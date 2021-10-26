@@ -1,6 +1,6 @@
 #  위드버디
 
-<center><img src="https://i.imgur.com/wbWfU5d.png" width=250><br/><br/>💜 위드코로나엔 위드버디 💜</center>
+<div align="center"><img src="https://i.imgur.com/wbWfU5d.png" width=250><br/>💜 위드코로나엔 위드버디 💜 </div>
 
 <br/>
 

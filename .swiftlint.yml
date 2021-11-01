@@ -1,0 +1,57 @@
+disabled_rules:
+  - trailing_whitespace
+  - type_body_length
+  - line_length
+  - opening_brace
+  
+excluded:
+  - WithBuddy/Application/AppDelegate.swift
+  - WithBuddy/Application/SceneDelegate.swift
+
+opt_in_rules: # disable된것 중 enable 하고 싶은 것
+    - force_unwrapping
+    - empty_count
+    - empty_string
+    - first_where
+    - last_where
+    - toggle_bool
+  
+function_body_length: # default 값
+  - 20 # warning
+  - 30 # error
+  
+file_length: #default
+  warning: 180
+  error: 200
+  ignore_comment_only_lines: true
+
+force_cast: error # 암시적으로 지정
+
+force_try:
+  severity: error # 명시적으로 지정
+  
+force_unwrapping: error #강제 언래핑 에러
+
+identifier_name: #default
+  min_length:
+    warning: 3
+    error: 2
+  max_length:
+    warning: 40
+    error: 60
+  excluded: #제외하고 싶은 변수 이름들
+    
+type_name: #default
+  min_length:
+    warning: 3
+    error: 0
+  max_length:
+    warning: 40
+    error: 1000
+
+custom_rules:
+  get_set_smell:
+    regex: 'func (get|set).*'
+    message: "Delete get or set from function name."
+    severity: error # 설정 안해주면 warning
+

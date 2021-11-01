@@ -119,8 +119,8 @@
 			children = (
 				BBF7FF30272FB51400B71C97 /* LaunchScreen.storyboard */,
 				BBF7FF25272FB51000B71C97 /* AppDelegate.swift */,
-				BBF7FF2E272FB51400B71C97 /* Assets.xcassets */,
 				BBF7FF27272FB51000B71C97 /* SceneDelegate.swift */,
+				BBF7FF2E272FB51400B71C97 /* Assets.xcassets */,
 			);
 			path = Application;
 			sourceTree = "<group>";

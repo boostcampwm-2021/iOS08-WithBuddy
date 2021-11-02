@@ -20,11 +20,11 @@ final class TabBarViewController: UITabBarController {
     }
     
     private func configure() {
-        self.configureTabBar()
+        self.configureTabBarItems()
         self.configureButton()
     }
     
-    private func configureTabBar() {
+    private func configureTabBarItems() {
         let calendar = configureTab(controller: CalendarViewController(), title: "일정", photoName: "calendar")
         let chart = configureTab(controller: ChartViewController(), title: "통계", photoName: "chart.bar.xaxis")
         let register = configureTab(controller: RegisterViewController(), title: "모임등록", photoName: "person.3.fill")
@@ -42,6 +42,7 @@ final class TabBarViewController: UITabBarController {
     }
     
     private func configureButton() {
+        let circleDiameter = self.tabBar.layer.bounds.height * 1.5
         var config = UIButton.Configuration.filled()
         var attText = AttributedString("모임등록")
         attText.font = UIFont.systemFont(ofSize: 10.0, weight: .medium)
@@ -52,19 +53,18 @@ final class TabBarViewController: UITabBarController {
         config.cornerStyle = .capsule
         
         self.registerButton = UIButton(configuration: config, primaryAction: nil)
-        self.registerButton.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
+        self.registerButton.frame = CGRect(x: 0, y: 0, width: circleDiameter, height: circleDiameter)
         self.registerButton.titleLabel?.font = .systemFont(ofSize: 10)
         self.registerButton.addTarget(self, action: #selector(registerAction), for: .touchUpInside)
         
         self.view.addSubview(self.registerButton)
         self.registerButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.registerButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30),
+            self.registerButton.topAnchor.constraint(equalTo: self.tabBar.topAnchor, constant: -circleDiameter / 6),
             self.registerButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.registerButton.widthAnchor.constraint(equalToConstant: 70),
-            self.registerButton.heightAnchor.constraint(equalToConstant: 70)
+            self.registerButton.widthAnchor.constraint(equalToConstant: circleDiameter),
+            self.registerButton.heightAnchor.constraint(equalToConstant: circleDiameter)
         ])
-        
     }
     
     @objc private func registerAction(_ sender: UIButton) {
@@ -72,3 +72,11 @@ final class TabBarViewController: UITabBarController {
     }
     
 }
+
+//extension UITabBar {
+//    override open func sizeThatFits(_ size: CGSize) -> CGSize {
+//    var sizeThatFits = super.sizeThatFits(size)
+//    sizeThatFits.height = 1000 // 원하는 길이
+//    return sizeThatFits
+//   }
+//}

@@ -1,5 +1,5 @@
 //
-//  TypeCollectionViewCell.swift
+//  ImageTextCollectionViewCell.swift
 //  WithBuddy
 //
 //  Created by 김두연 on 2021/11/02.
@@ -7,8 +7,8 @@
 
 import UIKit
 
-class TypeCollectionViewCell: UICollectionViewCell {
-    static let identifer = "TypeCollectionViewCell"
+class ImageTextCollectionViewCell: UICollectionViewCell {
+    static let identifer = "ImageTextCollectionViewCell"
     
     private var typeImage: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "x.circle"))

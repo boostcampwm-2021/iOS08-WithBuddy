@@ -51,6 +51,22 @@ class RegisterViewController: UIViewController {
         return label
     }()
     
+    private var memoBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        view.layer.cornerRadius = 10
+        return view
+    }()
+    
+    private var memoTextField: UITextField = {
+        let textField = UITextField()
+        textField.textColor = UIColor(named: "LabelPurple")
+        textField.attributedPlaceholder = NSAttributedString(string: "간단한 메모를 남겨보아요", attributes: [NSAttributedString.Key.foregroundColor : UIColor(named: "LabelPurple")])
+        textField.backgroundColor = .systemBackground
+        
+        return textField
+    }()
+    
     private var pictureTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "사진"
@@ -58,6 +74,7 @@ class RegisterViewController: UIViewController {
         label.font = .boldSystemFont(ofSize: 20)
         return label
     }()
+    
     
     private var dateBackgroundView: UIView = {
         let view = UIView()
@@ -90,7 +107,46 @@ class RegisterViewController: UIViewController {
         return textField
     }()
     
-    private var typeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
+    private var typeCollectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        return collectionView
+    }()
+    
+    private var buddyAddButton: UIButton = {
+        let button = UIButton()
+        let config = UIImage.SymbolConfiguration(
+            pointSize: 60, weight: .medium, scale: .default)
+        let image = UIImage(systemName: "plus.circle", withConfiguration: config)
+        button.setImage(image, for: .normal)
+    
+        return button
+    }()
+    
+    private var pictureAddButton: UIButton = {
+        let button = UIButton()
+        let config = UIImage.SymbolConfiguration(
+            pointSize: 30, weight: .medium, scale: .default)
+        let image = UIImage(systemName: "plus.square", withConfiguration: config)
+        button.setImage(image, for: .normal)
+    
+        return button
+    }()
+    
+    private var buddyCollectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        return collectionView
+    }()
+    
+    private var pictureCollectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        return collectionView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,7 +154,7 @@ class RegisterViewController: UIViewController {
         self.view.backgroundColor = UIColor(named: "BackgroundPurple")
         self.configureUI()
         self.configureLayout()
-        self.configureTypeCollectionView()
+        self.configureCollectionView()
     }
     
     private func configureUI() {
@@ -110,17 +166,46 @@ class RegisterViewController: UIViewController {
         self.contentView.addSubview(self.placeBackgroundView)
         self.contentView.addSubview(self.typeTitleLabel)
         self.contentView.addSubview(self.typeCollectionView)
+        self.contentView.addSubview(self.buddyTitleLabel)
+        self.contentView.addSubview(self.buddyAddButton)
+        self.contentView.addSubview(self.buddyCollectionView)
+        self.contentView.addSubview(self.memoTitleLabel)
+        self.contentView.addSubview(self.memoBackgroundView)
+        self.contentView.addSubview(self.pictureTitleLabel)
+        self.contentView.addSubview(self.pictureAddButton)
+        self.contentView.addSubview(self.pictureCollectionView)
         
         self.dateBackgroundView.addSubview(self.dateLabel)
         self.dateBackgroundView.addSubview(self.dateButton)
         
         self.placeBackgroundView.addSubview(self.placeTextField)
+        
+        self.memoBackgroundView.addSubview(self.memoTextField)
     }
     
-    private func configureTypeCollectionView() {
-        self.typeCollectionView.register(TypeCollectionViewCell.self, forCellWithReuseIdentifier: TypeCollectionViewCell.identifer)
+    private func configureCollectionView() {
+        self.typeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifer)
+        self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifer)
+        self.pictureCollectionView.register(PictureCollectionViewCell.self, forCellWithReuseIdentifier: PictureCollectionViewCell.identifer)
+        
         self.typeCollectionView.dataSource = self
         self.typeCollectionView.delegate = self
+        
+        self.buddyCollectionView.dataSource = self
+        self.buddyCollectionView.delegate = self
+        
+        self.pictureCollectionView.dataSource = self
+        self.pictureCollectionView.delegate = self
+        
+        let typeFlowLayout = UICollectionViewFlowLayout()
+        typeFlowLayout.scrollDirection = .horizontal
+        let buddyFlowLayout = UICollectionViewFlowLayout()
+        buddyFlowLayout.scrollDirection = .horizontal
+        let pictureFlowLayout = UICollectionViewFlowLayout()
+        pictureFlowLayout.scrollDirection = .horizontal
+        self.typeCollectionView.collectionViewLayout = typeFlowLayout
+        self.buddyCollectionView.collectionViewLayout = buddyFlowLayout
+        self.pictureCollectionView.collectionViewLayout = pictureFlowLayout
     }
     
     private func configureLayout() {
@@ -189,8 +274,7 @@ class RegisterViewController: UIViewController {
         self.typeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.typeTitleLabel.topAnchor.constraint(equalTo: self.placeTextField.bottomAnchor, constant: 40),
-            self.typeTitleLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
-            self.typeTitleLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20)
+            self.typeTitleLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20)
         ])
         
         self.typeCollectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -200,6 +284,74 @@ class RegisterViewController: UIViewController {
             self.typeCollectionView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20),
             self.typeCollectionView.heightAnchor.constraint(equalToConstant: 90)
         ])
+        
+        self.buddyTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.buddyTitleLabel.topAnchor.constraint(equalTo: self.typeCollectionView.bottomAnchor, constant: 40),
+            self.buddyTitleLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20)
+        ])
+        
+        self.buddyAddButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.buddyAddButton.topAnchor.constraint(equalTo: self.buddyTitleLabel.bottomAnchor, constant: 20),
+            self.buddyAddButton.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
+            self.buddyAddButton.widthAnchor.constraint(equalToConstant: 60),
+            self.buddyAddButton.heightAnchor.constraint(equalTo: self.buddyAddButton.widthAnchor)
+        ])
+        
+        self.buddyCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.buddyCollectionView.topAnchor.constraint(equalTo: self.buddyAddButton.topAnchor),
+            self.buddyCollectionView.leftAnchor.constraint(equalTo: self.buddyAddButton.rightAnchor, constant: 10),
+            self.buddyCollectionView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20),
+            self.buddyCollectionView.heightAnchor.constraint(equalToConstant: 90)
+        ])
+        
+        self.memoTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.memoTitleLabel.topAnchor.constraint(equalTo: self.buddyCollectionView.bottomAnchor, constant: 40),
+            self.memoTitleLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20)
+        ])
+        
+        self.memoBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.memoBackgroundView.topAnchor.constraint(equalTo: self.memoTitleLabel.bottomAnchor, constant: 20),
+            self.memoBackgroundView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
+            self.memoBackgroundView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20),
+            self.memoBackgroundView.heightAnchor.constraint(equalToConstant: 100)
+        ])
+        
+        self.memoTextField.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.memoTextField.topAnchor.constraint(equalTo: self.memoBackgroundView.topAnchor),
+            self.memoTextField.leftAnchor.constraint(equalTo: self.memoBackgroundView.leftAnchor, constant: 20),
+            self.memoTextField.rightAnchor.constraint(equalTo: self.memoBackgroundView.rightAnchor, constant: -20),
+            self.memoTextField.bottomAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor)
+        ])
+        
+        self.pictureTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.pictureTitleLabel.topAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor, constant: 40),
+            self.pictureTitleLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20)
+        ])
+        
+        self.pictureAddButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.pictureAddButton.centerYAnchor.constraint(equalTo: self.pictureTitleLabel.centerYAnchor),
+            self.pictureAddButton.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20),
+            self.pictureAddButton.widthAnchor.constraint(equalToConstant: 30),
+            self.pictureAddButton.heightAnchor.constraint(equalTo: self.pictureAddButton.widthAnchor)
+        ])
+        
+        self.pictureCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.pictureCollectionView.topAnchor.constraint(equalTo: self.pictureTitleLabel.bottomAnchor, constant: 20),
+            self.pictureCollectionView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
+            self.pictureCollectionView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20),
+            self.pictureCollectionView.heightAnchor.constraint(equalTo: self.pictureCollectionView.widthAnchor),
+            self.pictureCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+        ])
+        
     }
     
 }
@@ -210,13 +362,25 @@ extension RegisterViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = self.typeCollectionView.dequeueReusableCell(withReuseIdentifier: TypeCollectionViewCell.identifer, for: indexPath) as? TypeCollectionViewCell else { return UICollectionViewCell() }
-        
-        return cell
+        switch collectionView {
+        case self.pictureCollectionView:
+            guard let cell = self.pictureCollectionView.dequeueReusableCell(withReuseIdentifier: PictureCollectionViewCell.identifer, for: indexPath) as? PictureCollectionViewCell else { return UICollectionViewCell() }
+            return cell
+        case self.buddyCollectionView:
+            guard let cell = self.buddyCollectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { return UICollectionViewCell() }
+            return cell
+        default:
+            guard let cell = self.typeCollectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { return UICollectionViewCell() }
+            return cell
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: 60, height: self.typeCollectionView.frame.height)
+        if collectionView == self.pictureCollectionView {
+            return CGSize(width: self.pictureCollectionView.frame.width, height: self.pictureCollectionView.frame.height)
+        } else {
+            return CGSize(width: 60, height: self.typeCollectionView.frame.height)
+        }
     }
     
 }

@@ -10,12 +10,12 @@
 		85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */; };
 		85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D98272FEBE000825C64 /* ListViewController.swift */; };
 		BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25462730D97000E7BF35 /* Buddy.swift */; };
-		BB2D254A2730D97000E7BF35 /* Gathering.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25472730D97000E7BF35 /* Gathering.swift */; };
 		BB2D254B2730D97000E7BF35 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25482730D97000E7BF35 /* PlaceType.swift */; };
 		BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB2D254E2730DA2200E7BF35 /* Model.xcdatamodeld */; };
-		BB2D2554273112EE00E7BF35 /* TypeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D2553273112EE00E7BF35 /* TypeCollectionViewCell.swift */; };
+		BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */; };
 		BB2D255E2731317100E7BF35 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D255D2731317100E7BF35 /* SettingViewController.swift */; };
 		BB2D25602731317E00E7BF35 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D255F2731317E00E7BF35 /* ChartViewController.swift */; };
+		BB2D256227315B7B00E7BF35 /* PictureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */; };
 		BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF25272FB51000B71C97 /* AppDelegate.swift */; };
 		BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF27272FB51000B71C97 /* SceneDelegate.swift */; };
 		BBF7FF2A272FB51000B71C97 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF29272FB51000B71C97 /* RegisterViewController.swift */; };
@@ -32,12 +32,12 @@
 		85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		85FA1D98272FEBE000825C64 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		BB2D25462730D97000E7BF35 /* Buddy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buddy.swift; sourceTree = "<group>"; };
-		BB2D25472730D97000E7BF35 /* Gathering.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gathering.swift; sourceTree = "<group>"; };
 		BB2D25482730D97000E7BF35 /* PlaceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
 		BB2D254F2730DA2200E7BF35 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		BB2D2553273112EE00E7BF35 /* TypeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeCollectionViewCell.swift; sourceTree = "<group>"; };
+		BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTextCollectionViewCell.swift; sourceTree = "<group>"; };
 		BB2D255D2731317100E7BF35 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		BB2D255F2731317E00E7BF35 /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
+		BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCell.swift; sourceTree = "<group>"; };
 		BBF7FF22272FB51000B71C97 /* WithBuddy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WithBuddy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF7FF25272FB51000B71C97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BBF7FF27272FB51000B71C97 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -91,7 +91,6 @@
 			isa = PBXGroup;
 			children = (
 				BB2D25462730D97000E7BF35 /* Buddy.swift */,
-				BB2D25472730D97000E7BF35 /* Gathering.swift */,
 				BB2D25482730D97000E7BF35 /* PlaceType.swift */,
 			);
 			path = Entities;
@@ -187,7 +186,8 @@
 			isa = PBXGroup;
 			children = (
 				BBF7FF29272FB51000B71C97 /* RegisterViewController.swift */,
-				BB2D2553273112EE00E7BF35 /* TypeCollectionViewCell.swift */,
+				BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */,
+				BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -320,8 +320,9 @@
 				BB2D255E2731317100E7BF35 /* SettingViewController.swift in Sources */,
 				BBF7FF2A272FB51000B71C97 /* RegisterViewController.swift in Sources */,
 				BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */,
+				BB2D256227315B7B00E7BF35 /* PictureCollectionViewCell.swift in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
-				BB2D2554273112EE00E7BF35 /* TypeCollectionViewCell.swift in Sources */,
+				BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */,
 				BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */,
 				BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */,
 				85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */,
@@ -330,7 +331,6 @@
 				BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */,
 				BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
-				BB2D254A2730D97000E7BF35 /* Gathering.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

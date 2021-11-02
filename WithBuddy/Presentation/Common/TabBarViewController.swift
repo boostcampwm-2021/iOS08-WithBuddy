@@ -70,13 +70,4 @@ final class TabBarViewController: UITabBarController {
     @objc private func registerAction(_ sender: UIButton) {
         self.navigationController?.pushViewController(RegisterViewController(), animated: true)
     }
-    
 }
-
-//extension UITabBar {
-//    override open func sizeThatFits(_ size: CGSize) -> CGSize {
-//    var sizeThatFits = super.sizeThatFits(size)
-//    sizeThatFits.height = 1000 // 원하는 길이
-//    return sizeThatFits
-//   }
-//}

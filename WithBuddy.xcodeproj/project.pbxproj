@@ -14,6 +14,7 @@
 		BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25462730D97000E7BF35 /* Buddy.swift */; };
 		BB2D254A2730D97000E7BF35 /* Gathering.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25472730D97000E7BF35 /* Gathering.swift */; };
 		BB2D254B2730D97000E7BF35 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25482730D97000E7BF35 /* PlaceType.swift */; };
+		BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB2D254E2730DA2200E7BF35 /* Model.xcdatamodeld */; };
 		BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF25272FB51000B71C97 /* AppDelegate.swift */; };
 		BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF27272FB51000B71C97 /* SceneDelegate.swift */; };
 		BBF7FF2A272FB51000B71C97 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF29272FB51000B71C97 /* RegisterViewController.swift */; };
@@ -34,6 +35,7 @@
 		BB2D25462730D97000E7BF35 /* Buddy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buddy.swift; sourceTree = "<group>"; };
 		BB2D25472730D97000E7BF35 /* Gathering.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gathering.swift; sourceTree = "<group>"; };
 		BB2D25482730D97000E7BF35 /* PlaceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
+		BB2D254F2730DA2200E7BF35 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		BBF7FF22272FB51000B71C97 /* WithBuddy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WithBuddy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF7FF25272FB51000B71C97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BBF7FF27272FB51000B71C97 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -108,6 +110,22 @@
 			path = Entities;
 			sourceTree = "<group>";
 		};
+		BB2D254C2730DA0000E7BF35 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				BB2D254D2730DA0A00E7BF35 /* PersistentStorage */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		BB2D254D2730DA0A00E7BF35 /* PersistentStorage */ = {
+			isa = PBXGroup;
+			children = (
+				BB2D254E2730DA2200E7BF35 /* Model.xcdatamodeld */,
+			);
+			path = PersistentStorage;
+			sourceTree = "<group>";
+		};
 		BBF7FF19272FB51000B71C97 = {
 			isa = PBXGroup;
 			children = (
@@ -128,6 +146,7 @@
 		BBF7FF24272FB51000B71C97 /* WithBuddy */ = {
 			isa = PBXGroup;
 			children = (
+				BB2D254C2730DA0000E7BF35 /* Data */,
 				BB2D25442730D94100E7BF35 /* Domain */,
 				BBF7FF4A272FD7DD00B71C97 /* Resource */,
 				BBF7FF3B272FB66300B71C97 /* Presentation */,
@@ -299,6 +318,7 @@
 				BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */,
 				85FA1D96272FEBB400825C64 /* ChartViewController.swift in Sources */,
 				85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */,
+				BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
 				BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */,
 				BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */,
@@ -512,6 +532,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		BB2D254E2730DA2200E7BF35 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				BB2D254F2730DA2200E7BF35 /* Model.xcdatamodel */,
+			);
+			currentVersion = BB2D254F2730DA2200E7BF35 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = BBF7FF1A272FB51000B71C97 /* Project object */;
 }

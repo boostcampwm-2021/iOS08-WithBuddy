@@ -16,6 +16,7 @@ final class TabBarViewController: UITabBarController {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(named: "BackgroundPurple")
         self.tabBar.backgroundColor = .systemBackground
+        self.navigationController?.isNavigationBarHidden = true
         self.configure()
     }
     

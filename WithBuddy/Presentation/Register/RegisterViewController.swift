@@ -6,8 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 class RegisterViewController: UIViewController {
+    
+    private var registerViewModel = RegisterViewModel()
+    private var cancellables: Set<AnyCancellable> = []
     
     private lazy var datePicker : UIDatePicker = {
         let datePicker = UIDatePicker()
@@ -176,6 +180,7 @@ class RegisterViewController: UIViewController {
         self.configureUI()
         self.configureLayout()
         self.configureCollectionView()
+        self.bind()
         self.dateButton.addTarget(self, action: #selector(self.onDateButtonClicked(_:)), for: .touchUpInside)
     }
     
@@ -396,16 +401,19 @@ class RegisterViewController: UIViewController {
     }
     
     @objc private func onDoneClicked() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
-        
-        print(dateFormatter.string(from: self.datePicker.date))
-        
+        self.registerViewModel.didDatePicked(self.datePicker.date)
         self.datePicker.removeFromSuperview()
         self.toolBar.removeFromSuperview()
     }
     
+    private func bind() {
+        registerViewModel.$date
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] date in
+                self?.dateLabel.text = date
+            }
+            .store(in: &self.cancellables)
+    }
 }
 
 extension RegisterViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {

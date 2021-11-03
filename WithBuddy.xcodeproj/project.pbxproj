@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */; };
 		85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D98272FEBE000825C64 /* ListViewController.swift */; };
+		8A54F3ED27325B2500535B26 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */; };
 		BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25462730D97000E7BF35 /* Buddy.swift */; };
 		BB2D254B2730D97000E7BF35 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25482730D97000E7BF35 /* PlaceType.swift */; };
 		BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB2D254E2730DA2200E7BF35 /* Model.xcdatamodeld */; };
@@ -31,6 +32,7 @@
 /* Begin PBXFileReference section */
 		85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		85FA1D98272FEBE000825C64 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		BB2D25462730D97000E7BF35 /* Buddy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buddy.swift; sourceTree = "<group>"; };
 		BB2D25482730D97000E7BF35 /* PlaceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
 		BB2D254F2730DA2200E7BF35 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 				BBF7FF29272FB51000B71C97 /* RegisterViewController.swift */,
 				BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */,
 				BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */,
+				8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -314,6 +317,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */,
+				8A54F3ED27325B2500535B26 /* RegisterViewModel.swift in Sources */,
 				BB2D25602731317E00E7BF35 /* ChartViewController.swift in Sources */,
 				BBF7FF40272FB7B700B71C97 /* TabBarViewController.swift in Sources */,
 				BB2D254B2730D97000E7BF35 /* PlaceType.swift in Sources */,

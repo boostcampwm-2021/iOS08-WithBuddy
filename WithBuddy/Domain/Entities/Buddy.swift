@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct Buddy {
+struct Buddy: Hashable {
     
 }

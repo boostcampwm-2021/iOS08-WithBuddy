@@ -340,7 +340,7 @@ class RegisterViewController: UIViewController {
             self.memoBackgroundView.topAnchor.constraint(equalTo: self.memoTitleLabel.bottomAnchor, constant: 20),
             self.memoBackgroundView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             self.memoBackgroundView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20),
-            self.memoBackgroundView.heightAnchor.constraint(equalToConstant: 100)
+            self.memoBackgroundView.heightAnchor.constraint(equalToConstant: 140)
         ])
         
         self.memoTextField.translatesAutoresizingMaskIntoConstraints = false

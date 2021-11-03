@@ -1,5 +1,5 @@
 //
-//  WBCalendar.swift
+//  WBCalendarHeader.swift
 //  WithBuddy
 //
 //  Created by 이나정 on 2021/11/03.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WBCalendar: UIView {
+class WBCalendarHeaderView: UIView {
     private let thisMonth = UILabel()
     private let prevMonthButton = UIButton()
     private let nextMonthButton = UIButton()
@@ -15,12 +15,15 @@ class WBCalendar: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.configureMonth()
-        self.configureWeek()
+        self.configureCalendar()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        self.configureCalendar()
+    }
+    
+    private func configureCalendar() {
         self.configureMonth()
         self.configureWeek()
     }
@@ -61,11 +64,11 @@ class WBCalendar: UIView {
         weekStackView.addArrangedSubview(weekLabel(text: "금"))
         weekStackView.addArrangedSubview(weekLabel(text: "토"))
         weekStackView.distribution = .equalSpacing
-        weekStackView.spacing = 30
         self.weekStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.weekStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            self.weekStackView.topAnchor.constraint(equalTo: self.thisMonth.bottomAnchor, constant: 30)
+            self.weekStackView.topAnchor.constraint(equalTo: self.thisMonth.bottomAnchor, constant: 30),
+            self.weekStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
+            self.weekStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
         ])
     }
     

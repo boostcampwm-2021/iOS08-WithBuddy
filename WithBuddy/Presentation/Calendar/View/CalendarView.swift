@@ -8,7 +8,7 @@
 import UIKit
 
 class CalendarView: UIView {
-    private let calendar = WBCalendar()
+    private let calendar = WBCalendarView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

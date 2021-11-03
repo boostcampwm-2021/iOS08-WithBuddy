@@ -9,6 +9,27 @@ import UIKit
 
 class RegisterViewController: UIViewController {
     
+    private lazy var datePicker : UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        datePicker.autoresizingMask = .flexibleWidth
+        datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.locale = Locale(identifier: "ko-KR")
+        datePicker.timeZone = .autoupdatingCurrent
+        datePicker.backgroundColor = .white
+        return datePicker
+    }()
+        
+    private lazy var toolBar : UIToolbar = {
+        let toolBar = UIToolbar()
+        toolBar.translatesAutoresizingMaskIntoConstraints = false
+        toolBar.barStyle = .default
+        toolBar.items = [UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.onDoneClicked))]
+        toolBar.sizeToFit()
+        return toolBar
+    }()
+    
     private var scrollView = UIScrollView()
     private var contentView = UIView()
     private var dateTitleLabel: UILabel = {
@@ -75,7 +96,7 @@ class RegisterViewController: UIViewController {
         return label
     }()
     
-    
+//
     private var dateBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
@@ -155,6 +176,7 @@ class RegisterViewController: UIViewController {
         self.configureUI()
         self.configureLayout()
         self.configureCollectionView()
+        self.dateButton.addTarget(self, action: #selector(self.onDateButtonClicked(_:)), for: .touchUpInside)
     }
     
     private func configureUI() {
@@ -352,6 +374,36 @@ class RegisterViewController: UIViewController {
             self.pictureCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
         ])
         
+    }
+    
+    @objc private func onDateButtonClicked(_ sender: UIButton) {
+        self.view.addSubview(self.datePicker)
+        self.view.addSubview(self.toolBar)
+                
+        NSLayoutConstraint.activate([
+            self.datePicker.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            self.datePicker.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            self.datePicker.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            self.datePicker.heightAnchor.constraint(equalToConstant: 300)
+        ])
+        
+        NSLayoutConstraint.activate([
+            self.toolBar.bottomAnchor.constraint(equalTo: self.datePicker.topAnchor),
+            self.toolBar.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            self.toolBar.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            self.toolBar.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+    
+    @objc private func onDoneClicked() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .none
+        
+        print(dateFormatter.string(from: self.datePicker.date))
+        
+        self.datePicker.removeFromSuperview()
+        self.toolBar.removeFromSuperview()
     }
     
 }

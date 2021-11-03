@@ -34,9 +34,14 @@ class RegisterViewController: UIViewController {
         return toolBar
     }()
     
-    private var scrollView = UIScrollView()
-    private var contentView = UIView()
-    private var dateTitleLabel: UILabel = {
+    private lazy var scrollView = UIScrollView()
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapEmptySpace(sender:))))
+        return view
+    }()
+    
+    private lazy var dateTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "모임 날짜"
         label.textColor = UIColor(named: "LabelPurple")
@@ -44,7 +49,7 @@ class RegisterViewController: UIViewController {
         return label
     }()
     
-    private var placeLTitleabel: UILabel = {
+    private lazy var placeLTitleabel: UILabel = {
         let label = UILabel()
         label.text = "모임 장소"
         label.textColor = UIColor(named: "LabelPurple")
@@ -52,7 +57,7 @@ class RegisterViewController: UIViewController {
         return label
     }()
     
-    private var typeTitleLabel: UILabel = {
+    private lazy var typeTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "모임 목적"
         label.textColor = UIColor(named: "LabelPurple")
@@ -60,7 +65,7 @@ class RegisterViewController: UIViewController {
         return label
     }()
     
-    private var buddyTitleLabel: UILabel = {
+    private lazy var buddyTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "만난 버디"
         label.textColor = UIColor(named: "LabelPurple")
@@ -68,7 +73,7 @@ class RegisterViewController: UIViewController {
         return label
     }()
     
-    private var memoTitleLabel: UILabel = {
+    private lazy var memoTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "메모"
         label.textColor = UIColor(named: "LabelPurple")
@@ -76,23 +81,24 @@ class RegisterViewController: UIViewController {
         return label
     }()
     
-    private var memoBackgroundView: UIView = {
+    private lazy var memoBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
         view.layer.cornerRadius = 10
         return view
     }()
     
-    private var memoTextField: UITextField = {
+    private lazy var memoTextField: UITextField = {
         let textField = UITextField()
         textField.textColor = UIColor(named: "LabelPurple")
         textField.attributedPlaceholder = NSAttributedString(string: "간단한 메모를 남겨보아요", attributes: [NSAttributedString.Key.foregroundColor : UIColor(named: "LabelPurple")])
         textField.backgroundColor = .systemBackground
+        textField.delegate = self
         
         return textField
     }()
     
-    private var pictureTitleLabel: UILabel = {
+    private lazy var pictureTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "사진"
         label.textColor = UIColor(named: "LabelPurple")
@@ -101,45 +107,46 @@ class RegisterViewController: UIViewController {
     }()
     
 //
-    private var dateBackgroundView: UIView = {
+    private lazy var dateBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
         view.layer.cornerRadius = 10
         return view
     }()
     
-    private var dateLabel = UILabel()
-    private var dateButton: UIButton = {
+    private lazy var dateLabel = UILabel()
+    private lazy var dateButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "calendar"), for: .normal)
         button.sizeToFit()
         return button
     }()
     
-    private var placeBackgroundView: UIView = {
+    private lazy var placeBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
         view.layer.cornerRadius = 10
         return view
     }()
     
-    private var placeTextField: UITextField = {
+    private lazy var placeTextField: UITextField = {
         let textField = UITextField()
         textField.textColor = UIColor(named: "LabelPurple")
         textField.attributedPlaceholder = NSAttributedString(string: "장소를 적어주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor(named: "LabelPurple")])
         textField.backgroundColor = .systemBackground
+        textField.delegate = self
         
         return textField
     }()
     
-    private var typeCollectionView: UICollectionView = {
+    private lazy var typeCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }()
     
-    private var buddyAddButton: UIButton = {
+    private lazy var buddyAddButton: UIButton = {
         let button = UIButton()
         let config = UIImage.SymbolConfiguration(
             pointSize: 60, weight: .medium, scale: .default)
@@ -149,7 +156,7 @@ class RegisterViewController: UIViewController {
         return button
     }()
     
-    private var pictureAddButton: UIButton = {
+    private lazy var pictureAddButton: UIButton = {
         let button = UIButton()
         let config = UIImage.SymbolConfiguration(
             pointSize: 30, weight: .medium, scale: .default)
@@ -159,14 +166,14 @@ class RegisterViewController: UIViewController {
         return button
     }()
     
-    private var buddyCollectionView: UICollectionView = {
+    private lazy var buddyCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
         return collectionView
     }()
     
-    private var pictureCollectionView: UICollectionView = {
+    private lazy var pictureCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
@@ -406,6 +413,10 @@ class RegisterViewController: UIViewController {
         self.toolBar.removeFromSuperview()
     }
     
+    @objc func tapEmptySpace(sender: UITapGestureRecognizer){
+        view.endEditing(true)
+    }
+    
     private func bind() {
         registerViewModel.$date
             .receive(on: DispatchQueue.main)
@@ -443,4 +454,11 @@ extension RegisterViewController: UICollectionViewDataSource, UICollectionViewDe
         }
     }
     
+}
+
+extension RegisterViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }

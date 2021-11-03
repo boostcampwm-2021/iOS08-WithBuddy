@@ -31,10 +31,10 @@ class HeaderView: UIView {
         self.userFaceImageView.image = UIImage(systemName: "photo")
         self.userFaceImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.userFaceImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
+            self.userFaceImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),
             self.userFaceImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            self.userFaceImageView.widthAnchor.constraint(equalToConstant: 60),
-            self.userFaceImageView.heightAnchor.constraint(equalToConstant: 60)
+            self.userFaceImageView.widthAnchor.constraint(equalToConstant: 70),
+            self.userFaceImageView.heightAnchor.constraint(equalToConstant: 70)
         ])
     }
     

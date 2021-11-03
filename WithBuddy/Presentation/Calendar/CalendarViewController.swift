@@ -10,9 +10,9 @@ import UIKit
 class CalendarViewController: UIViewController {
 
     private let headerView = HeaderView()
+    private let calendarView = CalendarView()
     private let scrollView = UIScrollView()
     private let contentView = UIView()
-    private let calendarView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +26,7 @@ class CalendarViewController: UIViewController {
         self.configureScrollView()
         self.configureContentView()
         self.configureHeaderView()
+        self.configureCalendarView()
     }
     
     private func configureScrollView() {
@@ -58,10 +59,23 @@ class CalendarViewController: UIViewController {
         self.headerView.layer.cornerRadius = 10
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.headerView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 20),
+            self.headerView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
             self.headerView.heightAnchor.constraint(equalToConstant: 80),
             self.headerView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
             self.headerView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20)
+        ])
+    }
+    
+    private func configureCalendarView() {
+        self.contentView.addSubview(calendarView)
+        self.calendarView.backgroundColor = .systemBackground
+        self.calendarView.layer.cornerRadius = 10
+        self.calendarView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.calendarView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: 10),
+            self.calendarView.heightAnchor.constraint(equalToConstant: 500),
+            self.calendarView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
+            self.calendarView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20)
         ])
     }
 }

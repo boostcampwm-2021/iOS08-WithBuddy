@@ -11,15 +11,18 @@ class WBCalendar: UIView {
     private let thisMonth = UILabel()
     private let prevMonthButton = UIButton()
     private let nextMonthButton = UIButton()
+    private let weekStackView = UIStackView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.configureMonth()
+        self.configureWeek()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.configureMonth()
+        self.configureWeek()
     }
     
     private func configureMonth() {
@@ -45,5 +48,31 @@ class WBCalendar: UIView {
             self.nextMonthButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             self.nextMonthButton.leadingAnchor.constraint(equalTo: self.thisMonth.trailingAnchor)
         ])
+    }
+    
+    private func configureWeek() {
+        self.addSubview(weekStackView)
+        weekStackView.axis = .horizontal
+        weekStackView.addArrangedSubview(weekLabel(text: "일"))
+        weekStackView.addArrangedSubview(weekLabel(text: "월"))
+        weekStackView.addArrangedSubview(weekLabel(text: "화"))
+        weekStackView.addArrangedSubview(weekLabel(text: "수"))
+        weekStackView.addArrangedSubview(weekLabel(text: "목"))
+        weekStackView.addArrangedSubview(weekLabel(text: "금"))
+        weekStackView.addArrangedSubview(weekLabel(text: "토"))
+        weekStackView.distribution = .equalSpacing
+        weekStackView.spacing = 30
+        self.weekStackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.weekStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            self.weekStackView.topAnchor.constraint(equalTo: self.thisMonth.bottomAnchor, constant: 30)
+        ])
+    }
+    
+    private func weekLabel(text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.textColor = UIColor(named: "LabelPurple")
+        return label
     }
 }

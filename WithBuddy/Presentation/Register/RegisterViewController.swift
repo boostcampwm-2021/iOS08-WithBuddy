@@ -119,6 +119,7 @@ class RegisterViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "calendar"), for: .normal)
         button.sizeToFit()
+        button.addTarget(self, action: #selector(self.onDateButtonClicked(_:)), for: .touchUpInside)
         return button
     }()
     
@@ -162,7 +163,7 @@ class RegisterViewController: UIViewController {
             pointSize: 30, weight: .medium, scale: .default)
         let image = UIImage(systemName: "plus.square", withConfiguration: config)
         button.setImage(image, for: .normal)
-    
+        button.addTarget(self, action: #selector(self.onPictureButtonClicked(_:)), for: .touchUpInside)
         return button
     }()
     
@@ -188,7 +189,6 @@ class RegisterViewController: UIViewController {
         self.configureLayout()
         self.configureCollectionView()
         self.bind()
-        self.dateButton.addTarget(self, action: #selector(self.onDateButtonClicked(_:)), for: .touchUpInside)
     }
     
     private func configureUI() {
@@ -407,18 +407,25 @@ class RegisterViewController: UIViewController {
         ])
     }
     
+    @objc private func onPictureButtonClicked(_ sender: UIButton) {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = .photoLibrary
+        present(picker, animated: false, completion: nil)
+    }
+    
     @objc private func onDoneClicked() {
         self.registerViewModel.didDatePicked(self.datePicker.date)
         self.datePicker.removeFromSuperview()
         self.toolBar.removeFromSuperview()
     }
-    
+
     @objc func tapEmptySpace(sender: UITapGestureRecognizer){
         view.endEditing(true)
     }
     
     private func bind() {
-        registerViewModel.$date
+        self.registerViewModel.$date
             .receive(on: DispatchQueue.main)
             .sink { [weak self] date in
                 self?.dateLabel.text = date
@@ -460,5 +467,19 @@ extension RegisterViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+}
+
+extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let url = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
+            return
+        }
+        self.registerViewModel.didPicturePicked(url)
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
     }
 }

@@ -245,6 +245,7 @@ class RegisterViewController: UIViewController {
         self.contentView.addSubview(self.pictureCollectionView)
         
         self.dateBackgroundView.addSubview(self.dateLabel)
+        self.registerViewModel.didDatePicked(Date())
         self.dateBackgroundView.addSubview(self.dateButton)
         
         self.placeBackgroundView.addSubview(self.placeTextField)

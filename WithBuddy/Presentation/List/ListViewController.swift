@@ -6,20 +6,32 @@
 //
 
 import UIKit
+import Combine
 
 final class ListViewController: UIViewController {
     
+    private let listViewModel = ListViewModel()
     private let searchView = SearchView()
     private let listCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private var cancellables: Set<AnyCancellable> = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configure()
+        self.bind()
     }
     
     private func configure() {
         self.configureSearchView()
         self.configureCollectionView()
+    }
+    
+    private func bind() {
+        self.listViewModel.$gatheringList
+            .sink { _ in
+                self.listCollectionView.reloadData()
+            }
+            .store(in: &self.cancellables)
     }
     
     private func configureSearchView() {
@@ -54,12 +66,14 @@ final class ListViewController: UIViewController {
 extension ListViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return self.listViewModel.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListCollectionViewCell.identifier, for: indexPath)
                 as? ListCollectionViewCell else { return UICollectionViewCell() }
+        let gathering = self.listViewModel[indexPath.item]
+        cell.update(date: gathering.date, buddyImageNames: gathering.buddyList.map{ $0.face }, typeImageNames: gathering.type)
         return cell
     }
     

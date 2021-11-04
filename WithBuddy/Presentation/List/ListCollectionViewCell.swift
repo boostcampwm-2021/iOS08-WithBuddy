@@ -13,14 +13,12 @@ final class ListCollectionViewCell: UICollectionViewCell {
     private let dateLabel = UILabel()
     private let buddyLabel = UILabel()
     private let typeLabel = UILabel()
-    private let buddyStackView = UIStackView()
-    private let typeStackView = UIStackView()
+    private var buddyStackView = UIStackView()
+    private var typeStackView = UIStackView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.configure()
-        self.updateBuddy(imageNames: ["Green1", "Pink2", "Blue3", "Purple2"])
-        self.updateType(imageNames: ["FacePurple", "FaceYellow", "FaceRed", "FaceGreen", "FaceBlue", "FacePink", "FacePurple", "FaceYellow", "FaceRed", "FaceGreen", "FaceBlue", "FacePink"])
     }
     
     required init?(coder: NSCoder) {
@@ -28,12 +26,16 @@ final class ListCollectionViewCell: UICollectionViewCell {
         self.configure()
     }
     
-    func updateBuddy(imageNames: [String]) {
-        self.update(imageNames: imageNames, stackView: self.buddyStackView)
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.buddyStackView = UIStackView()
+        self.typeStackView = UIStackView()
     }
     
-    func updateType(imageNames: [String]) {
-        self.update(imageNames: imageNames, stackView: self.typeStackView)
+    func update(date: String, buddyImageNames: [String], typeImageNames: [String]) {
+        self.dateLabel.text = date
+        self.update(imageNames: buddyImageNames, stackView: self.buddyStackView)
+        self.update(imageNames: typeImageNames, stackView: self.typeStackView)
     }
     
     private func update(imageNames: [String], stackView: UIStackView) {

@@ -118,9 +118,12 @@ class RegisterViewController: UIViewController {
     
     private lazy var memoTextField: UITextField = {
         let textField = UITextField()
-        textField.textColor = UIColor(named: "LabelPurple")
-        textField.attributedPlaceholder = NSAttributedString(string: "간단한 메모를 남겨보아요", attributes: [NSAttributedString.Key.foregroundColor : UIColor(named: "LabelPurple")])
         textField.backgroundColor = .systemBackground
+        guard let color = UIColor(named: "LabelPurple") else {
+            return textField
+        }
+        textField.textColor = color
+        textField.attributedPlaceholder = NSAttributedString(string: "간단한 메모를 남겨보아요", attributes: [NSAttributedString.Key.foregroundColor : color])
         textField.delegate = self
         
         return textField
@@ -159,9 +162,12 @@ class RegisterViewController: UIViewController {
     
     private lazy var placeTextField: UITextField = {
         let textField = UITextField()
-        textField.textColor = UIColor(named: "LabelPurple")
-        textField.attributedPlaceholder = NSAttributedString(string: "장소를 적어주세요", attributes: [NSAttributedString.Key.foregroundColor : UIColor(named: "LabelPurple")])
         textField.backgroundColor = .systemBackground
+        guard let color = UIColor(named: "LabelPurple") else {
+            return textField
+        }
+        textField.textColor = color
+        textField.attributedPlaceholder = NSAttributedString(string: "장소를 적어주세요", attributes: [NSAttributedString.Key.foregroundColor : color])
         textField.delegate = self
         
         return textField
@@ -288,6 +294,15 @@ class RegisterViewController: UIViewController {
             self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor)
         ])
         
+        self.configureDateLayout()
+        self.configurePlaceLayout()
+        self.configureTypeLayout()
+        self.configureBuddyLayout()
+        self.configureMemoLayout()
+        self.configurePictureLayout()
+    }
+    
+    private func configureDateLayout() {
         self.dateTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.dateTitleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 40),
@@ -310,7 +325,9 @@ class RegisterViewController: UIViewController {
             self.dateButton.rightAnchor.constraint(equalTo: self.dateBackgroundView.rightAnchor, constant: -20),
             self.dateButton.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
         ])
-        
+    }
+    
+    private func configurePlaceLayout() {
         self.placeLTitleabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.placeLTitleabel.topAnchor.constraint(equalTo: self.dateBackgroundView.bottomAnchor, constant: 40),
@@ -332,7 +349,9 @@ class RegisterViewController: UIViewController {
             self.placeTextField.topAnchor.constraint(equalTo: self.placeBackgroundView.topAnchor),
             self.placeTextField.bottomAnchor.constraint(equalTo: self.placeBackgroundView.bottomAnchor)
         ])
-        
+    }
+    
+    private func configureTypeLayout() {
         self.typeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.typeTitleLabel.topAnchor.constraint(equalTo: self.placeTextField.bottomAnchor, constant: 40),
@@ -346,7 +365,9 @@ class RegisterViewController: UIViewController {
             self.typeCollectionView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20),
             self.typeCollectionView.heightAnchor.constraint(equalToConstant: 200)
         ])
-        
+    }
+    
+    private func configureBuddyLayout() {
         self.buddyTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.buddyTitleLabel.topAnchor.constraint(equalTo: self.typeCollectionView.bottomAnchor, constant: 40),
@@ -368,7 +389,9 @@ class RegisterViewController: UIViewController {
             self.buddyCollectionView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20),
             self.buddyCollectionView.heightAnchor.constraint(equalToConstant: 90)
         ])
-        
+    }
+    
+    private func configureMemoLayout() {
         self.memoTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.memoTitleLabel.topAnchor.constraint(equalTo: self.buddyCollectionView.bottomAnchor, constant: 40),
@@ -390,7 +413,9 @@ class RegisterViewController: UIViewController {
             self.memoTextField.rightAnchor.constraint(equalTo: self.memoBackgroundView.rightAnchor, constant: -20),
             self.memoTextField.bottomAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor)
         ])
-        
+    }
+    
+    private func configurePictureLayout() {
         self.pictureTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.pictureTitleLabel.topAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor, constant: 40),
@@ -413,7 +438,6 @@ class RegisterViewController: UIViewController {
             self.pictureCollectionView.heightAnchor.constraint(equalTo: self.pictureCollectionView.widthAnchor),
             self.pictureCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
         ])
-        
     }
     
     @objc private func onDateButtonClicked(_ sender: UIButton) {

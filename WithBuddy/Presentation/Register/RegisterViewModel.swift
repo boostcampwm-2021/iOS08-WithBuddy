@@ -13,7 +13,7 @@ class RegisterViewModel {
     @Published private(set) var type: Set<PlaceType> = []
     @Published private(set) var buddyList: Set<Buddy> = []
     @Published private(set) var memo: String? = nil
-    @Published private(set) var pictures: Set<URL> = []
+    @Published private(set) var pictures: [URL] = []
     
     func didDatePicked(_ date: Date) {
         let dateFormatter = DateFormatter()
@@ -39,6 +39,6 @@ class RegisterViewModel {
     }
     
     func didPicturePicked(_ picture: URL) {
-        self.pictures.update(with: picture)
+        self.pictures.append(picture)
     }
 }

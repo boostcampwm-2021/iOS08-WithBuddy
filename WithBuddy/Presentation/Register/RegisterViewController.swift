@@ -13,6 +13,16 @@ class RegisterViewController: UIViewController {
     private var registerViewModel = RegisterViewModel()
     private var cancellables: Set<AnyCancellable> = []
     
+    private lazy var pictureDataSource: UICollectionViewDiffableDataSource<Int, URL> = {
+        let dataSource = UICollectionViewDiffableDataSource<Int, URL>(collectionView: self.pictureCollectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: URL) -> UICollectionViewCell? in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PictureCollectionViewCell.identifer, for: indexPath) as? PictureCollectionViewCell else { preconditionFailure() }
+            cell.configure(url: itemIdentifier)
+            return cell
+        }
+        return dataSource
+    }()
+    
     private lazy var datePicker : UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.translatesAutoresizingMaskIntoConstraints = false
@@ -105,8 +115,7 @@ class RegisterViewController: UIViewController {
         label.font = .boldSystemFont(ofSize: 20)
         return label
     }()
-    
-//
+
     private lazy var dateBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
@@ -228,8 +237,8 @@ class RegisterViewController: UIViewController {
         self.buddyCollectionView.dataSource = self
         self.buddyCollectionView.delegate = self
         
-        self.pictureCollectionView.dataSource = self
-        self.pictureCollectionView.delegate = self
+//        self.pictureCollectionView.dataSource = self
+//        self.pictureCollectionView.delegate = self
         
         let typeFlowLayout = UICollectionViewFlowLayout()
         typeFlowLayout.scrollDirection = .horizontal
@@ -237,6 +246,7 @@ class RegisterViewController: UIViewController {
         buddyFlowLayout.scrollDirection = .horizontal
         let pictureFlowLayout = UICollectionViewFlowLayout()
         pictureFlowLayout.scrollDirection = .horizontal
+        pictureFlowLayout.itemSize = CGSize(width: self.view.frame.width-40, height: self.view.frame.width-40)
         self.typeCollectionView.collectionViewLayout = typeFlowLayout
         self.buddyCollectionView.collectionViewLayout = buddyFlowLayout
         self.pictureCollectionView.collectionViewLayout = pictureFlowLayout
@@ -431,6 +441,19 @@ class RegisterViewController: UIViewController {
                 self?.dateLabel.text = date
             }
             .store(in: &self.cancellables)
+        
+        self.registerViewModel.$pictures
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] pictures in
+                var snapshot = NSDiffableDataSourceSnapshot<Int, URL>()
+                
+                snapshot.appendSections([0])
+                snapshot.appendItems(pictures)
+                print(pictures)
+                self?.pictureDataSource.apply(snapshot, animatingDifferences: true)
+            }
+            .store(in: &self.cancellables)
+        
     }
 }
 
@@ -454,11 +477,7 @@ extension RegisterViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if collectionView == self.pictureCollectionView {
-            return CGSize(width: self.pictureCollectionView.frame.width, height: self.pictureCollectionView.frame.height)
-        } else {
-            return CGSize(width: 60, height: self.typeCollectionView.frame.height)
-        }
+        return CGSize(width: 60, height: self.typeCollectionView.frame.height)
     }
     
 }

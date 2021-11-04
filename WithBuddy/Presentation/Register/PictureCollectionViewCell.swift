@@ -26,8 +26,11 @@ class PictureCollectionViewCell: UICollectionViewCell {
         self.configureLayout()
     }
     
-    private func configure() {
-        
+    func configure(url: URL) {
+        guard let data = try? Data(contentsOf: url) else {
+            return
+        }
+        photoImage.image = UIImage(data: data)
     }
     
     private func configureLayout() {

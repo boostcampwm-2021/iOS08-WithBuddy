@@ -8,7 +8,7 @@
 import Foundation
 
 struct Buddy: Hashable {
-    private var name: String
+    private(set) var name: String
     
     init(name: String) {
         self.name = name

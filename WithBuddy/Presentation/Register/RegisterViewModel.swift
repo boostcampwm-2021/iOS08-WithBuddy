@@ -32,7 +32,7 @@ class RegisterViewModel {
     }
     
     func didBuddySelected(_ buddy: Buddy) {
-        self.buddyList.append(buddy)
+        self.buddyList.insert(buddy, at: 0)
     }
     
     func didMemoFinished(_ memo: String) {
@@ -40,6 +40,6 @@ class RegisterViewModel {
     }
     
     func didPicturePicked(_ picture: URL) {
-        self.pictures.append(picture)
+        self.pictures.insert(picture, at: 0)
     }
 }

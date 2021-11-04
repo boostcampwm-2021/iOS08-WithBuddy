@@ -27,6 +27,7 @@ class RegisterViewController: UIViewController {
         let dataSource = UICollectionViewDiffableDataSource<Int, PlaceType>(collectionView: self.typeCollectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: PlaceType) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
+            cell.configure(image: UIImage(named: "FaceRed"), text: itemIdentifier.rawValue)
             return cell
         }
         return dataSource
@@ -36,6 +37,7 @@ class RegisterViewController: UIViewController {
         let dataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
+            cell.configure(image: UIImage(named: "Purple1"), text: itemIdentifier.name)
             return cell
         }
         return dataSource
@@ -216,8 +218,6 @@ class RegisterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.addSubview(self.dateLabel)
-        self.view.backgroundColor = UIColor(named: "BackgroundPurple")
         self.configureUI()
         self.configureLayout()
         self.configureCollectionView()
@@ -225,7 +225,9 @@ class RegisterViewController: UIViewController {
     }
     
     private func configureUI() {
+        self.view.backgroundColor = UIColor(named: "BackgroundPurple")
         self.view.addSubview(self.scrollView)
+        
         self.scrollView.addSubview(self.contentView)
         self.contentView.addSubview(self.dateTitleLabel)
         self.contentView.addSubview(self.dateBackgroundView)
@@ -459,29 +461,6 @@ class RegisterViewController: UIViewController {
         ])
     }
     
-    @objc private func onPictureButtonClicked(_ sender: UIButton) {
-        let picker = UIImagePickerController()
-        picker.delegate = self
-        picker.sourceType = .photoLibrary
-        present(picker, animated: false, completion: nil)
-    }
-    
-    @objc private func onBuddyAddButtonClicked(_ sender: UIButton) {
-        let str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        let random = (0..<5).map{ _ in str.randomElement()! }
-        self.registerViewModel.didBuddySelected(Buddy(name: String(random)))
-    }
-    
-    @objc private func onDoneClicked() {
-        self.registerViewModel.didDatePicked(self.datePicker.date)
-        self.datePicker.removeFromSuperview()
-        self.toolBar.removeFromSuperview()
-    }
-
-    @objc func tapEmptySpace(sender: UITapGestureRecognizer){
-        view.endEditing(true)
-    }
-    
     private func bind() {
         self.registerViewModel.$date
             .receive(on: DispatchQueue.main)
@@ -511,6 +490,29 @@ class RegisterViewController: UIViewController {
                 self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
             }
             .store(in: &self.cancellables)
+    }
+    
+    @objc private func onPictureButtonClicked(_ sender: UIButton) {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = .photoLibrary
+        present(picker, animated: false, completion: nil)
+    }
+    
+    @objc private func onBuddyAddButtonClicked(_ sender: UIButton) {
+        let str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let random = (0..<5).map{ _ in str.randomElement()! }
+        self.registerViewModel.didBuddySelected(Buddy(name: String(random)))
+    }
+    
+    @objc private func onDoneClicked() {
+        self.registerViewModel.didDatePicked(self.datePicker.date)
+        self.datePicker.removeFromSuperview()
+        self.toolBar.removeFromSuperview()
+    }
+
+    @objc func tapEmptySpace(sender: UITapGestureRecognizer){
+        view.endEditing(true)
     }
 }
 

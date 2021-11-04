@@ -23,6 +23,24 @@ class RegisterViewController: UIViewController {
         return dataSource
     }()
     
+    private lazy var typeDataSource: UICollectionViewDiffableDataSource<Int, PlaceType> = {
+        let dataSource = UICollectionViewDiffableDataSource<Int, PlaceType>(collectionView: self.typeCollectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: PlaceType) -> UICollectionViewCell? in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
+            return cell
+        }
+        return dataSource
+    }()
+    
+    private lazy var buddyDataSource: UICollectionViewDiffableDataSource<Int, Buddy> = {
+        let dataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
+            return cell
+        }
+        return dataSource
+    }()
+    
     private lazy var datePicker : UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.translatesAutoresizingMaskIntoConstraints = false
@@ -162,7 +180,7 @@ class RegisterViewController: UIViewController {
             pointSize: 60, weight: .medium, scale: .default)
         let image = UIImage(systemName: "plus.circle", withConfiguration: config)
         button.setImage(image, for: .normal)
-    
+        button.addTarget(self, action: #selector(self.onBuddyAddButtonClicked(_:)), for: .touchUpInside)
         return button
     }()
     
@@ -231,25 +249,25 @@ class RegisterViewController: UIViewController {
         self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifer)
         self.pictureCollectionView.register(PictureCollectionViewCell.self, forCellWithReuseIdentifier: PictureCollectionViewCell.identifer)
         
-        self.typeCollectionView.dataSource = self
-        self.typeCollectionView.delegate = self
-        
-        self.buddyCollectionView.dataSource = self
-        self.buddyCollectionView.delegate = self
-        
-//        self.pictureCollectionView.dataSource = self
-//        self.pictureCollectionView.delegate = self
-        
         let typeFlowLayout = UICollectionViewFlowLayout()
         typeFlowLayout.scrollDirection = .horizontal
+        typeFlowLayout.itemSize = CGSize(width: 60, height: 90)
+        self.typeCollectionView.collectionViewLayout = typeFlowLayout
+        
         let buddyFlowLayout = UICollectionViewFlowLayout()
         buddyFlowLayout.scrollDirection = .horizontal
+        buddyFlowLayout.itemSize = CGSize(width: 60, height: 90)
+        self.buddyCollectionView.collectionViewLayout = buddyFlowLayout
+        
         let pictureFlowLayout = UICollectionViewFlowLayout()
         pictureFlowLayout.scrollDirection = .horizontal
         pictureFlowLayout.itemSize = CGSize(width: self.view.frame.width-40, height: self.view.frame.width-40)
-        self.typeCollectionView.collectionViewLayout = typeFlowLayout
-        self.buddyCollectionView.collectionViewLayout = buddyFlowLayout
         self.pictureCollectionView.collectionViewLayout = pictureFlowLayout
+        
+        var snapshot = NSDiffableDataSourceSnapshot<Int, PlaceType>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(PlaceType.allCases)
+        self.typeDataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func configureLayout() {
@@ -326,7 +344,7 @@ class RegisterViewController: UIViewController {
             self.typeCollectionView.topAnchor.constraint(equalTo: self.typeTitleLabel.bottomAnchor, constant: 20),
             self.typeCollectionView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             self.typeCollectionView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20),
-            self.typeCollectionView.heightAnchor.constraint(equalToConstant: 90)
+            self.typeCollectionView.heightAnchor.constraint(equalToConstant: 200)
         ])
         
         self.buddyTitleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -424,6 +442,12 @@ class RegisterViewController: UIViewController {
         present(picker, animated: false, completion: nil)
     }
     
+    @objc private func onBuddyAddButtonClicked(_ sender: UIButton) {
+        let str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let random = (0..<5).map{ _ in str.randomElement()! }
+        self.registerViewModel.didBuddySelected(Buddy(name: String(random)))
+    }
+    
     @objc private func onDoneClicked() {
         self.registerViewModel.didDatePicked(self.datePicker.date)
         self.datePicker.removeFromSuperview()
@@ -449,37 +473,21 @@ class RegisterViewController: UIViewController {
                 
                 snapshot.appendSections([0])
                 snapshot.appendItems(pictures)
-                print(pictures)
                 self?.pictureDataSource.apply(snapshot, animatingDifferences: true)
             }
             .store(in: &self.cancellables)
         
+        self.registerViewModel.$buddyList
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] buddyList in
+                var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
+                
+                snapshot.appendSections([0])
+                snapshot.appendItems(buddyList)
+                self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
+            }
+            .store(in: &self.cancellables)
     }
-}
-
-extension RegisterViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch collectionView {
-        case self.pictureCollectionView:
-            guard let cell = self.pictureCollectionView.dequeueReusableCell(withReuseIdentifier: PictureCollectionViewCell.identifer, for: indexPath) as? PictureCollectionViewCell else { return UICollectionViewCell() }
-            return cell
-        case self.buddyCollectionView:
-            guard let cell = self.buddyCollectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { return UICollectionViewCell() }
-            return cell
-        default:
-            guard let cell = self.typeCollectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { return UICollectionViewCell() }
-            return cell
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 60, height: self.typeCollectionView.frame.height)
-    }
-    
 }
 
 extension RegisterViewController: UITextFieldDelegate {

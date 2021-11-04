@@ -10,8 +10,8 @@ import Foundation
 class RegisterViewModel {
     @Published private(set) var date: String? = nil
     private var place: String? = nil
-    @Published private(set) var type: Set<PlaceType> = []
-    @Published private(set) var buddyList: Set<Buddy> = []
+    @Published private(set) var type: [PlaceType] = []
+    @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var memo: String? = nil
     @Published private(set) var pictures: [URL] = []
     
@@ -32,6 +32,7 @@ class RegisterViewModel {
     }
     
     func didBuddySelected(_ buddy: Buddy) {
+        self.buddyList.append(buddy)
     }
     
     func didMemoFinished(_ memo: String) {

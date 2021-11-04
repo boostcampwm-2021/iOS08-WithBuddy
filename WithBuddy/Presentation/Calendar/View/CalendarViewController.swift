@@ -36,7 +36,7 @@ class CalendarViewController: UIViewController {
             self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
             self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             self.scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            self.scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+            self.scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
         ])
     }
     
@@ -49,7 +49,7 @@ class CalendarViewController: UIViewController {
             self.contentView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor),
             self.contentView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor),
             self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor),
-            self.contentView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor, constant: 5000)
+//            self.contentView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor)
         ])
     }
     
@@ -73,9 +73,10 @@ class CalendarViewController: UIViewController {
         self.calendarView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.calendarView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: 10),
-            self.calendarView.heightAnchor.constraint(equalToConstant: 500),
+            self.calendarView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10),
             self.calendarView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
-            self.calendarView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20)
+            self.calendarView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+            self.calendarView.heightAnchor.constraint(equalToConstant: 530)
         ])
     }
 }

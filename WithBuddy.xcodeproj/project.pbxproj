@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		854AA75E27337A7200663911 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA75D27337A7200663911 /* SearchView.swift */; };
+		854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA76327338C2F00663911 /* ListCollectionViewCell.swift */; };
+		854AA7662733A37200663911 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA7652733A37200663911 /* ListViewModel.swift */; };
 		85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */; };
 		85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D98272FEBE000825C64 /* ListViewController.swift */; };
 		8A54F3ED27325B2500535B26 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */; };
@@ -35,6 +38,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		854AA75D27337A7200663911 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		854AA76327338C2F00663911 /* ListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCollectionViewCell.swift; sourceTree = "<group>"; };
+		854AA7652733A37200663911 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		85FA1D98272FEBE000825C64 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
@@ -87,6 +93,9 @@
 			isa = PBXGroup;
 			children = (
 				85FA1D98272FEBE000825C64 /* ListViewController.swift */,
+				854AA76327338C2F00663911 /* ListCollectionViewCell.swift */,
+				854AA75D27337A7200663911 /* SearchView.swift */,
+				854AA7652733A37200663911 /* ListViewModel.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -362,12 +371,15 @@
 				BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */,
 				BB2D256227315B7B00E7BF35 /* PictureCollectionViewCell.swift in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
+				854AA75E27337A7200663911 /* SearchView.swift in Sources */,
 				BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */,
 				BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */,
 				BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */,
 				85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */,
+				854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */,
 				BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
+				854AA7662733A37200663911 /* ListViewModel.swift in Sources */,
 				BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */,
 				BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,

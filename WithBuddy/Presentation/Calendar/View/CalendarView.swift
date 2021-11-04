@@ -9,17 +9,17 @@ import UIKit
 
 class CalendarView: UIView {
     private let calendar = WBCalendarView()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.configurCalendar()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.configurCalendar()
     }
-    
+
     private func configurCalendar() {
         self.addSubview(calendar)
         self.calendar.translatesAutoresizingMaskIntoConstraints = false

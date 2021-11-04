@@ -7,23 +7,29 @@
 
 import UIKit
 
-class ListViewController: UIViewController {
+final class ListViewController: UIViewController {
+    
+    private let searchView = SearchView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        self.configure()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    private func configure() {
+        self.configureSearchView()
     }
-    */
+    
+    private func configureSearchView() {
+        self.view.addSubview(self.searchView)
+        self.searchView.layer.cornerRadius = 10
+        self.searchView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.searchView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.searchView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            self.searchView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            self.searchView.heightAnchor.constraint(equalToConstant: 45)
+        ])
+    }
 
 }

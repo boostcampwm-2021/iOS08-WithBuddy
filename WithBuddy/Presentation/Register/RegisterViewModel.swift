@@ -10,10 +10,10 @@ import Foundation
 class RegisterViewModel {
     @Published private(set) var date: String? = nil
     private var place: String? = nil
-    @Published private(set) var type: Set<PlaceType> = []
-    @Published private(set) var buddyList: Set<Buddy> = []
+    @Published private(set) var type: [PlaceType] = []
+    @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var memo: String? = nil
-    @Published private(set) var pictures: Set<URL> = []
+    @Published private(set) var pictures: [URL] = []
     
     func didDatePicked(_ date: Date) {
         let dateFormatter = DateFormatter()
@@ -32,6 +32,7 @@ class RegisterViewModel {
     }
     
     func didBuddySelected(_ buddy: Buddy) {
+        self.buddyList.insert(buddy, at: 0)
     }
     
     func didMemoFinished(_ memo: String) {
@@ -39,6 +40,6 @@ class RegisterViewModel {
     }
     
     func didPicturePicked(_ picture: URL) {
-        self.pictures.update(with: picture)
+        self.pictures.insert(picture, at: 0)
     }
 }

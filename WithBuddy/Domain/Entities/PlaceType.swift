@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PlaceType: String {
+enum PlaceType: String, CaseIterable {
     case study
     case shopping
     case sport

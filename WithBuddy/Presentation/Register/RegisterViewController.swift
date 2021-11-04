@@ -59,7 +59,7 @@ class RegisterViewController: UIViewController {
         let toolBar = UIToolbar()
         toolBar.translatesAutoresizingMaskIntoConstraints = false
         toolBar.barStyle = .default
-        toolBar.items = [UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.onDoneClicked))]
+        toolBar.items = [UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.onDoneTouched))]
         toolBar.sizeToFit()
         return toolBar
     }()
@@ -188,7 +188,7 @@ class RegisterViewController: UIViewController {
             pointSize: 60, weight: .medium, scale: .default)
         let image = UIImage(systemName: "plus.circle", withConfiguration: config)
         button.setImage(image, for: .normal)
-        button.addTarget(self, action: #selector(self.onBuddyAddButtonClicked(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.onBuddyAddButtonTouched(_:)), for: .touchUpInside)
         return button
     }()
     
@@ -198,7 +198,7 @@ class RegisterViewController: UIViewController {
             pointSize: 30, weight: .medium, scale: .default)
         let image = UIImage(systemName: "plus.square", withConfiguration: config)
         button.setImage(image, for: .normal)
-        button.addTarget(self, action: #selector(self.onPictureButtonClicked(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.onPictureButtonTouched(_:)), for: .touchUpInside)
         return button
     }()
     
@@ -493,27 +493,27 @@ class RegisterViewController: UIViewController {
             .store(in: &self.cancellables)
     }
     
-    @objc private func onPictureButtonClicked(_ sender: UIButton) {
+    @objc private func onPictureButtonTouched(_ sender: UIButton) {
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .photoLibrary
         present(picker, animated: false, completion: nil)
     }
     
-    @objc private func onBuddyAddButtonClicked(_ sender: UIButton) {
+    @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
         let str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let random = (0..<5).map{ _ in str.randomElement()! }
         self.registerViewModel.didBuddySelected(Buddy(name: String(random)))
     }
     
-    @objc private func onDoneClicked() {
+    @objc private func onDoneTouched() {
         self.registerViewModel.didDatePicked(self.datePicker.date)
         self.datePicker.removeFromSuperview()
         self.toolBar.removeFromSuperview()
     }
 
     @objc func tapEmptySpace(sender: UITapGestureRecognizer){
-        view.endEditing(true)
+        self.view.endEditing(true)
     }
 }
 

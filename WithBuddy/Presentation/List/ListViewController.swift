@@ -36,6 +36,7 @@ final class ListViewController: UIViewController {
     
     private func configureSearchView() {
         self.view.addSubview(self.searchView)
+        self.searchView.searchTextField.delegate = self
         self.searchView.layer.cornerRadius = 10
         self.searchView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -61,6 +62,15 @@ final class ListViewController: UIViewController {
         ])
     }
 
+}
+
+extension ListViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
 }
 
 extension ListViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {

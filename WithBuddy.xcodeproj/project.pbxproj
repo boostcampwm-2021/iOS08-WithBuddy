@@ -14,6 +14,12 @@
 		85C236BA27381239001499E5 /* BuddyFaceUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C236B927381239001499E5 /* BuddyFaceUseCase.swift */; };
 		85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */; };
 		85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D98272FEBE000825C64 /* ListViewController.swift */; };
+		8A0997E527363F4E002F2297 /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0997E427363F4E002F2297 /* DateView.swift */; };
+		8A0997E72736AAF2002F2297 /* PlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0997E62736AAF2002F2297 /* PlaceView.swift */; };
+		8A0997E92736AF55002F2297 /* TypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0997E82736AF55002F2297 /* TypeView.swift */; };
+		8A0997EB2736B31F002F2297 /* BuddyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0997EA2736B31F002F2297 /* BuddyView.swift */; };
+		8A0997EF2736B8E7002F2297 /* MemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0997EE2736B8E7002F2297 /* MemoView.swift */; };
+		8A0997F12736BB83002F2297 /* PictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0997F02736BB83002F2297 /* PictureView.swift */; };
 		8A54F3ED27325B2500535B26 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */; };
 		BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25462730D97000E7BF35 /* Buddy.swift */; };
 		BB2D254B2730D97000E7BF35 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25482730D97000E7BF35 /* PlaceType.swift */; };
@@ -47,6 +53,12 @@
 		85C236B927381239001499E5 /* BuddyFaceUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyFaceUseCase.swift; sourceTree = "<group>"; };
 		85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		85FA1D98272FEBE000825C64 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		8A0997E427363F4E002F2297 /* DateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateView.swift; sourceTree = "<group>"; };
+		8A0997E62736AAF2002F2297 /* PlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceView.swift; sourceTree = "<group>"; };
+		8A0997E82736AF55002F2297 /* TypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeView.swift; sourceTree = "<group>"; };
+		8A0997EA2736B31F002F2297 /* BuddyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyView.swift; sourceTree = "<group>"; };
+		8A0997EE2736B8E7002F2297 /* MemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoView.swift; sourceTree = "<group>"; };
+		8A0997F02736BB83002F2297 /* PictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureView.swift; sourceTree = "<group>"; };
 		8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		BB2D25462730D97000E7BF35 /* Buddy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buddy.swift; sourceTree = "<group>"; };
 		BB2D25482730D97000E7BF35 /* PlaceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
@@ -224,6 +236,12 @@
 				BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */,
 				BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */,
 				8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */,
+				8A0997E427363F4E002F2297 /* DateView.swift */,
+				8A0997E62736AAF2002F2297 /* PlaceView.swift */,
+				8A0997E82736AF55002F2297 /* TypeView.swift */,
+				8A0997EA2736B31F002F2297 /* BuddyView.swift */,
+				8A0997EE2736B8E7002F2297 /* MemoView.swift */,
+				8A0997F02736BB83002F2297 /* PictureView.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -370,21 +388,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A0997E92736AF55002F2297 /* TypeView.swift in Sources */,
 				F7A7699B2732588500FF83EA /* WBCalendarView.swift in Sources */,
 				F7A769992732563700FF83EA /* CalendarView.swift in Sources */,
+				8A0997E527363F4E002F2297 /* DateView.swift in Sources */,
 				F7B69B8A273398C4005D2F32 /* CalendarManager.swift in Sources */,
 				85C236BA27381239001499E5 /* BuddyFaceUseCase.swift in Sources */,
 				F7B69B8C27339EF9005D2F32 /* WBCalendarViewCell.swift in Sources */,
 				85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */,
+				8A0997E72736AAF2002F2297 /* PlaceView.swift in Sources */,
 				8A54F3ED27325B2500535B26 /* RegisterViewModel.swift in Sources */,
 				BB2D25602731317E00E7BF35 /* ChartViewController.swift in Sources */,
 				F7A7699727315AF800FF83EA /* HeaderView.swift in Sources */,
 				BBF7FF40272FB7B700B71C97 /* TabBarViewController.swift in Sources */,
 				BB2D254B2730D97000E7BF35 /* PlaceType.swift in Sources */,
 				BB2D255E2731317100E7BF35 /* SettingViewController.swift in Sources */,
+				8A0997EB2736B31F002F2297 /* BuddyView.swift in Sources */,
 				BBF7FF2A272FB51000B71C97 /* RegisterViewController.swift in Sources */,
 				BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */,
 				BB2D256227315B7B00E7BF35 /* PictureCollectionViewCell.swift in Sources */,
+				8A0997EF2736B8E7002F2297 /* MemoView.swift in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
 				854AA75E27337A7200663911 /* SearchView.swift in Sources */,
 				BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */,
@@ -394,6 +417,7 @@
 				854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */,
 				BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */,
 				85C236B527380D39001499E5 /* FaceColor.swift in Sources */,
+				8A0997F12736BB83002F2297 /* PictureView.swift in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
 				854AA7662733A37200663911 /* ListViewModel.swift in Sources */,
 				BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */,

@@ -40,9 +40,13 @@ final class BuddyView: UIView {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] buddyList in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
-                
-                snapshot.appendSections([0])
-                snapshot.appendItems(buddyList)
+                if buddyList.isEmpty {
+                    snapshot.appendSections([0])
+                    snapshot.appendItems([Buddy(name: "친구없음")])
+                } else {
+                    snapshot.appendSections([0])
+                    snapshot.appendItems(buddyList)
+                }
                 self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
             }
             .store(in: &self.cancellables)

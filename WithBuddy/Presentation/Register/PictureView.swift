@@ -41,9 +41,17 @@ final class PictureView: UIView {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] pictures in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, URL>()
-                
-                snapshot.appendSections([0])
-                snapshot.appendItems(pictures)
+                if pictures.isEmpty {
+                    guard let filePath = Bundle.main.path(forResource: "widthBuddyLaunchScreen", ofType: "png") else {
+                        return
+                    }
+                    let fileUrl = URL(fileURLWithPath: filePath)
+                    snapshot.appendSections([0])
+                    snapshot.appendItems([fileUrl])
+                } else {
+                    snapshot.appendSections([0])
+                    snapshot.appendItems(pictures)
+                }
                 self?.pictureDataSource.apply(snapshot, animatingDifferences: true)
             }
             .store(in: &self.cancellables)

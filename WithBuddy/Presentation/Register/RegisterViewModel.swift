@@ -42,4 +42,10 @@ class RegisterViewModel {
     func didPicturePicked(_ picture: URL) {
         self.pictures.insert(picture, at: 0)
     }
+    
+    func didPictureDeleteTouched(in idx: Int) {
+        if idx < self.pictures.count {
+            self.pictures.remove(at: idx)
+        }
+    }
 }

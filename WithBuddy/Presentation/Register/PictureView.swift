@@ -98,6 +98,8 @@ final class PictureView: UIView {
         self.addSubview(self.pictureCollectionView)
         self.pictureCollectionView.backgroundColor = .clear
         self.pictureCollectionView.showsHorizontalScrollIndicator = false
+        self.pictureCollectionView.isUserInteractionEnabled = true
+        self.pictureCollectionView.delegate = self
         
         self.pictureCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -117,6 +119,18 @@ final class PictureView: UIView {
     
     @objc private func onPictureButtonTouched(_ sender: UIButton) {
         self.delegate?.onPictureButtonTouched()
+    }
+}
+
+extension PictureView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+            let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
+                                       image: UIImage(systemName: "trash")) { action in
+                self.registerViewModel?.didPictureDeleteTouched(in: indexPath.item)
+                }
+            return UIMenu(title: "이 사진을", children: [delete])
+        })
     }
 }
 

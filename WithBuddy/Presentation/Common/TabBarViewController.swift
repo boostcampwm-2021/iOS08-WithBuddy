@@ -16,8 +16,18 @@ final class TabBarViewController: UITabBarController {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(named: "BackgroundPurple")
         self.tabBar.backgroundColor = .systemBackground
-        self.navigationController?.isNavigationBarHidden = true
+        
         self.configure()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     private func configure() {
@@ -26,20 +36,21 @@ final class TabBarViewController: UITabBarController {
     }
     
     private func configureTabBarItems() {
-        let calendar = configureTab(controller: CalendarViewController(), title: "일정", photoName: "calendar")
-        let chart = configureTab(controller: ChartViewController(), title: "통계", photoName: "chart.bar.xaxis")
-        let register = configureTab(controller: RegisterViewController(), title: "모임등록", photoName: "person.3.fill")
-        let list = configureTab(controller: ListViewController(), title: "목록", photoName: "list.bullet.rectangle.fill")
-        let setting = configureTab(controller: SettingViewController(), title: "설정", photoName: "gearshape.fill")
+        let calendar = CalendarViewController()
+        let chart = ChartViewController()
+        let register = RegisterViewController()
+        let list = ListViewController()
+        let setting = SettingViewController()
+        self.configureTab(controller: calendar, title: "일정", photoName: "calendar")
+        self.configureTab(controller: chart, title: "통계", photoName: "chart.bar.xaxis")
+        self.configureTab(controller: list, title: "목록", photoName: "list.bullet.rectangle.fill")
+        self.configureTab(controller: setting, title: "설정", photoName: "gearshape.fill")
         self.viewControllers = [calendar, chart, register, list, setting]
     }
     
-    private func configureTab(controller: UIViewController, title: String, photoName: String) -> UINavigationController {
-        let tab = UINavigationController(rootViewController: controller)
-        if controller is RegisterViewController { return tab }
+    private func configureTab(controller: UIViewController, title: String, photoName: String) {
         let tabBarItem = UITabBarItem(title: title, image: UIImage(systemName: photoName), selectedImage: UIImage(systemName: photoName))
-        tab.tabBarItem = tabBarItem
-        return tab
+        controller.tabBarItem = tabBarItem
     }
     
     private func configureButton() {

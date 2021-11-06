@@ -16,9 +16,6 @@ class CalendarViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.isNavigationBarHidden = true
-//        self.navigationController?.navigationBar.clipsToBounds = true
-//        self.scrollView.contentInsetAdjustmentBehavior = .never
         self.configure()
     }
     

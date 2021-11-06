@@ -48,4 +48,10 @@ class RegisterViewModel {
             self.pictures.remove(at: idx)
         }
     }
+    
+    func didBuddyDeleteTouched(in idx: Int) {
+        if idx < self.buddyList.count {
+            self.buddyList.remove(at: idx)
+        }
+    }
 }

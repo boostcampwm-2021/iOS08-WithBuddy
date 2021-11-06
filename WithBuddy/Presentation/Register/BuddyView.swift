@@ -92,6 +92,7 @@ final class BuddyView: UIView {
         self.addSubview(self.buddyCollectionView)
         self.buddyCollectionView.backgroundColor = .clear
         self.buddyCollectionView.showsHorizontalScrollIndicator = false
+        self.buddyCollectionView.delegate = self
         
         self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifer)
         
@@ -112,5 +113,17 @@ final class BuddyView: UIView {
     
     @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
         self.registerViewModel?.didBuddySelected(Buddy(name: UUID().uuidString))
+    }
+}
+
+extension BuddyView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+            let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
+                                       image: UIImage(systemName: "trash")) { action in
+                self.registerViewModel?.didBuddyDeleteTouched(in: indexPath.item)
+                }
+            return UIMenu(title: "이 버디를", children: [delete])
+        })
     }
 }

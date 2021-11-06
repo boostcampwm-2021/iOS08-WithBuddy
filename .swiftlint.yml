@@ -21,8 +21,8 @@ function_body_length: # default 값
   - 30 # error
   
 file_length: #default
-  warning: 180
-  error: 200
+  warning: 600
+  error: 700
   ignore_comment_only_lines: true
 
 force_cast: error # 암시적으로 지정

@@ -10,17 +10,8 @@ import UIKit
 class TypeCollectionViewCell: UICollectionViewCell {
     static let identifer = "TypeCollectionViewCell"
     
-    private var image: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "x.circle"))
-        return imageView
-    }()
-    
-    private var textLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.textAlignment = .center
-        return label
-    }()
+    private var image = UIImageView()
+    private var textLabel = UILabel()
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -28,9 +19,7 @@ class TypeCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.addSubview(self.image)
-        self.addSubview(self.textLabel)
-        self.configureLayout()
+        self.configure()
     }
     
     func configure(image: UIImage?, text: String) {
@@ -41,7 +30,13 @@ class TypeCollectionViewCell: UICollectionViewCell {
         self.textLabel.text = text
     }
     
-    private func configureLayout() {
+    private func configure() {
+        self.configureImage()
+        self.configureTextLabel()
+    }
+    
+    private func configureImage() {
+        self.addSubview(self.image)
         self.image.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.image.topAnchor.constraint(equalTo: self.topAnchor),
@@ -49,7 +44,12 @@ class TypeCollectionViewCell: UICollectionViewCell {
             self.image.rightAnchor.constraint(equalTo: self.rightAnchor),
             self.image.heightAnchor.constraint(equalTo: self.widthAnchor)
         ])
-        
+    }
+    
+    private func configureTextLabel() {
+        self.addSubview(self.textLabel)
+        self.textLabel.font = .systemFont(ofSize: 12)
+        self.textLabel.textAlignment = .center
         self.textLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.textLabel.topAnchor.constraint(equalTo: self.image.bottomAnchor, constant: 10),
@@ -57,6 +57,5 @@ class TypeCollectionViewCell: UICollectionViewCell {
             self.textLabel.widthAnchor.constraint(equalToConstant: self.frame.width)
         ])
     }
-    
 }
 

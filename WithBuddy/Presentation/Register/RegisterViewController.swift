@@ -20,33 +20,16 @@ class RegisterViewController: UIViewController {
     private lazy var memoView = MemoView()
     private lazy var pictureView = PictureView()
     
+    private lazy var datePicker = UIDatePicker()
+    private lazy var dateToolBar = UIToolbar()
+    
     private var registerViewModel = RegisterViewModel()
     private var cancellables: Set<AnyCancellable> = []
-    
-    private lazy var datePicker : UIDatePicker = {
-        let datePicker = UIDatePicker()
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
-        datePicker.autoresizingMask = .flexibleWidth
-        datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .inline
-        datePicker.locale = Locale(identifier: "ko-KR")
-        datePicker.timeZone = .autoupdatingCurrent
-        datePicker.backgroundColor = .white
-        return datePicker
-    }()
-        
-    private lazy var toolBar : UIToolbar = {
-        let toolBar = UIToolbar()
-        toolBar.translatesAutoresizingMaskIntoConstraints = false
-        toolBar.barStyle = .default
-        toolBar.items = [UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.onDoneTouched))]
-        toolBar.sizeToFit()
-        return toolBar
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configure()
+        self.registerViewModel.didDatePicked(Date())
     }
     
     private func configure() {
@@ -60,8 +43,6 @@ class RegisterViewController: UIViewController {
         self.configureBuddyView()
         self.configureMemoView()
         self.configurePictureView()
-        
-        self.registerViewModel.didDatePicked(Date())
     }
     
     private func configureScrollView() {
@@ -160,7 +141,7 @@ class RegisterViewController: UIViewController {
     @objc private func onDoneTouched() {
         self.registerViewModel.didDatePicked(self.datePicker.date)
         self.datePicker.removeFromSuperview()
-        self.toolBar.removeFromSuperview()
+        self.dateToolBar.removeFromSuperview()
     }
 
     @objc private func tapEmptySpace(){
@@ -170,21 +151,40 @@ class RegisterViewController: UIViewController {
 
 extension RegisterViewController: DateViewDelegate {
     func onDateButtonTouched() {
+        self.configureDatePicker()
+        self.configureDateToolBar()
+    }
+    
+    private func configureDatePicker() {
         self.view.addSubview(self.datePicker)
-        self.view.addSubview(self.toolBar)
-                
+        self.datePicker.translatesAutoresizingMaskIntoConstraints = false
+        self.datePicker.autoresizingMask = .flexibleWidth
+        self.datePicker.datePickerMode = .date
+        self.datePicker.preferredDatePickerStyle = .inline
+        self.datePicker.locale = Locale(identifier: "ko-KR")
+        self.datePicker.timeZone = .autoupdatingCurrent
+        self.datePicker.backgroundColor = .white
+        
         NSLayoutConstraint.activate([
             self.datePicker.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             self.datePicker.leftAnchor.constraint(equalTo: self.view.leftAnchor),
             self.datePicker.rightAnchor.constraint(equalTo: self.view.rightAnchor),
             self.datePicker.heightAnchor.constraint(equalToConstant: 300)
         ])
+    }
+    
+    private func configureDateToolBar() {
+        self.view.addSubview(self.dateToolBar)
+        self.dateToolBar.translatesAutoresizingMaskIntoConstraints = false
+        self.dateToolBar.barStyle = .default
+        self.dateToolBar.items = [UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.onDoneTouched))]
+        self.dateToolBar.sizeToFit()
         
         NSLayoutConstraint.activate([
-            self.toolBar.bottomAnchor.constraint(equalTo: self.datePicker.topAnchor),
-            self.toolBar.leftAnchor.constraint(equalTo: self.view.leftAnchor),
-            self.toolBar.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-            self.toolBar.heightAnchor.constraint(equalToConstant: 50)
+            self.dateToolBar.bottomAnchor.constraint(equalTo: self.datePicker.topAnchor),
+            self.dateToolBar.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            self.dateToolBar.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            self.dateToolBar.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 }

@@ -234,10 +234,6 @@
 		BBF7FF3E272FB6CC00B71C97 /* Register */ = {
 			isa = PBXGroup;
 			children = (
-				8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */,
-				BB2D2553273112EE00E7BF35 /* BuddyCollectionViewCell.swift */,
-				BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */,
-				8A59E694273781E300977488 /* TypeCollectionViewCell.swift */,
 				BBF7FF29272FB51000B71C97 /* RegisterViewController.swift */,
 				8A0997E427363F4E002F2297 /* DateView.swift */,
 				8A0997E62736AAF2002F2297 /* PlaceView.swift */,
@@ -245,6 +241,10 @@
 				8A0997EA2736B31F002F2297 /* BuddyView.swift */,
 				8A0997EE2736B8E7002F2297 /* MemoView.swift */,
 				8A0997F02736BB83002F2297 /* PictureView.swift */,
+				BB2D2553273112EE00E7BF35 /* BuddyCollectionViewCell.swift */,
+				BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */,
+				8A59E694273781E300977488 /* TypeCollectionViewCell.swift */,
+				8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";

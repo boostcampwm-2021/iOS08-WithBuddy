@@ -27,7 +27,7 @@ class RegisterViewController: UIViewController {
         let dataSource = UICollectionViewDiffableDataSource<Int, PlaceType>(collectionView: self.typeCollectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: PlaceType) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
-            cell.configure(image: UIImage(named: "FaceRed"), text: itemIdentifier.rawValue)
+            cell.configure(image: UIImage(named: "\(itemIdentifier)"), text: "\(itemIdentifier)")
             return cell
         }
         return dataSource

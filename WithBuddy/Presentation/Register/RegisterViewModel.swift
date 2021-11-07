@@ -8,20 +8,30 @@
 import Foundation
 
 class RegisterViewModel {
-    @Published private(set) var date: String? = nil
+    @Published private(set) var startDate: String? = nil
+    @Published private(set) var endDate: String? = nil
     private var place: String? = nil
     @Published private(set) var typeSelectedList: [Bool] = Array(repeating: false, count: PlaceType.allCases.count)
     @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var memo: String? = nil
     @Published private(set) var pictures: [URL] = []
     
-    func didDatePicked(_ date: Date) {
+    func didStartDatePicked(_ date: Date) {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ko-KR")
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .none
         
-        self.date = dateFormatter.string(from: date)
+        self.startDate = dateFormatter.string(from: date)
+    }
+    
+    func didEndDatePicked(_ date: Date) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ko-KR")
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .none
+        
+        self.endDate = dateFormatter.string(from: date)
     }
     
     func didPlaceFinished(_ place: String) {

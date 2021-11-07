@@ -1,5 +1,5 @@
 //
-//  DateView.swift
+//  EndDateView.swift
 //  WithBuddy
 //
 //  Created by Inwoo Park on 2021/11/06.
@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class DateView: UIView {
+final class EndDateView: UIView {
     
     private lazy var dateTitleLabel = UILabel()
     private lazy var dateBackgroundView = UIView()
@@ -17,7 +17,7 @@ final class DateView: UIView {
     
     private var cancellables: Set<AnyCancellable> = []
     var registerViewModel: RegisterViewModel?
-    var delegate: DateViewDelegate?
+    var delegate: EndDateViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,7 +31,7 @@ final class DateView: UIView {
     
     func bind(_ registerViewModel: RegisterViewModel) {
         self.registerViewModel = registerViewModel
-        self.registerViewModel?.$date
+        self.registerViewModel?.$endDate
             .receive(on: DispatchQueue.main)
             .sink { [weak self] date in
                 self?.dateLabel.text = date
@@ -98,10 +98,10 @@ final class DateView: UIView {
     }
     
     @objc private func onDateButtonTouched(_ sender: UIButton) {
-        self.delegate?.onDateButtonTouched()
+        self.delegate?.onEndDateButtonTouched()
     }
 }
 
-protocol DateViewDelegate {
-    func onDateButtonTouched()
+protocol EndDateViewDelegate {
+    func onEndDateButtonTouched()
 }

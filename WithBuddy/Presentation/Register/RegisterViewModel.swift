@@ -10,7 +10,7 @@ import Foundation
 class RegisterViewModel {
     @Published private(set) var date: String? = nil
     private var place: String? = nil
-    @Published private(set) var type: [PlaceType] = []
+    @Published private(set) var typeSelectedList: [Bool] = Array(repeating: false, count: PlaceType.allCases.count)
     @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var memo: String? = nil
     @Published private(set) var pictures: [URL] = []
@@ -28,7 +28,8 @@ class RegisterViewModel {
         self.place = place
     }
     
-    func didTypeTouched(_ type: PlaceType) {
+    func didTypeTouched(_ idx: Int) {
+        self.typeSelectedList[idx].toggle()
     }
     
     func didBuddySelected(_ buddy: Buddy) {

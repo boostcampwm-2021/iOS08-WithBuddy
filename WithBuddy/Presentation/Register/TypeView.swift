@@ -6,18 +6,15 @@
 //
 
 import UIKit
+import Combine
 
 final class TypeView: UIView {
     
     private lazy var typeTitleLabel = UILabel()
     private lazy var typeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     
-    private lazy var typeDataSource = UICollectionViewDiffableDataSource<Int, PlaceType>(collectionView: self.typeCollectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: PlaceType) -> UICollectionViewCell? in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
-            cell.configure(image: UIImage(named: "FaceRed"), text: itemIdentifier.rawValue)
-            return cell
-        }
+    private var cancellables: Set<AnyCancellable> = []
+    var registerViewModel: RegisterViewModel?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,6 +24,25 @@ final class TypeView: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.configure()
+    }
+    
+    func bind(_ registerViewModel: RegisterViewModel) {
+        self.registerViewModel = registerViewModel
+        self.registerViewModel?.$typeSelectedList
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] typeSelectedList in
+                for (idx, selected) in typeSelectedList.enumerated() {
+                    guard let cell = self?.typeCollectionView.cellForItem(at: IndexPath(item: idx, section: 0)) else {
+                        return
+                    }
+                    if selected {
+                        cell.alpha = 1.0
+                    } else {
+                        cell.alpha = 0.6
+                    }
+                }
+            }
+            .store(in: &self.cancellables)
     }
     
     private func configure() {
@@ -51,18 +67,17 @@ final class TypeView: UIView {
         self.addSubview(self.typeCollectionView)
         self.typeCollectionView.backgroundColor = .clear
         self.typeCollectionView.showsHorizontalScrollIndicator = false
+        self.typeCollectionView.dataSource = self
+        self.typeCollectionView.delegate = self
+        self.typeCollectionView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+        self.typeCollectionView.addGestureRecognizer(tap)
         
-        self.typeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifer)
+        self.typeCollectionView.register(TypeCollectionViewCell.self, forCellWithReuseIdentifier: TypeCollectionViewCell.identifer)
 
         let typeFlowLayout = UICollectionViewFlowLayout()
-        typeFlowLayout.scrollDirection = .horizontal
         typeFlowLayout.itemSize = CGSize(width: 60, height: 90)
         self.typeCollectionView.collectionViewLayout = typeFlowLayout
-        
-        var snapshot = NSDiffableDataSourceSnapshot<Int, PlaceType>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(PlaceType.allCases)
-        self.typeDataSource.apply(snapshot, animatingDifferences: true)
         
         self.typeCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -72,5 +87,27 @@ final class TypeView: UIView {
             self.typeCollectionView.heightAnchor.constraint(equalToConstant: 200),
             self.typeCollectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
+    }
+    
+    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+       if let indexPath = self.typeCollectionView.indexPathForItem(at: sender.location(in: self.typeCollectionView)) {
+           self.registerViewModel?.didTypeTouched(indexPath.item)
+       }
+    }
+}
+
+extension TypeView: UICollectionViewDataSource, UICollectionViewDelegate {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return PlaceType.allCases.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TypeCollectionViewCell.identifer, for: indexPath) as? TypeCollectionViewCell else { preconditionFailure() }
+        cell.configure(image: UIImage(named: "FaceRed"), text: PlaceType.allCases[indexPath.item].rawValue)
+        return cell
     }
 }

@@ -108,6 +108,7 @@ class RegisterViewController: UIViewController {
             self.placeView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             self.placeView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
         ])
+        self.placeView.bind(self.registerViewModel)
     }
     
     private func configureTypeView() {
@@ -118,6 +119,7 @@ class RegisterViewController: UIViewController {
             self.typeView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             self.typeView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
         ])
+        self.typeView.bind(self.registerViewModel)
     }
     
     private func configureBuddyView() {
@@ -139,6 +141,7 @@ class RegisterViewController: UIViewController {
             self.memoView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             self.memoView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
         ])
+        self.memoView.bind(self.registerViewModel)
     }
     
     private func configurePictureView() {

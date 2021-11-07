@@ -6,12 +6,16 @@
 //
 
 import UIKit
+import Combine
 
 final class PlaceView: UIView {
     
     private lazy var placeTitleabel = UILabel()
     private lazy var placeBackgroundView = UIView()
     private lazy var placeTextField = UITextField()
+    
+    private var cancellables: Set<AnyCancellable> = []
+    var registerViewModel: RegisterViewModel?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,6 +25,10 @@ final class PlaceView: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.configure()
+    }
+    
+    func bind(_ registerViewModel: RegisterViewModel) {
+        self.registerViewModel = registerViewModel
     }
     
     private func configure() {
@@ -77,6 +85,9 @@ final class PlaceView: UIView {
 
 extension PlaceView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let text = textField.text {
+            self.registerViewModel?.didPlaceFinished(text)
+        }
         textField.resignFirstResponder()
         return true
     }

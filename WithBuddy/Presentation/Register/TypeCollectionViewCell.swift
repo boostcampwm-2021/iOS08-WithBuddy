@@ -1,14 +1,14 @@
 //
-//  ImageTextCollectionViewCell.swift
+//  TypeCollectionViewCell.swift
 //  WithBuddy
 //
-//  Created by 김두연 on 2021/11/02.
+//  Created by Inwoo Park on 2021/11/07.
 //
 
 import UIKit
 
-class ImageTextCollectionViewCell: UICollectionViewCell {
-    static let identifer = "ImageTextCollectionViewCell"
+class TypeCollectionViewCell: UICollectionViewCell {
+    static let identifer = "TypeCollectionViewCell"
     
     private var image: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "x.circle"))
@@ -17,7 +17,6 @@ class ImageTextCollectionViewCell: UICollectionViewCell {
     
     private var textLabel: UILabel = {
         let label = UILabel()
-        label.text = "없음"
         label.font = .systemFont(ofSize: 12)
         label.textAlignment = .center
         return label
@@ -60,3 +59,4 @@ class ImageTextCollectionViewCell: UICollectionViewCell {
     }
     
 }
+

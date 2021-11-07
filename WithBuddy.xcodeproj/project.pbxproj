@@ -21,10 +21,11 @@
 		8A0997EF2736B8E7002F2297 /* MemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0997EE2736B8E7002F2297 /* MemoView.swift */; };
 		8A0997F12736BB83002F2297 /* PictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0997F02736BB83002F2297 /* PictureView.swift */; };
 		8A54F3ED27325B2500535B26 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */; };
+		8A59E695273781E300977488 /* TypeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A59E694273781E300977488 /* TypeCollectionViewCell.swift */; };
 		BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25462730D97000E7BF35 /* Buddy.swift */; };
 		BB2D254B2730D97000E7BF35 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25482730D97000E7BF35 /* PlaceType.swift */; };
 		BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB2D254E2730DA2200E7BF35 /* Model.xcdatamodeld */; };
-		BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */; };
+		BB2D2554273112EE00E7BF35 /* BuddyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D2553273112EE00E7BF35 /* BuddyCollectionViewCell.swift */; };
 		BB2D255E2731317100E7BF35 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D255D2731317100E7BF35 /* SettingViewController.swift */; };
 		BB2D25602731317E00E7BF35 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D255F2731317E00E7BF35 /* ChartViewController.swift */; };
 		BB2D256227315B7B00E7BF35 /* PictureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */; };
@@ -60,10 +61,11 @@
 		8A0997EE2736B8E7002F2297 /* MemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoView.swift; sourceTree = "<group>"; };
 		8A0997F02736BB83002F2297 /* PictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureView.swift; sourceTree = "<group>"; };
 		8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
+		8A59E694273781E300977488 /* TypeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeCollectionViewCell.swift; sourceTree = "<group>"; };
 		BB2D25462730D97000E7BF35 /* Buddy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buddy.swift; sourceTree = "<group>"; };
 		BB2D25482730D97000E7BF35 /* PlaceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
 		BB2D254F2730DA2200E7BF35 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTextCollectionViewCell.swift; sourceTree = "<group>"; };
+		BB2D2553273112EE00E7BF35 /* BuddyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyCollectionViewCell.swift; sourceTree = "<group>"; };
 		BB2D255D2731317100E7BF35 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		BB2D255F2731317E00E7BF35 /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -232,10 +234,11 @@
 		BBF7FF3E272FB6CC00B71C97 /* Register */ = {
 			isa = PBXGroup;
 			children = (
-				BBF7FF29272FB51000B71C97 /* RegisterViewController.swift */,
-				BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */,
-				BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */,
 				8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */,
+				BB2D2553273112EE00E7BF35 /* BuddyCollectionViewCell.swift */,
+				BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */,
+				8A59E694273781E300977488 /* TypeCollectionViewCell.swift */,
+				BBF7FF29272FB51000B71C97 /* RegisterViewController.swift */,
 				8A0997E427363F4E002F2297 /* DateView.swift */,
 				8A0997E62736AAF2002F2297 /* PlaceView.swift */,
 				8A0997E82736AF55002F2297 /* TypeView.swift */,
@@ -410,7 +413,7 @@
 				8A0997EF2736B8E7002F2297 /* MemoView.swift in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
 				854AA75E27337A7200663911 /* SearchView.swift in Sources */,
-				BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */,
+				BB2D2554273112EE00E7BF35 /* BuddyCollectionViewCell.swift in Sources */,
 				BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */,
 				BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */,
 				85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */,
@@ -418,6 +421,7 @@
 				BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */,
 				85C236B527380D39001499E5 /* FaceColor.swift in Sources */,
 				8A0997F12736BB83002F2297 /* PictureView.swift in Sources */,
+				8A59E695273781E300977488 /* TypeCollectionViewCell.swift in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
 				854AA7662733A37200663911 /* ListViewModel.swift in Sources */,
 				BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */,

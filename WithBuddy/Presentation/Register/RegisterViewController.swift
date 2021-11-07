@@ -162,14 +162,8 @@ class RegisterViewController: UIViewController {
         self.datePicker.removeFromSuperview()
         self.toolBar.removeFromSuperview()
     }
-    
-    @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
-        let str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        let random = (0..<5).map{ _ in str.randomElement() }.compactMap{ $0 }
-        self.registerViewModel.didBuddySelected(Buddy(name: String(random)))
-    }
 
-    @objc func tapEmptySpace(){
+    @objc private func tapEmptySpace(){
         self.view.endEditing(true)
     }
 }

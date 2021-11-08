@@ -7,12 +7,14 @@
 
 import UIKit
 
-class CalendarViewController: UIViewController {
-
+class CalendarViewController: UIViewController, CalendarCellSelectable {
+    static let identifer = "CalendarViewController"
     private let headerView = HeaderView()
-    private let calendarView = CalendarView()
+    private let calendarView = UIView()
+    private let wbcalendar = WBCalendarView()
     private let scrollView = UIScrollView()
     private let contentView = UIView()
+    private let tmpViewModel = ListViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,10 +22,12 @@ class CalendarViewController: UIViewController {
     }
     
     private func configure() {
+        self.wbcalendar.delegate = self
         self.configureScrollView()
         self.configureContentView()
         self.configureHeaderView()
         self.configureCalendarView()
+        self.configurCalendar()
     }
     
     private func configureScrollView() {
@@ -75,5 +79,26 @@ class CalendarViewController: UIViewController {
             self.calendarView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
             self.calendarView.heightAnchor.constraint(equalToConstant: 530)
         ])
+    }
+    
+    private func configurCalendar() {
+        self.calendarView.addSubview(wbcalendar)
+        self.wbcalendar.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.wbcalendar.leadingAnchor.constraint(equalTo: self.calendarView.leadingAnchor, constant: 15),
+            self.wbcalendar.trailingAnchor.constraint(equalTo: self.calendarView.trailingAnchor, constant: -15),
+            self.wbcalendar.topAnchor.constraint(equalTo: self.calendarView.topAnchor, constant: 15),
+            self.wbcalendar.bottomAnchor.constraint(equalTo: self.calendarView.bottomAnchor, constant: -15)
+        ])
+    }
+    
+    func presentCellDetail() {
+        let CalendarDetailViewController = CalendarDetailViewController()
+        let nav = UINavigationController(rootViewController: CalendarDetailViewController)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+        }
+        present(nav, animated: true, completion: nil)
     }
 }

@@ -82,4 +82,14 @@ final class TabBarViewController: UITabBarController {
     @objc private func registerAction(_ sender: UIButton) {
         self.navigationController?.pushViewController(RegisterViewController(), animated: true)
     }
+    
+//    func presentDetail() {
+//        let CalendarDetailViewController = CalendarDetailViewController()
+//        let nav = UINavigationController(rootViewController: CalendarDetailViewController)
+//        nav.modalPresentationStyle = .pageSheet
+//        if let sheet = nav.sheetPresentationController {
+//            sheet.detents = [.medium(), .large()]
+//        }
+//        present(nav, animated: true, completion: nil)
+//    }
 }

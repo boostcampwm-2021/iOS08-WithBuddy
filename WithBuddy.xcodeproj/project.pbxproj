@@ -25,11 +25,15 @@
 		8A59E69A27383DA300977488 /* EndDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A59E69927383DA300977488 /* EndDateView.swift */; };
 		BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25462730D97000E7BF35 /* Buddy.swift */; };
 		BB2D254B2730D97000E7BF35 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25482730D97000E7BF35 /* PlaceType.swift */; };
-		BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB2D254E2730DA2200E7BF35 /* Model.xcdatamodeld */; };
 		BB2D2554273112EE00E7BF35 /* BuddyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D2553273112EE00E7BF35 /* BuddyCollectionViewCell.swift */; };
 		BB2D255E2731317100E7BF35 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D255D2731317100E7BF35 /* SettingViewController.swift */; };
 		BB2D25602731317E00E7BF35 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D255F2731317E00E7BF35 /* ChartViewController.swift */; };
 		BB2D256227315B7B00E7BF35 /* PictureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */; };
+		BB2D25832739192200E7BF35 /* WithBuddyModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25812739192200E7BF35 /* WithBuddyModel.xcdatamodeld */; };
+		BB2D25852739197600E7BF35 /* Gathering.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25842739197600E7BF35 /* Gathering.swift */; };
+		BB2D258C273922FC00E7BF35 /* BuddyEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D2588273922FC00E7BF35 /* BuddyEntity+CoreDataClass.swift */; };
+		BB2D258F2739299A00E7BF35 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D258E2739299A00E7BF35 /* CoreDataManager.swift */; };
+		BB2D25962739441300E7BF35 /* GatheringEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25942739441300E7BF35 /* GatheringEntity+CoreDataClass.swift */; };
 		BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF25272FB51000B71C97 /* AppDelegate.swift */; };
 		BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF27272FB51000B71C97 /* SceneDelegate.swift */; };
 		BBF7FF2A272FB51000B71C97 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF29272FB51000B71C97 /* RegisterViewController.swift */; };
@@ -66,11 +70,15 @@
 		8A59E69927383DA300977488 /* EndDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndDateView.swift; sourceTree = "<group>"; };
 		BB2D25462730D97000E7BF35 /* Buddy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buddy.swift; sourceTree = "<group>"; };
 		BB2D25482730D97000E7BF35 /* PlaceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
-		BB2D254F2730DA2200E7BF35 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		BB2D2553273112EE00E7BF35 /* BuddyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyCollectionViewCell.swift; sourceTree = "<group>"; };
 		BB2D255D2731317100E7BF35 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		BB2D255F2731317E00E7BF35 /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCell.swift; sourceTree = "<group>"; };
+		BB2D25822739192200E7BF35 /* WithBuddyModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WithBuddyModel.xcdatamodel; sourceTree = "<group>"; };
+		BB2D25842739197600E7BF35 /* Gathering.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gathering.swift; sourceTree = "<group>"; };
+		BB2D2588273922FC00E7BF35 /* BuddyEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BuddyEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		BB2D258E2739299A00E7BF35 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		BB2D25942739441300E7BF35 /* GatheringEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GatheringEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		BBF7FF22272FB51000B71C97 /* WithBuddy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WithBuddy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF7FF25272FB51000B71C97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BBF7FF27272FB51000B71C97 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -143,6 +151,7 @@
 				BB2D25462730D97000E7BF35 /* Buddy.swift */,
 				BB2D25482730D97000E7BF35 /* PlaceType.swift */,
 				85C236B427380D39001499E5 /* FaceColor.swift */,
+				BB2D25842739197600E7BF35 /* Gathering.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -158,7 +167,10 @@
 		BB2D254D2730DA0A00E7BF35 /* PersistentStorage */ = {
 			isa = PBXGroup;
 			children = (
-				BB2D254E2730DA2200E7BF35 /* Model.xcdatamodeld */,
+				BB2D25812739192200E7BF35 /* WithBuddyModel.xcdatamodeld */,
+				BB2D2588273922FC00E7BF35 /* BuddyEntity+CoreDataClass.swift */,
+				BB2D25942739441300E7BF35 /* GatheringEntity+CoreDataClass.swift */,
+				BB2D258E2739299A00E7BF35 /* CoreDataManager.swift */,
 			);
 			path = PersistentStorage;
 			sourceTree = "<group>";
@@ -396,6 +408,7 @@
 			files = (
 				8A0997E92736AF55002F2297 /* TypeView.swift in Sources */,
 				F7A7699B2732588500FF83EA /* WBCalendarView.swift in Sources */,
+				BB2D25852739197600E7BF35 /* Gathering.swift in Sources */,
 				F7A769992732563700FF83EA /* CalendarView.swift in Sources */,
 				8A0997E527363F4E002F2297 /* StartDateView.swift in Sources */,
 				F7B69B8A273398C4005D2F32 /* CalendarManager.swift in Sources */,
@@ -409,10 +422,10 @@
 				F7A7699727315AF800FF83EA /* HeaderView.swift in Sources */,
 				BBF7FF40272FB7B700B71C97 /* TabBarViewController.swift in Sources */,
 				BB2D254B2730D97000E7BF35 /* PlaceType.swift in Sources */,
+				BB2D25962739441300E7BF35 /* GatheringEntity+CoreDataClass.swift in Sources */,
 				BB2D255E2731317100E7BF35 /* SettingViewController.swift in Sources */,
 				8A0997EB2736B31F002F2297 /* BuddyView.swift in Sources */,
 				BBF7FF2A272FB51000B71C97 /* RegisterViewController.swift in Sources */,
-				BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */,
 				BB2D256227315B7B00E7BF35 /* PictureCollectionViewCell.swift in Sources */,
 				8A0997EF2736B8E7002F2297 /* MemoView.swift in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
@@ -422,14 +435,16 @@
 				BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */,
 				85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */,
 				854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */,
-				BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */,
 				85C236B527380D39001499E5 /* FaceColor.swift in Sources */,
+				BB2D25832739192200E7BF35 /* WithBuddyModel.xcdatamodeld in Sources */,
 				8A0997F12736BB83002F2297 /* PictureView.swift in Sources */,
 				8A59E695273781E300977488 /* TypeCollectionViewCell.swift in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
+				BB2D258C273922FC00E7BF35 /* BuddyEntity+CoreDataClass.swift in Sources */,
 				854AA7662733A37200663911 /* ListViewModel.swift in Sources */,
 				BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */,
 				BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */,
+				BB2D258F2739299A00E7BF35 /* CoreDataManager.swift in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -642,13 +657,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		BB2D254E2730DA2200E7BF35 /* Model.xcdatamodeld */ = {
+		BB2D25812739192200E7BF35 /* WithBuddyModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				BB2D254F2730DA2200E7BF35 /* Model.xcdatamodel */,
+				BB2D25822739192200E7BF35 /* WithBuddyModel.xcdatamodel */,
 			);
-			currentVersion = BB2D254F2730DA2200E7BF35 /* Model.xcdatamodel */;
-			path = Model.xcdatamodeld;
+			currentVersion = BB2D25822739192200E7BF35 /* WithBuddyModel.xcdatamodel */;
+			path = WithBuddyModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

@@ -15,14 +15,13 @@ final class BuddyView: UIView {
     private lazy var buddyCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     
     private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BuddyCollectionViewCell.identifer, for: indexPath) as? BuddyCollectionViewCell else { preconditionFailure() }
-            cell.configure(image: UIImage(named: "Purple1"), text: itemIdentifier.name)
-            return cell
-        }
+        (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BuddyCollectionViewCell.identifer, for: indexPath) as? BuddyCollectionViewCell else { preconditionFailure() }
+        cell.configure(image: UIImage(named: "FacePurple1"), text: itemIdentifier.name)
+        return cell
+    }
     
-    private var cancellables: Set<AnyCancellable> = []
-    var registerViewModel: RegisterViewModel?
+    var delegate: BuddyViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,22 +33,16 @@ final class BuddyView: UIView {
         self.configure()
     }
     
-    func bind(_ registerViewModel: RegisterViewModel) {
-        self.registerViewModel = registerViewModel
-        self.registerViewModel?.$buddyList
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] buddyList in
-                var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
-                if buddyList.isEmpty {
-                    snapshot.appendSections([0])
-                    snapshot.appendItems([Buddy(name: "친구없음")])
-                } else {
-                    snapshot.appendSections([0])
-                    snapshot.appendItems(buddyList)
-                }
-                self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
-            }
-            .store(in: &self.cancellables)
+    func buddyListReload(_ buddyList: [Buddy]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
+        if buddyList.isEmpty {
+            snapshot.appendSections([0])
+            snapshot.appendItems([Buddy(name: "친구없음")])
+        } else {
+            snapshot.appendSections([0])
+            snapshot.appendItems(buddyList)
+        }
+        self.buddyDataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func configure() {
@@ -112,7 +105,7 @@ final class BuddyView: UIView {
     }
     
     @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
-        self.registerViewModel?.didBuddySelected(Buddy(name: UUID().uuidString))
+        self.delegate?.buddyDidSelected(Buddy(name: UUID().uuidString))
     }
 }
 
@@ -120,10 +113,15 @@ extension BuddyView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
             let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
-                                       image: UIImage(systemName: "trash")) { action in
-                self.registerViewModel?.didBuddyDeleteTouched(in: indexPath.item)
-                }
+                                  image: UIImage(systemName: "trash")) { action in
+                self.delegate?.buddyDidDeleted(indexPath.item)
+            }
             return UIMenu(title: "이 버디를", children: [delete])
         })
     }
+}
+
+protocol BuddyViewDelegate {
+    func buddyDidDeleted(_: Int)
+    func buddyDidSelected(_: Buddy)
 }

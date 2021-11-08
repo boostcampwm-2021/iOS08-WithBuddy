@@ -29,9 +29,48 @@ class RegisterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.bind()
         self.configure()
         self.registerViewModel.didStartDatePicked(Date())
         self.registerViewModel.didEndDatePicked(Date())
+    }
+    
+    private func bind() {
+        self.registerViewModel.$startDate
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] date in
+                self?.startDateView.changeDateLebelText(date)
+            }
+            .store(in: &self.cancellables)
+        
+        self.registerViewModel.$endDate
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] date in
+                self?.endDateView.changeDateLebelText(date)
+            }
+            .store(in: &self.cancellables)
+        
+        self.registerViewModel.$typeSelectedList
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] typeSelectedList in
+                self?.typeView.changeSelectedType(typeSelectedList)
+            }
+            .store(in: &self.cancellables)
+        
+        self.registerViewModel.$buddyList
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] buddyList in
+                self?.buddyView.buddyListReload(buddyList)
+            }
+            .store(in: &self.cancellables)
+        
+        
+        self.registerViewModel.$pictures
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] pictures in
+                self?.pictureView.pictureListReload(pictures)
+            }
+            .store(in: &self.cancellables)
     }
     
     private func configure() {
@@ -81,7 +120,6 @@ class RegisterViewController: UIViewController {
             self.startDateView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
         ])
         self.startDateView.delegate = self
-        self.startDateView.bind(self.registerViewModel)
     }
     
     private func configureEndDateView() {
@@ -93,7 +131,6 @@ class RegisterViewController: UIViewController {
             self.endDateView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
         ])
         self.endDateView.delegate = self
-        self.endDateView.bind(self.registerViewModel)
     }
     
     private func configurePlaceView() {
@@ -104,7 +141,7 @@ class RegisterViewController: UIViewController {
             self.placeView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             self.placeView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
         ])
-        self.placeView.bind(self.registerViewModel)
+        self.placeView.delegate = self
     }
     
     private func configureTypeView() {
@@ -115,7 +152,7 @@ class RegisterViewController: UIViewController {
             self.typeView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             self.typeView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
         ])
-        self.typeView.bind(self.registerViewModel)
+        self.typeView.delegate = self
     }
     
     private func configureBuddyView() {
@@ -126,7 +163,7 @@ class RegisterViewController: UIViewController {
             self.buddyView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             self.buddyView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
         ])
-        self.buddyView.bind(self.registerViewModel)
+        self.buddyView.delegate = self
     }
     
     private func configureMemoView() {
@@ -137,7 +174,7 @@ class RegisterViewController: UIViewController {
             self.memoView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             self.memoView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
         ])
-        self.memoView.bind(self.registerViewModel)
+        self.memoView.delegate = self
     }
     
     private func configurePictureView() {
@@ -150,7 +187,6 @@ class RegisterViewController: UIViewController {
             self.pictureView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
         ])
         self.pictureView.delegate = self
-        self.pictureView.bind(self.registerViewModel)
     }
     
     @objc private func onStartDoneTouched() {
@@ -171,12 +207,12 @@ class RegisterViewController: UIViewController {
 }
 
 extension RegisterViewController: StartDateViewDelegate, EndDateViewDelegate {
-    func onStartDateButtonTouched() {
+    func startDateButtonDidTouched() {
         self.configureDatePicker()
         self.configureStartDateToolBar()
     }
     
-    func onEndDateButtonTouched() {
+    func endDateButtonDidTouched() {
         self.configureDatePicker()
         self.configureEndDateToolBar()
     }
@@ -230,15 +266,6 @@ extension RegisterViewController: StartDateViewDelegate, EndDateViewDelegate {
     }
 }
 
-extension RegisterViewController: PictureViewDelegate {
-    func onPictureButtonTouched() {
-        let picker = UIImagePickerController()
-        picker.delegate = self
-        picker.sourceType = .photoLibrary
-        present(picker, animated: false, completion: nil)
-    }
-}
-
 extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let url = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
@@ -250,5 +277,46 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
+    }
+}
+
+extension RegisterViewController: PlaceViewDelegate {
+    func placeTextFieldDidReturn(_ place: String) {
+        self.registerViewModel.didPlaceFinished(place)
+    }
+}
+
+extension RegisterViewController: TypeViewDelegate {
+    func typeDidSelected(_ idx: Int) {
+        self.registerViewModel.didTypeTouched(idx)
+    }
+}
+
+extension RegisterViewController: BuddyViewDelegate {
+    func buddyDidDeleted(_ idx: Int) {
+        self.registerViewModel.didBuddyDeleteTouched(in: idx)
+    }
+    
+    func buddyDidSelected(_ buddy: Buddy) {
+        self.registerViewModel.didBuddySelected(buddy)
+    }
+}
+
+extension RegisterViewController: MemoViewDelegate {
+    func memoTextFieldDidReturn(_ text: String) {
+        self.registerViewModel.didMemoFinished(text)
+    }
+}
+
+extension RegisterViewController: PictureViewDelegate {
+    func pictureDidDeleted(_ idx: Int) {
+        self.registerViewModel.didPictureDeleteTouched(in: idx)
+    }
+    
+    func pictureButtonDidTouched() {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = .photoLibrary
+        present(picker, animated: false, completion: nil)
     }
 }

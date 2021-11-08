@@ -21,8 +21,6 @@ final class PictureView: UIView {
             return cell
         }
     
-    private var cancellables: Set<AnyCancellable> = []
-    var registerViewModel: RegisterViewModel?
     var delegate: PictureViewDelegate?
     
     override init(frame: CGRect) {
@@ -35,26 +33,20 @@ final class PictureView: UIView {
         self.configure()
     }
     
-    func bind(_ registerViewModel: RegisterViewModel) {
-        self.registerViewModel = registerViewModel
-        self.registerViewModel?.$pictures
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] pictures in
-                var snapshot = NSDiffableDataSourceSnapshot<Int, URL>()
-                if pictures.isEmpty {
-                    guard let filePath = Bundle.main.path(forResource: "widthBuddyLaunchScreen", ofType: "png") else {
-                        return
-                    }
-                    let fileUrl = URL(fileURLWithPath: filePath)
-                    snapshot.appendSections([0])
-                    snapshot.appendItems([fileUrl])
-                } else {
-                    snapshot.appendSections([0])
-                    snapshot.appendItems(pictures)
-                }
-                self?.pictureDataSource.apply(snapshot, animatingDifferences: true)
+    func pictureListReload(_ pictures: [URL]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, URL>()
+        if pictures.isEmpty {
+            guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else {
+                return
             }
-            .store(in: &self.cancellables)
+            let fileUrl = URL(fileURLWithPath: filePath)
+            snapshot.appendSections([0])
+            snapshot.appendItems([fileUrl])
+        } else {
+            snapshot.appendSections([0])
+            snapshot.appendItems(pictures)
+        }
+        self.pictureDataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func configure() {
@@ -118,7 +110,7 @@ final class PictureView: UIView {
     }
     
     @objc private func onPictureButtonTouched(_ sender: UIButton) {
-        self.delegate?.onPictureButtonTouched()
+        self.delegate?.pictureButtonDidTouched()
     }
 }
 
@@ -127,7 +119,7 @@ extension PictureView: UICollectionViewDelegate {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
             let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
                                        image: UIImage(systemName: "trash")) { action in
-                self.registerViewModel?.didPictureDeleteTouched(in: indexPath.item)
+                self.delegate?.pictureDidDeleted(indexPath.item)
                 }
             return UIMenu(title: "이 사진을", children: [delete])
         })
@@ -135,7 +127,8 @@ extension PictureView: UICollectionViewDelegate {
 }
 
 protocol PictureViewDelegate {
-    func onPictureButtonTouched()
+    func pictureButtonDidTouched()
+    func pictureDidDeleted(_: Int)
 }
 
 

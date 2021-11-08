@@ -13,8 +13,7 @@ final class TypeView: UIView {
     private lazy var typeTitleLabel = UILabel()
     private lazy var typeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     
-    private var cancellables: Set<AnyCancellable> = []
-    var registerViewModel: RegisterViewModel?
+    var delegate: TypeViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,23 +25,17 @@ final class TypeView: UIView {
         self.configure()
     }
     
-    func bind(_ registerViewModel: RegisterViewModel) {
-        self.registerViewModel = registerViewModel
-        self.registerViewModel?.$typeSelectedList
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] typeSelectedList in
-                for (idx, selected) in typeSelectedList.enumerated() {
-                    guard let cell = self?.typeCollectionView.cellForItem(at: IndexPath(item: idx, section: 0)) else {
-                        return
-                    }
-                    if selected {
-                        cell.alpha = 1.0
-                    } else {
-                        cell.alpha = 0.6
-                    }
-                }
+    func changeSelectedType(_ typeSelectedList: [Bool]) {
+        for (idx, selected) in typeSelectedList.enumerated() {
+            guard let cell = self.typeCollectionView.cellForItem(at: IndexPath(item: idx, section: 0)) else {
+                return
             }
-            .store(in: &self.cancellables)
+            if selected {
+                cell.alpha = 1.0
+            } else {
+                cell.alpha = 0.6
+            }
+        }
     }
     
     private func configure() {
@@ -91,7 +84,7 @@ final class TypeView: UIView {
     
     @objc func handleTap(_ sender: UITapGestureRecognizer) {
        if let indexPath = self.typeCollectionView.indexPathForItem(at: sender.location(in: self.typeCollectionView)) {
-           self.registerViewModel?.didTypeTouched(indexPath.item)
+           self.delegate?.typeDidSelected(indexPath.item)
        }
     }
 }
@@ -107,7 +100,11 @@ extension TypeView: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TypeCollectionViewCell.identifer, for: indexPath) as? TypeCollectionViewCell else { preconditionFailure() }
-        cell.configure(image: UIImage(named: "FaceRed"), text: "\(PlaceType.allCases[indexPath.item])")
+        cell.configure(image: UIImage(named: "\(PlaceType.allCases[indexPath.item])"), text: "\(PlaceType.allCases[indexPath.item])")
         return cell
     }
+}
+
+protocol TypeViewDelegate {
+    func typeDidSelected(_: Int)
 }

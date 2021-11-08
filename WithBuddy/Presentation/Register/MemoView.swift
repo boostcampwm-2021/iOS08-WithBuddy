@@ -14,8 +14,7 @@ final class MemoView: UIView {
     private lazy var memoBackgroundView = UIView()
     private lazy var memoTextField = UITextField()
    
-    private var cancellables: Set<AnyCancellable> = []
-    var registerViewModel: RegisterViewModel?
+    var delegate: MemoViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,10 +24,6 @@ final class MemoView: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.configure()
-    }
-    
-    func bind(_ registerViewModel: RegisterViewModel) {
-        self.registerViewModel = registerViewModel
     }
     
     private func configure() {
@@ -86,9 +81,13 @@ final class MemoView: UIView {
 extension MemoView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text {
-            self.registerViewModel?.didPlaceFinished(text)
+            self.delegate?.memoTextFieldDidReturn(text)
         }
         textField.resignFirstResponder()
         return true
     }
+}
+
+protocol MemoViewDelegate {
+    func memoTextFieldDidReturn(_: String)
 }

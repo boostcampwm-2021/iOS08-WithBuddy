@@ -14,9 +14,7 @@ final class EndDateView: UIView {
     private lazy var dateBackgroundView = UIView()
     private lazy var dateLabel = UILabel()
     private lazy var dateButton = UIButton()
-    
-    private var cancellables: Set<AnyCancellable> = []
-    var registerViewModel: RegisterViewModel?
+
     var delegate: EndDateViewDelegate?
     
     override init(frame: CGRect) {
@@ -29,14 +27,8 @@ final class EndDateView: UIView {
         self.configure()
     }
     
-    func bind(_ registerViewModel: RegisterViewModel) {
-        self.registerViewModel = registerViewModel
-        self.registerViewModel?.$endDate
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] date in
-                self?.dateLabel.text = date
-            }
-            .store(in: &self.cancellables)
+    func changeDateLebelText(_ date: String?) {
+        self.dateLabel.text = date
     }
     
     private func configure() {
@@ -98,10 +90,10 @@ final class EndDateView: UIView {
     }
     
     @objc private func onDateButtonTouched(_ sender: UIButton) {
-        self.delegate?.onEndDateButtonTouched()
+        self.delegate?.endDateButtonDidTouched()
     }
 }
 
 protocol EndDateViewDelegate {
-    func onEndDateButtonTouched()
+    func endDateButtonDidTouched()
 }

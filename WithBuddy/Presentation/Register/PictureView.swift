@@ -36,7 +36,7 @@ final class PictureView: UIView {
     func pictureListReload(_ pictures: [URL]) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, URL>()
         if pictures.isEmpty {
-            guard let filePath = Bundle.main.path(forResource: "widthBuddyLaunchScreen", ofType: "png") else {
+            guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else {
                 return
             }
             let fileUrl = URL(fileURLWithPath: filePath)

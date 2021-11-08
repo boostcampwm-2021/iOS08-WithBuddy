@@ -10,11 +10,7 @@ import UIKit
 class PictureCollectionViewCell: UICollectionViewCell {
     static let identifer = "PictureCollectionViewCell"
     
-    private var photoImage: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "photo"))
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
+    private var photoImage = UIImageView()
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -22,8 +18,7 @@ class PictureCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.addSubview(self.photoImage)
-        self.configureLayout()
+        self.configure()
     }
     
     func configure(url: URL) {
@@ -33,7 +28,9 @@ class PictureCollectionViewCell: UICollectionViewCell {
         photoImage.image = UIImage(data: data)
     }
     
-    private func configureLayout() {
+    private func configure() {
+        self.addSubview(self.photoImage)
+        self.photoImage.contentMode = .scaleAspectFit
         self.photoImage.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.photoImage.topAnchor.constraint(equalTo: self.topAnchor),

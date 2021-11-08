@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19206" systemVersion="20G165" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <elements/>
+    <entity name="BuddyEntity" representedClassName=".BuddyEntity" syncable="YES">
+        <attribute name="face" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <relationship name="gathering" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GatheringEntity" inverseName="buddy" inverseEntity="GatheringEntity"/>
+    </entity>
+    <entity name="GatheringEntity" representedClassName=".GatheringEntity" syncable="YES">
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="memo" optional="YES" attributeType="String"/>
+        <attribute name="picture" optional="YES" attributeType="Transformable" customClassName="[URL]"/>
+        <attribute name="place" optional="YES" attributeType="String"/>
+        <attribute name="placeType" attributeType="Transformable" customClassName="[Int]"/>
+        <relationship name="buddy" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BuddyEntity" inverseName="gathering" inverseEntity="BuddyEntity"/>
+    </entity>
+    <elements>
+        <element name="GatheringEntity" positionX="-27" positionY="18" width="128" height="119"/>
+        <element name="BuddyEntity" positionX="18" positionY="99" width="128" height="89"/>
+    </elements>
 </model>

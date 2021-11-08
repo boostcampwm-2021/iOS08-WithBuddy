@@ -14,7 +14,6 @@ class CalendarViewController: UIViewController, CalendarCellSelectable {
     private let wbcalendar = WBCalendarView()
     private let scrollView = UIScrollView()
     private let contentView = UIView()
-    private let tmpViewModel = ListViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()

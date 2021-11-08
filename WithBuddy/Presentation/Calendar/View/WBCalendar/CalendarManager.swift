@@ -48,11 +48,4 @@ final class CalendarManager {
         let components = calendar.dateComponents([.weekday], from: baseDate)
         return (components.weekday ?? 1) - 1
     }
-    
-//    func dateOfDay(baseDate: Date, day: Int) {
-//        let yaer = calendar.current.component(.year, from: Date)
-//        let myDateComponents = DateComponents(year: baseDate.year, month: baseDate., day: 22)
-//        let calendar = Calendar.current
-//        let myDate = calendar.date(from: myDateComponents) // "Feb 22, 2222 at 12:00 AM"
-//    }
 }

@@ -17,7 +17,6 @@ class WBCalendarView: UIView {
     
     private var selectedDate = Date()
     private var totalDays = [String]()
-    private var totalDates = [Date]()
     var delegate: CalendarCellSelectable?
     
     override init(frame: CGRect) {
@@ -132,11 +131,9 @@ class WBCalendarView: UIView {
         var count: Int = 1
         
         self.totalDays.removeAll()
-        self.totalDates.removeAll()
         while(count <= 42) {
             if(count <= weekDay || count - weekDay > numOfDaysInMonth) {
                 totalDays.append("")
-//                totalDates.append(dateOfDay)
             } else {
                 totalDays.append(String(count - weekDay))
             }

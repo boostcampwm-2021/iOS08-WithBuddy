@@ -45,7 +45,7 @@ class WBCalendarViewCell: UICollectionViewCell {
     
     private func configureBuddyImageView() {
         self.addSubview(buddyImageView)
-        buddyImageView.image = UIImage(named: "Blue1")
+        buddyImageView.image = UIImage(named: "FaceBlue1")
         self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.buddyImageView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8),

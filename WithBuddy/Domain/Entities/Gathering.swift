@@ -10,8 +10,8 @@ import Foundation
 struct Gathering {
     var date: Date
     var place: String?
-    var placeType: [PlaceType]
+    var placeType: [Int]
     var buddy: [Buddy]
     var memo: String?
-    var picture: [URL]
+    var picture: [URL]?
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 struct Buddy: Hashable {
-    private(set) var id: UUID
-    private(set) var name: String
-    private(set) var face: String
+    var id: UUID
+    var name: String
+    var face: String
 }

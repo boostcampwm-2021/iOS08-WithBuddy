@@ -100,7 +100,7 @@ extension TypeView: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TypeCollectionViewCell.identifer, for: indexPath) as? TypeCollectionViewCell else { preconditionFailure() }
-        cell.configure(image: UIImage(named: "FaceRed"), text: "\(PlaceType.allCases[indexPath.item])")
+        cell.configure(image: UIImage(named: "\(PlaceType.allCases[indexPath.item])"), text: "\(PlaceType.allCases[indexPath.item])")
         return cell
     }
 }

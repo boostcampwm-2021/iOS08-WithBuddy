@@ -27,7 +27,7 @@ class RegisterViewController: UIViewController {
         let dataSource = UICollectionViewDiffableDataSource<Int, PlaceType>(collectionView: self.typeCollectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: PlaceType) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
-            cell.configure(image: UIImage(named: "FaceRed"), text: itemIdentifier.rawValue)
+            cell.configure(image: UIImage(named: "\(itemIdentifier)"), text: "\(itemIdentifier)")
             return cell
         }
         return dataSource
@@ -37,7 +37,7 @@ class RegisterViewController: UIViewController {
         let dataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
-            cell.configure(image: UIImage(named: "Purple1"), text: itemIdentifier.name)
+            cell.configure(image: UIImage(named: BuddyFaceUseCase().random()), text: itemIdentifier.name)
             return cell
         }
         return dataSource

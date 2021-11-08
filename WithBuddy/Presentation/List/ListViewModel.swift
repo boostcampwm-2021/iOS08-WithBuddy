@@ -24,10 +24,12 @@ final class ListViewModel {
     }
     
     private func configure() {
-        let buddy1 = TmpBuddy(name: "정아", face: "Purple1")
-        let buddy2 = TmpBuddy(name: "나정", face: "Pink2")
-        let buddy3 = TmpBuddy(name: "인우", face: "Green3")
-        let buddy4 = TmpBuddy(name: "두연", face: "Blue1")
+        let useCase: BuddyFaceInterface = BuddyFaceUseCase()
+        let faceList = useCase.faceList(color: FaceColor.purple)
+        let buddy1 = TmpBuddy(name: "정아", face: faceList[0])
+        let buddy2 = TmpBuddy(name: "나정", face: faceList[3])
+        let buddy3 = TmpBuddy(name: "인우", face: faceList[6])
+        let buddy4 = TmpBuddy(name: "두연", face: faceList[8])
         let type1 = "FaceGreen"
         let type2 = "FacePurple"
         let type3 = "FaceRed"

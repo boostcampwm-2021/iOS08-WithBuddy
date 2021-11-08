@@ -10,6 +10,8 @@
 		854AA75E27337A7200663911 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA75D27337A7200663911 /* SearchView.swift */; };
 		854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA76327338C2F00663911 /* ListCollectionViewCell.swift */; };
 		854AA7662733A37200663911 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA7652733A37200663911 /* ListViewModel.swift */; };
+		85C236B527380D39001499E5 /* FaceColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C236B427380D39001499E5 /* FaceColor.swift */; };
+		85C236BA27381239001499E5 /* BuddyFaceUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C236B927381239001499E5 /* BuddyFaceUseCase.swift */; };
 		85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */; };
 		85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D98272FEBE000825C64 /* ListViewController.swift */; };
 		8A54F3ED27325B2500535B26 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */; };
@@ -41,6 +43,8 @@
 		854AA75D27337A7200663911 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		854AA76327338C2F00663911 /* ListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCollectionViewCell.swift; sourceTree = "<group>"; };
 		854AA7652733A37200663911 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
+		85C236B427380D39001499E5 /* FaceColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceColor.swift; sourceTree = "<group>"; };
+		85C236B927381239001499E5 /* BuddyFaceUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyFaceUseCase.swift; sourceTree = "<group>"; };
 		85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		85FA1D98272FEBE000825C64 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
@@ -81,6 +85,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		85C236B8273811EA001499E5 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				85C236B927381239001499E5 /* BuddyFaceUseCase.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
 		85FA1D91272FEAE500825C64 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
@@ -104,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				BB2D25452730D95C00E7BF35 /* Entities */,
+				85C236B8273811EA001499E5 /* UseCases */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -113,6 +126,7 @@
 			children = (
 				BB2D25462730D97000E7BF35 /* Buddy.swift */,
 				BB2D25482730D97000E7BF35 /* PlaceType.swift */,
+				85C236B427380D39001499E5 /* FaceColor.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -359,6 +373,7 @@
 				F7A7699B2732588500FF83EA /* WBCalendarView.swift in Sources */,
 				F7A769992732563700FF83EA /* CalendarView.swift in Sources */,
 				F7B69B8A273398C4005D2F32 /* CalendarManager.swift in Sources */,
+				85C236BA27381239001499E5 /* BuddyFaceUseCase.swift in Sources */,
 				F7B69B8C27339EF9005D2F32 /* WBCalendarViewCell.swift in Sources */,
 				85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */,
 				8A54F3ED27325B2500535B26 /* RegisterViewModel.swift in Sources */,
@@ -378,6 +393,7 @@
 				85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */,
 				854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */,
 				BB2D25502730DA2200E7BF35 /* Model.xcdatamodeld in Sources */,
+				85C236B527380D39001499E5 /* FaceColor.swift in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
 				854AA7662733A37200663911 /* ListViewModel.swift in Sources */,
 				BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */,

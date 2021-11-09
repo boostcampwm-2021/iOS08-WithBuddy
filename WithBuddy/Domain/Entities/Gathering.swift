@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Gathering {
+struct Gathering: Hashable {
     var date: Date
     var place: String?
     var placeType: [Int]

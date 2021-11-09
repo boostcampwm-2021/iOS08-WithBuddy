@@ -10,11 +10,19 @@ import Combine
 
 final class ListViewController: UIViewController {
     
-    private let listViewModel = ListViewModel()
     private let searchView = SearchView()
     private let listCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+    
+    private lazy var listDataSource = UICollectionViewDiffableDataSource<Int, Gathering>(collectionView: self.listCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Gathering) -> UICollectionViewCell? in
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListCollectionViewCell.identifier, for: indexPath) as? ListCollectionViewCell else { return UICollectionViewCell() }
+        print(itemIdentifier)
+        cell.update(date: itemIdentifier.date, buddyImageList: itemIdentifier.buddy.map{ $0.face }, typeList: itemIdentifier.placeType)
+        return cell
+    }
+    
+    private let listViewModel = ListViewModel()
     private var cancellables: Set<AnyCancellable> = []
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configure()
@@ -28,8 +36,8 @@ final class ListViewController: UIViewController {
     
     private func bind() {
         self.listViewModel.$gatheringList
-            .sink { _ in
-                self.listCollectionView.reloadData()
+            .sink { [weak self] getheringList in
+                self?.reloadGathering(list: getheringList)
             }
             .store(in: &self.cancellables)
     }
@@ -49,7 +57,6 @@ final class ListViewController: UIViewController {
     
     private func configureCollectionView() {
         self.view.addSubview(self.listCollectionView)
-        self.listCollectionView.dataSource = self
         self.listCollectionView.delegate = self
         self.listCollectionView.backgroundColor = .clear
         self.listCollectionView.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: ListCollectionViewCell.identifier)
@@ -61,7 +68,14 @@ final class ListViewController: UIViewController {
             self.listCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
     }
-
+    
+    private func reloadGathering(list: [Gathering]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Gathering>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(list)
+        self.listDataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
 }
 
 extension ListViewController: UITextFieldDelegate {
@@ -73,22 +87,10 @@ extension ListViewController: UITextFieldDelegate {
     
 }
 
-extension ListViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.listViewModel.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListCollectionViewCell.identifier, for: indexPath)
-                as? ListCollectionViewCell else { return UICollectionViewCell() }
-        let gathering = self.listViewModel[indexPath.item]
-        cell.update(date: gathering.date, buddyImageNames: gathering.buddyList.map{ $0.face }, typeImageNames: gathering.type)
-        return cell
-    }
+extension ListViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.view.frame.width-40, height: 150)
     }
-
+    
 }

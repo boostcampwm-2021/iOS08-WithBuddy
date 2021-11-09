@@ -7,9 +7,9 @@
 
 import Foundation
 
-enum PlaceType: CaseIterable, CustomStringConvertible {
+enum PlaceType: Int, CaseIterable, CustomStringConvertible {
     
-    case study
+    case study = 0
     case shopping
     case sport
     case healing

@@ -32,13 +32,17 @@ final class ListCollectionViewCell: UICollectionViewCell {
         self.typeStackView = UIStackView()
     }
     
-    func update(date: String, buddyImageNames: [String], typeImageNames: [String]) {
-        self.dateLabel.text = date
-        self.update(imageNames: buddyImageNames, stackView: self.buddyStackView)
-        self.update(imageNames: typeImageNames, stackView: self.typeStackView)
+    func update(date: Date, buddyImageList: [String], typeList: [Int]) {
+        let placeTypeList = typeList.map{ "\(PlaceType.init(rawValue: $0) ?? PlaceType.etc)" }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy년 MM월 dd일"
+        self.dateLabel.text = dateFormatter.string(from: date)
+        self.update(imageNames: buddyImageList, stackView: self.buddyStackView)
+        self.update(imageNames: placeTypeList, stackView: self.typeStackView)
     }
     
     private func update(imageNames: [String], stackView: UIStackView) {
+        print(imageNames)
         (0..<min(6, imageNames.count)).forEach { index in
             guard let image = UIImage(named: imageNames[index]) else { return }
             let imageView = UIImageView(image: image)

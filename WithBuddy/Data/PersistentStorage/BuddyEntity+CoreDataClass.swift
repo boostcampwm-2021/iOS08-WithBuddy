@@ -14,7 +14,7 @@ public class BuddyEntity: NSManagedObject {
     @NSManaged public var id: UUID
     @NSManaged public var name: String
     @NSManaged public var face: String
-    @NSManaged public var gathering: NSSet?
+    @NSManaged public var gathering: Set<GatheringEntity>?
 }
 
 extension BuddyEntity {

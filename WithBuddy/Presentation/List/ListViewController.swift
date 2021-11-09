@@ -13,9 +13,10 @@ final class ListViewController: UIViewController {
     private let searchView = SearchView()
     private let listCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     
-    private lazy var listDataSource = UICollectionViewDiffableDataSource<Int, TmpGatheringList>(collectionView: self.listCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: TmpGatheringList) -> UICollectionViewCell? in
+    private lazy var listDataSource = UICollectionViewDiffableDataSource<Int, Gathering>(collectionView: self.listCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Gathering) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListCollectionViewCell.identifier, for: indexPath) as? ListCollectionViewCell else { return UICollectionViewCell() }
-        cell.update(date: itemIdentifier.date, buddyImageNames: itemIdentifier.buddyList.map{ $0.face }, typeImageNames: itemIdentifier.type)
+        print(itemIdentifier)
+        cell.update(date: itemIdentifier.date, buddyImageList: itemIdentifier.buddy.map{ $0.face }, typeList: itemIdentifier.placeType)
         return cell
     }
     
@@ -68,8 +69,8 @@ final class ListViewController: UIViewController {
         ])
     }
     
-    private func reloadGathering(list: [TmpGatheringList]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, TmpGatheringList>()
+    private func reloadGathering(list: [Gathering]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Gathering>()
         snapshot.appendSections([0])
         snapshot.appendItems(list)
         self.listDataSource.apply(snapshot, animatingDifferences: true)

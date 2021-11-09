@@ -29,6 +29,10 @@ extension GatheringEntity {
         self.picture = gathering.picture
     }
     
+    var buddyList: [Buddy] {
+        return self.buddy.map{ $0.buddy }
+    }
+    
     @nonobjc public class func fetchRequest() -> NSFetchRequest<GatheringEntity> {
         return NSFetchRequest<GatheringEntity>(entityName: "GatheringEntity")
     }

@@ -26,6 +26,10 @@ extension BuddyEntity {
         self.face = buddy.face
     }
     
+    var buddy: Buddy {
+        return Buddy(id: self.id, name: self.name, face: self.face)
+    }
+    
     @nonobjc public class func fetchRequest() -> NSFetchRequest<BuddyEntity> {
         return NSFetchRequest<BuddyEntity>(entityName: "BuddyEntity")
     }

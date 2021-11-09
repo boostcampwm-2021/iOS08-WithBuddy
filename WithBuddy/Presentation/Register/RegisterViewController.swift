@@ -299,6 +299,7 @@ extension RegisterViewController: BuddyViewDelegate {
     
     func buddyDidSelected(_ buddy: Buddy) {
         self.registerViewModel.didBuddySelected(buddy)
+        self.navigationController?.pushViewController(BuddyChoiceViewController(), animated: true)
     }
 }
 

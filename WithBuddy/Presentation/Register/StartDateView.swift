@@ -40,7 +40,7 @@ final class StartDateView: UIView {
     
     private func configureTitleLabel() {
         self.addSubview(self.dateTitleLabel)
-        self.dateTitleLabel.text = "모임 날짜"
+        self.dateTitleLabel.text = "모임 시작일"
         self.dateTitleLabel.textColor = UIColor(named: "LabelPurple")
         self.dateTitleLabel.font = .boldSystemFont(ofSize: 20)
         

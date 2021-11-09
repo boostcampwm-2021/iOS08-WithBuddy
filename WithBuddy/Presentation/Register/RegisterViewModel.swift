@@ -8,8 +8,10 @@
 import Foundation
 
 class RegisterViewModel {
-    @Published private(set) var startDate: String? = nil
-    @Published private(set) var endDate: String? = nil
+    @Published private(set) var startDateString: String? = nil
+    @Published private(set) var endDateString: String? = nil
+    private var startDate: Date? = nil
+    private var endDate: Date? = nil
     private var place: String? = nil
     @Published private(set) var typeSelectedList: [Bool] = Array(repeating: false, count: PlaceType.allCases.count)
     @Published private(set) var buddyList: [Buddy] = []
@@ -22,7 +24,14 @@ class RegisterViewModel {
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .none
         
-        self.startDate = dateFormatter.string(from: date)
+        self.startDate = date
+        self.startDateString = dateFormatter.string(from: date)
+        
+        if let endDate = self.endDate,
+           endDate < date {
+            self.endDate = self.startDate
+            self.endDateString = self.startDateString
+        }
     }
     
     func didEndDatePicked(_ date: Date) {
@@ -31,7 +40,14 @@ class RegisterViewModel {
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .none
         
-        self.endDate = dateFormatter.string(from: date)
+        if let startDate = startDate,
+           startDate > date {
+            self.endDate = self.startDate
+            self.endDateString = self.startDateString
+            return
+        }
+        self.endDate = date
+        self.endDateString = dateFormatter.string(from: date)
     }
     
     func didPlaceFinished(_ place: String) {

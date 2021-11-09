@@ -36,14 +36,14 @@ class RegisterViewController: UIViewController {
     }
     
     private func bind() {
-        self.registerViewModel.$startDate
+        self.registerViewModel.$startDateString
             .receive(on: DispatchQueue.main)
             .sink { [weak self] date in
                 self?.startDateView.changeDateLebelText(date)
             }
             .store(in: &self.cancellables)
         
-        self.registerViewModel.$endDate
+        self.registerViewModel.$endDateString
             .receive(on: DispatchQueue.main)
             .sink { [weak self] date in
                 self?.endDateView.changeDateLebelText(date)

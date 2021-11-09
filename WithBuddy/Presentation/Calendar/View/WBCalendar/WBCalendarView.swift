@@ -16,7 +16,7 @@ class WBCalendarView: UIView {
     private let weekStackView = UIStackView()
     
     private var selectedDate = Date()
-    private var totalDays = [String]()
+    private var totalDays = [Int]()
     var delegate: CalendarCellSelectable?
     
     override init(frame: CGRect) {
@@ -133,9 +133,9 @@ class WBCalendarView: UIView {
         self.totalDays.removeAll()
         while(count <= 42) {
             if(count <= weekDay || count - weekDay > numOfDaysInMonth) {
-                totalDays.append("")
+                totalDays.append(0)
             } else {
-                totalDays.append(String(count - weekDay))
+                totalDays.append(count - weekDay)
             }
             count += 1
         }
@@ -146,17 +146,20 @@ class WBCalendarView: UIView {
 
 extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        totalDays.count
+        return totalDays.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifer, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
-        cell.dayOfMonth.text = totalDays[indexPath.item]
+        cell.dayOfMonth.text = String(totalDays[indexPath.item])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.delegate?.presentCellDetail()
+        if totalDays[indexPath.item] > 0 {
+            self.selectedDate = self.calendarManager.pickDay(baseDate: selectedDate, numberOfDay: totalDays[indexPath.item])
+            self.delegate?.presentCellDetail(selectedDate: selectedDate)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
@@ -185,5 +188,5 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
 }
 
 protocol CalendarCellSelectable {
-    func presentCellDetail()
+    func presentCellDetail(selectedDate: Date)
 }

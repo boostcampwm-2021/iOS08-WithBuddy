@@ -8,6 +8,8 @@
 import UIKit
 
 class CalendarViewController: UIViewController, CalendarCellSelectable {
+//    private let detailNavigationController = UINavigationController(rootViewController: CalendarDetailViewController())
+    private let detailView = CalendarDetail()
     static let identifer = "CalendarViewController"
     private let headerView = HeaderView()
     private let calendarView = UIView()
@@ -36,7 +38,7 @@ class CalendarViewController: UIViewController, CalendarCellSelectable {
             self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
             self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             self.scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            self.scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
     }
     
@@ -48,8 +50,7 @@ class CalendarViewController: UIViewController, CalendarCellSelectable {
             self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
             self.contentView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor),
             self.contentView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor),
-            self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor),
-//            self.contentView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor)
+            self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor)
         ])
     }
     
@@ -91,12 +92,31 @@ class CalendarViewController: UIViewController, CalendarCellSelectable {
         ])
     }
     
-    func presentCellDetail() {
-        let nav = UINavigationController(rootViewController: CalendarDetailViewController())
-        nav.modalPresentationStyle = .pageSheet
-        if let sheet = nav.sheetPresentationController {
+    func presentCellDetail(selectedDate: Date) {
+        self.presentDetailModal()
+        self.configureDetailLabel(selectedDate: selectedDate)
+    }
+    
+    func presentDetailModal() {
+        let detailNavigationController = UINavigationController(rootViewController: CalendarDetailViewController())
+        detailNavigationController.modalPresentationStyle = .pageSheet
+        if let sheet = detailNavigationController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
         }
-        present(nav, animated: true, completion: nil)
+        self.tabBarController?.present(detailNavigationController, animated: true, completion: nil)
+        detailNavigationController.view.addSubview(detailView)
+        self.detailView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.detailView.leadingAnchor.constraint(equalTo: detailNavigationController.view.leadingAnchor),
+            self.detailView.trailingAnchor.constraint(equalTo: detailNavigationController.view.trailingAnchor),
+            self.detailView.topAnchor.constraint(equalTo: detailNavigationController.view.topAnchor),
+            self.detailView.bottomAnchor.constraint(equalTo: detailNavigationController.view.bottomAnchor),
+            self.detailView.widthAnchor.constraint(equalTo: detailNavigationController.view.widthAnchor),
+            self.detailView.heightAnchor.constraint(equalTo: detailNavigationController.view.heightAnchor)
+        ])
+    }
+    
+    func configureDetailLabel(selectedDate: Date) {
+        self.detailView.saveSelecetedDate(selectedDate: selectedDate)
     }
 }

@@ -54,6 +54,7 @@
 		F7B69B8A273398C4005D2F32 /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B69B89273398C4005D2F32 /* CalendarManager.swift */; };
 		F7B69B8C27339EF9005D2F32 /* WBCalendarViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B69B8B27339EF9005D2F32 /* WBCalendarViewCell.swift */; };
 		F7E8ABB42738133B005F8306 /* CalendarDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABB32738133B005F8306 /* CalendarDetailViewController.swift */; };
+		F7E8ABB8273A54A5005F8306 /* CalendarDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABB7273A54A5005F8306 /* CalendarDetail.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -106,6 +107,7 @@
 		F7B69B89273398C4005D2F32 /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
 		F7B69B8B27339EF9005D2F32 /* WBCalendarViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WBCalendarViewCell.swift; sourceTree = "<group>"; };
 		F7E8ABB32738133B005F8306 /* CalendarDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDetailViewController.swift; sourceTree = "<group>"; };
+		F7E8ABB7273A54A5005F8306 /* CalendarDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDetail.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -345,6 +347,7 @@
 			children = (
 				85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */,
 				F7A7699627315AF800FF83EA /* HeaderView.swift */,
+				F7E8ABB7273A54A5005F8306 /* CalendarDetail.swift */,
 				F7A7699E2732760300FF83EA /* WBCalendar */,
 			);
 			path = View;
@@ -450,6 +453,8 @@
 				BB2D25852739197600E7BF35 /* Gathering.swift in Sources */,
 				BB2D25852739197600E7BF35 /* Gathering.swift in Sources */,
 				BB2D25B6273B582500E7BF35 /* PictureView.swift in Sources */,
+				8A0997E527363F4E002F2297 /* StartDateView.swift in Sources */,
+				F7E8ABB8273A54A5005F8306 /* CalendarDetail.swift in Sources */,
 				F7B69B8A273398C4005D2F32 /* CalendarManager.swift in Sources */,
 				85C236BA27381239001499E5 /* BuddyFaceUseCase.swift in Sources */,
 				F7B69B8C27339EF9005D2F32 /* WBCalendarViewCell.swift in Sources */,
@@ -477,6 +482,10 @@
 				BB2D25B3273B582500E7BF35 /* StartDateView.swift in Sources */,
 				BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */,
 				BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */,
+				BB2D2554273112EE00E7BF35 /* ImageTextCollectionVIiewCell.swift in Sources */,
+				BB2D2554273112EE00E7BF35 /* ImageTextCollectionVIiewCell.swift in Sources */,
+				BB2D2554273112EE00E7BF35 /* BuddyCollectionViewCell.swift in Sources */,
+				BB2D2554273112EE00E7BF35 /* BuddyCollectionViewCell.swift in Sources */,
 				F7E8ABB42738133B005F8306 /* CalendarDetailViewController.swift in Sources */,
 				BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */,
 				BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */,

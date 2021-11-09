@@ -10,7 +10,7 @@ import UIKit
 class WBCalendarViewCell: UICollectionViewCell {
     static let identifer = "WBCalendarViewCell"
     
-    var buddyImageView = UIImageView()
+    private var buddyImageView = UIImageView()
     var dayOfMonth: UILabel = {
         let label = UILabel()
         label.text = "1"

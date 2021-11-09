@@ -16,7 +16,7 @@ public class GatheringEntity: NSManagedObject {
     @NSManaged public var placeType: [Int]
     @NSManaged public var memo: String?
     @NSManaged public var picture: [URL]?
-    @NSManaged public var buddy: Set<BuddyEntity>?
+    @NSManaged public var buddy: Set<BuddyEntity>
 }
 
 extension GatheringEntity {

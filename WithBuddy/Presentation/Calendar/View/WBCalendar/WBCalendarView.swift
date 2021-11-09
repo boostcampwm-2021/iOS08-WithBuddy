@@ -16,7 +16,8 @@ class WBCalendarView: UIView {
     private let weekStackView = UIStackView()
     
     private var selectedDate = Date()
-    private var totalSquares = [String]()
+    private var totalDays = [String]()
+    var delegate: CalendarCellSelectable?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -129,12 +130,12 @@ class WBCalendarView: UIView {
         let weekDay = calendarManager.weekDay(baseDate: firstOfMonth)
         var count: Int = 1
         
-        self.totalSquares.removeAll()
+        self.totalDays.removeAll()
         while(count <= 42) {
             if(count <= weekDay || count - weekDay > numOfDaysInMonth) {
-                totalSquares.append("")
+                totalDays.append("")
             } else {
-                totalSquares.append(String(count - weekDay))
+                totalDays.append(String(count - weekDay))
             }
             count += 1
         }
@@ -145,13 +146,31 @@ class WBCalendarView: UIView {
 
 extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        totalSquares.count
+        totalDays.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifer, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
-        cell.dayOfMonth.text = totalSquares[indexPath.item]
+        cell.dayOfMonth.text = totalDays[indexPath.item]
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.delegate?.presentCellDetail()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? WBCalendarViewCell {
+            let pressedDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 3, options: [.curveEaseInOut], animations: { cell.transform = pressedDownTransform })
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? WBCalendarViewCell {
+            let originalTransform = CGAffineTransform(scaleX: 1, y: 1)
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 3, options: [.curveEaseInOut], animations: { cell.transform = originalTransform })
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -163,4 +182,8 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+}
+
+protocol CalendarCellSelectable {
+    func presentCellDetail()
 }

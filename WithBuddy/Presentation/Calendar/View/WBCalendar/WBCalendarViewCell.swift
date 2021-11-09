@@ -10,6 +10,7 @@ import UIKit
 class WBCalendarViewCell: UICollectionViewCell {
     static let identifer = "WBCalendarViewCell"
     
+    var buddyImageView = UIImageView()
     var dayOfMonth: UILabel = {
         let label = UILabel()
         label.text = "1"
@@ -30,6 +31,7 @@ class WBCalendarViewCell: UICollectionViewCell {
     
     private func configure() {
         self.configuredayOfMonth()
+        self.configureBuddyImageView()
     }
     
     private func configuredayOfMonth() {
@@ -38,6 +40,18 @@ class WBCalendarViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             self.dayOfMonth.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             self.dayOfMonth.topAnchor.constraint(equalTo: self.topAnchor, constant: 3)
+        ])
+    }
+    
+    private func configureBuddyImageView() {
+        self.addSubview(buddyImageView)
+        buddyImageView.image = UIImage(named: "FaceBlue1")
+        self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.buddyImageView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8),
+            self.buddyImageView.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8),
+            self.buddyImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            self.buddyImageView.topAnchor.constraint(equalTo: self.dayOfMonth.bottomAnchor, constant: 3)
         ])
     }
 }

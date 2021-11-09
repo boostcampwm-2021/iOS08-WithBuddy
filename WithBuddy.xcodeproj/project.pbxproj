@@ -207,6 +207,32 @@
 			path = Setting;
 			sourceTree = "<group>";
 		};
+		BB2D25A0273A46C100E7BF35 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BBF7FF29272FB51000B71C97 /* RegisterViewController.swift */,
+				8A0997E427363F4E002F2297 /* StartDateView.swift */,
+				8A59E69927383DA300977488 /* EndDateView.swift */,
+				8A0997E62736AAF2002F2297 /* PlaceView.swift */,
+				8A0997E82736AF55002F2297 /* TypeView.swift */,
+				8A0997EA2736B31F002F2297 /* BuddyView.swift */,
+				8A0997EE2736B8E7002F2297 /* MemoView.swift */,
+				8A0997F02736BB83002F2297 /* PictureView.swift */,
+				BB2D2553273112EE00E7BF35 /* BuddyCollectionViewCell.swift */,
+				BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */,
+				8A59E694273781E300977488 /* TypeCollectionViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		BB2D25A1273A46FB00E7BF35 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		BBF7FF19272FB51000B71C97 = {
 			isa = PBXGroup;
 			children = (
@@ -276,6 +302,8 @@
 				BB2D2553273112EE00E7BF35 /* ImageTextCollectionVIiewCell.swift */,
 				BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */,
 				8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */,
+				BB2D25A0273A46C100E7BF35 /* View */,
+				BB2D25A1273A46FB00E7BF35 /* ViewModel */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -454,6 +482,8 @@
 				8A73D683273AC3B8001D5184 /* Purpose.swift in Sources */,
 				BB2D2554273112EE00E7BF35 /* ImageTextCollectionVIiewCell.swift in Sources */,
 				BB2D2554273112EE00E7BF35 /* ImageTextCollectionVIiewCell.swift in Sources */,
+				BB2D2554273112EE00E7BF35 /* BuddyCollectionViewCell.swift in Sources */,
+				BB2D2554273112EE00E7BF35 /* BuddyCollectionViewCell.swift in Sources */,
 				F7E8ABB42738133B005F8306 /* CalendarDetailViewController.swift in Sources */,
 				BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */,
 				BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */,

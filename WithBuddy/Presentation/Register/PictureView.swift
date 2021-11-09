@@ -103,10 +103,17 @@ final class PictureView: UIView {
         ])
         
         self.pictureCollectionView.register(PictureCollectionViewCell.self, forCellWithReuseIdentifier: PictureCollectionViewCell.identifer)
-        let pictureFlowLayout = UICollectionViewFlowLayout()
-        pictureFlowLayout.scrollDirection = .horizontal
-        pictureFlowLayout.itemSize = CGSize(width: 300, height: 300)
-        self.pictureCollectionView.collectionViewLayout = pictureFlowLayout
+        
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1)))
+        item.contentInsets = .init(top: 0, leading: 5, bottom: 16, trailing: 5)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(0.9), heightDimension: .fractionalHeight(0.9)), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .groupPaging
+        section.contentInsets = .init(top: 0, leading: 16, bottom: 0, trailing: 16)
+        
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        
+        self.pictureCollectionView.collectionViewLayout = layout
     }
     
     @objc private func onPictureButtonTouched(_ sender: UIButton) {

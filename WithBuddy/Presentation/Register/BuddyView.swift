@@ -89,10 +89,14 @@ final class BuddyView: UIView {
         
         self.buddyCollectionView.register(BuddyCollectionViewCell.self, forCellWithReuseIdentifier: BuddyCollectionViewCell.identifer)
         
-        let buddyFlowLayout = UICollectionViewFlowLayout()
-        buddyFlowLayout.scrollDirection = .horizontal
-        buddyFlowLayout.itemSize = CGSize(width: 60, height: 90)
-        self.buddyCollectionView.collectionViewLayout = buddyFlowLayout
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(60), heightDimension: .absolute(90)))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        
+        self.buddyCollectionView.collectionViewLayout = layout
         
         self.buddyCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

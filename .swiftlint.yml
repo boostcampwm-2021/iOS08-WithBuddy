@@ -17,8 +17,8 @@ opt_in_rules: # disable된것 중 enable 하고 싶은 것
     - toggle_bool
   
 function_body_length: # default 값
-  - 20 # warning
-  - 30 # error
+  - 40 # warning
+  - 50 # error
   
 file_length: #default
   warning: 600

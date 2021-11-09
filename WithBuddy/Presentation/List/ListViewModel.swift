@@ -51,8 +51,9 @@ final class ListViewModel {
     
 }
 
-struct TmpGatheringList {
+struct TmpGatheringList: Hashable {
     
+    let id = UUID()
     private(set) var date: String
     private(set) var buddyList: [TmpBuddy]
     private(set) var type: [String]
@@ -65,7 +66,7 @@ struct TmpGatheringList {
     
 }
 
-struct TmpBuddy {
+struct TmpBuddy: Hashable {
     
     private var name: String
     private(set) var face: String

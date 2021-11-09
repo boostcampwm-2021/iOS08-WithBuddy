@@ -9,6 +9,12 @@ import Foundation
 
 class BuddyChoiceViewModel {
     @Published private(set) var storedBuddyList: [Buddy] = []
+    private var checkedBuddyList: [Buddy] {
+        return self.storedBuddyList.filter( {
+            guard let check = $0.check else { return false }
+            return check
+        })
+    }
     
     func buddyDidAdded(_ buddy: Buddy) {
         self.storedBuddyList.append(buddy)

@@ -92,8 +92,7 @@ class CalendarViewController: UIViewController, CalendarCellSelectable {
     }
     
     func presentCellDetail() {
-        let CalendarDetailViewController = CalendarDetailViewController()
-        let nav = UINavigationController(rootViewController: CalendarDetailViewController)
+        let nav = UINavigationController(rootViewController: CalendarDetailViewController())
         nav.modalPresentationStyle = .pageSheet
         if let sheet = nav.sheetPresentationController {
             sheet.detents = [.medium(), .large()]

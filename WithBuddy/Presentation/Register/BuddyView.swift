@@ -37,7 +37,7 @@ final class BuddyView: UIView {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
         if buddyList.isEmpty {
             snapshot.appendSections([0])
-            snapshot.appendItems([Buddy(name: "친구없음")])
+            snapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "")])
         } else {
             snapshot.appendSections([0])
             snapshot.appendItems(buddyList)
@@ -105,7 +105,7 @@ final class BuddyView: UIView {
     }
     
     @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
-        self.delegate?.buddyDidSelected(Buddy(name: UUID().uuidString))
+        self.delegate?.buddyDidSelected(Buddy(id: UUID(), name: UUID().uuidString, face: ""))
     }
 }
 

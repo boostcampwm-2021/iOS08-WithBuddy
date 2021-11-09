@@ -70,15 +70,14 @@ class CalendarDetailView: UIView {
 extension CalendarDetailView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return self.calendarDetailViewModel.count
-        return 10
+        return self.calendarDetailViewModel.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListCollectionViewCell.identifier, for: indexPath)
                 as? ListCollectionViewCell else { return UICollectionViewCell() }
-//        let gathering = self.calendarDetailViewModel[indexPath.item]
-//        cell.update(date: gathering.date, buddyImageNames: gathering.buddyList.map{ $0.face }, typeImageNames: gathering.type)
+        let gathering = self.calendarDetailViewModel[indexPath.item]
+        cell.update(date: gathering.date, buddyImageList: gathering.buddy.map { $0.face }, typeList: gathering.placeType )
         return cell
     }
     

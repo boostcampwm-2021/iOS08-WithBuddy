@@ -125,8 +125,7 @@ class RegisterViewModel {
                   let endDate = endDate else {
                 return
             }
-
-            self.gatheringUseCase.insertGathering(Gathering(date: startDate, place: self.place, placeType: [], buddy: self.buddyList, memo: self.memo, picture: self.pictures), buddy: <#T##[Buddy]#>)
+            self.gatheringUseCase.insertGathering(Gathering(date: startDate, place: self.place, placeType: [], buddy: [], memo: self.memo, picture: self.pictures), buddy: self.buddyList)
             self.registerDoneSignal.send()
         }
     }

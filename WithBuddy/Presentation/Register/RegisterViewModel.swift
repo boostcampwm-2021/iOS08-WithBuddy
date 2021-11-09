@@ -13,7 +13,10 @@ class RegisterViewModel {
     private var startDate: Date? = nil
     private var endDate: Date? = nil
     private var place: String? = nil
-    @Published private(set) var typeSelectedList: [Bool] = Array(repeating: false, count: PlaceType.allCases.count)
+    @Published private(set) var purposeList: [Purpose] = PlaceType.allCases.map({ Purpose(type: $0, check: false) })
+    private var checkedPurposeList: [Purpose] {
+        return self.purposeList.filter( { $0.check })
+    }
     @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var memo: String? = nil
     @Published private(set) var pictures: [URL] = []
@@ -55,7 +58,7 @@ class RegisterViewModel {
     }
     
     func didTypeTouched(_ idx: Int) {
-        self.typeSelectedList[idx].toggle()
+        self.purposeList[idx].check.toggle()
     }
     
     func didBuddySelected(_ buddy: Buddy) {

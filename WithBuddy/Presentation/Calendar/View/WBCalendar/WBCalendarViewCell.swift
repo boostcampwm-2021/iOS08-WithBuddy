@@ -8,9 +8,10 @@
 import UIKit
 
 class WBCalendarViewCell: UICollectionViewCell {
-    static let identifer = "WBCalendarViewCell"
     
+    static let identifer = "WBCalendarViewCell"
     private var buddyImageView = UIImageView()
+    
     var dayOfMonth: UILabel = {
         let label = UILabel()
         label.text = "1"
@@ -54,4 +55,5 @@ class WBCalendarViewCell: UICollectionViewCell {
             self.buddyImageView.topAnchor.constraint(equalTo: self.dayOfMonth.bottomAnchor, constant: 3)
         ])
     }
+    
 }

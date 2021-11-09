@@ -82,4 +82,5 @@ final class TabBarViewController: UITabBarController {
     @objc private func registerAction(_ sender: UIButton) {
         self.navigationController?.pushViewController(RegisterViewController(), animated: true)
     }
+    
 }

@@ -8,6 +8,7 @@
 import UIKit
 
 class WBCalendarView: UIView {
+    
     private let calendarManager = CalendarManager()
     private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     private let thisMonthLabel = UILabel()
@@ -142,9 +143,11 @@ class WBCalendarView: UIView {
         self.configureThisMonth()
         self.collectionView.reloadData()
     }
+    
 }
 
 extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return totalDays.count
     }
@@ -185,6 +188,7 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+    
 }
 
 protocol CalendarCellSelectable {

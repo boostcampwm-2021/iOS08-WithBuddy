@@ -8,9 +8,9 @@
 import UIKit
 
 class CalendarViewController: UIViewController, CalendarCellSelectable {
-//    private let detailNavigationController = UINavigationController(rootViewController: CalendarDetailViewController())
-    private let detailView = CalendarDetail()
+
     static let identifer = "CalendarViewController"
+    private let detailView = CalendarDetailView()
     private let headerView = HeaderView()
     private let calendarView = UIView()
     private let wbcalendar = WBCalendarView()
@@ -119,4 +119,5 @@ class CalendarViewController: UIViewController, CalendarCellSelectable {
     func configureDetailLabel(selectedDate: Date) {
         self.detailView.saveSelecetedDate(selectedDate: selectedDate)
     }
+    
 }

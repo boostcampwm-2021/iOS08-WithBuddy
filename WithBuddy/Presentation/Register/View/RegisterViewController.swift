@@ -74,6 +74,12 @@ class RegisterViewController: UIViewController {
                 self?.pictureView.pictureListReload(pictures)
             }
             .store(in: &self.cancellables)
+        self.registerViewModel.registerDoneSignal
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.navigationController?.popViewController(animated: true)
+            }
+            .store(in: &self.cancellables)
     }
     
     private func configure() {
@@ -209,7 +215,7 @@ class RegisterViewController: UIViewController {
     }
     
     @objc private func addGathering() {
-        
+        self.registerViewModel.didDoneTouched()
     }
 }
 

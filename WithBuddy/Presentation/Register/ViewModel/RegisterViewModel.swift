@@ -8,11 +8,16 @@
 import Foundation
 import Combine
 
-enum RegisterError: Error {
-    case noStartDate
-    case noEndDate
+enum RegisterError: LocalizedError {
     case noBuddy
     case noType
+    
+    var errorDescription: String? {
+        switch self {
+        case .noBuddy: return "최소 한명 이상의 버디를 추가해 주세요."
+        case .noType: return "최소 한개 이상의 모임 목적을 추가해 주세요."
+        }
+    }
 }
 
 class RegisterViewModel {
@@ -33,7 +38,8 @@ class RegisterViewModel {
     private var endDate: Date?
 >>>>>>> 481e61b ((#56) refactor: register view Model에 passthroughsubject에 error 추가)
     private var place: String?
-    private(set) var registerDoneSignal = PassthroughSubject<Void, Error>()
+    private(set) var registerDoneSignal = PassthroughSubject<Void, Never>()
+    private(set) var registerFailSignal = PassthroughSubject<RegisterError, Never>()
     
     @Published private(set) var startDateString: String?
     @Published private(set) var endDateString: String?
@@ -112,13 +118,15 @@ class RegisterViewModel {
     }
     
     func didDoneTouched() {
-        if self.startDate == nil {
-            self.registerDoneSignal.send(completion: .failure(RegisterError.noStartDate))
-        } else if self.endDate == nil {
-            self.registerDoneSignal.send(completion: .failure(RegisterError.noEndDate))
-        } else if self.buddyList.isEmpty {
-            self.registerDoneSignal.send(completion: .failure(RegisterError.noBuddy))
+        if self.buddyList.isEmpty {
+            self.registerFailSignal.send(RegisterError.noBuddy)
         } else {
+            guard let startDate = startDate,
+                  let endDate = endDate else {
+                return
+            }
+
+            self.gatheringUseCase.insertGathering(Gathering(date: startDate, place: self.place, placeType: [], buddy: self.buddyList, memo: self.memo, picture: self.pictures), buddy: <#T##[Buddy]#>)
             self.registerDoneSignal.send()
         }
     }

@@ -8,7 +8,15 @@
 import Foundation
 import Combine
 
+enum RegisterError: Error {
+    case noStartDate
+    case noEndDate
+    case noBuddy
+    case noType
+}
+
 class RegisterViewModel {
+<<<<<<< HEAD
     @Published private(set) var startDateString: String? = nil
     @Published private(set) var endDateString: String? = nil
     private var startDate: Date? = nil
@@ -20,7 +28,15 @@ class RegisterViewModel {
         return self.purposeList.filter( { $0.check })
     }
 =======
+=======
+    private var startDate: Date?
+    private var endDate: Date?
+>>>>>>> 481e61b ((#56) refactor: register view Model에 passthroughsubject에 error 추가)
     private var place: String?
+    private(set) var registerDoneSignal = PassthroughSubject<Void, Error>()
+    
+    @Published private(set) var startDateString: String?
+    @Published private(set) var endDateString: String?
     @Published private(set) var typeSelectedList: [Bool] = Array(repeating: false, count: PlaceType.allCases.count)
 >>>>>>> 008d7a9 ((#54) feat: combine을 활용해서 완료 버튼 눌렀을 시 navigation pop 되도록 구현)
     @Published private(set) var buddyList: [Buddy] = []
@@ -29,7 +45,6 @@ class RegisterViewModel {
     
     private var buddyUseCase = BuddyUseCase()
     private var gatheringUseCase = GatheringUseCase()
-    private(set) var registerDoneSignal = PassthroughSubject<Void, Never>()
     
     func didStartDatePicked(_ date: Date) {
         let dateFormatter = DateFormatter()
@@ -97,6 +112,14 @@ class RegisterViewModel {
     }
     
     func didDoneTouched() {
-        self.registerDoneSignal.send()
+        if self.startDate == nil {
+            self.registerDoneSignal.send(completion: .failure(RegisterError.noStartDate))
+        } else if self.endDate == nil {
+            self.registerDoneSignal.send(completion: .failure(RegisterError.noEndDate))
+        } else if self.buddyList.isEmpty {
+            self.registerDoneSignal.send(completion: .failure(RegisterError.noBuddy))
+        } else {
+            self.registerDoneSignal.send()
+        }
     }
 }

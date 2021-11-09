@@ -22,7 +22,22 @@ class BuddyCollectionViewCell: UICollectionViewCell {
         self.configure()
     }
     
-    func configure(image: UIImage?, text: String) {
+    func update(image: UIImage?, text: String, check: Bool?) {
+        guard let image = image else {
+            return
+        }
+        self.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.image.image = image
+        self.textLabel.text = text
+        if let check = check,
+           check {
+            self.image.alpha = 1.0
+        } else {
+            self.image.alpha = 0.1
+        }
+    }
+    
+    func update(image: UIImage?, text: String) {
         guard let image = image else {
             return
         }

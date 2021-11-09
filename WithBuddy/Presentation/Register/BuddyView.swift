@@ -17,7 +17,7 @@ final class BuddyView: UIView {
     private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) {
         (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BuddyCollectionViewCell.identifer, for: indexPath) as? BuddyCollectionViewCell else { preconditionFailure() }
-        cell.configure(image: UIImage(named: "FacePurple1"), text: itemIdentifier.name)
+        cell.update(image: UIImage(named: "FacePurple1"), text: itemIdentifier.name)
         return cell
     }
     

@@ -19,7 +19,7 @@ class BuddyChoiceViewController: UIViewController {
     private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) {
         (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BuddyCollectionViewCell.identifer, for: indexPath) as? BuddyCollectionViewCell else { preconditionFailure() }
-        cell.configure(image: UIImage(named: itemIdentifier.face), text: "test")
+        cell.update(image: UIImage(named: itemIdentifier.face), text: itemIdentifier.name, check: itemIdentifier.check)
         return cell
     }
     
@@ -40,7 +40,7 @@ class BuddyChoiceViewController: UIViewController {
     }
     
     private func bind() {
-        self.buddyChoiceViewModel.$buddyList
+        self.buddyChoiceViewModel.$storedBuddyList
             .receive(on: DispatchQueue.main)
             .sink { [weak self] buddyList in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
@@ -80,6 +80,9 @@ class BuddyChoiceViewController: UIViewController {
         buddyFlowLayout.itemSize = CGSize(width: self.view.frame.width*0.2, height: self.view.frame.width*0.3)
         self.buddyCollectionView.collectionViewLayout = buddyFlowLayout
         
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.collectionViewDidTouched(_:)))
+        self.buddyCollectionView.addGestureRecognizer(tap)
+        
         self.buddyCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.buddyCollectionView.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: 20),
@@ -87,6 +90,12 @@ class BuddyChoiceViewController: UIViewController {
             self.buddyCollectionView.trailingAnchor.constraint(equalTo: self.searchView.trailingAnchor),
             self.buddyCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
+    }
+    
+    @objc func collectionViewDidTouched(_ sender: UITapGestureRecognizer) {
+       if let indexPath = self.buddyCollectionView.indexPathForItem(at: sender.location(in: self.buddyCollectionView)) {
+           self.buddyChoiceViewModel.buddyDidChecked(in: indexPath.item)
+       }
     }
     
 }

@@ -8,15 +8,23 @@
 import Foundation
 
 class BuddyChoiceViewModel {
-    @Published private(set) var buddyList: [Buddy] = []
+    @Published private(set) var storedBuddyList: [Buddy] = []
     
     func buddyDidAdded(_ buddy: Buddy) {
-        self.buddyList.append(buddy)
+        self.storedBuddyList.append(buddy)
     }
     
     func buddyDidUpdated(_ buddyList: [Buddy]) {
         buddyList.forEach({
-            self.buddyList.append($0)
+            self.storedBuddyList.append($0)
         })
+    }
+    
+    func buddyDidChecked(in idx: Int) {
+        if let _ = self.storedBuddyList[idx].check {
+            self.storedBuddyList[idx].check?.toggle()
+        } else {
+            self.storedBuddyList[idx].check = true
+        }
     }
 }

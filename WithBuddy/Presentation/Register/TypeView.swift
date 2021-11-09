@@ -63,7 +63,7 @@ final class TypeView: UIView {
         self.typeCollectionView.dataSource = self
         self.typeCollectionView.delegate = self
         self.typeCollectionView.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.collectionViewDidTouched(_:)))
         self.typeCollectionView.addGestureRecognizer(tap)
         
         self.typeCollectionView.register(TypeCollectionViewCell.self, forCellWithReuseIdentifier: TypeCollectionViewCell.identifer)
@@ -82,7 +82,7 @@ final class TypeView: UIView {
         ])
     }
     
-    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+    @objc func collectionViewDidTouched(_ sender: UITapGestureRecognizer) {
        if let indexPath = self.typeCollectionView.indexPathForItem(at: sender.location(in: self.typeCollectionView)) {
            self.delegate?.typeDidSelected(indexPath.item)
        }

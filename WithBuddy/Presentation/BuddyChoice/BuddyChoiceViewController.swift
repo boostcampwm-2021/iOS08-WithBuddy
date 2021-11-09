@@ -6,15 +6,49 @@
 //
 
 import UIKit
+import Combine
 
 class BuddyChoiceViewController: UIViewController {
     
     private let searchView = SearchView()
     private let buddyCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     
+    private var buddyChoiceViewModel = BuddyChoiceViewModel()
+    private var cancellables: Set<AnyCancellable> = []
+    
+    private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) {
+        (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BuddyCollectionViewCell.identifer, for: indexPath) as? BuddyCollectionViewCell else { preconditionFailure() }
+        cell.configure(image: UIImage(named: itemIdentifier.face), text: "test")
+        return cell
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configure()
+        self.bind()
+        self.buddyChoiceViewModel.buddyDidUpdated([Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
+                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
+                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
+                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
+                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
+                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
+                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
+                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
+                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
+                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1")])
+    }
+    
+    private func bind() {
+        self.buddyChoiceViewModel.$buddyList
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] buddyList in
+                var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
+                snapshot.appendSections([0])
+                snapshot.appendItems(buddyList)
+                self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
+            }
+            .store(in: &self.cancellables)
     }
     
     private func configure() {
@@ -22,7 +56,7 @@ class BuddyChoiceViewController: UIViewController {
         self.configureSearchView()
         self.configureBuddyCollectionView()
     }
-
+    
     private func configureSearchView() {
         self.view.addSubview(self.searchView)
         self.searchView.searchTextField.delegate = self
@@ -38,13 +72,12 @@ class BuddyChoiceViewController: UIViewController {
     
     private func configureBuddyCollectionView() {
         self.view.addSubview(self.buddyCollectionView)
-        self.buddyCollectionView.dataSource = self
-        self.buddyCollectionView.delegate = self
         self.buddyCollectionView.backgroundColor = .clear
         self.buddyCollectionView.register(BuddyCollectionViewCell.self, forCellWithReuseIdentifier: BuddyCollectionViewCell.identifer)
+        
         let buddyFlowLayout = UICollectionViewFlowLayout()
         buddyFlowLayout.scrollDirection = .vertical
-        buddyFlowLayout.itemSize = CGSize(width: 100, height: 150)
+        buddyFlowLayout.itemSize = CGSize(width: self.view.frame.width*0.2, height: self.view.frame.width*0.3)
         self.buddyCollectionView.collectionViewLayout = buddyFlowLayout
         
         self.buddyCollectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -65,19 +98,4 @@ extension BuddyChoiceViewController: UITextFieldDelegate {
         return true
     }
     
-}
-
-extension BuddyChoiceViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BuddyCollectionViewCell.identifer, for: indexPath)
-                as? BuddyCollectionViewCell else { return UICollectionViewCell() }
-        cell.configure(image: UIImage(named: "FaceBlue1"), text: "test")
-        return cell
-    }
-
 }

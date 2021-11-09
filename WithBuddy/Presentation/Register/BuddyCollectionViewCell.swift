@@ -26,6 +26,7 @@ class BuddyCollectionViewCell: UICollectionViewCell {
         guard let image = image else {
             return
         }
+        self.backgroundColor = UIColor(named: "BackgroundPurple")
         self.image.image = image
         self.textLabel.text = text
     }

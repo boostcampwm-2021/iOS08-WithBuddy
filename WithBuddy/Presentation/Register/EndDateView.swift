@@ -40,7 +40,7 @@ final class EndDateView: UIView {
     
     private func configureTitleLabel() {
         self.addSubview(self.dateTitleLabel)
-        self.dateTitleLabel.text = "모임 날짜"
+        self.dateTitleLabel.text = "모임 종료일"
         self.dateTitleLabel.textColor = UIColor(named: "LabelPurple")
         self.dateTitleLabel.font = .boldSystemFont(ofSize: 20)
         

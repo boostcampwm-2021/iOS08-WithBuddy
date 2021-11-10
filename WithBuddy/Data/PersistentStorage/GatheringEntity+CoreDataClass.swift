@@ -49,7 +49,7 @@ extension GatheringEntity {
         self.startDate = gathering.startDate
         self.endDate = gathering.endDate
         self.place = gathering.place
-        self.purpose = gathering.placeType
+        self.purpose = gathering.purpose
         self.memo = gathering.memo
         self.picture = gathering.picture
     }

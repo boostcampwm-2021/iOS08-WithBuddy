@@ -38,9 +38,9 @@ final class CoreDataManager {
     }
     
     @discardableResult
-    func insertGathering(_ gathering: Gathering, buddyList: [BuddyEntity]) -> Bool {
+    func insertGathering(_ gathering: Gathering) -> Bool {
         let gatheringEntity = GatheringEntity(context: self.context, gathering: gathering)
-        gatheringEntity.addToBuddy(NSSet(array: buddyList))
+        gatheringEntity.addToBuddyList(NSSet(array: self.fetchBuddyEntity(of: gathering.buddyList)))
         
         do {
             try self.context.save()
@@ -62,5 +62,11 @@ final class CoreDataManager {
             print(error.localizedDescription)
             return false
         }
+    }
+    
+    private func fetchBuddyEntity(of buddyList: [Buddy]) -> [BuddyEntity] {
+        let request = BuddyEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id IN $@", buddyList.map{ $0.id })
+        return self.fetch(request: request)
     }
 }

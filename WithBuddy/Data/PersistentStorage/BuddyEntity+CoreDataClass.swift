@@ -41,6 +41,7 @@ extension BuddyEntity {
 
 extension BuddyEntity {
     
+    @discardableResult
     convenience init(context: NSManagedObjectContext, buddy: Buddy) {
         self.init(context: context)
         self.id = buddy.id

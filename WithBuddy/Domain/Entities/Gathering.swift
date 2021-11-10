@@ -11,8 +11,8 @@ struct Gathering: Hashable {
     var startDate: Date
     var endDate: Date
     var place: String?
-    var placeType: [String]
-    var buddy: [Buddy]
+    var purpose: [String]
+    var buddyList: [Buddy]
     var memo: String?
     var picture: [URL]?
 }

@@ -66,7 +66,7 @@ final class CoreDataManager {
     
     private func fetchBuddyEntity(of buddyList: [Buddy]) -> [BuddyEntity] {
         let request = BuddyEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "id IN $@", buddyList.map{ $0.id })
+        request.predicate = NSPredicate(format: "id IN %@", buddyList.map{ $0.id })
         return self.fetch(request: request)
     }
 }

@@ -58,8 +58,8 @@ extension GatheringEntity {
         return Gathering(startDate: self.startDate,
                          endDate: self.endDate,
                          place: self.place,
-                         placeType: self.purpose,
-                         buddy: self.buddyList.map{ $0.toDomain() },
+                         purpose: self.purpose,
+                         buddyList: self.buddyList.map{ $0.toDomain() },
                          memo: self.memo,
                          picture: self.picture)
     }

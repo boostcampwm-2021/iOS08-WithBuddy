@@ -78,7 +78,7 @@ extension CalendarDetailView: UICollectionViewDataSource, UICollectionViewDelega
                 as? ListCollectionViewCell else { return UICollectionViewCell() }
         self.calendarDetailViewModel.listOfDay(selectedDate: self.selectedDate)
         let gathering = self.calendarDetailViewModel[indexPath.item]
-        cell.update(date: gathering.date, buddyImageList: gathering.buddy.map{ $0.face }, typeList: gathering.placeType)
+        cell.update(date: gathering.startDate, buddyImageList: gathering.buddyList.map{ $0.face }, typeList: gathering.purpose)
         return cell
     }
     

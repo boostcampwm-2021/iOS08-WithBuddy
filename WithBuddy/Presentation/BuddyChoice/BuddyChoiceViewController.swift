@@ -129,4 +129,18 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
         self.buddyChoiceViewModel.buddyDidChecked(in: indexPath.item)
     }
     
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+            let edit = UIAction(title: NSLocalizedString("편집", comment: ""),
+                                  image: UIImage(systemName: "pencil.circle")) { action in
+//                self.delegate?.buddyDidDeleted(indexPath.item)
+            }
+            let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
+                                  image: UIImage(systemName: "trash")) { action in
+//                self.buddyChoiceViewModel.buddyDidADeleted(in: indexPath.item)
+            }
+            return UIMenu(title: "이 버디를", children: [edit, delete])
+        })
+    }
+    
 }

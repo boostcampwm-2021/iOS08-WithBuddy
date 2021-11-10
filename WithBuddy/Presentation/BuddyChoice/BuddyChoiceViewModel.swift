@@ -16,6 +16,10 @@ class BuddyChoiceViewModel {
         })
     }
     
+    func buddyDidADeleted(in idx: Int) {
+        self.storedBuddyList.remove(at: idx)
+    }
+    
     func buddyDidAdded(_ buddy: Buddy) {
         self.storedBuddyList.append(buddy)
     }

@@ -14,24 +14,15 @@
 		85C236BA27381239001499E5 /* BuddyFaceUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C236B927381239001499E5 /* BuddyFaceUseCase.swift */; };
 		85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */; };
 		85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D98272FEBE000825C64 /* ListViewController.swift */; };
-		8A0997E527363F4E002F2297 /* StartDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0997E427363F4E002F2297 /* StartDateView.swift */; };
-		8A0997E72736AAF2002F2297 /* PlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0997E62736AAF2002F2297 /* PlaceView.swift */; };
-		8A0997E92736AF55002F2297 /* TypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0997E82736AF55002F2297 /* TypeView.swift */; };
-		8A0997EB2736B31F002F2297 /* BuddyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0997EA2736B31F002F2297 /* BuddyView.swift */; };
-		8A0997EF2736B8E7002F2297 /* MemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0997EE2736B8E7002F2297 /* MemoView.swift */; };
-		8A0997F12736BB83002F2297 /* PictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0997F02736BB83002F2297 /* PictureView.swift */; };
 		8A52C4F6273947E50025C562 /* defaultImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A52C4F5273947E50025C562 /* defaultImage.png */; };
-		8A54F3ED27325B2500535B26 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */; };
-		8A59E69A27383DA300977488 /* EndDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A59E69927383DA300977488 /* EndDateView.swift */; };
 		8A73D679273A61EC001D5184 /* BuddyChoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D678273A61EC001D5184 /* BuddyChoiceViewController.swift */; };
 		8A73D67E273A6C4B001D5184 /* BuddyChoiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D67D273A6C4B001D5184 /* BuddyChoiceViewModel.swift */; };
 		8A73D683273AC3B8001D5184 /* Purpose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D682273AC3B8001D5184 /* Purpose.swift */; };
 		BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25462730D97000E7BF35 /* Buddy.swift */; };
 		BB2D254B2730D97000E7BF35 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25482730D97000E7BF35 /* PlaceType.swift */; };
-		BB2D2554273112EE00E7BF35 /* ImageTextCollectionVIiewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D2553273112EE00E7BF35 /* ImageTextCollectionVIiewCell.swift */; };
+		BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */; };
 		BB2D255E2731317100E7BF35 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D255D2731317100E7BF35 /* SettingViewController.swift */; };
 		BB2D25602731317E00E7BF35 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D255F2731317E00E7BF35 /* ChartViewController.swift */; };
-		BB2D256227315B7B00E7BF35 /* PictureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */; };
 		BB2D25832739192200E7BF35 /* WithBuddyModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25812739192200E7BF35 /* WithBuddyModel.xcdatamodeld */; };
 		BB2D25852739197600E7BF35 /* Gathering.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25842739197600E7BF35 /* Gathering.swift */; };
 		BB2D258C273922FC00E7BF35 /* BuddyEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D2588273922FC00E7BF35 /* BuddyEntity+CoreDataClass.swift */; };
@@ -39,9 +30,18 @@
 		BB2D25962739441300E7BF35 /* GatheringEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25942739441300E7BF35 /* GatheringEntity+CoreDataClass.swift */; };
 		BB2D25A3273A550B00E7BF35 /* BuddyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A2273A550B00E7BF35 /* BuddyUseCase.swift */; };
 		BB2D25A5273A58A100E7BF35 /* GatheringUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A4273A58A100E7BF35 /* GatheringUseCase.swift */; };
+		BB2D25B1273B582500E7BF35 /* PictureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */; };
+		BB2D25B2273B582500E7BF35 /* MemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A7273B582500E7BF35 /* MemoView.swift */; };
+		BB2D25B3273B582500E7BF35 /* StartDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A8273B582500E7BF35 /* StartDateView.swift */; };
+		BB2D25B6273B582500E7BF35 /* PictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AB273B582500E7BF35 /* PictureView.swift */; };
+		BB2D25B7273B582500E7BF35 /* BuddyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AC273B582500E7BF35 /* BuddyView.swift */; };
+		BB2D25B8273B582500E7BF35 /* EndDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AD273B582500E7BF35 /* EndDateView.swift */; };
+		BB2D25B9273B582500E7BF35 /* TypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AE273B582500E7BF35 /* TypeView.swift */; };
+		BB2D25BA273B582500E7BF35 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */; };
+		BB2D25BB273B582500E7BF35 /* PlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25B0273B582500E7BF35 /* PlaceView.swift */; };
+		BB2D25BD273B585200E7BF35 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25BC273B585200E7BF35 /* RegisterViewModel.swift */; };
 		BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF25272FB51000B71C97 /* AppDelegate.swift */; };
 		BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF27272FB51000B71C97 /* SceneDelegate.swift */; };
-		BBF7FF2A272FB51000B71C97 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF29272FB51000B71C97 /* RegisterViewController.swift */; };
 		BBF7FF2F272FB51400B71C97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF2E272FB51400B71C97 /* Assets.xcassets */; };
 		BBF7FF32272FB51400B71C97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF30272FB51400B71C97 /* LaunchScreen.storyboard */; };
 		BBF7FF40272FB7B700B71C97 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF3F272FB7B700B71C97 /* TabBarViewController.swift */; };
@@ -64,24 +64,15 @@
 		85C236B927381239001499E5 /* BuddyFaceUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyFaceUseCase.swift; sourceTree = "<group>"; };
 		85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		85FA1D98272FEBE000825C64 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
-		8A0997E427363F4E002F2297 /* StartDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartDateView.swift; sourceTree = "<group>"; };
-		8A0997E62736AAF2002F2297 /* PlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceView.swift; sourceTree = "<group>"; };
-		8A0997E82736AF55002F2297 /* TypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeView.swift; sourceTree = "<group>"; };
-		8A0997EA2736B31F002F2297 /* BuddyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyView.swift; sourceTree = "<group>"; };
-		8A0997EE2736B8E7002F2297 /* MemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoView.swift; sourceTree = "<group>"; };
-		8A0997F02736BB83002F2297 /* PictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureView.swift; sourceTree = "<group>"; };
 		8A52C4F5273947E50025C562 /* defaultImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultImage.png; sourceTree = "<group>"; };
-		8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
-		8A59E69927383DA300977488 /* EndDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndDateView.swift; sourceTree = "<group>"; };
 		8A73D678273A61EC001D5184 /* BuddyChoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyChoiceViewController.swift; sourceTree = "<group>"; };
 		8A73D67D273A6C4B001D5184 /* BuddyChoiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyChoiceViewModel.swift; sourceTree = "<group>"; };
 		8A73D682273AC3B8001D5184 /* Purpose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Purpose.swift; sourceTree = "<group>"; };
 		BB2D25462730D97000E7BF35 /* Buddy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buddy.swift; sourceTree = "<group>"; };
 		BB2D25482730D97000E7BF35 /* PlaceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
-		BB2D2553273112EE00E7BF35 /* ImageTextCollectionVIiewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTextCollectionVIiewCell.swift; sourceTree = "<group>"; };
+		BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTextCollectionViewCell.swift; sourceTree = "<group>"; };
 		BB2D255D2731317100E7BF35 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		BB2D255F2731317E00E7BF35 /* ChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
-		BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCell.swift; sourceTree = "<group>"; };
 		BB2D25822739192200E7BF35 /* WithBuddyModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WithBuddyModel.xcdatamodel; sourceTree = "<group>"; };
 		BB2D25842739197600E7BF35 /* Gathering.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gathering.swift; sourceTree = "<group>"; };
 		BB2D2588273922FC00E7BF35 /* BuddyEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BuddyEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -89,10 +80,19 @@
 		BB2D25942739441300E7BF35 /* GatheringEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GatheringEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		BB2D25A2273A550B00E7BF35 /* BuddyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyUseCase.swift; sourceTree = "<group>"; };
 		BB2D25A4273A58A100E7BF35 /* GatheringUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatheringUseCase.swift; sourceTree = "<group>"; };
+		BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCell.swift; sourceTree = "<group>"; };
+		BB2D25A7273B582500E7BF35 /* MemoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoView.swift; sourceTree = "<group>"; };
+		BB2D25A8273B582500E7BF35 /* StartDateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartDateView.swift; sourceTree = "<group>"; };
+		BB2D25AB273B582500E7BF35 /* PictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureView.swift; sourceTree = "<group>"; };
+		BB2D25AC273B582500E7BF35 /* BuddyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuddyView.swift; sourceTree = "<group>"; };
+		BB2D25AD273B582500E7BF35 /* EndDateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndDateView.swift; sourceTree = "<group>"; };
+		BB2D25AE273B582500E7BF35 /* TypeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeView.swift; sourceTree = "<group>"; };
+		BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		BB2D25B0273B582500E7BF35 /* PlaceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceView.swift; sourceTree = "<group>"; };
+		BB2D25BC273B585200E7BF35 /* RegisterViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		BBF7FF22272FB51000B71C97 /* WithBuddy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WithBuddy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF7FF25272FB51000B71C97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BBF7FF27272FB51000B71C97 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		BBF7FF29272FB51000B71C97 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		BBF7FF2E272FB51400B71C97 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BBF7FF31272FB51400B71C97 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BBF7FF33272FB51400B71C97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -216,17 +216,16 @@
 		BB2D25A0273A46C100E7BF35 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				BBF7FF29272FB51000B71C97 /* RegisterViewController.swift */,
-				8A0997E427363F4E002F2297 /* StartDateView.swift */,
-				8A59E69927383DA300977488 /* EndDateView.swift */,
-				8A0997E62736AAF2002F2297 /* PlaceView.swift */,
-				8A0997E82736AF55002F2297 /* TypeView.swift */,
-				8A0997EA2736B31F002F2297 /* BuddyView.swift */,
-				8A0997EE2736B8E7002F2297 /* MemoView.swift */,
-				8A0997F02736BB83002F2297 /* PictureView.swift */,
-				BB2D2553273112EE00E7BF35 /* BuddyCollectionViewCell.swift */,
-				BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */,
-				8A59E694273781E300977488 /* TypeCollectionViewCell.swift */,
+				BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */,
+				BB2D25AC273B582500E7BF35 /* BuddyView.swift */,
+				BB2D25AD273B582500E7BF35 /* EndDateView.swift */,
+				BB2D25A7273B582500E7BF35 /* MemoView.swift */,
+				BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */,
+				BB2D25AB273B582500E7BF35 /* PictureView.swift */,
+				BB2D25B0273B582500E7BF35 /* PlaceView.swift */,
+				BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */,
+				BB2D25A8273B582500E7BF35 /* StartDateView.swift */,
+				BB2D25AE273B582500E7BF35 /* TypeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -234,7 +233,7 @@
 		BB2D25A1273A46FB00E7BF35 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */,
+				BB2D25BC273B585200E7BF35 /* RegisterViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -297,17 +296,6 @@
 		BBF7FF3E272FB6CC00B71C97 /* Register */ = {
 			isa = PBXGroup;
 			children = (
-				BBF7FF29272FB51000B71C97 /* RegisterViewController.swift */,
-				8A0997E427363F4E002F2297 /* StartDateView.swift */,
-				8A59E69927383DA300977488 /* EndDateView.swift */,
-				8A0997E62736AAF2002F2297 /* PlaceView.swift */,
-				8A0997E82736AF55002F2297 /* TypeView.swift */,
-				8A0997EA2736B31F002F2297 /* BuddyView.swift */,
-				8A0997EE2736B8E7002F2297 /* MemoView.swift */,
-				8A0997F02736BB83002F2297 /* PictureView.swift */,
-				BB2D2553273112EE00E7BF35 /* ImageTextCollectionVIiewCell.swift */,
-				BB2D256127315B7B00E7BF35 /* PictureCollectionViewCell.swift */,
-				8A54F3EC27325B2500535B26 /* RegisterViewModel.swift */,
 				BB2D25A0273A46C100E7BF35 /* View */,
 				BB2D25A1273A46FB00E7BF35 /* ViewModel */,
 			);
@@ -458,38 +446,37 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A0997E92736AF55002F2297 /* TypeView.swift in Sources */,
 				F7A7699B2732588500FF83EA /* WBCalendarView.swift in Sources */,
 				BB2D25852739197600E7BF35 /* Gathering.swift in Sources */,
 				BB2D25852739197600E7BF35 /* Gathering.swift in Sources */,
-				8A0997E527363F4E002F2297 /* StartDateView.swift in Sources */,
+				BB2D25B6273B582500E7BF35 /* PictureView.swift in Sources */,
 				F7B69B8A273398C4005D2F32 /* CalendarManager.swift in Sources */,
 				85C236BA27381239001499E5 /* BuddyFaceUseCase.swift in Sources */,
 				F7B69B8C27339EF9005D2F32 /* WBCalendarViewCell.swift in Sources */,
 				85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */,
-				8A59E69A27383DA300977488 /* EndDateView.swift in Sources */,
-				8A0997E72736AAF2002F2297 /* PlaceView.swift in Sources */,
-				8A54F3ED27325B2500535B26 /* RegisterViewModel.swift in Sources */,
 				BB2D25602731317E00E7BF35 /* ChartViewController.swift in Sources */,
 				F7A7699727315AF800FF83EA /* HeaderView.swift in Sources */,
 				BBF7FF40272FB7B700B71C97 /* TabBarViewController.swift in Sources */,
+				BB2D25B8273B582500E7BF35 /* EndDateView.swift in Sources */,
+				BB2D25B2273B582500E7BF35 /* MemoView.swift in Sources */,
+				BB2D25BB273B582500E7BF35 /* PlaceView.swift in Sources */,
 				BB2D254B2730D97000E7BF35 /* PlaceType.swift in Sources */,
 				BB2D25962739441300E7BF35 /* GatheringEntity+CoreDataClass.swift in Sources */,
 				BB2D255E2731317100E7BF35 /* SettingViewController.swift in Sources */,
-				8A0997EB2736B31F002F2297 /* BuddyView.swift in Sources */,
-				BBF7FF2A272FB51000B71C97 /* RegisterViewController.swift in Sources */,
 				8A73D67E273A6C4B001D5184 /* BuddyChoiceViewModel.swift in Sources */,
-				BB2D256227315B7B00E7BF35 /* PictureCollectionViewCell.swift in Sources */,
-				8A0997EF2736B8E7002F2297 /* MemoView.swift in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
 				854AA75E27337A7200663911 /* SearchView.swift in Sources */,
-				BB2D2554273112EE00E7BF35 /* ImageTextCollectionVIiewCell.swift in Sources */,
-				BB2D2554273112EE00E7BF35 /* ImageTextCollectionVIiewCell.swift in Sources */,
+				BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */,
+				BB2D25B9273B582500E7BF35 /* TypeView.swift in Sources */,
+				BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */,
+				BB2D25BA273B582500E7BF35 /* RegisterViewController.swift in Sources */,
 				8A73D683273AC3B8001D5184 /* Purpose.swift in Sources */,
-				BB2D2554273112EE00E7BF35 /* ImageTextCollectionVIiewCell.swift in Sources */,
-				BB2D2554273112EE00E7BF35 /* ImageTextCollectionVIiewCell.swift in Sources */,
-				BB2D2554273112EE00E7BF35 /* BuddyCollectionViewCell.swift in Sources */,
-				BB2D2554273112EE00E7BF35 /* BuddyCollectionViewCell.swift in Sources */,
+				BB2D25B1273B582500E7BF35 /* PictureCollectionViewCell.swift in Sources */,
+				BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */,
+				BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */,
+				BB2D25B3273B582500E7BF35 /* StartDateView.swift in Sources */,
+				BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */,
+				BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */,
 				F7E8ABB42738133B005F8306 /* CalendarDetailViewController.swift in Sources */,
 				BBF7FF26272FB51000B71C97 /* AppDelegate.swift in Sources */,
 				BBF7FF28272FB51000B71C97 /* SceneDelegate.swift in Sources */,
@@ -498,10 +485,11 @@
 				854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */,
 				85C236B527380D39001499E5 /* FaceColor.swift in Sources */,
 				BB2D25832739192200E7BF35 /* WithBuddyModel.xcdatamodeld in Sources */,
+				BB2D25B7273B582500E7BF35 /* BuddyView.swift in Sources */,
 				85C236B527380D39001499E5 /* FaceColor.swift in Sources */,
+				BB2D25BD273B585200E7BF35 /* RegisterViewModel.swift in Sources */,
 				BB2D25832739192200E7BF35 /* WithBuddyModel.xcdatamodeld in Sources */,
 				8A73D679273A61EC001D5184 /* BuddyChoiceViewController.swift in Sources */,
-				8A0997F12736BB83002F2297 /* PictureView.swift in Sources */,
 				BB2D25492730D97000E7BF35 /* Buddy.swift in Sources */,
 				BB2D258C273922FC00E7BF35 /* BuddyEntity+CoreDataClass.swift in Sources */,
 				854AA7662733A37200663911 /* ListViewModel.swift in Sources */,

@@ -1,14 +1,14 @@
 //
-//  TypeCollectionViewCell.swift
+//  ImageTextCollectionViewCell.swift
 //  WithBuddy
 //
-//  Created by Inwoo Park on 2021/11/07.
+//  Created by 김두연 on 2021/11/02.
 //
 
 import UIKit
 
-class TypeCollectionViewCell: UICollectionViewCell {
-    static let identifer = "TypeCollectionViewCell"
+class ImageTextCollectionViewCell: UICollectionViewCell {
+    static let identifer = "ImageTextCollectionViewCell"
     
     private var image = UIImageView()
     private var textLabel = UILabel()
@@ -22,10 +22,26 @@ class TypeCollectionViewCell: UICollectionViewCell {
         self.configure()
     }
     
-    func configure(image: UIImage?, text: String) {
+    func update(image: UIImage?, text: String, check: Bool?) {
         guard let image = image else {
             return
         }
+        self.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.image.image = image
+        self.textLabel.text = text
+        if let check = check,
+           check {
+            self.image.alpha = 1.0
+        } else {
+            self.image.alpha = 0.3
+        }
+    }
+    
+    func update(image: UIImage?, text: String) {
+        guard let image = image else {
+            return
+        }
+        self.backgroundColor = UIColor(named: "BackgroundPurple")
         self.image.image = image
         self.textLabel.text = text
     }
@@ -57,5 +73,5 @@ class TypeCollectionViewCell: UICollectionViewCell {
             self.textLabel.widthAnchor.constraint(equalToConstant: self.frame.width)
         ])
     }
+    
 }
-

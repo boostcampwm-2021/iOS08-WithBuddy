@@ -15,6 +15,7 @@
 		85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */; };
 		85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D98272FEBE000825C64 /* ListViewController.swift */; };
 		8A52C4F6273947E50025C562 /* defaultImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A52C4F5273947E50025C562 /* defaultImage.png */; };
+		8A53C22F273B9EB200BB0C20 /* BuddyCustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A53C22E273B9EB200BB0C20 /* BuddyCustomViewController.swift */; };
 		8A73D679273A61EC001D5184 /* BuddyChoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D678273A61EC001D5184 /* BuddyChoiceViewController.swift */; };
 		8A73D67E273A6C4B001D5184 /* BuddyChoiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D67D273A6C4B001D5184 /* BuddyChoiceViewModel.swift */; };
 		8A73D683273AC3B8001D5184 /* Purpose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D682273AC3B8001D5184 /* Purpose.swift */; };
@@ -68,6 +69,7 @@
 		85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		85FA1D98272FEBE000825C64 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		8A52C4F5273947E50025C562 /* defaultImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultImage.png; sourceTree = "<group>"; };
+		8A53C22E273B9EB200BB0C20 /* BuddyCustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyCustomViewController.swift; sourceTree = "<group>"; };
 		8A73D678273A61EC001D5184 /* BuddyChoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyChoiceViewController.swift; sourceTree = "<group>"; };
 		8A73D67D273A6C4B001D5184 /* BuddyChoiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyChoiceViewModel.swift; sourceTree = "<group>"; };
 		8A73D682273AC3B8001D5184 /* Purpose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Purpose.swift; sourceTree = "<group>"; };
@@ -152,6 +154,14 @@
 				854AA7652733A37200663911 /* ListViewModel.swift */,
 			);
 			path = List;
+			sourceTree = "<group>";
+		};
+		8A53C22D273B9E5E00BB0C20 /* BuddyCustom */ = {
+			isa = PBXGroup;
+			children = (
+				8A53C22E273B9EB200BB0C20 /* BuddyCustomViewController.swift */,
+			);
+			path = BuddyCustom;
 			sourceTree = "<group>";
 		};
 		8A73D677273A61C5001D5184 /* BuddyChoice */ = {
@@ -293,6 +303,7 @@
 				BB2D255B2731315900E7BF35 /* Chart */,
 				BBF7FF3E272FB6CC00B71C97 /* Register */,
 				8A73D677273A61C5001D5184 /* BuddyChoice */,
+				8A53C22D273B9E5E00BB0C20 /* BuddyCustom */,
 				85FA1D97272FEBBB00825C64 /* List */,
 				BB2D255C2731315E00E7BF35 /* Setting */,
 			);
@@ -482,6 +493,7 @@
 				BB2D25B9273B582500E7BF35 /* TypeView.swift in Sources */,
 				BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */,
 				BB2D25BA273B582500E7BF35 /* RegisterViewController.swift in Sources */,
+				8A53C22F273B9EB200BB0C20 /* BuddyCustomViewController.swift in Sources */,
 				8A73D683273AC3B8001D5184 /* Purpose.swift in Sources */,
 				BB2D25B1273B582500E7BF35 /* PictureCollectionViewCell.swift in Sources */,
 				BB2D2554273112EE00E7BF35 /* ImageTextCollectionViewCell.swift in Sources */,

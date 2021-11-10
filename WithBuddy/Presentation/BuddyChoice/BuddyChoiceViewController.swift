@@ -109,6 +109,7 @@ class BuddyChoiceViewController: UIViewController {
     
     @objc private func onAddButtonTouched(_ sender: UIButton) {
         self.buddyChoiceViewModel.buddyDidAdded(Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"))
+        self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
     }
     
 }

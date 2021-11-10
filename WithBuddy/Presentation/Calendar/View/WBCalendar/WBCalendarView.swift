@@ -158,13 +158,8 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifer, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMdd"
         let today = self.calendarManager.pickDay(baseDate: self.selectedDate, numberOfDay: self.totalDays[indexPath.item])
-        if dateFormatter.string(from: Date()) == dateFormatter.string(from: today) {
-            cell.highlightToday()
-        }
-        cell.update(day: totalDays[indexPath.item], face: firstFace(item: indexPath.item) )
+        cell.update(day: self.totalDays[indexPath.item], face: self.firstFace(item: indexPath.item), today: today)
         return cell
     }
     

@@ -45,12 +45,12 @@ class WBCalendarViewCell: UICollectionViewCell {
         ])
     }
     
-    func initCell() {
+    private func initCell() {
         self.backgroundColor = .systemBackground
         self.layer.cornerRadius = 0
     }
     
-    func highlightToday() {
+    private func highlightToday() {
         self.backgroundColor = UIColor(named: "BackgroundPurple")
         self.layer.cornerRadius = 10
     }
@@ -68,9 +68,16 @@ class WBCalendarViewCell: UICollectionViewCell {
         ])
     }
     
-    func update(day: Int, face: String) {
+    func update(day: Int, face: String, today: Date) {
+        self.initCell()
         self.dayOfCell.text = day > 0 ? String(day) : ""
         self.buddyImageView.image = UIImage(named: face)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd"
+        if dateFormatter.string(from: Date()) == dateFormatter.string(from: today) {
+            self.highlightToday()
+        }
     }
     
 }

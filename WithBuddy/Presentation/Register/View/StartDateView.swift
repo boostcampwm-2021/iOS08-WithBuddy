@@ -15,7 +15,7 @@ final class StartDateView: UIView {
     private lazy var dateLabel = UILabel()
     private lazy var dateButton = UIButton()
     
-    var delegate: StartDateViewDelegate?
+    weak var delegate: StartDateViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -94,6 +94,6 @@ final class StartDateView: UIView {
     }
 }
 
-protocol StartDateViewDelegate {
+protocol StartDateViewDelegate: AnyObject {
     func startDateButtonDidTouched()
 }

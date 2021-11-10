@@ -13,14 +13,13 @@ final class TypeView: UIView {
     private lazy var typeTitleLabel = UILabel()
     private lazy var typeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     
-    private lazy var typeDataSource = UICollectionViewDiffableDataSource<Int, Purpose>(collectionView: self.typeCollectionView) {
-        (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Purpose) -> UICollectionViewCell? in
+    private lazy var typeDataSource = UICollectionViewDiffableDataSource<Int, Purpose>(collectionView: self.typeCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Purpose) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifier, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
         cell.update(image: UIImage(named: "\(itemIdentifier.type)"), text: "\(itemIdentifier.type)", check: itemIdentifier.check)
         return cell
     }
     
-    var delegate: TypeViewDelegate?
+    weak var delegate: TypeViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -87,6 +86,6 @@ final class TypeView: UIView {
     }
 }
 
-protocol TypeViewDelegate {
+protocol TypeViewDelegate: AnyObject {
     func typeDidSelected(_: Int)
 }

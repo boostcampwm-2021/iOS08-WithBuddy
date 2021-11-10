@@ -14,14 +14,13 @@ final class PictureView: UIView {
     private lazy var pictureAddButton = UIButton()
     private lazy var pictureCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     
-    private lazy var pictureDataSource = UICollectionViewDiffableDataSource<Int, URL>(collectionView: self.pictureCollectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: URL) -> UICollectionViewCell? in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PictureCollectionViewCell.identifier, for: indexPath) as? PictureCollectionViewCell else { preconditionFailure() }
-            cell.configure(url: itemIdentifier)
-            return cell
-        }
+    private lazy var pictureDataSource = UICollectionViewDiffableDataSource<Int, URL>(collectionView: self.pictureCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: URL) -> UICollectionViewCell? in
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PictureCollectionViewCell.identifier, for: indexPath) as? PictureCollectionViewCell else { preconditionFailure() }
+        cell.configure(url: itemIdentifier)
+        return cell
+    }
     
-    var delegate: PictureViewDelegate?
+    weak var delegate: PictureViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -123,19 +122,16 @@ final class PictureView: UIView {
 
 extension PictureView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
-            let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
-                                       image: UIImage(systemName: "trash")) { action in
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
+            let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash")) { _ in
                 self.delegate?.pictureDidDeleted(indexPath.item)
-                }
+            }
             return UIMenu(title: "이 사진을", children: [delete])
         })
     }
 }
 
-protocol PictureViewDelegate {
+protocol PictureViewDelegate: AnyObject {
     func pictureButtonDidTouched()
     func pictureDidDeleted(_: Int)
 }
-
-

@@ -89,6 +89,10 @@ extension ListViewController: UITextFieldDelegate {
         return true
     }
     
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        self.listViewModel.didSearchFieldReturn(name: textField.text)
+    }
+    
 }
 
 extension ListViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {

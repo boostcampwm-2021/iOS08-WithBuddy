@@ -10,8 +10,9 @@ import Foundation
 protocol BuddyFaceInterface {
     func faceList(color: String) -> [String]
     func insertBuddy(buddy: Buddy)
-    func insertGathering(gathering: Gathering)
+    func insertGathering(gathering: Gathering, buddy: [Buddy])
     func fetch() -> [Gathering]?
+    func fetch(name: String) -> [Gathering]? 
     func random() -> String
 }
 
@@ -27,9 +28,11 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
         CoreDataManager.shared.insertBuddy(buddy)
     }
     
-    func insertGathering(gathering: Gathering) {
-        let buddyList = self.fetchBuddy().shuffled()
-        CoreDataManager.shared.insertGathering(gathering, buddyList: buddyList)
+    func insertGathering(gathering: Gathering, buddy: [Buddy]) {
+        let buddyList = CoreDataManager.shared.fetch(request: BuddyEntity.fetchRequest())
+        let buddyMap = buddy.map { $0.id }
+        let filter = buddyList.filter{ buddyMap.contains($0.id) }
+        CoreDataManager.shared.insertGathering(gathering, buddyList:  filter)
     }
     
     private func fetchBuddy() -> [BuddyEntity] {
@@ -39,6 +42,14 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
     
     func fetch() -> [Gathering]? {
         let request = GatheringEntity.fetchRequest()
+        let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
+        return gatheringEntityList.map{ Gathering(date: $0.date, place: $0.place, placeType: $0.placeType, buddy: $0.buddyList, memo: $0.memo, picture: $0.picture) }
+    }
+    
+    func fetch(name: String) -> [Gathering]? {
+        let request = GatheringEntity.fetchRequest()
+        let predicate = NSPredicate(format: "%@ IN buddy.name", name)
+        request.predicate = predicate
         let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
         return gatheringEntityList.map{ Gathering(date: $0.date, place: $0.place, placeType: $0.placeType, buddy: $0.buddyList, memo: $0.memo, picture: $0.picture) }
     }

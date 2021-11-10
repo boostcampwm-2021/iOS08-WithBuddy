@@ -31,6 +31,7 @@ class WBCalendarViewCell: UICollectionViewCell {
     }
     
     private func configure() {
+        self.initCell()
         self.configuredayOfMonth()
         self.configureBuddyImageView()
     }
@@ -44,15 +45,26 @@ class WBCalendarViewCell: UICollectionViewCell {
         ])
     }
     
+    func initCell() {
+        self.backgroundColor = .systemBackground
+        self.layer.cornerRadius = 0
+    }
+    
+    func highlightToday() {
+        self.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.layer.cornerRadius = 10
+    }
+    
     private func configureBuddyImageView() {
         self.addSubview(buddyImageView)
-        buddyImageView.image = UIImage(named: "FaceBlue1")
+        self.buddyImageView.image = UIImage(named: "")
         self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.buddyImageView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8),
             self.buddyImageView.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8),
             self.buddyImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            self.buddyImageView.topAnchor.constraint(equalTo: self.dayOfCell.bottomAnchor, constant: 3)
+            self.buddyImageView.topAnchor.constraint(equalTo: self.dayOfCell.bottomAnchor, constant: 1),
+            self.buddyImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -3)
         ])
     }
     

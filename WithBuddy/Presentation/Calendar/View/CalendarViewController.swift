@@ -64,7 +64,7 @@ class CalendarViewController: UIViewController, CalendarCellSelectable {
         self.headerView.layer.cornerRadius = 10
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.headerView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
+            self.headerView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 20),
             self.headerView.heightAnchor.constraint(equalToConstant: 80),
             self.headerView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
             self.headerView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20)

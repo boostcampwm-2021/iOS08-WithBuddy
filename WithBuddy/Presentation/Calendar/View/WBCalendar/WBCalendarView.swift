@@ -158,6 +158,12 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifer, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd"
+        let today = self.calendarManager.pickDay(baseDate: self.selectedDate, numberOfDay: self.totalDays[indexPath.item])
+        if dateFormatter.string(from: Date()) == dateFormatter.string(from: today) {
+            cell.highlightToday()
+        }
         cell.update(day: totalDays[indexPath.item], face: firstFace(item: indexPath.item) )
         return cell
     }
@@ -167,22 +173,10 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
             self.selectedDate = self.calendarManager.pickDay(baseDate: self.selectedDate, numberOfDay: self.totalDays[indexPath.item])
             self.delegate?.presentCellDetail(selectedDate: self.selectedDate)
         }
+        if let cell = collectionView.cellForItem(at: indexPath) as? WBCalendarViewCell {
+            cell.animateButtonTap(scale: 0.9)
+        }
     }
-    
-    // TODO: 누를때 애니메이션
-//    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-//        if let cell = collectionView.cellForItem(at: indexPath) as? WBCalendarViewCell {
-//            let pressedDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-//            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 3, options: [.curveEaseInOut], animations: { cell.transform = pressedDownTransform })
-//        }
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-//        if let cell = collectionView.cellForItem(at: indexPath) as? WBCalendarViewCell {
-//            let originalTransform = CGAffineTransform(scaleX: 1, y: 1)
-//            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 3, options: [.curveEaseInOut], animations: { cell.transform = originalTransform })
-//        }
-//    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (self.frame.size.width) / 7
@@ -204,4 +198,16 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
 
 protocol CalendarCellSelectable {
     func presentCellDetail(selectedDate: Date)
+}
+
+extension UIView {
+    func animateButtonTap(scale: Float) {
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
+        } completion: { [weak self] (isFinish) in
+            UIView.animate(withDuration: 0.2) {
+                self?.transform = CGAffineTransform.identity
+            }
+        }
+    }
 }

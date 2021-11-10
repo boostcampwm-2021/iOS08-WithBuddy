@@ -81,9 +81,14 @@ class RegisterViewModel {
         self.purposeList[idx].check.toggle()
     }
     
-    func didBuddySelected(_ buddy: Buddy) {
+    func buddyDidAdded(_ buddy: Buddy) {
         self.buddyList.insert(buddy, at: 0)
         self.buddyUseCase.insertBuddy(buddy)
+    }
+    
+    func buddyDidUpdated(_ buddyList: [Buddy]) {
+        buddyList.forEach({ self.buddyList.insert($0, at: 0) })
+//        self.buddyUseCase.insertBuddy(buddy)
     }
     
     func didMemoFinished(_ memo: String) {

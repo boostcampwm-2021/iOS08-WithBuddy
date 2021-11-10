@@ -109,7 +109,7 @@ final class BuddyView: UIView {
     }
     
     @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
-        self.delegate?.buddyDidSelected(Buddy(id: UUID(), name: UUID().uuidString, face: "FaceBlue9"))
+        self.delegate?.buddyAddDidTouched()
     }
 }
 
@@ -127,5 +127,5 @@ extension BuddyView: UICollectionViewDelegate {
 
 protocol BuddyViewDelegate {
     func buddyDidDeleted(_: Int)
-    func buddyDidSelected(_: Buddy)
+    func buddyAddDidTouched()
 }

@@ -80,6 +80,7 @@ class RegisterViewController: UIViewController {
                 self?.alertSuccess()
             }
             .store(in: &self.cancellables)
+        
         self.registerViewModel.registerFailSignal
             .receive(on: DispatchQueue.main)
             .sink{ [weak self] result in
@@ -302,7 +303,7 @@ extension RegisterViewController: StartDateViewDelegate, EndDateViewDelegate {
 }
 
 extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         guard let url = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
             return
         }
@@ -332,9 +333,10 @@ extension RegisterViewController: BuddyViewDelegate {
         self.registerViewModel.didBuddyDeleteTouched(in: idx)
     }
     
-    func buddyDidSelected(_ buddy: Buddy) {
-        self.registerViewModel.didBuddySelected(buddy)
-        self.navigationController?.pushViewController(BuddyChoiceViewController(), animated: true)
+    func buddyAddDidTouched() {
+        let buddyChoiceViewController = BuddyChoiceViewController()
+        buddyChoiceViewController.delegate = self
+        self.navigationController?.pushViewController(buddyChoiceViewController, animated: true)
     }
 }
 
@@ -354,5 +356,11 @@ extension RegisterViewController: PictureViewDelegate {
         picker.delegate = self
         picker.sourceType = .photoLibrary
         present(picker, animated: false, completion: nil)
+    }
+}
+
+extension RegisterViewController: BuddyChoiceDelegate {
+    func buddySelectingDidCompleted(_ buddyList: [Buddy]) {
+        self.registerViewModel.buddyDidUpdated(buddyList)
     }
 }

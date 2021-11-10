@@ -9,11 +9,11 @@ import UIKit
 
 class CalendarViewController: UIViewController, CalendarCellSelectable {
 
-    static let identifer = "CalendarViewController"
+    static let identifier = "CalendarViewController"
     private let detailView = CalendarDetailView()
     private let headerView = HeaderView()
     private let calendarView = UIView()
-    private let wbcalendar = WBCalendarView()
+    private let wbCalendar = WBCalendarView()
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
@@ -23,11 +23,11 @@ class CalendarViewController: UIViewController, CalendarCellSelectable {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.wbcalendar.reload()
+        self.wbCalendar.reload()
     }
     
     private func configure() {
-        self.wbcalendar.delegate = self
+        self.wbCalendar.delegate = self
         self.configureScrollView()
         self.configureContentView()
         self.configureHeaderView()
@@ -86,13 +86,13 @@ class CalendarViewController: UIViewController, CalendarCellSelectable {
     }
     
     private func configurCalendar() {
-        self.calendarView.addSubview(wbcalendar)
-        self.wbcalendar.translatesAutoresizingMaskIntoConstraints = false
+        self.calendarView.addSubview(wbCalendar)
+        self.wbCalendar.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.wbcalendar.leadingAnchor.constraint(equalTo: self.calendarView.leadingAnchor, constant: 15),
-            self.wbcalendar.trailingAnchor.constraint(equalTo: self.calendarView.trailingAnchor, constant: -15),
-            self.wbcalendar.topAnchor.constraint(equalTo: self.calendarView.topAnchor, constant: 15),
-            self.wbcalendar.bottomAnchor.constraint(equalTo: self.calendarView.bottomAnchor, constant: -15)
+            self.wbCalendar.leadingAnchor.constraint(equalTo: self.calendarView.leadingAnchor, constant: 15),
+            self.wbCalendar.trailingAnchor.constraint(equalTo: self.calendarView.trailingAnchor, constant: -15),
+            self.wbCalendar.topAnchor.constraint(equalTo: self.calendarView.topAnchor, constant: 15),
+            self.wbCalendar.bottomAnchor.constraint(equalTo: self.calendarView.bottomAnchor, constant: -15)
         ])
     }
     

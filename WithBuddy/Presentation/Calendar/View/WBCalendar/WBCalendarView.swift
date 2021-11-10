@@ -120,7 +120,7 @@ class WBCalendarView: UIView {
         self.addSubview(collectionView)
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
-        self.collectionView.register(WBCalendarViewCell.self, forCellWithReuseIdentifier: WBCalendarViewCell.identifer)
+        self.collectionView.register(WBCalendarViewCell.self, forCellWithReuseIdentifier: WBCalendarViewCell.identifier)
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.collectionView.topAnchor.constraint(equalTo: self.weekStackView.bottomAnchor, constant: 10),
@@ -157,7 +157,7 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifer, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifier, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
         let today = self.calendarManager.pickDay(baseDate: self.selectedDate, numberOfDay: self.totalDays[indexPath.item])
         cell.update(day: self.totalDays[indexPath.item], face: self.firstFace(item: indexPath.item), today: today)
         return cell
@@ -184,8 +184,8 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
     }
     
     func firstFace(item: Int) -> String {
-        let DateOfCell = self.calendarManager.pickDay(baseDate: self.selectedDate, numberOfDay: self.totalDays[item])
-        let firstFace = self.wbcalendarViewModel.firstBuddyFace(selectedDate: DateOfCell)
+        let dateOfCell = self.calendarManager.pickDay(baseDate: self.selectedDate, numberOfDay: self.totalDays[item])
+        let firstFace = self.wbcalendarViewModel.firstBuddyFace(selectedDate: dateOfCell)
         return firstFace
     }
     

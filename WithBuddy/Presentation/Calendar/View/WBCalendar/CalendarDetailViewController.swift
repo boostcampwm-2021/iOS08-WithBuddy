@@ -9,7 +9,7 @@ import UIKit
 
 class CalendarDetailViewController: UIViewController {
 
-    static let identifer = "CalendarDetailViewController"
+    static let identifier = "CalendarDetailViewController"
     
     override func viewDidLoad() {
         super.viewDidLoad()

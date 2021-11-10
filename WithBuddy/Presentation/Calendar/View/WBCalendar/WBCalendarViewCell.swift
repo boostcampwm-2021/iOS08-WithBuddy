@@ -57,9 +57,7 @@ class WBCalendarViewCell: UICollectionViewCell {
     }
     
     func update(day: Int, face: String) {
-        if day > 0 {
-            self.dayOfCell.text = String(day)
-        }
+        self.dayOfCell.text = day > 0 ? String(day) : ""
         self.buddyImageView.image = UIImage(named: face)
     }
     

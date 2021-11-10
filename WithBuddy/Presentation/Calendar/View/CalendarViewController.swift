@@ -22,6 +22,10 @@ class CalendarViewController: UIViewController, CalendarCellSelectable {
         self.configure()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.wbcalendar.reload()
+    }
+    
     private func configure() {
         self.wbcalendar.delegate = self
         self.configureScrollView()

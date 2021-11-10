@@ -31,6 +31,10 @@ class WBCalendarView: UIView {
         self.configureCalendar()
     }
     
+    func reload() {
+        self.collectionView.reloadData()
+    }
+    
     private func configureCalendar() {
         self.configureMonth()
         self.configureWeek()
@@ -141,7 +145,6 @@ class WBCalendarView: UIView {
             }
             count += 1
         }
-        self.configureThisMonth()
         self.collectionView.reloadData()
     }
     

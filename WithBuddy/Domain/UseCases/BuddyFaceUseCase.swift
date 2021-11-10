@@ -40,7 +40,7 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
     func fetch() -> [Gathering]? {
         let request = GatheringEntity.fetchRequest()
         let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
-        return gatheringEntityList.map{ Gathering(date: $0.date, place: $0.place, placeType: $0.placeType, buddy: $0.buddy.map{ $0.map{ Buddy(id: $0.id, name: $0.name, face: $0.face) } } ?? [Buddy(id: UUID(), name: "", face: "")], memo: $0.memo, picture: $0.picture) }
+        return gatheringEntityList.map{ Gathering(date: $0.date, place: $0.place, placeType: $0.placeType, buddy: $0.buddyList, memo: $0.memo, picture: $0.picture) }
     }
     
     func random() -> String {

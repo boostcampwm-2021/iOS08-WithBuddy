@@ -7,8 +7,8 @@
 
 import UIKit
 
-class ImageTextCollectionVIiewCell: UICollectionViewCell {
-    static let identifer = "BuddyCollectionViewCell"
+class ImageTextCollectionViewCell: UICollectionViewCell {
+    static let identifer = "ImageTextCollectionViewCell"
     
     private var image = UIImageView()
     private var textLabel = UILabel()

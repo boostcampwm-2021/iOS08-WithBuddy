@@ -16,7 +16,7 @@ public class GatheringEntity: NSManagedObject {
     @NSManaged public var placeType: [Int]
     @NSManaged public var memo: String?
     @NSManaged public var picture: [URL]?
-    @NSManaged public var buddy: Set<BuddyEntity>?
+    @NSManaged public var buddy: Set<BuddyEntity>
 }
 
 extension GatheringEntity {
@@ -27,6 +27,10 @@ extension GatheringEntity {
         self.placeType = gathering.placeType
         self.memo = gathering.memo
         self.picture = gathering.picture
+    }
+    
+    var buddyList: [Buddy] {
+        return self.buddy.map{ $0.buddy }
     }
     
     @nonobjc public class func fetchRequest() -> NSFetchRequest<GatheringEntity> {

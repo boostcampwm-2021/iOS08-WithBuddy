@@ -50,10 +50,10 @@ class RegisterViewController: UIViewController {
             }
             .store(in: &self.cancellables)
         
-        self.registerViewModel.$typeSelectedList
+        self.registerViewModel.$purposeList
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] typeSelectedList in
-                self?.typeView.changeSelectedType(typeSelectedList)
+            .sink { [weak self] purposeList in
+                self?.typeView.changeSelectedType(purposeList)
             }
             .store(in: &self.cancellables)
         
@@ -299,6 +299,7 @@ extension RegisterViewController: BuddyViewDelegate {
     
     func buddyDidSelected(_ buddy: Buddy) {
         self.registerViewModel.didBuddySelected(buddy)
+        self.navigationController?.pushViewController(BuddyChoiceViewController(), animated: true)
     }
 }
 

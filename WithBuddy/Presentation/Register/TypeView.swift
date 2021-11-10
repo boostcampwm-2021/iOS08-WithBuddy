@@ -13,6 +13,13 @@ final class TypeView: UIView {
     private lazy var typeTitleLabel = UILabel()
     private lazy var typeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     
+    private lazy var typeDataSource = UICollectionViewDiffableDataSource<Int, Purpose>(collectionView: self.typeCollectionView) {
+        (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Purpose) -> UICollectionViewCell? in
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionVIiewCell.identifer, for: indexPath) as? ImageTextCollectionVIiewCell else { preconditionFailure() }
+        cell.update(image: UIImage(named: "\(itemIdentifier.type)"), text: "\(itemIdentifier.type)", check: itemIdentifier.check)
+        return cell
+    }
+    
     var delegate: TypeViewDelegate?
     
     override init(frame: CGRect) {
@@ -25,17 +32,11 @@ final class TypeView: UIView {
         self.configure()
     }
     
-    func changeSelectedType(_ typeSelectedList: [Bool]) {
-        for (idx, selected) in typeSelectedList.enumerated() {
-            guard let cell = self.typeCollectionView.cellForItem(at: IndexPath(item: idx, section: 0)) else {
-                return
-            }
-            if selected {
-                cell.alpha = 1.0
-            } else {
-                cell.alpha = 0.6
-            }
-        }
+    func changeSelectedType(_ purposeList: [Purpose]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Purpose>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(purposeList)
+        self.typeDataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func configure() {
@@ -60,13 +61,10 @@ final class TypeView: UIView {
         self.addSubview(self.typeCollectionView)
         self.typeCollectionView.backgroundColor = .clear
         self.typeCollectionView.showsHorizontalScrollIndicator = false
-        self.typeCollectionView.dataSource = self
-        self.typeCollectionView.delegate = self
         self.typeCollectionView.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.collectionViewDidTouched(_:)))
         self.typeCollectionView.addGestureRecognizer(tap)
-        
-        self.typeCollectionView.register(TypeCollectionViewCell.self, forCellWithReuseIdentifier: TypeCollectionViewCell.identifer)
+        self.typeCollectionView.register(ImageTextCollectionVIiewCell.self, forCellWithReuseIdentifier: ImageTextCollectionVIiewCell.identifer)
 
         let typeFlowLayout = UICollectionViewFlowLayout()
         typeFlowLayout.itemSize = CGSize(width: 60, height: 90)
@@ -82,26 +80,10 @@ final class TypeView: UIView {
         ])
     }
     
-    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+    @objc func collectionViewDidTouched(_ sender: UITapGestureRecognizer) {
        if let indexPath = self.typeCollectionView.indexPathForItem(at: sender.location(in: self.typeCollectionView)) {
            self.delegate?.typeDidSelected(indexPath.item)
        }
-    }
-}
-
-extension TypeView: UICollectionViewDataSource, UICollectionViewDelegate {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return PlaceType.allCases.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TypeCollectionViewCell.identifer, for: indexPath) as? TypeCollectionViewCell else { preconditionFailure() }
-        cell.configure(image: UIImage(named: "\(PlaceType.allCases[indexPath.item])"), text: "\(PlaceType.allCases[indexPath.item])")
-        return cell
     }
 }
 

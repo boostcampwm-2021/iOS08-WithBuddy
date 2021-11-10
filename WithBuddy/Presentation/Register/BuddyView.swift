@@ -16,8 +16,8 @@ final class BuddyView: UIView {
     
     private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) {
         (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BuddyCollectionViewCell.identifer, for: indexPath) as? BuddyCollectionViewCell else { preconditionFailure() }
-        cell.configure(image: UIImage(named: "FacePurple1"), text: itemIdentifier.name)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionVIiewCell.identifer, for: indexPath) as? ImageTextCollectionVIiewCell else { preconditionFailure() }
+        cell.update(image: UIImage(named: "FacePurple1"), text: itemIdentifier.name)
         return cell
     }
     
@@ -87,7 +87,7 @@ final class BuddyView: UIView {
         self.buddyCollectionView.showsHorizontalScrollIndicator = false
         self.buddyCollectionView.delegate = self
         
-        self.buddyCollectionView.register(BuddyCollectionViewCell.self, forCellWithReuseIdentifier: BuddyCollectionViewCell.identifer)
+        self.buddyCollectionView.register(ImageTextCollectionVIiewCell.self, forCellWithReuseIdentifier: ImageTextCollectionVIiewCell.identifer)
         
         let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(60), heightDimension: .absolute(90)))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)), subitems: [item])

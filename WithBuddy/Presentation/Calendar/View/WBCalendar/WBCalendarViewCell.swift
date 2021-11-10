@@ -12,9 +12,9 @@ class WBCalendarViewCell: UICollectionViewCell {
     static let identifer = "WBCalendarViewCell"
     private var buddyImageView = UIImageView()
     
-    var dayOfMonth: UILabel = {
+    var dayOfCell: UILabel = {
         let label = UILabel()
-        label.text = "1"
+        label.text = ""
         label.font = .boldSystemFont(ofSize: 10)
         label.textColor = UIColor(named: "LabelPurple")
         return label
@@ -36,11 +36,11 @@ class WBCalendarViewCell: UICollectionViewCell {
     }
     
     private func configuredayOfMonth() {
-        self.addSubview(dayOfMonth)
-        self.dayOfMonth.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(dayOfCell)
+        self.dayOfCell.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.dayOfMonth.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            self.dayOfMonth.topAnchor.constraint(equalTo: self.topAnchor, constant: 3)
+            self.dayOfCell.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            self.dayOfCell.topAnchor.constraint(equalTo: self.topAnchor, constant: 3)
         ])
     }
     
@@ -52,8 +52,15 @@ class WBCalendarViewCell: UICollectionViewCell {
             self.buddyImageView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8),
             self.buddyImageView.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8),
             self.buddyImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            self.buddyImageView.topAnchor.constraint(equalTo: self.dayOfMonth.bottomAnchor, constant: 3)
+            self.buddyImageView.topAnchor.constraint(equalTo: self.dayOfCell.bottomAnchor, constant: 3)
         ])
+    }
+    
+    func update(day: Int, face: String) {
+        if day > 0 {
+            self.dayOfCell.text = String(day)
+        }
+        self.buddyImageView.image = UIImage(named: face)
     }
     
 }

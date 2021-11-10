@@ -81,33 +81,8 @@ extension CalendarDetailView: UICollectionViewDataSource, UICollectionViewDelega
         return cell
     }
     
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        if totalDays[indexPath.item] > 0 {
-//            self.selectedDate = self.calendarManager.pickDay(baseDate: selectedDate, numberOfDay: totalDays[indexPath.item])
-//            self.delegate?.presentCellDetail(selectedDate: selectedDate)
-////        }
-//    }
-    
-    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? ListCollectionViewCell {
-            let pressedDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 3, options: [.curveEaseInOut], animations: { cell.transform = pressedDownTransform })
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? ListCollectionViewCell {
-            let originalTransform = CGAffineTransform(scaleX: 1, y: 1)
-            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 3, options: [.curveEaseInOut], animations: { cell.transform = originalTransform })
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.frame.width-40, height: 150)
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//        return 0
-//    }
     
 }

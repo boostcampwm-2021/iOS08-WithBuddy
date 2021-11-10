@@ -15,10 +15,11 @@ class WBCalendarView: UIView {
     private let prevMonthButton = UIButton()
     private let nextMonthButton = UIButton()
     private let weekStackView = UIStackView()
-    
+    private let wbcalendarViewModel = WBCalendarViewModel()
     private var selectedDate = Date()
     private var totalDays = [Int]()
     var delegate: CalendarCellSelectable?
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -154,14 +155,16 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifer, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
-        cell.dayOfMonth.text = String(totalDays[indexPath.item])
+        let DateOfCell = self.calendarManager.pickDay(baseDate: self.selectedDate, numberOfDay: self.totalDays[indexPath.item])
+        let firstFace = self.wbcalendarViewModel.firstBuddyFace(selectedDate: DateOfCell)
+        cell.update(day: totalDays[indexPath.item], face: firstFace )
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if totalDays[indexPath.item] > 0 {
-            self.selectedDate = self.calendarManager.pickDay(baseDate: selectedDate, numberOfDay: totalDays[indexPath.item])
-            self.delegate?.presentCellDetail(selectedDate: selectedDate)
+            self.selectedDate = self.calendarManager.pickDay(baseDate: self.selectedDate, numberOfDay: self.totalDays[indexPath.item])
+            self.delegate?.presentCellDetail(selectedDate: self.selectedDate)
         }
     }
     

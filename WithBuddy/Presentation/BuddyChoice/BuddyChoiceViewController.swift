@@ -137,7 +137,7 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
             }
             let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
                                   image: UIImage(systemName: "trash")) { action in
-//                self.buddyChoiceViewModel.buddyDidADeleted(in: indexPath.item)
+                self.buddyChoiceViewModel.buddyDidADeleted(in: indexPath.item)
             }
             return UIMenu(title: "이 버디를", children: [edit, delete])
         })

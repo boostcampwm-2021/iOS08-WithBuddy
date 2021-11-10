@@ -15,7 +15,7 @@ final class TypeView: UIView {
     
     private lazy var typeDataSource = UICollectionViewDiffableDataSource<Int, Purpose>(collectionView: self.typeCollectionView) {
         (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Purpose) -> UICollectionViewCell? in
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifier, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
         cell.update(image: UIImage(named: "\(itemIdentifier.type)"), text: "\(itemIdentifier.type)", check: itemIdentifier.check)
         return cell
     }
@@ -64,7 +64,7 @@ final class TypeView: UIView {
         self.typeCollectionView.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.collectionViewDidTouched(_:)))
         self.typeCollectionView.addGestureRecognizer(tap)
-        self.typeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifer)
+        self.typeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
 
         let typeFlowLayout = UICollectionViewFlowLayout()
         typeFlowLayout.itemSize = CGSize(width: 60, height: 90)

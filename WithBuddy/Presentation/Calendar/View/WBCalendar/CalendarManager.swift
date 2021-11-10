@@ -8,6 +8,7 @@
 import Foundation
 
 final class CalendarManager {
+    
     private let calendar = Calendar.current
     
     func plusMonth(baseDate: Date) -> Date {
@@ -20,6 +21,12 @@ final class CalendarManager {
         var dateComponents = DateComponents()
         dateComponents.month = -1
         return Calendar.current.date(byAdding: dateComponents, to: baseDate) ?? Date()
+    }
+    
+    func pickDay(baseDate: Date, numberOfDay: Int) -> Date {
+        var dateComponents = DateComponents()
+        dateComponents.day = numberOfDay - 1
+        return Calendar.current.date(byAdding: dateComponents, to: self.firstOfMonth(baseDate: baseDate)) ?? Date()
     }
     
     func month(baseDate: Date) -> String {
@@ -48,4 +55,5 @@ final class CalendarManager {
         let components = calendar.dateComponents([.weekday], from: baseDate)
         return (components.weekday ?? 1) - 1
     }
+    
 }

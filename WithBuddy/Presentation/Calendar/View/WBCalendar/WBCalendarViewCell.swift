@@ -8,12 +8,13 @@
 import UIKit
 
 class WBCalendarViewCell: UICollectionViewCell {
-    static let identifer = "WBCalendarViewCell"
     
-    var buddyImageView = UIImageView()
-    var dayOfMonth: UILabel = {
+    static let identifer = "WBCalendarViewCell"
+    private var buddyImageView = UIImageView()
+    
+    var dayOfCell: UILabel = {
         let label = UILabel()
-        label.text = "1"
+        label.text = ""
         label.font = .boldSystemFont(ofSize: 10)
         label.textColor = UIColor(named: "LabelPurple")
         return label
@@ -30,28 +31,53 @@ class WBCalendarViewCell: UICollectionViewCell {
     }
     
     private func configure() {
+        self.initCell()
         self.configuredayOfMonth()
         self.configureBuddyImageView()
     }
     
     private func configuredayOfMonth() {
-        self.addSubview(dayOfMonth)
-        self.dayOfMonth.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(dayOfCell)
+        self.dayOfCell.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.dayOfMonth.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            self.dayOfMonth.topAnchor.constraint(equalTo: self.topAnchor, constant: 3)
+            self.dayOfCell.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            self.dayOfCell.topAnchor.constraint(equalTo: self.topAnchor, constant: 3)
         ])
+    }
+    
+    private func initCell() {
+        self.backgroundColor = .systemBackground
+        self.layer.cornerRadius = 0
+    }
+    
+    private func highlightToday() {
+        self.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.layer.cornerRadius = 10
     }
     
     private func configureBuddyImageView() {
         self.addSubview(buddyImageView)
-        buddyImageView.image = UIImage(named: "FaceBlue1")
+        self.buddyImageView.image = UIImage(named: "")
         self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.buddyImageView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8),
             self.buddyImageView.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8),
             self.buddyImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            self.buddyImageView.topAnchor.constraint(equalTo: self.dayOfMonth.bottomAnchor, constant: 3)
+            self.buddyImageView.topAnchor.constraint(equalTo: self.dayOfCell.bottomAnchor, constant: 1),
+            self.buddyImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -3)
         ])
     }
+    
+    func update(day: Int, face: String, today: Date) {
+        self.initCell()
+        self.dayOfCell.text = day > 0 ? String(day) : ""
+        self.buddyImageView.image = UIImage(named: face)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd"
+        if dateFormatter.string(from: Date()) == dateFormatter.string(from: today) {
+            self.highlightToday()
+        }
+    }
+    
 }

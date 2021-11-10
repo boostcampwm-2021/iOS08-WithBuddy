@@ -8,6 +8,7 @@
 import UIKit
 
 class HeaderView: UIView {
+    
     private let userFaceImageView = UIImageView()
     private let userCommentLabel = UILabel()
     
@@ -52,4 +53,5 @@ class HeaderView: UIView {
             self.userCommentLabel.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
+    
 }

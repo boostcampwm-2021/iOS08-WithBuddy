@@ -10,7 +10,7 @@ import Foundation
 protocol BuddyFaceInterface {
     func faceList(color: String) -> [String]
     func insertBuddy(buddy: Buddy)
-    func insertGathering(gathering: Gathering)
+    func insertGathering(gathering: Gathering, buddy: [Buddy])
     func fetch() -> [Gathering]?
     func fetch(name: String) -> [Gathering]? 
     func random() -> String
@@ -28,9 +28,11 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
         CoreDataManager.shared.insertBuddy(buddy)
     }
     
-    func insertGathering(gathering: Gathering) {
-        let buddyList = self.fetchBuddy().shuffled()
-        CoreDataManager.shared.insertGathering(gathering, buddyList: buddyList)
+    func insertGathering(gathering: Gathering, buddy: [Buddy]) {
+        let buddyList = CoreDataManager.shared.fetch(request: BuddyEntity.fetchRequest())
+        let buddyMap = buddy.map { $0.id }
+        let filter = buddyList.filter{ buddyMap.contains($0.id) }
+        CoreDataManager.shared.insertGathering(gathering, buddyList:  filter)
     }
     
     private func fetchBuddy() -> [BuddyEntity] {

@@ -12,6 +12,7 @@ protocol BuddyFaceInterface {
     func insertBuddy(buddy: Buddy)
     func insertGathering(gathering: Gathering)
     func fetch() -> [Gathering]?
+    func fetch(name: String) -> [Gathering]? 
     func random() -> String
 }
 
@@ -39,6 +40,14 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
     
     func fetch() -> [Gathering]? {
         let request = GatheringEntity.fetchRequest()
+        let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
+        return gatheringEntityList.map{ Gathering(date: $0.date, place: $0.place, placeType: $0.placeType, buddy: $0.buddyList, memo: $0.memo, picture: $0.picture) }
+    }
+    
+    func fetch(name: String) -> [Gathering]? {
+        let request = GatheringEntity.fetchRequest()
+        let predicate = NSPredicate(format: "%@ IN buddy.name", name)
+        request.predicate = predicate
         let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
         return gatheringEntityList.map{ Gathering(date: $0.date, place: $0.place, placeType: $0.placeType, buddy: $0.buddyList, memo: $0.memo, picture: $0.picture) }
     }

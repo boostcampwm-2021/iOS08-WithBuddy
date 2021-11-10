@@ -86,6 +86,7 @@ extension ListViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        self.listViewModel.didSearchFieldReturn(name: textField.text)
         return true
     }
     

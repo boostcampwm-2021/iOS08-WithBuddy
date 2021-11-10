@@ -25,6 +25,12 @@ final class ListViewModel {
         return self.gatheringList.reversed()[index]
     }
     
+    func didSearchFieldReturn(name: String?) {
+        guard let name = name else { return }
+        let gatheringList = self.buddyFaceUseCase.fetch(name: name) ?? []
+        self.gatheringList = gatheringList
+    }
+    
     private func configure() {
 //        self.insert()
         self.fetch()

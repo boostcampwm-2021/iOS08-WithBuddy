@@ -10,7 +10,7 @@ import Foundation
 protocol BuddyFaceInterface {
     func faceList(color: String) -> [String]
     func insertBuddy(buddy: Buddy)
-    func insertGathering(gathering: Gathering, buddy: [Buddy])
+    func insertGathering(gathering: Gathering)
     func fetch() -> [Gathering]?
     func fetch(name: String) -> [Gathering]? 
     func random() -> String
@@ -30,11 +30,8 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
         CoreDataManager.shared.insertBuddy(buddy)
     }
     
-    func insertGathering(gathering: Gathering, buddy: [Buddy]) {
-        let buddyList = CoreDataManager.shared.fetch(request: BuddyEntity.fetchRequest())
-        let buddyMap = buddy.map { $0.id }
-        let filter = buddyList.filter{ buddyMap.contains($0.id) }
-        CoreDataManager.shared.insertGathering(gathering, buddyList:  filter)
+    func insertGathering(gathering: Gathering) {
+        CoreDataManager.shared.insertGathering(gathering)
     }
     
     private func fetchBuddy() -> [BuddyEntity] {
@@ -45,7 +42,7 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
     func fetch() -> [Gathering]? {
         let request = GatheringEntity.fetchRequest()
         let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
-        return gatheringEntityList.map{ Gathering(date: $0.date, place: $0.place, placeType: $0.placeType, buddy: $0.buddyList, memo: $0.memo, picture: $0.picture) }
+        return gatheringEntityList.map{ $0.toDomain() }
     }
     
     func fetch(name: String) -> [Gathering]? {
@@ -53,7 +50,7 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
         let predicate = NSPredicate(format: "%@ IN buddy.name", name)
         request.predicate = predicate
         let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
-        return gatheringEntityList.map{ Gathering(date: $0.date, place: $0.place, placeType: $0.placeType, buddy: $0.buddyList, memo: $0.memo, picture: $0.picture) }
+        return gatheringEntityList.map{ $0.toDomain() }
     }
     
     func random() -> String {
@@ -68,15 +65,15 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
         let request = GatheringEntity.fetchRequest()
         request.predicate = oneDayCondition(selectedDate: selectedDate)
         let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
-        let searchedList = gatheringEntityList.map{ Gathering(date: $0.date, place: $0.place, placeType: $0.placeType, buddy: $0.buddyList, memo: $0.memo, picture: $0.picture) }
-        return searchedList.first?.buddy.first?.face ?? ""
+        let searchedList = gatheringEntityList.map{ $0.toDomain() }
+        return searchedList.first?.buddyList.first?.face ?? ""
     }
     
     func fetchListOfOneDay(selectedDate: Date) -> [Gathering] {
         let request = GatheringEntity.fetchRequest()
         request.predicate = oneDayCondition(selectedDate: selectedDate)
         let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
-        return gatheringEntityList.map{ Gathering(date: $0.date, place: $0.place, placeType: $0.placeType, buddy: $0.buddyList, memo: $0.memo, picture: $0.picture) }
+        return gatheringEntityList.map{ $0.toDomain() }
     }
     
     func oneDayCondition(selectedDate: Date) -> NSPredicate {
@@ -90,7 +87,7 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
         components.minute = 59
         components.second = 59
         let endDate = calendar.date(from: components)
-        let condition = NSPredicate(format: "date >= %@ AND date =< %@", argumentArray: [startDate, endDate])
+        let condition = NSPredicate(format: "startDate >= %@ AND startDate =< %@", argumentArray: [startDate, endDate])
         return condition
     }
     

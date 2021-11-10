@@ -8,19 +8,15 @@
 import Foundation
 
 final class GatheringUseCase {
+    
     private let coreDataManager = CoreDataManager.shared
     
-    func fetchGathering() -> [GatheringEntity] {
-        return self.coreDataManager.fetch(request: GatheringEntity.fetchRequest())
+    func fetchGathering() -> [Gathering] {
+        return self.coreDataManager.fetch(request: GatheringEntity.fetchRequest()).map{ $0.toDomain() }
     }
     
-    func insertGathering(_ gathering: Gathering, buddy: [Buddy]) {
-        let buddyList = self.coreDataManager.fetch(request: BuddyEntity.fetchRequest())
-//        dump(buddyList)
-        let buddyMap = buddy.map { $0.id }
-//        dump(buddyMap)
-        let filter = buddyList.filter{ buddyMap.contains($0.id) }
-//        dump(filter)
-        self.coreDataManager.insertGathering(gathering, buddyList:  filter)
+    func insertGathering(_ gathering: Gathering) {
+        self.coreDataManager.insertGathering(gathering)
     }
+    
 }

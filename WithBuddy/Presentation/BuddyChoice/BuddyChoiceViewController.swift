@@ -133,7 +133,7 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
             let edit = UIAction(title: NSLocalizedString("편집", comment: ""),
                                   image: UIImage(systemName: "pencil.circle")) { action in
-//                self.delegate?.buddyDidDeleted(indexPath.item)
+                self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
             }
             let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
                                   image: UIImage(systemName: "trash")) { action in

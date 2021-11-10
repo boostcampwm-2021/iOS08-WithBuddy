@@ -22,7 +22,6 @@ enum RegisterError: LocalizedError {
 
 class RegisterViewModel {
     
-    
     private var startDate: Date?
     private var endDate: Date?
     private var place: String?
@@ -115,7 +114,7 @@ class RegisterViewModel {
                   let endDate = endDate else {
                 return
             }
-            self.gatheringUseCase.insertGathering(Gathering(date: startDate, place: self.place, placeType: [], buddy: [], memo: self.memo, picture: self.pictures), buddy: self.buddyList)
+            self.gatheringUseCase.insertGathering(Gathering(date: startDate, place: self.place, placeType: [1, 2, 3], buddy: [], memo: self.memo, picture: self.pictures), buddy: self.buddyList)
             self.registerDoneSignal.send()
         }
     }

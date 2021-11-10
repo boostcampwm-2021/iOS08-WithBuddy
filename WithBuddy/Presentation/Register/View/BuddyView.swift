@@ -16,8 +16,8 @@ final class BuddyView: UIView {
     
     private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) {
         (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
-        cell.update(image: UIImage(named: "FacePurple1"), text: itemIdentifier.name)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifier, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
+        cell.update(image: UIImage(named: itemIdentifier.face), text: itemIdentifier.name)
         return cell
     }
     
@@ -37,7 +37,7 @@ final class BuddyView: UIView {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
         if buddyList.isEmpty {
             snapshot.appendSections([0])
-            snapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "")])
+            snapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "FacePurple1")])
         } else {
             snapshot.appendSections([0])
             snapshot.appendItems(buddyList)
@@ -87,7 +87,7 @@ final class BuddyView: UIView {
         self.buddyCollectionView.showsHorizontalScrollIndicator = false
         self.buddyCollectionView.delegate = self
         
-        self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifer)
+        self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
         
         let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(60), heightDimension: .absolute(90)))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)), subitems: [item])
@@ -109,7 +109,7 @@ final class BuddyView: UIView {
     }
     
     @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
-        self.delegate?.buddyDidSelected(Buddy(id: UUID(), name: UUID().uuidString, face: ""))
+        self.delegate?.buddyDidSelected(Buddy(id: UUID(), name: UUID().uuidString, face: "FaceBlue9"))
     }
 }
 

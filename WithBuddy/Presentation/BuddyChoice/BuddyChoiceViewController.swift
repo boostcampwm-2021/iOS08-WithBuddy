@@ -18,7 +18,7 @@ class BuddyChoiceViewController: UIViewController {
     
     private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) {
         (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifer, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifier, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
         cell.update(image: UIImage(named: itemIdentifier.face), text: itemIdentifier.name, check: itemIdentifier.check)
         return cell
     }
@@ -73,7 +73,7 @@ class BuddyChoiceViewController: UIViewController {
     private func configureBuddyCollectionView() {
         self.view.addSubview(self.buddyCollectionView)
         self.buddyCollectionView.backgroundColor = .clear
-        self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifer)
+        self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
         
         let buddyFlowLayout = UICollectionViewFlowLayout()
         buddyFlowLayout.scrollDirection = .vertical

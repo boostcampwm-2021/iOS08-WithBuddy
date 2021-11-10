@@ -80,6 +80,19 @@ final class ListViewController: UIViewController {
         self.listDataSource.apply(snapshot, animatingDifferences: true)
     }
     
+    private func reloadGathering(filter: String) {
+        let gatheringList = self.listViewModel.gatheringList
+        let filtered = gatheringList.filter{ $0.buddyList.contains{ $0.name.contains(filter) } }
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Gathering>()
+        snapshot.appendSections([0])
+        if filter.isEmpty {
+            snapshot.appendItems(gatheringList)
+        } else {
+            snapshot.appendItems(filtered)
+        }
+        self.listDataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
 }
 
 extension ListViewController: UITextFieldDelegate {
@@ -90,7 +103,8 @@ extension ListViewController: UITextFieldDelegate {
     }
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        self.listViewModel.didSearchFieldChange(name: textField.text)
+        guard let text = textField.text else { return }
+        self.reloadGathering(filter: text)
     }
     
 }

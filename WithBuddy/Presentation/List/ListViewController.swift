@@ -15,7 +15,6 @@ final class ListViewController: UIViewController {
     
     private lazy var listDataSource = UICollectionViewDiffableDataSource<Int, Gathering>(collectionView: self.listCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Gathering) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListCollectionViewCell.identifier, for: indexPath) as? ListCollectionViewCell else { return UICollectionViewCell() }
-        print(itemIdentifier)
         cell.update(date: itemIdentifier.date, buddyImageList: itemIdentifier.buddy.map{ $0.face }, typeList: itemIdentifier.placeType)
         return cell
     }
@@ -27,6 +26,11 @@ final class ListViewController: UIViewController {
         super.viewDidLoad()
         self.configure()
         self.bind()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.listViewModel.fetch()
     }
     
     private func configure() {

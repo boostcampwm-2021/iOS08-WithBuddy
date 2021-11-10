@@ -31,7 +31,7 @@ final class ListViewModel {
         
     }
     
-    private func fetch() {
+    func fetch() {
         guard let gatheringList = self.buddyFaceUseCase.fetch() else { return }
         self.gatheringList = gatheringList
     }

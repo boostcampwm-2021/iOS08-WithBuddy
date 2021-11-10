@@ -47,7 +47,7 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
     
     func fetch(name: String) -> [Gathering]? {
         let request = GatheringEntity.fetchRequest()
-        let predicate = NSPredicate(format: "%@ IN buddy.name", name)
+        let predicate = NSPredicate(format: "%@ IN buddyList.name", name)
         request.predicate = predicate
         let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
         return gatheringEntityList.map{ $0.toDomain() }

@@ -69,7 +69,6 @@ class CalendarDetailView: UIView {
 extension CalendarDetailView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(selectedDate)
         self.calendarDetailViewModel.listOfDay(selectedDate: self.selectedDate)
         return self.calendarDetailViewModel.count
     }

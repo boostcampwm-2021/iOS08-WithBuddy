@@ -9,7 +9,7 @@ import UIKit
 
 class WBCalendarViewCell: UICollectionViewCell {
     
-    static let identifer = "WBCalendarViewCell"
+    static let identifier = "WBCalendarViewCell"
     private var buddyImageView = UIImageView()
     
     var dayOfCell: UILabel = {
@@ -31,7 +31,7 @@ class WBCalendarViewCell: UICollectionViewCell {
     }
     
     private func configure() {
-        self.initCell()
+        self.configureCell()
         self.configuredayOfMonth()
         self.configureBuddyImageView()
     }
@@ -45,7 +45,7 @@ class WBCalendarViewCell: UICollectionViewCell {
         ])
     }
     
-    private func initCell() {
+    private func configureCell() {
         self.backgroundColor = .systemBackground
         self.layer.cornerRadius = 0
     }
@@ -69,7 +69,7 @@ class WBCalendarViewCell: UICollectionViewCell {
     }
     
     func update(day: Int, face: String, today: Date) {
-        self.initCell()
+        self.configureCell()
         self.dayOfCell.text = day > 0 ? String(day) : ""
         self.buddyImageView.image = UIImage(named: face)
         

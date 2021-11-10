@@ -22,7 +22,7 @@ final class CalendarDetailViewModel {
     }
     
     subscript(index: Int) -> Gathering {
-        return self.gatheringList.reversed()[index]
+        return self.gatheringList[index]
     }
     
     private func configure() {
@@ -32,6 +32,10 @@ final class CalendarDetailViewModel {
     private func fetch() {
         guard let gatheringList = self.buddyFaceUseCase.fetch() else { return }
         self.gatheringList = gatheringList
+    }
+    
+    func listOfDay(selectedDate: Date) {
+        self.gatheringList = self.buddyFaceUseCase.fetchListOfOneDay(selectedDate: selectedDate)
     }
 
 }

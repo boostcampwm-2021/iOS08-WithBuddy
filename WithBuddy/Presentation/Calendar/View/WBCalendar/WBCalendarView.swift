@@ -158,14 +158,12 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifer, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
-        let DateOfCell = self.calendarManager.pickDay(baseDate: self.selectedDate, numberOfDay: self.totalDays[indexPath.item])
-        let firstFace = self.wbcalendarViewModel.firstBuddyFace(selectedDate: DateOfCell)
-        cell.update(day: totalDays[indexPath.item], face: firstFace )
+        cell.update(day: totalDays[indexPath.item], face: firstFace(item: indexPath.item) )
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if totalDays[indexPath.item] > 0 {
+        if firstFace(item: indexPath.item) != "" {
             self.selectedDate = self.calendarManager.pickDay(baseDate: self.selectedDate, numberOfDay: self.totalDays[indexPath.item])
             self.delegate?.presentCellDetail(selectedDate: self.selectedDate)
         }
@@ -194,6 +192,12 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+    
+    func firstFace(item: Int) -> String {
+        let DateOfCell = self.calendarManager.pickDay(baseDate: self.selectedDate, numberOfDay: self.totalDays[item])
+        let firstFace = self.wbcalendarViewModel.firstBuddyFace(selectedDate: DateOfCell)
+        return firstFace
     }
     
 }

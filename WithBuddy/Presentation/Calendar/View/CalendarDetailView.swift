@@ -26,9 +26,8 @@ class CalendarDetailView: UIView {
     
     func saveSelecetedDate(selectedDate: Date) {
         self.selectedDate = selectedDate
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy년 MM월 dd일 모임"
-        self.detailLabel.text = dateFormatter.string(from: self.selectedDate)
+        self.configureDetail()
+        self.detailCollectionView.reloadData()
     }
     
     private func configureDetail() {
@@ -70,14 +69,17 @@ class CalendarDetailView: UIView {
 extension CalendarDetailView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print(selectedDate)
+        self.calendarDetailViewModel.listOfDay(selectedDate: self.selectedDate)
         return self.calendarDetailViewModel.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListCollectionViewCell.identifier, for: indexPath)
                 as? ListCollectionViewCell else { return UICollectionViewCell() }
+        self.calendarDetailViewModel.listOfDay(selectedDate: self.selectedDate)
         let gathering = self.calendarDetailViewModel[indexPath.item]
-        cell.update(date: gathering.date, buddyImageList: gathering.buddy.map { $0.face }, typeList: gathering.placeType )
+        cell.update(date: gathering.date, buddyImageList: gathering.buddy.map{ $0.face }, typeList: gathering.placeType)
         return cell
     }
     

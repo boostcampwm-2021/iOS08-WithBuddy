@@ -14,7 +14,8 @@ protocol BuddyFaceInterface {
     func fetch() -> [Gathering]?
     func fetch(name: String) -> [Gathering]? 
     func random() -> String
-    func fetchOneDay(selectedDate: Date) -> String
+    func fetchFirstFaceInOneDay(selectedDate: Date) -> String
+    func fetchListOfOneDay(selectedDate: Date) -> [Gathering]
 }
 
 final class BuddyFaceUseCase: BuddyFaceInterface {
@@ -63,7 +64,22 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
         return faceList[index - 1]
     }
 
-    func fetchOneDay(selectedDate: Date) -> String {
+    func fetchFirstFaceInOneDay(selectedDate: Date) -> String {
+        let request = GatheringEntity.fetchRequest()
+        request.predicate = oneDayCondition(selectedDate: selectedDate)
+        let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
+        let searchedList = gatheringEntityList.map{ Gathering(date: $0.date, place: $0.place, placeType: $0.placeType, buddy: $0.buddyList, memo: $0.memo, picture: $0.picture) }
+        return searchedList.first?.buddy.first?.face ?? ""
+    }
+    
+    func fetchListOfOneDay(selectedDate: Date) -> [Gathering] {
+        let request = GatheringEntity.fetchRequest()
+        request.predicate = oneDayCondition(selectedDate: selectedDate)
+        let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
+        return gatheringEntityList.map{ Gathering(date: $0.date, place: $0.place, placeType: $0.placeType, buddy: $0.buddyList, memo: $0.memo, picture: $0.picture) }
+    }
+    
+    func oneDayCondition(selectedDate: Date) -> NSPredicate {
         let calendar = Calendar.current
         var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: selectedDate)
         components.hour = 00
@@ -74,12 +90,8 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
         components.minute = 59
         components.second = 59
         let endDate = calendar.date(from: components)
-        let request = GatheringEntity.fetchRequest()
         let condition = NSPredicate(format: "date >= %@ AND date =< %@", argumentArray: [startDate!, endDate!])
-        request.predicate = condition
-        let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
-        let searchedList = gatheringEntityList.map{ Gathering(date: $0.date, place: $0.place, placeType: $0.placeType, buddy: $0.buddyList, memo: $0.memo, picture: $0.picture) }
-        return searchedList.first?.buddy.first?.face ?? ""
+        return condition
     }
     
 }

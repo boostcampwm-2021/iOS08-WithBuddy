@@ -31,7 +31,7 @@ final class WBCalendarViewModel {
     }
     
     func firstBuddyFace(selectedDate: Date) -> String {
-        return self.buddyFaceUseCase.fetchOneDay(selectedDate: selectedDate)
+        return self.buddyFaceUseCase.fetchFirstFaceInOneDay(selectedDate: selectedDate)
     }
     
 }

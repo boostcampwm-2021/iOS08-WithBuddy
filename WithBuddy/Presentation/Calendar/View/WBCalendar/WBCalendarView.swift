@@ -18,6 +18,7 @@ class WBCalendarView: UIView {
     private let wbcalendarViewModel = WBCalendarViewModel()
     private var selectedDate = Date()
     private var totalDays = [Int]()
+
     weak var delegate: CalendarCellSelectable?
     
     override init(frame: CGRect) {

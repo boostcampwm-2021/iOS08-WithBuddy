@@ -28,6 +28,7 @@ class CalendarViewController: UIViewController {
     
     private func configure() {
         self.wbCalendar.delegate = self
+        self.detailView.delegate = self
         self.configureScrollView()
         self.configureContentView()
         self.configureHeaderView()
@@ -133,25 +134,9 @@ extension CalendarViewController: CalendarCellSelectable {
 extension CalendarViewController: gatheringListDelegate {
     
     func gatheringListTouched() {
-        
-        let detailNavigationController = UINavigationController(rootViewController: DetailViewController())
-//        detailNavigationController.modalPresentationStyle = .pageSheet
-//        if let sheet = detailNavigationController.sheetPresentationController {
-//            sheet.detents = [.medium(), .large()]
-//        }
-        self.tabBarController?.present(detailNavigationController, animated: true, completion: nil)
-//        detailNavigationController.view.addSubview(detailView)
-//        self.detailView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            self.detailView.leadingAnchor.constraint(equalTo: detailNavigationController.view.leadingAnchor),
-//            self.detailView.trailingAnchor.constraint(equalTo: detailNavigationController.view.trailingAnchor),
-//            self.detailView.topAnchor.constraint(equalTo: detailNavigationController.view.topAnchor),
-//            self.detailView.bottomAnchor.constraint(equalTo: detailNavigationController.view.bottomAnchor),
-//            self.detailView.widthAnchor.constraint(equalTo: detailNavigationController.view.widthAnchor),
-//            self.detailView.heightAnchor.constraint(equalTo: detailNavigationController.view.heightAnchor)
-//        ])
-//        self.navigationController?.pushViewController(DetailViewController(), animated: true)
-//        ushViewController(DetailViewController(), animated: true)
+        self.tabBarController?.dismiss(animated: true, completion: {
+            self.navigationController?.pushViewController(GatheringDetailViewController(), animated: true)
+        })
     }
     
 }

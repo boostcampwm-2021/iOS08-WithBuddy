@@ -67,7 +67,7 @@
 		F7E8ABB8273A54A5005F8306 /* CalendarDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABB7273A54A5005F8306 /* CalendarDetailView.swift */; };
 		F7E8ABBC273A6B17005F8306 /* CalendarDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABBB273A6B17005F8306 /* CalendarDetailViewModel.swift */; };
 		F7E8ABBE273A8D43005F8306 /* WBCalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABBD273A8D43005F8306 /* WBCalendarViewModel.swift */; };
-		F7E8ABC5273BB814005F8306 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABC4273BB814005F8306 /* DetailViewController.swift */; };
+		F7E8ABC5273BB814005F8306 /* GatheringDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABC4273BB814005F8306 /* GatheringDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -133,7 +133,7 @@
 		F7E8ABB7273A54A5005F8306 /* CalendarDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDetailView.swift; sourceTree = "<group>"; };
 		F7E8ABBB273A6B17005F8306 /* CalendarDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDetailViewModel.swift; sourceTree = "<group>"; };
 		F7E8ABBD273A8D43005F8306 /* WBCalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WBCalendarViewModel.swift; sourceTree = "<group>"; };
-		F7E8ABC4273BB814005F8306 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		F7E8ABC4273BB814005F8306 /* GatheringDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatheringDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -427,7 +427,7 @@
 		F7E8ABC3273BB7F4005F8306 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F7E8ABC4273BB814005F8306 /* DetailViewController.swift */,
+				F7E8ABC4273BB814005F8306 /* GatheringDetailViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -573,7 +573,7 @@
 				85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */,
 				854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */,
 				85C236B527380D39001499E5 /* FaceColor.swift in Sources */,
-				F7E8ABC5273BB814005F8306 /* DetailViewController.swift in Sources */,
+				F7E8ABC5273BB814005F8306 /* GatheringDetailViewController.swift in Sources */,
 				BB2D25832739192200E7BF35 /* WithBuddyModel.xcdatamodeld in Sources */,
 				BB2D25B7273B582500E7BF35 /* BuddyView.swift in Sources */,
 				BB2D25C2273B901600E7BF35 /* BuddyEntity+CoreDataClass.swift in Sources */,

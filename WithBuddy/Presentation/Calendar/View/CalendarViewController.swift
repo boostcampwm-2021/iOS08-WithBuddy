@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CalendarViewController: UIViewController, CalendarCellSelectable {
+class CalendarViewController: UIViewController {
 
     static let identifier = "CalendarViewController"
     private let detailView = CalendarDetailView()
@@ -96,32 +96,62 @@ class CalendarViewController: UIViewController, CalendarCellSelectable {
         ])
     }
     
+}
+
+extension CalendarViewController: CalendarCellSelectable {
+    
     func presentCellDetail(selectedDate: Date) {
         self.presentDetailModal()
         self.configureDetailLabel(selectedDate: selectedDate)
     }
     
     func presentDetailModal() {
-        let detailNavigationController = UINavigationController(rootViewController: CalendarDetailViewController())
-        detailNavigationController.modalPresentationStyle = .pageSheet
-        if let sheet = detailNavigationController.sheetPresentationController {
+        let calendarDetailNavigationController = UINavigationController(rootViewController: CalendarDetailViewController())
+        calendarDetailNavigationController.modalPresentationStyle = .pageSheet
+        if let sheet = calendarDetailNavigationController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
         }
-        self.tabBarController?.present(detailNavigationController, animated: true, completion: nil)
-        detailNavigationController.view.addSubview(detailView)
+        self.tabBarController?.present(calendarDetailNavigationController, animated: true, completion: nil)
+        calendarDetailNavigationController.view.addSubview(detailView)
         self.detailView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.detailView.leadingAnchor.constraint(equalTo: detailNavigationController.view.leadingAnchor),
-            self.detailView.trailingAnchor.constraint(equalTo: detailNavigationController.view.trailingAnchor),
-            self.detailView.topAnchor.constraint(equalTo: detailNavigationController.view.topAnchor),
-            self.detailView.bottomAnchor.constraint(equalTo: detailNavigationController.view.bottomAnchor),
-            self.detailView.widthAnchor.constraint(equalTo: detailNavigationController.view.widthAnchor),
-            self.detailView.heightAnchor.constraint(equalTo: detailNavigationController.view.heightAnchor)
+            self.detailView.leadingAnchor.constraint(equalTo: calendarDetailNavigationController.view.leadingAnchor),
+            self.detailView.trailingAnchor.constraint(equalTo: calendarDetailNavigationController.view.trailingAnchor),
+            self.detailView.topAnchor.constraint(equalTo: calendarDetailNavigationController.view.topAnchor),
+            self.detailView.bottomAnchor.constraint(equalTo: calendarDetailNavigationController.view.bottomAnchor),
+            self.detailView.widthAnchor.constraint(equalTo: calendarDetailNavigationController.view.widthAnchor),
+            self.detailView.heightAnchor.constraint(equalTo: calendarDetailNavigationController.view.heightAnchor)
         ])
     }
     
     func configureDetailLabel(selectedDate: Date) {
         self.detailView.saveSelecetedDate(selectedDate: selectedDate)
+    }
+    
+}
+
+extension CalendarViewController: gatheringListDelegate {
+    
+    func gatheringListTouched() {
+        
+        let detailNavigationController = UINavigationController(rootViewController: DetailViewController())
+//        detailNavigationController.modalPresentationStyle = .pageSheet
+//        if let sheet = detailNavigationController.sheetPresentationController {
+//            sheet.detents = [.medium(), .large()]
+//        }
+        self.tabBarController?.present(detailNavigationController, animated: true, completion: nil)
+//        detailNavigationController.view.addSubview(detailView)
+//        self.detailView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            self.detailView.leadingAnchor.constraint(equalTo: detailNavigationController.view.leadingAnchor),
+//            self.detailView.trailingAnchor.constraint(equalTo: detailNavigationController.view.trailingAnchor),
+//            self.detailView.topAnchor.constraint(equalTo: detailNavigationController.view.topAnchor),
+//            self.detailView.bottomAnchor.constraint(equalTo: detailNavigationController.view.bottomAnchor),
+//            self.detailView.widthAnchor.constraint(equalTo: detailNavigationController.view.widthAnchor),
+//            self.detailView.heightAnchor.constraint(equalTo: detailNavigationController.view.heightAnchor)
+//        ])
+//        self.navigationController?.pushViewController(DetailViewController(), animated: true)
+//        ushViewController(DetailViewController(), animated: true)
     }
     
 }

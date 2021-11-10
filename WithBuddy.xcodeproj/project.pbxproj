@@ -67,6 +67,7 @@
 		F7E8ABB8273A54A5005F8306 /* CalendarDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABB7273A54A5005F8306 /* CalendarDetailView.swift */; };
 		F7E8ABBC273A6B17005F8306 /* CalendarDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABBB273A6B17005F8306 /* CalendarDetailViewModel.swift */; };
 		F7E8ABBE273A8D43005F8306 /* WBCalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABBD273A8D43005F8306 /* WBCalendarViewModel.swift */; };
+		F7E8ABC5273BB814005F8306 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABC4273BB814005F8306 /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -132,6 +133,7 @@
 		F7E8ABB7273A54A5005F8306 /* CalendarDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDetailView.swift; sourceTree = "<group>"; };
 		F7E8ABBB273A6B17005F8306 /* CalendarDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDetailViewModel.swift; sourceTree = "<group>"; };
 		F7E8ABBD273A8D43005F8306 /* WBCalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WBCalendarViewModel.swift; sourceTree = "<group>"; };
+		F7E8ABC4273BB814005F8306 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				F7A7699F2732762900FF83EA /* View */,
+				F7E8ABC1273BB78A005F8306 /* ViewModel */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -327,6 +330,7 @@
 				85FA1D91272FEAE500825C64 /* Calendar */,
 				BB2D255B2731315900E7BF35 /* Chart */,
 				BBF7FF3E272FB6CC00B71C97 /* Register */,
+				F7E8ABC0273BB76D005F8306 /* Detail */,
 				8A73D677273A61C5001D5184 /* BuddyChoice */,
 				8A53C22D273B9E5E00BB0C20 /* BuddyCustom */,
 				85FA1D97272FEBBB00825C64 /* List */,
@@ -377,10 +381,8 @@
 			isa = PBXGroup;
 			children = (
 				F7A7699A2732588500FF83EA /* WBCalendarView.swift */,
-				F7E8ABB32738133B005F8306 /* CalendarDetailViewController.swift */,
 				F7B69B8B27339EF9005D2F32 /* WBCalendarViewCell.swift */,
 				F7B69B89273398C4005D2F32 /* CalendarManager.swift */,
-				F7E8ABBD273A8D43005F8306 /* WBCalendarViewModel.swift */,
 			);
 			path = WBCalendar;
 			sourceTree = "<group>";
@@ -390,9 +392,42 @@
 			children = (
 				85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */,
 				F7A7699627315AF800FF83EA /* HeaderView.swift */,
-				F7E8ABB7273A54A5005F8306 /* CalendarDetailView.swift */,
-				F7E8ABBB273A6B17005F8306 /* CalendarDetailViewModel.swift */,
 				F7A7699E2732760300FF83EA /* WBCalendar */,
+				F7E8ABC2273BB7A6005F8306 /* Calendardetail */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F7E8ABC0273BB76D005F8306 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				F7E8ABC3273BB7F4005F8306 /* View */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
+		F7E8ABC1273BB78A005F8306 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F7E8ABBD273A8D43005F8306 /* WBCalendarViewModel.swift */,
+				F7E8ABBB273A6B17005F8306 /* CalendarDetailViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		F7E8ABC2273BB7A6005F8306 /* Calendardetail */ = {
+			isa = PBXGroup;
+			children = (
+				F7E8ABB32738133B005F8306 /* CalendarDetailViewController.swift */,
+				F7E8ABB7273A54A5005F8306 /* CalendarDetailView.swift */,
+			);
+			path = Calendardetail;
+			sourceTree = "<group>";
+		};
+		F7E8ABC3273BB7F4005F8306 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F7E8ABC4273BB814005F8306 /* DetailViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -537,6 +572,9 @@
 				BB2D25A3273A550B00E7BF35 /* BuddyUseCase.swift in Sources */,
 				85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */,
 				854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */,
+				85C236B527380D39001499E5 /* FaceColor.swift in Sources */,
+				F7E8ABC5273BB814005F8306 /* DetailViewController.swift in Sources */,
+				BB2D25832739192200E7BF35 /* WithBuddyModel.xcdatamodeld in Sources */,
 				BB2D25B7273B582500E7BF35 /* BuddyView.swift in Sources */,
 				BB2D25C2273B901600E7BF35 /* BuddyEntity+CoreDataClass.swift in Sources */,
 				85D262F2273CE7D6000190B8 /* TitleLabel.swift in Sources */,

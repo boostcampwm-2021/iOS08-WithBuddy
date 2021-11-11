@@ -39,8 +39,8 @@ class RegisterViewModel {
     @Published private(set) var memo: String?
     @Published private(set) var pictures: [URL] = []
     
-    private var buddyUseCase = BuddyUseCase()
-    private var gatheringUseCase = GatheringUseCase()
+    private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
+    private var gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
     
     func didStartDatePicked(_ date: Date) {
         let dateFormatter = DateFormatter()
@@ -48,7 +48,7 @@ class RegisterViewModel {
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .none
         
-        self.startDate = date
+        self.startDate = Calendar.current.startOfDay(for: date)
         self.startDateString = dateFormatter.string(from: date)
         
         if let endDate = self.endDate,
@@ -70,7 +70,7 @@ class RegisterViewModel {
             self.endDateString = self.startDateString
             return
         }
-        self.endDate = date
+        self.endDate = Calendar.current.startOfDay(for: date)
         self.endDateString = dateFormatter.string(from: date)
     }
     
@@ -118,7 +118,7 @@ class RegisterViewModel {
                   let endDate = endDate else {
                 return
             }
-            self.gatheringUseCase.insertGathering(Gathering(startDate: startDate, endDate: endDate, place: self.place, purpose: ["\(PlaceType.culture)", "\(PlaceType.study)", "\(PlaceType.etc)"], buddyList: self.buddyList, memo: self.memo, picture: self.pictures))
+            self.gatheringUseCase.insertGathering(Gathering(startDate: startDate, endDate: endDate, place: self.place, purpose: self.checkedPurposeList.map{ "\($0.type)" }, buddyList: self.buddyList, memo: self.memo, picture: self.pictures))
             self.registerDoneSignal.send()
         }
     }

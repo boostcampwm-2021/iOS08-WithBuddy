@@ -7,6 +7,18 @@
 
 import CoreData
 
+protocol CoreDataManagable {
+    
+    @discardableResult func insertGathering(_ gathering: Gathering) -> Bool
+    @discardableResult func insertBuddy(_ buddy: Buddy) -> Bool
+    func fetchAllBuddy() -> [BuddyEntity]
+    func fetchAllGathering() -> [GatheringEntity]
+    func fetchBuddy(name: String) -> [BuddyEntity]
+    func fetchGathering(including name: String) -> [GatheringEntity]
+    func fetchGathering(including day: Date) -> [GatheringEntity]
+    func fetchGaterhing(month: Date) -> [GatheringEntity]
+}
+
 final class CoreDataManager {
 
     static let shared = CoreDataManager()
@@ -23,17 +35,81 @@ final class CoreDataManager {
         return container
     }()
 
-    var context: NSManagedObjectContext {
+    private var context: NSManagedObjectContext {
         self.persistentContainer.viewContext
     }
     
-    func fetch<T: NSManagedObject>(request: NSFetchRequest<T>) -> [T] {
+    private func fetch<T: NSManagedObject>(request: NSFetchRequest<T>) -> [T] {
         do {
             let fetchResult = try self.context.fetch(request)
             return fetchResult
         } catch {
             print(error.localizedDescription)
             return []
+        }
+    }
+    
+    private func fetchBuddyEntity(of buddyList: [Buddy]) -> [BuddyEntity] {
+        let request = BuddyEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id IN %@", buddyList.map{ $0.id })
+        return self.fetch(request: request)
+    }
+    
+}
+
+extension CoreDataManager: CoreDataManagable {
+    
+    func fetchAllBuddy() -> [BuddyEntity] {
+        return self.fetch(request: BuddyEntity.fetchRequest()).sorted()
+    }
+    
+    func fetchAllGathering() -> [GatheringEntity] {
+        return self.fetch(request: GatheringEntity.fetchRequest()).sorted(by: >)
+    }
+    
+    func fetchBuddy(name: String) -> [BuddyEntity] {
+        let request = BuddyEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "name == %@", name)
+        return self.fetch(request: request)
+    }
+    
+    func fetchGathering(including name: String) -> [GatheringEntity] {
+        return self.fetchBuddy(name: name).compactMap{ $0.gatheringList }.map{ Array($0) }.compactMap{ $0 }.flatMap{ $0 }.sorted(by: >)
+    }
+    
+    func fetchGathering(including day: Date) -> [GatheringEntity] {
+        let midnightOfDay = Calendar.current.startOfDay(for: day)
+        
+        let request = GatheringEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "startDate <= %@ AND endDate >= %@", midnightOfDay as NSDate, midnightOfDay as NSDate)
+        return self.fetch(request: request)
+    }
+    
+    func fetchGaterhing(month: Date) -> [GatheringEntity] {
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: month)
+        components.day = 1
+        components.hour = 00
+        components.minute = 00
+        components.second = 00
+        let startDateOfMonth = calendar.date(from: components) ?? Date()
+        let endDateOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startDateOfMonth) ?? Date()
+        
+        let request = GatheringEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "startDate >= %@ AND startDate <= %@", startDateOfMonth as NSDate, endDateOfMonth as NSDate)
+        return self.fetch(request: request)
+    }
+    
+    @discardableResult
+    func insertBuddy(_ buddy: Buddy) -> Bool {
+        BuddyEntity(context: self.context, buddy: buddy)
+        
+        do {
+            try self.context.save()
+            return true
+        } catch {
+            print(error.localizedDescription)
+            return false
         }
     }
     
@@ -51,22 +127,4 @@ final class CoreDataManager {
         }
     }
     
-    @discardableResult
-    func insertBuddy(_ buddy: Buddy) -> Bool {
-        BuddyEntity(context: self.context, buddy: buddy)
-        
-        do {
-            try self.context.save()
-            return true
-        } catch {
-            print(error.localizedDescription)
-            return false
-        }
-    }
-    
-    private func fetchBuddyEntity(of buddyList: [Buddy]) -> [BuddyEntity] {
-        let request = BuddyEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "id IN %@", buddyList.map{ $0.id })
-        return self.fetch(request: request)
-    }
 }

@@ -29,7 +29,7 @@ class HeaderView: UIView {
     
     private func configureUserFaceImageView() {
         self.addSubview(userFaceImageView)
-        self.userFaceImageView.image = UIImage(named: BuddyFaceUseCase().random())
+        self.userFaceImageView.image = UIImage(named: BuddyUseCase(coreDataManager: CoreDataManager.shared).makeRandomBuddy().face)
         self.userFaceImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.userFaceImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),

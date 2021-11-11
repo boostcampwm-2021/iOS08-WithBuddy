@@ -64,3 +64,11 @@ extension GatheringEntity {
                          picture: self.picture)
     }
 }
+
+extension GatheringEntity: Comparable {
+    
+    public static func < (lhs: GatheringEntity, rhs: GatheringEntity) -> Bool {
+        return lhs.startDate < rhs.startDate
+    }
+
+}

@@ -10,13 +10,13 @@ import Foundation
 final class WBCalendarViewModel {
     
     private let calendarManager = CalendarManager()
-    private let buddyFaceUseCase: BuddyFaceInterface
+    private let gatheringUseCase: GatheringUseCase
     private var thisMonthGathrtingList: [Gathering] = []
     private var totalDays = [Int]()
     private var totalFaces = [String]()
     
     init() {
-        self.buddyFaceUseCase = BuddyFaceUseCase()
+        self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
     }
     
     var count: Int {
@@ -69,7 +69,7 @@ final class WBCalendarViewModel {
     }
     
     func thisMonthGatheringList(thisMonth: Date, numOfDays: Int) {
-        self.thisMonthGathrtingList =  self.buddyFaceUseCase.fetch(thisMonth: thisMonth, numOfDays: numOfDays)
+        self.thisMonthGathrtingList =  self.gatheringUseCase.fetchGathering(month: thisMonth)
     }
     
     func isGathering(in date: Date) -> Bool {

@@ -125,10 +125,8 @@ class BuddyChoiceViewController: UIViewController {
     }
     
     @objc private func newBuddyButtonTouched(_ sender: UIButton) {
-        let buddyFaceUseCase = BuddyFaceUseCase()
-        let uuid = UUID()
-        let newBuddy = Buddy(id: uuid, name: uuid.uuidString, face: buddyFaceUseCase.random())
-        self.buddyChoiceViewModel.buddyDidAdded(newBuddy)
+        let buddyUsecase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
+        self.buddyChoiceViewModel.buddyDidAdded(buddyUsecase.makeRandomBuddy())
         self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
     }
     

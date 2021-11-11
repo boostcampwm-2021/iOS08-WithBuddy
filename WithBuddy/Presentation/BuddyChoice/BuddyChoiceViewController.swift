@@ -32,17 +32,7 @@ class BuddyChoiceViewController: UIViewController {
     }
     
     func configureBuddyList(by buddyList: [Buddy]) {
-        let buddyUseCase = BuddyUseCase()
-        let storedBuddyList = buddyUseCase.fetchBuddy()
-        storedBuddyList.forEach( { buddy in
-            var checkedBuddy = buddy
-            checkedBuddy.check = true
-            if buddyList.contains(checkedBuddy) {
-                self.buddyChoiceViewModel.buddyDidLoaded(checkedBuddy)
-            } else {
-                self.buddyChoiceViewModel.buddyDidLoaded(buddy)
-            }
-        })
+        self.buddyChoiceViewModel.buddyListDidLoaded(by: buddyList)
     }
     
     private func bind() {
@@ -135,9 +125,9 @@ class BuddyChoiceViewController: UIViewController {
     }
     
     @objc private func newBuddyButtonTouched(_ sender: UIButton) {
-        let bfusecase = BuddyFaceUseCase()
+        let buddyFaceUseCase = BuddyFaceUseCase()
         let uuid = UUID()
-        let newBuddy = Buddy(id: uuid, name: uuid.uuidString, face: bfusecase.random())
+        let newBuddy = Buddy(id: uuid, name: uuid.uuidString, face: buddyFaceUseCase.random())
         self.buddyChoiceViewModel.buddyDidAdded(newBuddy)
         self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
     }

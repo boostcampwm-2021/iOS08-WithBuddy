@@ -18,8 +18,7 @@ class WBCalendarView: UIView {
     private let wbcalendarViewModel = WBCalendarViewModel()
     private var selectedDate = Date()
     private var totalDays = [Int]()
-    var delegate: CalendarCellSelectable?
-    
+    weak var delegate: CalendarCellSelectable?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -137,8 +136,8 @@ class WBCalendarView: UIView {
         var count: Int = 1
         
         self.totalDays.removeAll()
-        while(count <= 42) {
-            if(count <= weekDay || count - weekDay > numOfDaysInMonth) {
+        while count <= 42 {
+            if count <= weekDay || count - weekDay > numOfDaysInMonth {
                 totalDays.append(0)
             } else {
                 totalDays.append(count - weekDay)
@@ -191,7 +190,7 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
     
 }
 
-protocol CalendarCellSelectable {
+protocol CalendarCellSelectable: AnyObject {
     func presentCellDetail(selectedDate: Date)
 }
 
@@ -199,7 +198,7 @@ extension UIView {
     func animateButtonTap(scale: Float) {
         UIView.animate(withDuration: 0.2) { [weak self] in
             self?.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
-        } completion: { [weak self] (isFinish) in
+        } completion: { [weak self] _ in
             UIView.animate(withDuration: 0.2) {
                 self?.transform = CGAffineTransform.identity
             }

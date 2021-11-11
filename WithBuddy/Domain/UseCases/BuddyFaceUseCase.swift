@@ -73,11 +73,11 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
         components.hour = 00
         components.minute = 00
         components.second = 00
-        let startDate = calendar.date(from: components)
+        let startDate = calendar.date(from: components) ?? Date()
         components.hour = 23
         components.minute = 59
         components.second = 59
-        let endDate = calendar.date(from: components)
+        let endDate = calendar.date(from: components) ?? Date()
         let condition = NSPredicate(format: "startDate >= %@ AND startDate =< %@", argumentArray: [startDate, endDate])
         return condition
     }

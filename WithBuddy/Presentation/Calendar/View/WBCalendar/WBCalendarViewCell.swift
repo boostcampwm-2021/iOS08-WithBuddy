@@ -30,6 +30,11 @@ class WBCalendarViewCell: UICollectionViewCell {
         self.configure()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.buddyImageView.image = nil
+    }
+    
     private func configure() {
         self.configureCell()
         self.configuredayOfMonth()
@@ -67,19 +72,16 @@ class WBCalendarViewCell: UICollectionViewCell {
         ])
     }
     
-    func update(day: Int, today: Date) {
+    func update(day: Int, face: String, today: Date) {
         self.configureCell()
         self.dayOfCell.text = day > 0 ? String(day) : ""
+        if face.isEmpty == false {
+            self.buddyImageView.image = UIImage(named: face)
+        }
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMdd"
         if dateFormatter.string(from: Date()) == dateFormatter.string(from: today) {
             self.highlightToday()
-        }
-    }
-    
-    func update(face: String) {
-        if face.isEmpty == false {
-            self.buddyImageView.image = UIImage(named: face)
         }
     }
     

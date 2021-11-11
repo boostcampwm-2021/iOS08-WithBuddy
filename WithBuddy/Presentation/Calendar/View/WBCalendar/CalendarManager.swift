@@ -41,6 +41,12 @@ final class CalendarManager {
         return dateFormatter.string(from: baseDate)
     }
     
+    func day(baseDate: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd"
+        return dateFormatter.string(from: baseDate)
+    }
+    
     func numOfDaysInMonth(baseDate: Date) -> Int {
         guard let range = calendar.range(of: .day, in: .month, for: baseDate) else { return 0 }
         return range.count
@@ -51,7 +57,7 @@ final class CalendarManager {
         return calendar.date(from: components) ?? Date()
     }
     
-    func firstTimeOfMonth(baseDate: Date) -> Date {
+    func firstTimeOfDay(baseDate: Date) -> Date {
         let components = calendar.dateComponents([.year, .month, .day], from: baseDate)
         return calendar.date(from: components) ?? Date()
     }

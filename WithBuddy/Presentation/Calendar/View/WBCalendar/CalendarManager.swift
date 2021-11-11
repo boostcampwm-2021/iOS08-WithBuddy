@@ -51,6 +51,11 @@ final class CalendarManager {
         return calendar.date(from: components) ?? Date()
     }
     
+    func firstTimeOfMonth(baseDate: Date) -> Date {
+        let components = calendar.dateComponents([.year, .month, .day], from: baseDate)
+        return calendar.date(from: components) ?? Date()
+    }
+    
     func weekDay(baseDate: Date) -> Int {
         let components = calendar.dateComponents([.weekday], from: baseDate)
         return (components.weekday ?? 1) - 1

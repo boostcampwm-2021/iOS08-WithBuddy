@@ -10,7 +10,9 @@ import Foundation
 final class WBCalendarViewModel {
     
     @Published private(set) var gatheringList: [Gathering] = []
+    private let calendarManager = CalendarManager()
     private let buddyFaceUseCase: BuddyFaceInterface
+    private var thisMonthGathrtingList: [Gathering] = []
     
     init() {
         self.buddyFaceUseCase = BuddyFaceUseCase()
@@ -30,8 +32,30 @@ final class WBCalendarViewModel {
         self.gatheringList = gatheringList
     }
     
-    func firstBuddyFace(selectedDate: Date) -> String {
-        return self.buddyFaceUseCase.fetchFirstFaceInOneDay(selectedDate: selectedDate)
+    func firstBuddyFace(date: Date) -> String {
+        var firstFace = ""
+        self.thisMonthGathrtingList.forEach {
+            if self.calendarManager.firstTimeOfMonth(baseDate: $0.startDate) == self.calendarManager.firstTimeOfMonth(baseDate: date) {
+                if let face = $0.buddyList.first?.face {
+                    firstFace = face
+                }
+            }
+        }
+        return firstFace
+    }
+    
+    func thisMonthGatheringList(thisMonth: Date, numOfDays: Int) {
+        self.thisMonthGathrtingList =  self.buddyFaceUseCase.fetch(thisMonth: thisMonth, numOfDays: numOfDays)
+    }
+    
+    func isGathering(in date: Date) -> Bool {
+        var result = false
+        self.thisMonthGathrtingList.forEach {
+            if self.calendarManager.firstTimeOfMonth(baseDate: $0.startDate) == self.calendarManager.firstTimeOfMonth(baseDate: date) {
+                result = true
+            }
+        }
+        return result
     }
     
 }

@@ -36,20 +36,26 @@ class WBCalendarView: UIView {
     }
     
     private func configureCalendar() {
-        self.firstDayOfThisMonth = calendarManager.firstDateOfMonth(baseDate: Date())
+        self.configureDate()
         self.configureThisMonth()
         self.configureButton()
         self.configureWeekDays()
         self.configureCollectionView()
-        self.configureMonthView()
+        self.configureMonthDate()
+    }
+
+    private func configureDate() {
+        let numOfDays = self.calendarManager.numOfDaysInMonth(baseDate: firstDayOfThisMonth)
+        self.firstDayOfThisMonth = calendarManager.firstDateOfMonth(baseDate: firstDayOfThisMonth)
+        self.wbcalendarViewModel.thisMonthGatheringList(thisMonth: firstDayOfThisMonth, numOfDays: numOfDays)
+        self.thisMonthLabel.text = calendarManager.year(baseDate: firstDayOfThisMonth) + "년 "
+                                + calendarManager.month(baseDate: firstDayOfThisMonth) + "월"
     }
     
     private func configureThisMonth() {
         self.addSubview(thisMonthLabel)
         self.thisMonthLabel.textColor = UIColor(named: "LabelPurple")
         self.thisMonthLabel.font = .boldSystemFont(ofSize: 17)
-        self.thisMonthLabel.text = calendarManager.year(baseDate: firstDayOfThisMonth) + "년 "
-                                + calendarManager.month(baseDate: firstDayOfThisMonth) + "월"
         self.thisMonthLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.thisMonthLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 20),
@@ -107,15 +113,15 @@ class WBCalendarView: UIView {
     @objc private func minusMonth(_ sender: UIButton) {
         let prevMonth = calendarManager.minusMonth(baseDate: firstDayOfThisMonth)
         self.firstDayOfThisMonth = calendarManager.firstDateOfMonth(baseDate: prevMonth)
-        self.configureThisMonth()
-        self.configureMonthView()
+        self.configureDate()
+        self.configureMonthDate()
     }
     
     @objc private func plusMonth(_ sender: UIButton) {
         let nextMonth = calendarManager.plusMonth(baseDate: firstDayOfThisMonth)
         self.firstDayOfThisMonth = calendarManager.firstDateOfMonth(baseDate: nextMonth)
-        self.configureThisMonth()
-        self.configureMonthView()
+        self.configureDate()
+        self.configureMonthDate()
     }
     
     private func configureCollectionView() {
@@ -132,7 +138,7 @@ class WBCalendarView: UIView {
         ])
     }
     
-    func configureMonthView() {
+    func configureMonthDate() {
         let numOfDaysInMonth = calendarManager.numOfDaysInMonth(baseDate: firstDayOfThisMonth)
         let weekDay = calendarManager.weekDay(baseDate: firstDayOfThisMonth)
         let maxDayOfMonth = 42
@@ -159,14 +165,18 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifier, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
         let today = self.calendarManager.pickDay(baseDate: self.firstDayOfThisMonth, numberOfDay: self.totalDays[indexPath.item])
-        cell.update(day: self.totalDays[indexPath.item], face: self.firstFace(item: indexPath.item), today: today)
+//        cell.update(day: self.totalDays[indexPath.item], face: self.wbcalendarViewModel.firstBuddyFace(date: today), today: today)
+        cell.update(day: self.totalDays[indexPath.item], today: today)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if firstFace(item: indexPath.item).isEmpty == false {
-            self.firstDayOfThisMonth = self.calendarManager.pickDay(baseDate: self.firstDayOfThisMonth, numberOfDay: self.totalDays[indexPath.item])
+        let today = self.calendarManager.pickDay(baseDate: self.firstDayOfThisMonth, numberOfDay: self.totalDays[indexPath.item])
+        if self.wbcalendarViewModel.isGathering(in: today) {
+            self.delegate?.presentCellDetail(selectedDate: today)
         }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifier, for: indexPath) as? WBCalendarViewCell else { return }
+        cell.animateButtonTap(scale: 0.90)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -177,12 +187,6 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
-    }
-    
-    func firstFace(item: Int) -> String {
-        let dateOfCell = self.calendarManager.pickDay(baseDate: self.firstDayOfThisMonth, numberOfDay: self.totalDays[item])
-        let firstFace = self.wbcalendarViewModel.firstBuddyFace(selectedDate: dateOfCell)
-        return firstFace
     }
     
 }

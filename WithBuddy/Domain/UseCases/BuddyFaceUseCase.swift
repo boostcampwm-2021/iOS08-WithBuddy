@@ -13,6 +13,7 @@ protocol BuddyFaceInterface {
     func insertGathering(gathering: Gathering)
     func fetch() -> [Gathering]?
     func random() -> String
+    func fetch(thisMonth: Date, numOfDays: Int) -> [Gathering]
     func fetchFirstFaceInOneDay(selectedDate: Date) -> String
     func fetchListOfOneDay(selectedDate: Date) -> [Gathering]
 }
@@ -52,6 +53,13 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
         return faceList[index - 1]
     }
 
+    func fetch(thisMonth: Date, numOfDays: Int) -> [Gathering] {
+        let request = GatheringEntity.fetchRequest()
+        request.predicate = oneMonthCondition(selectedDate: thisMonth, numOfDays: numOfDays)
+        let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
+        return gatheringEntityList.map{ $0.toDomain() }
+    }
+    
     func fetchFirstFaceInOneDay(selectedDate: Date) -> String {
         let request = GatheringEntity.fetchRequest()
         request.predicate = oneDayCondition(selectedDate: selectedDate)
@@ -74,6 +82,23 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
         components.minute = 00
         components.second = 00
         let startDate = calendar.date(from: components) ?? Date()
+        components.hour = 23
+        components.minute = 59
+        components.second = 59
+        let endDate = calendar.date(from: components) ?? Date()
+        let condition = NSPredicate(format: "startDate >= %@ AND startDate =< %@", argumentArray: [startDate, endDate])
+        return condition
+    }
+    
+    func oneMonthCondition(selectedDate: Date, numOfDays: Int) -> NSPredicate {
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: selectedDate)
+        components.day = 1
+        components.hour = 00
+        components.minute = 00
+        components.second = 00
+        let startDate = calendar.date(from: components) ?? Date()
+        components.day = numOfDays
         components.hour = 23
         components.minute = 59
         components.second = 59

@@ -28,17 +28,21 @@ class BuddyChoiceViewController: UIViewController {
         super.viewDidLoad()
         self.configure()
         self.bind()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addBuddys))
-        self.buddyChoiceViewModel.buddyDidUpdated([Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
-                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
-                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
-                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
-                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
-                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
-                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
-                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
-                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
-                                                   Buddy(id: UUID(), name: "TEST", face: "FaceBlue1")])
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.completeButtonTouched))
+    }
+    
+    func configureBuddyList(by buddyList: [Buddy]) {
+        let buddyUseCase = BuddyUseCase()
+        let storedBuddyList = buddyUseCase.fetchBuddy()
+        storedBuddyList.forEach( { buddy in
+            var checkedBuddy = buddy
+            checkedBuddy.check = true
+            if buddyList.contains(checkedBuddy) {
+                self.buddyChoiceViewModel.buddyDidLoaded(checkedBuddy)
+            } else {
+                self.buddyChoiceViewModel.buddyDidLoaded(buddy)
+            }
+        })
     }
     
     private func bind() {
@@ -92,9 +96,9 @@ class BuddyChoiceViewController: UIViewController {
         self.view.addSubview(self.addButton)
         let config = UIImage.SymbolConfiguration(
             pointSize: 60, weight: .medium, scale: .default)
-        let image = UIImage(systemName: "plus.circle", withConfiguration: config)
+        let image = UIImage(systemName: "person.badge.plus", withConfiguration: config)
         self.addButton.setImage(image, for: .normal)
-        self.addButton.addTarget(self, action: #selector(self.onAddButtonTouched(_:)), for: .touchUpInside)
+        self.addButton.addTarget(self, action: #selector(self.newBuddyButtonTouched(_:)), for: .touchUpInside)
         
         self.addButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -130,12 +134,15 @@ class BuddyChoiceViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    @objc private func onAddButtonTouched(_ sender: UIButton) {
-        self.buddyChoiceViewModel.buddyDidAdded(Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"))
+    @objc private func newBuddyButtonTouched(_ sender: UIButton) {
+        let bfusecase = BuddyFaceUseCase()
+        let uuid = UUID()
+        let newBuddy = Buddy(id: uuid, name: uuid.uuidString, face: bfusecase.random())
+        self.buddyChoiceViewModel.buddyDidAdded(newBuddy)
         self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
     }
     
-    @objc private func addBuddys() {
+    @objc private func completeButtonTouched() {
         self.buddyChoiceViewModel.buddySelectingDidCompleted()
     }
     
@@ -159,7 +166,7 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
             let edit = UIAction(title: NSLocalizedString("편집", comment: ""),
-                                  image: UIImage(systemName: "pencil.circle")) { _ in
+                                image: UIImage(systemName: "pencil.circle")) { _ in
                 self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
             }
             let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),

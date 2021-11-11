@@ -30,18 +30,19 @@ class BuddyChoiceViewModel {
         })
     }
     
+    private var buddyUseCase = BuddyUseCase()
+    
     func buddyDidADeleted(in idx: Int) {
         self.storedBuddyList.remove(at: idx)
     }
     
     func buddyDidAdded(_ buddy: Buddy) {
+        self.buddyUseCase.insertBuddy(buddy)
         self.storedBuddyList.append(buddy)
     }
     
-    func buddyDidUpdated(_ buddyList: [Buddy]) {
-        buddyList.forEach({
-            self.storedBuddyList.append($0)
-        })
+    func buddyDidLoaded(_ buddy: Buddy) {
+        self.storedBuddyList.append(buddy)
     }
     
     func buddyDidChecked(in idx: Int) {

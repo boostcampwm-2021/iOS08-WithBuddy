@@ -96,7 +96,7 @@ extension CoreDataManager: CoreDataManagable {
         let endDateOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startDateOfMonth) ?? Date()
         
         let request = GatheringEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "startDate <= %@ AND startDate >= %@", startDateOfMonth as NSDate, endDateOfMonth as NSDate)
+        request.predicate = NSPredicate(format: "startDate >= %@ AND startDate <= %@", startDateOfMonth as NSDate, endDateOfMonth as NSDate)
         return self.fetch(request: request)
     }
     

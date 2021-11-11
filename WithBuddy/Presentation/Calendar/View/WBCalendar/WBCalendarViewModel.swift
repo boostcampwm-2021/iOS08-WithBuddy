@@ -1,5 +1,5 @@
 //
-//  CalendarDetailViewModel.swift
+//  WBCalendarViewModel.swift
 //  WithBuddy
 //
 //  Created by 이나정 on 2021/11/09.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class CalendarDetailViewModel {
+final class WBCalendarViewModel {
     
     @Published private(set) var gatheringList: [Gathering] = []
     private let gatheringUseCase: GatheringUseCase
@@ -20,11 +20,7 @@ final class CalendarDetailViewModel {
     var count: Int {
         return gatheringList.count
     }
-    
-    subscript(index: Int) -> Gathering {
-        return self.gatheringList[index]
-    }
-    
+
     private func configure() {
         self.fetch()
     }
@@ -33,8 +29,9 @@ final class CalendarDetailViewModel {
         self.gatheringList = self.gatheringUseCase.fetchGathering()
     }
     
-    func listOfDay(selectedDate: Date) {
-        self.gatheringList = self.gatheringUseCase.fetchGathering(including: selectedDate)
+    func firstBuddyFace(selectedDate: Date) -> String {
+        print("1111111", self.gatheringUseCase.fetchGathering(including: selectedDate))
+        return self.gatheringUseCase.fetchGathering(including: selectedDate).first?.buddyList.first?.face ?? ""
     }
-
+    
 }

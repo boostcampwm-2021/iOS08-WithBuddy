@@ -32,7 +32,21 @@ class BuddyChoiceViewController: UIViewController {
     }
     
     func configureBuddyList(by buddyList: [Buddy]) {
+<<<<<<< HEAD
         self.buddyChoiceViewModel.buddyListDidLoaded(by: buddyList)
+=======
+        let buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
+        let storedBuddyList = buddyUseCase.fetchBuddy()
+        storedBuddyList.forEach( { buddy in
+            var checkedBuddy = buddy
+            checkedBuddy.check = true
+            if buddyList.contains(checkedBuddy) {
+                self.buddyChoiceViewModel.buddyDidLoaded(checkedBuddy)
+            } else {
+                self.buddyChoiceViewModel.buddyDidLoaded(buddy)
+            }
+        })
+>>>>>>> 0fdb459 ((#54) refactor: BuddyFaceUseCase -> BuddyUseCase, GatheringUseCase로 변경)
     }
     
     private func bind() {
@@ -125,10 +139,8 @@ class BuddyChoiceViewController: UIViewController {
     }
     
     @objc private func newBuddyButtonTouched(_ sender: UIButton) {
-        let buddyFaceUseCase = BuddyFaceUseCase()
-        let uuid = UUID()
-        let newBuddy = Buddy(id: uuid, name: uuid.uuidString, face: buddyFaceUseCase.random())
-        self.buddyChoiceViewModel.buddyDidAdded(newBuddy)
+        let buddyUsecase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
+        self.buddyChoiceViewModel.buddyDidAdded(buddyUsecase.makeRandomBuddy())
         self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
     }
     

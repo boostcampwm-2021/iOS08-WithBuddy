@@ -10,7 +10,6 @@
 		854AA75E27337A7200663911 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA75D27337A7200663911 /* SearchView.swift */; };
 		854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA76327338C2F00663911 /* ListCollectionViewCell.swift */; };
 		854AA7662733A37200663911 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA7652733A37200663911 /* ListViewModel.swift */; };
-		85C236BA27381239001499E5 /* BuddyFaceUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C236B927381239001499E5 /* BuddyFaceUseCase.swift */; };
 		85D262E8273CD703000190B8 /* PurposeChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262E7273CD703000190B8 /* PurposeChartView.swift */; };
 		85D262EA273CD71C000190B8 /* BubbleChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262E9273CD71C000190B8 /* BubbleChartView.swift */; };
 		85D262EC273CDEBE000190B8 /* LatestOldChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262EB273CDEBE000190B8 /* LatestOldChartView.swift */; };
@@ -76,7 +75,6 @@
 		854AA76327338C2F00663911 /* ListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCollectionViewCell.swift; sourceTree = "<group>"; };
 		854AA7652733A37200663911 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		85C236B427380D39001499E5 /* FaceColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceColor.swift; sourceTree = "<group>"; };
-		85C236B927381239001499E5 /* BuddyFaceUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyFaceUseCase.swift; sourceTree = "<group>"; };
 		85D262E7273CD703000190B8 /* PurposeChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurposeChartView.swift; sourceTree = "<group>"; };
 		85D262E9273CD71C000190B8 /* BubbleChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleChartView.swift; sourceTree = "<group>"; };
 		85D262EB273CDEBE000190B8 /* LatestOldChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestOldChartView.swift; sourceTree = "<group>"; };
@@ -152,7 +150,6 @@
 		85C236B8273811EA001499E5 /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
-				85C236B927381239001499E5 /* BuddyFaceUseCase.swift */,
 				BB2D25A2273A550B00E7BF35 /* BuddyUseCase.swift */,
 				BB2D25A4273A58A100E7BF35 /* GatheringUseCase.swift */,
 			);
@@ -553,7 +550,6 @@
 				F7E8ABB8273A54A5005F8306 /* CalendarDetailView.swift in Sources */,
 				F7B69B8A273398C4005D2F32 /* CalendarManager.swift in Sources */,
 				F7E8ABBC273A6B17005F8306 /* CalendarDetailViewModel.swift in Sources */,
-				85C236BA27381239001499E5 /* BuddyFaceUseCase.swift in Sources */,
 				85D262EA273CD71C000190B8 /* BubbleChartView.swift in Sources */,
 				F7B69B8C27339EF9005D2F32 /* WBCalendarViewCell.swift in Sources */,
 				85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */,

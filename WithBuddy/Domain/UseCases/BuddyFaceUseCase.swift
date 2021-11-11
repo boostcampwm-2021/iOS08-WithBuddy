@@ -12,7 +12,6 @@ protocol BuddyFaceInterface {
     func insertBuddy(buddy: Buddy)
     func insertGathering(gathering: Gathering)
     func fetch() -> [Gathering]?
-    func fetch(name: String) -> [Gathering]? 
     func random() -> String
     func fetchFirstFaceInOneDay(selectedDate: Date) -> String
     func fetchListOfOneDay(selectedDate: Date) -> [Gathering]
@@ -41,14 +40,6 @@ final class BuddyFaceUseCase: BuddyFaceInterface {
     
     func fetch() -> [Gathering]? {
         let request = GatheringEntity.fetchRequest()
-        let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
-        return gatheringEntityList.map{ $0.toDomain() }
-    }
-    
-    func fetch(name: String) -> [Gathering]? {
-        let request = GatheringEntity.fetchRequest()
-        let predicate = NSPredicate(format: "%@ IN buddy.name", name)
-        request.predicate = predicate
         let gatheringEntityList = CoreDataManager.shared.fetch(request: request)
         return gatheringEntityList.map{ $0.toDomain() }
     }

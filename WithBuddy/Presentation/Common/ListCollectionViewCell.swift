@@ -41,7 +41,7 @@ final class ListCollectionViewCell: UICollectionViewCell {
     }
     
     private func update(imageNames: [String], stackView: UIStackView) {
-        (0..<min(6, imageNames.count)).forEach { index in
+        (0..<min(4, imageNames.count)).forEach { index in
             guard let image = UIImage(named: imageNames[index]) else { return }
             let imageView = UIImageView(image: image)
             stackView.addArrangedSubview(imageView)

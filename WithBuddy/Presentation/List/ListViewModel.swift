@@ -25,22 +25,9 @@ final class ListViewModel {
         return self.gatheringList.reversed()[index]
     }
     
-    func didSearchFieldReturn(name: String?) {
-        guard let name = name else { return }
-        
-        if name.isEmpty {
-            self.fetch()
-            return
-        }
-        
-        let gatheringList = self.buddyFaceUseCase.fetch(name: name) ?? []
-        self.gatheringList = gatheringList
-    }
-    
     private func configure() {
 //        self.insert()
         self.fetch()
-        
     }
     
     func fetch() {
@@ -69,27 +56,27 @@ final class ListViewModel {
     let date9 = Calendar.current.date(from: DateComponents(year: 2021, month: 11, day: 1)) ?? Date()
     let date10 = Calendar.current.date(from: DateComponents(year: 2021, month: 11, day: 13)) ?? Date()
     
-//    private func insert() {
-//        self.buddyFaceUseCase.insertBuddy(buddy: buddy1)
-//        self.buddyFaceUseCase.insertBuddy(buddy: buddy2)
-//        self.buddyFaceUseCase.insertBuddy(buddy: buddy3)
-//        self.buddyFaceUseCase.insertBuddy(buddy: buddy4)
-//        self.buddyFaceUseCase.insertBuddy(buddy: buddy5)
-//        self.buddyFaceUseCase.insertBuddy(buddy: buddy6)
-//        self.buddyFaceUseCase.insertBuddy(buddy: buddy7)
-//        self.buddyFaceUseCase.insertBuddy(buddy: buddy8)
-//        self.buddyFaceUseCase.insertBuddy(buddy: buddy9)
-//        
-//        self.buddyFaceUseCase.insertGathering(gathering: Gathering(date: date1, place: nil, placeType: [0], buddy: [buddy1], memo: nil, picture: nil), buddy: [buddy1])
-//        self.buddyFaceUseCase.insertGathering(gathering: Gathering(date: date2, place: nil, placeType: [1], buddy: [buddy2], memo: nil, picture: nil), buddy: [buddy2])
-//        self.buddyFaceUseCase.insertGathering(gathering: Gathering(date: date3, place: nil, placeType: [2], buddy: [buddy3], memo: nil, picture: nil), buddy: [buddy3])
-//        self.buddyFaceUseCase.insertGathering(gathering: Gathering(date: date4, place: nil, placeType: [3], buddy: [buddy1, buddy2, buddy3], memo: nil, picture: nil), buddy: [buddy1, buddy2, buddy3])
-//        self.buddyFaceUseCase.insertGathering(gathering: Gathering(date: date5, place: nil, placeType: [4, 5], buddy: [buddy4], memo: nil, picture: nil), buddy: [buddy4])
-//        self.buddyFaceUseCase.insertGathering(gathering: Gathering(date: date6, place: nil, placeType: [6, 7], buddy: [buddy5], memo: nil, picture: nil), buddy: [buddy5])
-//        self.buddyFaceUseCase.insertGathering(gathering: Gathering(date: date7, place: nil, placeType: [8, 1, 2], buddy: [buddy6, buddy6, buddy6, buddy6, buddy6, buddy6, buddy6, buddy6], memo: nil, picture: nil), buddy: [buddy6, buddy6, buddy6, buddy6, buddy6, buddy6, buddy6, buddy6])
-//        self.buddyFaceUseCase.insertGathering(gathering: Gathering(date: date8, place: nil, placeType: [0, 0, 0], buddy: [buddy3], memo: nil, picture: nil), buddy: [buddy3])
-//        self.buddyFaceUseCase.insertGathering(gathering: Gathering(date: date9, place: nil, placeType: [1, 2, 3, 4, 5], buddy: [buddy2, buddy3], memo: nil, picture: nil), buddy: [buddy2, buddy3])
-//        self.buddyFaceUseCase.insertGathering(gathering: Gathering(date: date10, place: nil, placeType: [0, 1, 2], buddy: [buddy1], memo: nil, picture: nil), buddy: [buddy1])
-//    }
+    private func insert() {
+        self.buddyFaceUseCase.insertBuddy(buddy: buddy1)
+        self.buddyFaceUseCase.insertBuddy(buddy: buddy2)
+        self.buddyFaceUseCase.insertBuddy(buddy: buddy3)
+        self.buddyFaceUseCase.insertBuddy(buddy: buddy4)
+        self.buddyFaceUseCase.insertBuddy(buddy: buddy5)
+        self.buddyFaceUseCase.insertBuddy(buddy: buddy6)
+        self.buddyFaceUseCase.insertBuddy(buddy: buddy7)
+        self.buddyFaceUseCase.insertBuddy(buddy: buddy8)
+        self.buddyFaceUseCase.insertBuddy(buddy: buddy9)
+        
+        self.buddyFaceUseCase.insertGathering(gathering: Gathering(startDate: date1, endDate: date1, place: nil, purpose: [], buddyList: [buddy1], memo: nil, picture: nil))
+        self.buddyFaceUseCase.insertGathering(gathering: Gathering(startDate: date2, endDate: date2, place: nil, purpose: [], buddyList: [buddy2], memo: nil, picture: nil))
+        self.buddyFaceUseCase.insertGathering(gathering: Gathering(startDate: date3, endDate: date3, place: nil, purpose: [], buddyList: [buddy3], memo: nil, picture: nil))
+        self.buddyFaceUseCase.insertGathering(gathering: Gathering(startDate: date4, endDate: date4, place: nil, purpose: [], buddyList: [buddy1, buddy2, buddy3], memo: nil, picture: nil))
+        self.buddyFaceUseCase.insertGathering(gathering: Gathering(startDate: date5, endDate: date5, place: nil, purpose: [], buddyList: [buddy4], memo: nil, picture: nil))
+        self.buddyFaceUseCase.insertGathering(gathering: Gathering(startDate: date6, endDate: date6, place: nil, purpose: [], buddyList: [buddy5], memo: nil, picture: nil))
+        self.buddyFaceUseCase.insertGathering(gathering: Gathering(startDate: date7, endDate: date7, place: nil, purpose: [], buddyList: [buddy6, buddy6, buddy6, buddy6, buddy6, buddy6, buddy6, buddy6], memo: nil, picture: nil))
+        self.buddyFaceUseCase.insertGathering(gathering: Gathering(startDate: date8, endDate: date8, place: nil, purpose: [], buddyList: [buddy3], memo: nil, picture: nil))
+        self.buddyFaceUseCase.insertGathering(gathering: Gathering(startDate: date9, endDate: date9, place: nil, purpose: [], buddyList: [buddy2, buddy3], memo: nil, picture: nil))
+        self.buddyFaceUseCase.insertGathering(gathering: Gathering(startDate: date10, endDate: date10, place: nil, purpose: [], buddyList: [buddy1], memo: nil, picture: nil))
+    }
     
 }

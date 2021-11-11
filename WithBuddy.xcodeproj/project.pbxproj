@@ -149,8 +149,6 @@
 			isa = PBXGroup;
 			children = (
 				85FA1D98272FEBE000825C64 /* ListViewController.swift */,
-				854AA76327338C2F00663911 /* ListCollectionViewCell.swift */,
-				854AA75D27337A7200663911 /* SearchView.swift */,
 				854AA7652733A37200663911 /* ListViewModel.swift */,
 			);
 			path = List;
@@ -323,6 +321,8 @@
 			isa = PBXGroup;
 			children = (
 				BBF7FF3F272FB7B700B71C97 /* TabBarViewController.swift */,
+				854AA76327338C2F00663911 /* ListCollectionViewCell.swift */,
+				854AA75D27337A7200663911 /* SearchView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";

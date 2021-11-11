@@ -33,8 +33,8 @@ class BuddyChoiceViewController: UIViewController {
     
     func configureBuddyList(by buddyList: [Buddy]) {
         let buddyUseCase = BuddyUseCase()
-        let buddyListMockData = buddyUseCase.fetchBuddy()
-        buddyListMockData.forEach( { buddy in
+        let storedBuddyList = buddyUseCase.fetchBuddy()
+        storedBuddyList.forEach( { buddy in
             var checkedBuddy = buddy
             checkedBuddy.check = true
             if buddyList.contains(checkedBuddy) {

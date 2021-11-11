@@ -14,7 +14,7 @@ final class PlaceView: UIView {
     private lazy var placeBackgroundView = UIView()
     private lazy var placeTextField = UITextField()
     
-    var delegate: PlaceViewDelegate?
+    weak var delegate: PlaceViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -56,7 +56,7 @@ final class PlaceView: UIView {
             self.placeBackgroundView.leftAnchor.constraint(equalTo: self.leftAnchor),
             self.placeBackgroundView.rightAnchor.constraint(equalTo: self.rightAnchor),
             self.placeBackgroundView.heightAnchor.constraint(equalToConstant: 45),
-            self.placeBackgroundView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            self.placeBackgroundView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
     
@@ -64,7 +64,7 @@ final class PlaceView: UIView {
         self.placeBackgroundView.addSubview(self.placeTextField)
         self.placeTextField.backgroundColor = .systemBackground
         if let color = UIColor(named: "LabelPurple") {
-            self.placeTextField.attributedPlaceholder = NSAttributedString(string: "장소를 적어주세요", attributes: [NSAttributedString.Key.foregroundColor : color])
+            self.placeTextField.attributedPlaceholder = NSAttributedString(string: "장소를 적어주세요", attributes: [NSAttributedString.Key.foregroundColor: color])
         }
         self.placeTextField.delegate = self
         
@@ -88,6 +88,6 @@ extension PlaceView: UITextFieldDelegate {
     }
 }
 
-protocol PlaceViewDelegate {
+protocol PlaceViewDelegate: AnyObject {
     func placeTextFieldDidReturn(_: String)
 }

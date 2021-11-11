@@ -14,14 +14,13 @@ final class BuddyView: UIView {
     private lazy var buddyAddButton = UIButton()
     private lazy var buddyCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     
-    private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) {
-        (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
+    private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifier, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
         cell.update(image: UIImage(named: itemIdentifier.face), text: itemIdentifier.name)
         return cell
     }
     
-    var delegate: BuddyViewDelegate?
+    weak var delegate: BuddyViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -115,9 +114,9 @@ final class BuddyView: UIView {
 
 extension BuddyView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
             let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
-                                  image: UIImage(systemName: "trash")) { action in
+                                  image: UIImage(systemName: "trash")) { _ in
                 self.delegate?.buddyDidDeleted(indexPath.item)
             }
             return UIMenu(title: "이 버디를", children: [delete])
@@ -125,7 +124,7 @@ extension BuddyView: UICollectionViewDelegate {
     }
 }
 
-protocol BuddyViewDelegate {
+protocol BuddyViewDelegate: AnyObject {
     func buddyDidDeleted(_: Int)
     func buddyAddDidTouched()
 }

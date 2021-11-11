@@ -14,7 +14,7 @@ final class MemoView: UIView {
     private lazy var memoBackgroundView = UIView()
     private lazy var memoTextField = UITextField()
    
-    var delegate: MemoViewDelegate?
+    weak var delegate: MemoViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -64,7 +64,7 @@ final class MemoView: UIView {
         self.memoBackgroundView.addSubview(self.memoTextField)
         self.memoTextField.backgroundColor = .systemBackground
         if let color = UIColor(named: "LabelPurple") {
-            self.memoTextField.attributedPlaceholder = NSAttributedString(string: "간단한 메모를 남겨보아요", attributes: [NSAttributedString.Key.foregroundColor : color])
+            self.memoTextField.attributedPlaceholder = NSAttributedString(string: "간단한 메모를 남겨보아요", attributes: [NSAttributedString.Key.foregroundColor: color])
         }
         self.memoTextField.delegate = self
         
@@ -88,6 +88,6 @@ extension MemoView: UITextFieldDelegate {
     }
 }
 
-protocol MemoViewDelegate {
+protocol MemoViewDelegate: AnyObject {
     func memoTextFieldDidReturn(_: String)
 }

@@ -7,7 +7,8 @@
 
 import Foundation
 
-enum PlaceType: String, CaseIterable {
+enum PlaceType: CaseIterable, CustomStringConvertible {
+    
     case study
     case shopping
     case sport
@@ -17,4 +18,19 @@ enum PlaceType: String, CaseIterable {
     case extracurricularActivities
     case meal
     case etc
+    
+    var description: String {
+        switch self {
+        case .study: return "Study"
+        case .shopping: return "Shopping"
+        case .sport: return "Sport"
+        case .healing: return "Healing"
+        case .hobby: return "Hobby"
+        case .culture: return "Culture"
+        case .extracurricularActivities: return "ExtraCurricularActivities"
+        case .meal: return "Meal"
+        case .etc: return "Etc"
+        }
+    }
+    
 }

@@ -8,15 +8,17 @@
 import UIKit
 
 class WBCalendarView: UIView {
+    
     private let calendarManager = CalendarManager()
     private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     private let thisMonthLabel = UILabel()
     private let prevMonthButton = UIButton()
     private let nextMonthButton = UIButton()
     private let weekStackView = UIStackView()
+    private let wbcalendarViewModel = WBCalendarViewModel()
     
-    private var selectedDate = Date()
-    private var totalSquares = [String]()
+    private var firstDayOfThisMonth = Date()
+    weak var delegate: CalendarCellSelectable?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,44 +30,62 @@ class WBCalendarView: UIView {
         self.configureCalendar()
     }
     
+    func reload() {
+        self.reloadThisMonth()
+        self.reloadDays()
+        self.reloadFace()
+    }
+    
     private func configureCalendar() {
-        self.configureMonth()
-        self.configureWeek()
+        self.reloadThisMonth()
+        self.configureThisMonth()
         self.configureButton()
+        self.configureWeekDays()
+        self.reloadDays()
         self.configureCollectionView()
-        self.configureMonthView()
+        self.reloadFace()
+    }
+
+    private func reloadThisMonth() {
+        let numOfDays = self.calendarManager.numOfDaysInMonth(baseDate: firstDayOfThisMonth)
+        self.firstDayOfThisMonth = calendarManager.firstDateOfMonth(baseDate: firstDayOfThisMonth)
+        self.wbcalendarViewModel.thisMonthGatheringList(thisMonth: firstDayOfThisMonth, numOfDays: numOfDays)
+        self.thisMonthLabel.text = calendarManager.year(baseDate: firstDayOfThisMonth) + "년 "
+                                + calendarManager.month(baseDate: firstDayOfThisMonth) + "월"
     }
     
     private func configureThisMonth() {
-        thisMonthLabel.text = calendarManager.year(baseDate: selectedDate) + "년 " + calendarManager.month(baseDate: selectedDate) + "월"
-    }
-    
-    private func configureMonth() {
         self.addSubview(thisMonthLabel)
-        self.addSubview(prevMonthButton)
-        self.addSubview(nextMonthButton)
-        self.configureThisMonth()
         self.thisMonthLabel.textColor = UIColor(named: "LabelPurple")
         self.thisMonthLabel.font = .boldSystemFont(ofSize: 17)
-        self.prevMonthButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
-        self.nextMonthButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
         self.thisMonthLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.prevMonthButton.translatesAutoresizingMaskIntoConstraints = false
-        self.nextMonthButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.thisMonthLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 20),
             self.thisMonthLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            self.thisMonthLabel.widthAnchor.constraint(equalToConstant: thisMonthLabel.intrinsicContentSize.width + 10),
+            self.thisMonthLabel.widthAnchor.constraint(equalToConstant: thisMonthLabel.intrinsicContentSize.width + 10)
+        ])
+    }
+    
+    private func configureButton() {
+        self.addSubview(prevMonthButton)
+        self.addSubview(nextMonthButton)
+        self.prevMonthButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        self.nextMonthButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
+        self.prevMonthButton.addTarget(self, action: #selector(minusMonth), for: .touchUpInside)
+        self.nextMonthButton.addTarget(self, action: #selector(plusMonth), for: .touchUpInside)
+        self.prevMonthButton.translatesAutoresizingMaskIntoConstraints = false
+        self.nextMonthButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
             self.prevMonthButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor),
-            self.nextMonthButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor),
             self.prevMonthButton.trailingAnchor.constraint(equalTo: self.thisMonthLabel.leadingAnchor),
             self.prevMonthButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            self.nextMonthButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor),
             self.nextMonthButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             self.nextMonthButton.leadingAnchor.constraint(equalTo: self.thisMonthLabel.trailingAnchor)
         ])
     }
     
-    private func configureWeek() {
+    private func configureWeekDays() {
         self.addSubview(weekStackView)
         self.weekStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -92,28 +112,23 @@ class WBCalendarView: UIView {
         return label
     }
     
-    private func configureButton() {
-        self.prevMonthButton.addTarget(self, action: #selector(minusMonth), for: .touchUpInside)
-        self.nextMonthButton.addTarget(self, action: #selector(plusMonth), for: .touchUpInside)
-    }
-    
     @objc private func minusMonth(_ sender: UIButton) {
-        self.selectedDate = calendarManager.minusMonth(baseDate: selectedDate)
-        self.configureThisMonth()
-        self.configureMonthView()
+        let prevMonth = self.calendarManager.minusMonth(baseDate: self.firstDayOfThisMonth)
+        self.firstDayOfThisMonth = self.calendarManager.firstDateOfMonth(baseDate: prevMonth)
+        self.reload()
     }
     
     @objc private func plusMonth(_ sender: UIButton) {
-        self.selectedDate = calendarManager.plusMonth(baseDate: selectedDate)
-        self.configureThisMonth()
-        self.configureMonthView()
+        let nextMonth = self.calendarManager.plusMonth(baseDate: firstDayOfThisMonth)
+        self.firstDayOfThisMonth = self.calendarManager.firstDateOfMonth(baseDate: nextMonth)
+        self.reload()
     }
     
     private func configureCollectionView() {
         self.addSubview(collectionView)
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
-        self.collectionView.register(WBCalendarViewCell.self, forCellWithReuseIdentifier: WBCalendarViewCell.identifer)
+        self.collectionView.register(WBCalendarViewCell.self, forCellWithReuseIdentifier: WBCalendarViewCell.identifier)
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.collectionView.topAnchor.constraint(equalTo: self.weekStackView.bottomAnchor, constant: 10),
@@ -121,37 +136,47 @@ class WBCalendarView: UIView {
             self.collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             self.collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
-    }
-    
-    func configureMonthView() {
-        let numOfDaysInMonth = calendarManager.numOfDaysInMonth(baseDate: selectedDate)
-        let firstOfMonth = calendarManager.firstOfMonth(baseDate: selectedDate)
-        let weekDay = calendarManager.weekDay(baseDate: firstOfMonth)
-        var count: Int = 1
-        
-        self.totalSquares.removeAll()
-        while(count <= 42) {
-            if(count <= weekDay || count - weekDay > numOfDaysInMonth) {
-                totalSquares.append("")
-            } else {
-                totalSquares.append(String(count - weekDay))
-            }
-            count += 1
-        }
-        self.configureThisMonth()
         self.collectionView.reloadData()
     }
+    
+    func reloadDays() {
+        self.wbcalendarViewModel.reloadDays(date: self.firstDayOfThisMonth)
+        self.collectionView.reloadData()
+    }
+    
+    func reloadFace() {
+        self.wbcalendarViewModel.reloadFace(date: self.firstDayOfThisMonth)
+        self.collectionView.reloadData()
+    }
+    
 }
 
 extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        totalSquares.count
+        return self.wbcalendarViewModel.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifer, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
-        cell.dayOfMonth.text = totalSquares[indexPath.item]
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifier, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
+        let numberOfDay = self.wbcalendarViewModel.totalDays(index: indexPath.item)
+        let today = self.calendarManager.pickDay(baseDate: self.firstDayOfThisMonth, numberOfDay: numberOfDay)
+        let numOfDay = self.wbcalendarViewModel.totalDays(index: indexPath.item)
+        let faceOfDay = self.wbcalendarViewModel.totalFaces(index: indexPath.item)
+        if self.wbcalendarViewModel.isFace {
+            cell.update(day: numOfDay, face: faceOfDay, today: today)
+        }
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let numberOfDay = self.wbcalendarViewModel.totalDays(index: indexPath.item)
+        let today = self.calendarManager.pickDay(baseDate: self.firstDayOfThisMonth, numberOfDay: numberOfDay)
+        if self.wbcalendarViewModel.isGathering(in: today) {
+            self.delegate?.presentCellDetail(selectedDate: today)
+        }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifier, for: indexPath) as? WBCalendarViewCell else { return }
+        cell.animateButtonTap(duration: 0.4, scale: 0.90)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -163,4 +188,9 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+    
+}
+
+protocol CalendarCellSelectable: AnyObject {
+    func presentCellDetail(selectedDate: Date)
 }

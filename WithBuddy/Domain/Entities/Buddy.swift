@@ -8,9 +8,8 @@
 import Foundation
 
 struct Buddy: Hashable {
-    private(set) var name: String
-    
-    init(name: String) {
-        self.name = name
-    }
+    var id: UUID
+    var name: String
+    var face: String
+    var check: Bool?
 }

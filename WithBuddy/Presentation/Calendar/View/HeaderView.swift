@@ -8,6 +8,7 @@
 import UIKit
 
 class HeaderView: UIView {
+    
     private let userFaceImageView = UIImageView()
     private let userCommentLabel = UILabel()
     
@@ -28,7 +29,7 @@ class HeaderView: UIView {
     
     private func configureUserFaceImageView() {
         self.addSubview(userFaceImageView)
-        self.userFaceImageView.image = UIImage(named: "Purple3")
+        self.userFaceImageView.image = UIImage(named: BuddyFaceUseCase().random())
         self.userFaceImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.userFaceImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),
@@ -52,4 +53,5 @@ class HeaderView: UIView {
             self.userCommentLabel.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
+    
 }

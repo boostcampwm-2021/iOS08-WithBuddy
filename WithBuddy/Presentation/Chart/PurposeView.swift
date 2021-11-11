@@ -22,7 +22,8 @@ final class PurposeView: UIView {
         self.configure()
     }
     
-    func update(purpose: String) {
+    func update(image: String, purpose: String) {
+        self.imageView.image = UIImage(named: image)
         self.label.text = purpose
     }
     

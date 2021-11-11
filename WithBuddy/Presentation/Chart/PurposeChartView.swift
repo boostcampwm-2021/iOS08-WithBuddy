@@ -32,13 +32,6 @@ final class PurposeChartView: UIView {
         self.nameLabel.text = name
     }
     
-    func update(purposeList: [String]) {
-        self.firstPurposeView.update(purpose: purposeList.indices ~= 0 ? purposeList[0] : "기타")
-        self.secondPurposeView.update(purpose: purposeList.indices ~= 1 ? purposeList[1] : "기타")
-        self.thirdPurposeView.update(purpose: purposeList.indices ~= 2 ? purposeList[2] : "기타")
-        self.fourthPurposeView.update(purpose: purposeList.indices ~= 3 ? purposeList[3] : "기타")
-    }
-    
     private func configure() {
         self.configureNameLabel()
         self.configureWhiteView()
@@ -95,6 +88,10 @@ final class PurposeChartView: UIView {
         self.stackView.addArrangedSubview(self.secondPurposeView)
         self.stackView.addArrangedSubview(self.thirdPurposeView)
         self.stackView.addArrangedSubview(self.fourthPurposeView)
+        self.firstPurposeView.update(image: "DefaultHobby", purpose: "취미")
+        self.secondPurposeView.update(image: "DefaultStudy", purpose: "공부")
+        self.thirdPurposeView.update(image: "DefaultMeal", purpose: "식사")
+        self.fourthPurposeView.update(image: "DefaultSport", purpose: "운동")
     }
 
 }

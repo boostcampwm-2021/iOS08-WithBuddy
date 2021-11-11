@@ -14,7 +14,7 @@ class CalendarDetailView: UIView {
     private let calendarDetailViewModel = CalendarDetailViewModel()
     
     var selectedDate = Date()
-    var delegate: gatheringListDelegate?
+    weak var delegate: gatheringListDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -97,6 +97,6 @@ extension CalendarDetailView: UICollectionViewDataSource, UICollectionViewDelega
     
 }
 
-protocol gatheringListDelegate {
+protocol gatheringListDelegate: AnyObject {
     func gatheringListTouched()
 }

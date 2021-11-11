@@ -57,7 +57,6 @@ class WBCalendarViewCell: UICollectionViewCell {
     
     private func configureBuddyImageView() {
         self.addSubview(buddyImageView)
-        self.buddyImageView.image = UIImage(named: "")
         self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.buddyImageView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8),
@@ -71,8 +70,9 @@ class WBCalendarViewCell: UICollectionViewCell {
     func update(day: Int, face: String, today: Date) {
         self.configureCell()
         self.dayOfCell.text = day > 0 ? String(day) : ""
-        self.buddyImageView.image = UIImage(named: face)
-        
+        if face.isEmpty == false {
+            self.buddyImageView.image = UIImage(named: face)
+        }
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMdd"
         if dateFormatter.string(from: Date()) == dateFormatter.string(from: today) {

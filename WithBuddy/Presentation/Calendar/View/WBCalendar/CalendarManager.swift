@@ -14,19 +14,19 @@ final class CalendarManager {
     func plusMonth(baseDate: Date) -> Date {
         var dateComponents = DateComponents()
         dateComponents.month = 1
-        return Calendar.current.date(byAdding: dateComponents, to: baseDate) ?? Date()
+        return calendar.date(byAdding: dateComponents, to: baseDate) ?? Date()
     }
     
     func minusMonth(baseDate: Date) -> Date {
         var dateComponents = DateComponents()
         dateComponents.month = -1
-        return Calendar.current.date(byAdding: dateComponents, to: baseDate) ?? Date()
+        return calendar.date(byAdding: dateComponents, to: baseDate) ?? Date()
     }
     
     func pickDay(baseDate: Date, numberOfDay: Int) -> Date {
         var dateComponents = DateComponents()
         dateComponents.day = numberOfDay - 1
-        return Calendar.current.date(byAdding: dateComponents, to: self.firstOfMonth(baseDate: baseDate)) ?? Date()
+        return calendar.date(byAdding: dateComponents, to: baseDate) ?? Date()
     }
     
     func month(baseDate: Date) -> String {
@@ -46,7 +46,7 @@ final class CalendarManager {
         return range.count
     }
     
-    func firstOfMonth(baseDate: Date) -> Date {
+    func firstDateOfMonth(baseDate: Date) -> Date {
         let components = calendar.dateComponents([.year, .month], from: baseDate)
         return calendar.date(from: components) ?? Date()
     }

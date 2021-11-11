@@ -10,13 +10,6 @@
 		854AA75E27337A7200663911 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA75D27337A7200663911 /* SearchView.swift */; };
 		854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA76327338C2F00663911 /* ListCollectionViewCell.swift */; };
 		854AA7662733A37200663911 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA7652733A37200663911 /* ListViewModel.swift */; };
-		8552A14C273CAF980027C70A /* Gathering.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25842739197600E7BF35 /* Gathering.swift */; };
-		8552A14D273CAFAC0027C70A /* ImageTextCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */; };
-		8552A14E273CAFE90027C70A /* FaceColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C236B427380D39001499E5 /* FaceColor.swift */; };
-		8552A14F273CB0030027C70A /* WithBuddyModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25812739192200E7BF35 /* WithBuddyModel.xcdatamodeld */; };
-		8552A150273CB0250027C70A /* Buddy.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25462730D97000E7BF35 /* Buddy.swift */; };
-		8552A151273CB0250027C70A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF25272FB51000B71C97 /* AppDelegate.swift */; };
-		8552A152273CB0250027C70A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF27272FB51000B71C97 /* SceneDelegate.swift */; };
 		85C236BA27381239001499E5 /* BuddyFaceUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C236B927381239001499E5 /* BuddyFaceUseCase.swift */; };
 		85D262E8273CD703000190B8 /* PurposeChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262E7273CD703000190B8 /* PurposeChartView.swift */; };
 		85D262EA273CD71C000190B8 /* BubbleChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262E9273CD71C000190B8 /* BubbleChartView.swift */; };
@@ -68,6 +61,14 @@
 		F7E8ABBC273A6B17005F8306 /* CalendarDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABBB273A6B17005F8306 /* CalendarDetailViewModel.swift */; };
 		F7E8ABBE273A8D43005F8306 /* WBCalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABBD273A8D43005F8306 /* WBCalendarViewModel.swift */; };
 		F7E8ABC5273BB814005F8306 /* GatheringDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABC4273BB814005F8306 /* GatheringDetailViewController.swift */; };
+		F7E8AC2F273CB5F9005F8306 /* Gathering.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25842739197600E7BF35 /* Gathering.swift */; };
+		F7E8AC38273CD428005F8306 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8AC37273CD428005F8306 /* UIViewExtension.swift */; };
+		F7E8AC39273CD4DC005F8306 /* WithBuddyModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25812739192200E7BF35 /* WithBuddyModel.xcdatamodeld */; };
+		F7E8AC3A273CD4DC005F8306 /* Buddy.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25462730D97000E7BF35 /* Buddy.swift */; };
+		F7E8AC3B273CD4DC005F8306 /* FaceColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C236B427380D39001499E5 /* FaceColor.swift */; };
+		F7E8AC3C273CD4E2005F8306 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF25272FB51000B71C97 /* AppDelegate.swift */; };
+		F7E8AC3D273CD4E2005F8306 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF27272FB51000B71C97 /* SceneDelegate.swift */; };
+		F7E8AC3E273CD4E6005F8306 /* ImageTextCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -134,6 +135,7 @@
 		F7E8ABBB273A6B17005F8306 /* CalendarDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDetailViewModel.swift; sourceTree = "<group>"; };
 		F7E8ABBD273A8D43005F8306 /* WBCalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WBCalendarViewModel.swift; sourceTree = "<group>"; };
 		F7E8ABC4273BB814005F8306 /* GatheringDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatheringDetailViewController.swift; sourceTree = "<group>"; };
+		F7E8AC37273CD428005F8306 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -351,6 +353,7 @@
 		BBF7FF41272FB95400B71C97 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				F7E8AC36273CD412005F8306 /* Extension */,
 				BBF7FF3F272FB7B700B71C97 /* TabBarViewController.swift */,
 				854AA76327338C2F00663911 /* ListCollectionViewCell.swift */,
 				854AA75D27337A7200663911 /* SearchView.swift */,
@@ -430,6 +433,14 @@
 				F7E8ABC4273BB814005F8306 /* GatheringDetailViewController.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		F7E8AC36273CD412005F8306 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				F7E8AC37273CD428005F8306 /* UIViewExtension.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -537,6 +548,13 @@
 				85D262F4273CF211000190B8 /* PurposeView.swift in Sources */,
 				85D262EE273CE6DD000190B8 /* WhiteView.swift in Sources */,
 				8552A14C273CAF980027C70A /* Gathering.swift in Sources */,
+				F7E8AC3E273CD4E6005F8306 /* ImageTextCollectionViewCell.swift in Sources */,
+				F7E8AC3C273CD4E2005F8306 /* AppDelegate.swift in Sources */,
+				F7E8AC3D273CD4E2005F8306 /* SceneDelegate.swift in Sources */,
+				F7E8AC39273CD4DC005F8306 /* WithBuddyModel.xcdatamodeld in Sources */,
+				F7E8AC3A273CD4DC005F8306 /* Buddy.swift in Sources */,
+				F7E8AC3B273CD4DC005F8306 /* FaceColor.swift in Sources */,
+				F7E8AC2F273CB5F9005F8306 /* Gathering.swift in Sources */,
 				F7A7699B2732588500FF83EA /* WBCalendarView.swift in Sources */,
 				BB2D25B6273B582500E7BF35 /* PictureView.swift in Sources */,
 				F7E8ABB8273A54A5005F8306 /* CalendarDetailView.swift in Sources */,
@@ -546,6 +564,7 @@
 				85D262EA273CD71C000190B8 /* BubbleChartView.swift in Sources */,
 				F7B69B8C27339EF9005D2F32 /* WBCalendarViewCell.swift in Sources */,
 				85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */,
+				F7E8AC38273CD428005F8306 /* UIViewExtension.swift in Sources */,
 				BB2D25602731317E00E7BF35 /* ChartViewController.swift in Sources */,
 				F7A7699727315AF800FF83EA /* HeaderView.swift in Sources */,
 				85D262E8273CD703000190B8 /* PurposeChartView.swift in Sources */,
@@ -572,9 +591,7 @@
 				BB2D25A3273A550B00E7BF35 /* BuddyUseCase.swift in Sources */,
 				85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */,
 				854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */,
-				85C236B527380D39001499E5 /* FaceColor.swift in Sources */,
 				F7E8ABC5273BB814005F8306 /* GatheringDetailViewController.swift in Sources */,
-				BB2D25832739192200E7BF35 /* WithBuddyModel.xcdatamodeld in Sources */,
 				BB2D25B7273B582500E7BF35 /* BuddyView.swift in Sources */,
 				BB2D25C2273B901600E7BF35 /* BuddyEntity+CoreDataClass.swift in Sources */,
 				85D262F2273CE7D6000190B8 /* TitleLabel.swift in Sources */,

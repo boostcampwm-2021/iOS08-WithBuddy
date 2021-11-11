@@ -9,10 +9,12 @@ import UIKit
 
 class CalendarDetailView: UIView {
     
-    var selectedDate = Date()
     private var detailLabel = UILabel()
     private var detailCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     private let calendarDetailViewModel = CalendarDetailViewModel()
+    
+    var selectedDate = Date()
+    weak var delegate: gatheringListDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -84,7 +86,8 @@ extension CalendarDetailView: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? ListCollectionViewCell {
-            cell.animateButtonTap(scale: 0.95)
+            cell.animateButtonTap(duration: 0.4, scale: 0.95)
+            self.delegate?.gatheringListTouched()
         }
     }
     
@@ -92,4 +95,8 @@ extension CalendarDetailView: UICollectionViewDataSource, UICollectionViewDelega
         return CGSize(width: self.frame.width-40, height: 150)
     }
     
+}
+
+protocol gatheringListDelegate: AnyObject {
+    func gatheringListTouched()
 }

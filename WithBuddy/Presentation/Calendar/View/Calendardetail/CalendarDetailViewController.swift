@@ -10,10 +10,10 @@ import UIKit
 class CalendarDetailViewController: UIViewController {
 
     static let identifier = "CalendarDetailViewController"
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(named: "BackgroundPurple")
     }
-    
+
 }

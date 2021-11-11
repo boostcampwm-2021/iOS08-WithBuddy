@@ -27,6 +27,10 @@ final class GatheringUseCase {
         return coreDataManager.fetchGathering(including: date).map{ $0.toDomain() }
     }
     
+    func fetchGathering(month: Date) -> [Gathering] {
+        return coreDataManager.fetchGaterhing(month: month).map{ $0.toDomain() }
+    }
+    
     func insertGathering(_ gathering: Gathering) {
         self.coreDataManager.insertGathering(gathering)
     }

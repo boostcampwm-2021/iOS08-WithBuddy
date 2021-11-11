@@ -15,6 +15,7 @@ final class LatestOldChartView: UIView {
     private let stackView = UIStackView()
     private let latestView = LatestOldView()
     private let oldView = LatestOldView()
+    private let defaultView = DefaultView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,6 +42,7 @@ final class LatestOldChartView: UIView {
         self.configureTitleLabel()
         self.configureStackView()
         self.configureChartView()
+        self.configureDefaultView()
     }
     
     private func configureNameLabel() {
@@ -78,6 +80,7 @@ final class LatestOldChartView: UIView {
         self.whiteView.addSubview(self.stackView)
         self.stackView.spacing = 30
         self.stackView.alignment = .center
+        self.stackView.isHidden = true
         self.stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.stackView.centerXAnchor.constraint(equalTo: self.whiteView.centerXAnchor),
@@ -91,6 +94,17 @@ final class LatestOldChartView: UIView {
         self.stackView.addArrangedSubview(self.oldView)
         self.latestView.update(description: "가장 최근에 만난 버디는")
         self.oldView.update(description: "만난지 가장 오래된 버디는")
+    }
+    
+    private func configureDefaultView() {
+        self.whiteView.addSubview(self.defaultView)
+        self.defaultView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.defaultView.centerXAnchor.constraint(equalTo: self.whiteView.centerXAnchor),
+            self.defaultView.centerYAnchor.constraint(equalTo: self.whiteView.centerYAnchor),
+            self.defaultView.widthAnchor.constraint(equalToConstant: 200),
+            self.defaultView.heightAnchor.constraint(equalToConstant: 150)
+        ])
     }
     
 }

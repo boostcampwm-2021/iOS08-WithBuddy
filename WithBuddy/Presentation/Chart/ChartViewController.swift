@@ -27,6 +27,7 @@ final class ChartViewController: UIViewController {
         self.configurePurposeChartView()
         self.configureLatestOldChartView()
         self.update(name: "정아")
+        self.update(purposeList: ["공원", "영화관", "식당", "카페"])
         self.update(latest: "인우", old: "나정")
     }
     
@@ -88,6 +89,10 @@ final class ChartViewController: UIViewController {
         self.bubbleChartView.update(name: name)
         self.purposeChartView.update(name: name)
         self.latestOldChartView.update(name: name)
+    }
+    
+    private func update(purposeList: [String]) {
+        self.purposeChartView.update(purposeList: purposeList)
     }
     
     private func update(latest: String, old: String) {

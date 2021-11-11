@@ -12,6 +12,7 @@ final class BubbleChartView: UIView {
     private let nameLabel = NameLabel()
     private let titleLabel = TitleLabel()
     private let whiteView = WhiteView()
+    private let defaultView = DefaultView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,6 +32,7 @@ final class BubbleChartView: UIView {
         self.configureNameLabel()
         self.configureWhiteView()
         self.configureTitleLabel()
+        self.configureDefaultView()
     }
     
     private func configureNameLabel() {
@@ -61,6 +63,17 @@ final class BubbleChartView: UIView {
             self.whiteView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             self.whiteView.heightAnchor.constraint(equalToConstant: 250),
             self.whiteView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+    }
+    
+    private func configureDefaultView() {
+        self.whiteView.addSubview(self.defaultView)
+        self.defaultView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.defaultView.centerXAnchor.constraint(equalTo: self.whiteView.centerXAnchor),
+            self.defaultView.centerYAnchor.constraint(equalTo: self.whiteView.centerYAnchor),
+            self.defaultView.widthAnchor.constraint(equalToConstant: 200),
+            self.defaultView.heightAnchor.constraint(equalToConstant: 200)
         ])
     }
 

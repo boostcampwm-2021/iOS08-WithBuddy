@@ -9,12 +9,14 @@ import CoreData
 
 protocol CoreDataManagable {
     
-    func insertGathering(_ gathering: Gathering) -> Bool
-    func insertBuddy(_ buddy: Buddy) -> Bool
+    @discardableResult func insertGathering(_ gathering: Gathering) -> Bool
+    @discardableResult func insertBuddy(_ buddy: Buddy) -> Bool
     func fetchAllBuddy() -> [BuddyEntity]
     func fetchAllGathering() -> [GatheringEntity]
     func fetchBuddy(name: String) -> [BuddyEntity]
     func fetchGathering(including name: String) -> [GatheringEntity]
+    func fetchGathering(including day: Date) -> [GatheringEntity]
+    func fetchGaterhing(month: Date) -> [GatheringEntity]
 }
 
 final class CoreDataManager {
@@ -73,6 +75,29 @@ extension CoreDataManager: CoreDataManagable {
     
     func fetchGathering(including name: String) -> [GatheringEntity] {
         return self.fetchBuddy(name: name).compactMap{ $0.gatheringList }.map{ Array($0) }.compactMap{ $0 }.flatMap{ $0 }.sorted(by: >)
+    }
+    
+    func fetchGathering(including day: Date) -> [GatheringEntity] {
+        let midnightOfDay = Calendar.current.startOfDay(for: day)
+        
+        let request = GatheringEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "startDate <= %@ AND endDate >= %@", midnightOfDay as NSDate, midnightOfDay as NSDate)
+        return self.fetch(request: request)
+    }
+    
+    func fetchGaterhing(month: Date) -> [GatheringEntity] {
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: month)
+        components.day = 1
+        components.hour = 00
+        components.minute = 00
+        components.second = 00
+        let startDateOfMonth = calendar.date(from: components) ?? Date()
+        let endDateOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startDateOfMonth) ?? Date()
+        
+        let request = GatheringEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "startDate <= %@ AND startDate >= %@", startDateOfMonth as NSDate, endDateOfMonth as NSDate)
+        return self.fetch(request: request)
     }
     
     @discardableResult

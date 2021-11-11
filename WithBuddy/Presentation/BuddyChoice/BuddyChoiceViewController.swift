@@ -16,9 +16,9 @@ class BuddyChoiceViewController: UIViewController {
     
     private var buddyChoiceViewModel = BuddyChoiceViewModel()
     private var cancellables: Set<AnyCancellable> = []
+    weak var delegate: BuddyChoiceDelegate?
     
-    private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) {
-        (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
+    private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifier, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
         cell.update(image: UIImage(named: itemIdentifier.face), text: itemIdentifier.name, check: itemIdentifier.check)
         return cell
@@ -28,6 +28,7 @@ class BuddyChoiceViewController: UIViewController {
         super.viewDidLoad()
         self.configure()
         self.bind()
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addBuddys))
         self.buddyChoiceViewModel.buddyDidUpdated([Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
                                                    Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
                                                    Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"),
@@ -48,6 +49,21 @@ class BuddyChoiceViewController: UIViewController {
                 snapshot.appendSections([0])
                 snapshot.appendItems(buddyList)
                 self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
+            }
+            .store(in: &self.cancellables)
+        
+        self.buddyChoiceViewModel.doneSignal
+            .receive(on: DispatchQueue.main)
+            .sink{ [weak self] checkedBuddyList in
+                self?.delegate?.buddySelectingDidCompleted(checkedBuddyList)
+                self?.navigationController?.popViewController(animated: true)
+            }
+            .store(in: &self.cancellables)
+        
+        self.buddyChoiceViewModel.failSignal
+            .receive(on: DispatchQueue.main)
+            .sink{ [weak self] result in
+                self?.alertError(result)
             }
             .store(in: &self.cancellables)
     }
@@ -107,9 +123,20 @@ class BuddyChoiceViewController: UIViewController {
         ])
     }
     
+    private func alertError(_ error: BuddyChoiceError) {
+        let alert = UIAlertController(title: "등록 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     @objc private func onAddButtonTouched(_ sender: UIButton) {
         self.buddyChoiceViewModel.buddyDidAdded(Buddy(id: UUID(), name: "TEST", face: "FaceBlue1"))
         self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
+    }
+    
+    @objc private func addBuddys() {
+        self.buddyChoiceViewModel.buddySelectingDidCompleted()
     }
     
 }
@@ -130,17 +157,21 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
             let edit = UIAction(title: NSLocalizedString("편집", comment: ""),
-                                  image: UIImage(systemName: "pencil.circle")) { action in
+                                  image: UIImage(systemName: "pencil.circle")) { _ in
                 self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
             }
             let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
-                                  image: UIImage(systemName: "trash")) { action in
+                                  image: UIImage(systemName: "trash")) { _ in
                 self.buddyChoiceViewModel.buddyDidADeleted(in: indexPath.item)
             }
             return UIMenu(title: "이 버디를", children: [edit, delete])
         })
     }
     
+}
+
+protocol BuddyChoiceDelegate: AnyObject {
+    func buddySelectingDidCompleted(_: [Buddy])
 }

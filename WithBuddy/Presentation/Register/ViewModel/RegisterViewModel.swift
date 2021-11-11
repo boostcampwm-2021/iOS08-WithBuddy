@@ -28,6 +28,7 @@ class RegisterViewModel {
     private var checkedPurposeList: [Purpose] {
         return self.purposeList.filter( { $0.check })
     }
+    private(set) var addBuddySignal = PassthroughSubject<[Buddy], Never>()
     private(set) var registerDoneSignal = PassthroughSubject<Void, Never>()
     private(set) var registerFailSignal = PassthroughSubject<RegisterError, Never>()
     
@@ -83,12 +84,10 @@ class RegisterViewModel {
     
     func buddyDidAdded(_ buddy: Buddy) {
         self.buddyList.insert(buddy, at: 0)
-        self.buddyUseCase.insertBuddy(buddy)
     }
     
     func buddyDidUpdated(_ buddyList: [Buddy]) {
-        buddyList.forEach({ self.buddyList.insert($0, at: 0) })
-//        self.buddyUseCase.insertBuddy(buddy)
+        self.buddyList = buddyList
     }
     
     func didMemoFinished(_ memo: String) {
@@ -123,4 +122,9 @@ class RegisterViewModel {
             self.registerDoneSignal.send()
         }
     }
+    
+    func addBuddyDidTouched() {
+        self.addBuddySignal.send(self.buddyList)
+    }
+    
 }

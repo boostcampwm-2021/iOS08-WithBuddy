@@ -39,6 +39,11 @@ class RegisterViewController: UIViewController {
     }
     
     private func bind() {
+        self.dataBind()
+        self.signalBind()
+    }
+    
+    private func dataBind() {
         self.registerViewModel.$startDateString
             .receive(on: DispatchQueue.main)
             .sink { [weak self] date in
@@ -73,7 +78,9 @@ class RegisterViewController: UIViewController {
                 self?.pictureView.pictureListReload(pictures)
             }
             .store(in: &self.cancellables)
-        
+    }
+    
+    private func signalBind() {
         self.registerViewModel.registerDoneSignal
             .receive(on: DispatchQueue.main)
             .sink{ [weak self] in
@@ -85,6 +92,16 @@ class RegisterViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink{ [weak self] result in
                 self?.alertError(result)
+            }
+            .store(in: &self.cancellables)
+        
+        self.registerViewModel.addBuddySignal
+            .receive(on: DispatchQueue.main)
+            .sink{ [weak self] buddyList in
+                let buddyChoiceViewController = BuddyChoiceViewController()
+                buddyChoiceViewController.delegate = self
+                buddyChoiceViewController.configureBuddyList(by: buddyList)
+                self?.navigationController?.pushViewController(buddyChoiceViewController, animated: true)
             }
             .store(in: &self.cancellables)
     }
@@ -334,9 +351,7 @@ extension RegisterViewController: BuddyViewDelegate {
     }
     
     func buddyAddDidTouched() {
-        let buddyChoiceViewController = BuddyChoiceViewController()
-        buddyChoiceViewController.delegate = self
-        self.navigationController?.pushViewController(buddyChoiceViewController, animated: true)
+        self.registerViewModel.addBuddyDidTouched()
     }
 }
 

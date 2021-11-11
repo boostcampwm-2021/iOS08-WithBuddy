@@ -12,7 +12,7 @@ final class MemoView: UIView {
 
     private lazy var memoTitleLabel = UILabel()
     private lazy var memoBackgroundView = UIView()
-    private lazy var memoTextField = UITextField()
+    private lazy var memoTextView = UITextView()
    
     weak var delegate: MemoViewDelegate?
     
@@ -61,31 +61,50 @@ final class MemoView: UIView {
     }
     
     private func configureTextField() {
-        self.memoBackgroundView.addSubview(self.memoTextField)
-        self.memoTextField.backgroundColor = .systemBackground
-        if let color = UIColor(named: "LabelPurple") {
-            self.memoTextField.attributedPlaceholder = NSAttributedString(string: "간단한 메모를 남겨보아요", attributes: [NSAttributedString.Key.foregroundColor: color])
-        }
-        self.memoTextField.delegate = self
+        self.memoBackgroundView.addSubview(self.memoTextView)
+        self.memoTextView.backgroundColor = .systemBackground
+        self.memoTextView.font =  UIFont.systemFont(ofSize: 15, weight: .medium)
+        self.memoTextView.textContentType = .none
+        self.memoTextView.autocapitalizationType = .none
+        self.memoTextView.autocorrectionType = .no
+        self.memoTextView.delegate = self
+        self.memoTextView.text = "메모를 적어주세요."
+        self.memoTextView.textColor = UIColor(named: "LabelPurple")
         
-        self.memoTextField.translatesAutoresizingMaskIntoConstraints = false
+        self.memoTextView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.memoTextField.topAnchor.constraint(equalTo: self.memoBackgroundView.topAnchor),
-            self.memoTextField.leftAnchor.constraint(equalTo: self.memoBackgroundView.leftAnchor, constant: 20),
-            self.memoTextField.rightAnchor.constraint(equalTo: self.memoBackgroundView.rightAnchor, constant: -20),
-            self.memoTextField.bottomAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor)
+            self.memoTextView.topAnchor.constraint(equalTo: self.memoBackgroundView.topAnchor, constant: 20),
+            self.memoTextView.leftAnchor.constraint(equalTo: self.memoBackgroundView.leftAnchor, constant: 20),
+            self.memoTextView.rightAnchor.constraint(equalTo: self.memoBackgroundView.rightAnchor, constant: -20),
+            self.memoTextView.bottomAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor, constant: -20)
         ])
     }
 }
 
-extension MemoView: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+extension MemoView: UITextViewDelegate {
+    
+    func textViewShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text {
             self.delegate?.memoTextFieldDidReturn(text)
         }
         textField.resignFirstResponder()
         return true
     }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor(named: "LabelPurple") {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "메모를 적어주세요."
+            textView.textColor = UIColor(named: "LabelPurple")
+        }
+    }
+
 }
 
 protocol MemoViewDelegate: AnyObject {

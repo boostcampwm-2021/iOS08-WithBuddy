@@ -28,8 +28,8 @@ final class ListCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.buddyStackView = UIStackView()
-        self.typeStackView = UIStackView()
+        self.buddyStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        self.typeStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
     
     func update(date: Date, buddyImageList: [String], typeList: [String]) {

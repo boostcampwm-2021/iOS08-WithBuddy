@@ -172,11 +172,11 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let numberOfDay = self.wbcalendarViewModel.totalDays(index: indexPath.item)
         let today = self.calendarManager.pickDay(baseDate: self.firstDayOfThisMonth, numberOfDay: numberOfDay)
+        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
+        cell.animateButtonTap(duration: 0.4, scale: 0.90)
         if self.wbcalendarViewModel.isGathering(in: today) {
             self.delegate?.presentCellDetail(selectedDate: today)
         }
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifier, for: indexPath) as? WBCalendarViewCell else { return }
-        cell.animateButtonTap(duration: 0.4, scale: 0.90)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

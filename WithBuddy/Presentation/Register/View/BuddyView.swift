@@ -88,12 +88,9 @@ final class BuddyView: UIView {
         
         self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
         
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(60), heightDimension: .absolute(90)))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)), subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuous
-        
-        let layout = UICollectionViewCompositionalLayout(section: section)
+        let layout = UICollectionViewFlowLayout.init()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 60, height: 90)
         
         self.buddyCollectionView.collectionViewLayout = layout
         

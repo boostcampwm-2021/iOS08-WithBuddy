@@ -26,16 +26,18 @@ final class ChartViewController: UIViewController {
         self.configureBubbleChartView()
         self.configurePurposeChartView()
         self.configureLatestOldChartView()
+        self.update(name: "정아")
+        self.update(latest: "인우", old: "나정")
     }
     
     private func configureScrollView() {
         self.view.addSubview(self.scrollView)
         self.scrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            self.scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            self.scrollView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            self.scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.scrollView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+            self.scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
@@ -80,6 +82,16 @@ final class ChartViewController: UIViewController {
             self.latestOldChartView.trailingAnchor.constraint(equalTo: self.bubbleChartView.trailingAnchor),
             self.latestOldChartView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
         ])
+    }
+    
+    private func update(name: String) {
+        self.bubbleChartView.update(name: name)
+        self.purposeChartView.update(name: name)
+        self.latestOldChartView.update(name: name)
+    }
+    
+    private func update(latest: String, old: String) {
+        self.latestOldChartView.update(latest: latest, old: old)
     }
 
 }

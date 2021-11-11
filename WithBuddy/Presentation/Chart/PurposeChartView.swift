@@ -28,6 +28,10 @@ final class PurposeChartView: UIView {
         self.configure()
     }
     
+    func update(name: String) {
+        self.nameLabel.text = name
+    }
+    
     private func configure() {
         self.configureNameLabel()
         self.configureWhiteView()
@@ -38,7 +42,6 @@ final class PurposeChartView: UIView {
     
     private func configureNameLabel() {
         self.addSubview(self.nameLabel)
-        self.nameLabel.text = "위드버디"
         self.nameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),

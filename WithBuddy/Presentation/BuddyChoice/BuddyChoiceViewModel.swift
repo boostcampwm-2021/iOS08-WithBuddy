@@ -41,16 +41,25 @@ class BuddyChoiceViewModel {
         self.storedBuddyList.append(buddy)
     }
     
-    func buddyDidLoaded(_ buddy: Buddy) {
-        self.storedBuddyList.append(buddy)
-    }
-    
     func buddyDidChecked(in idx: Int) {
         if self.storedBuddyList[idx].check != nil {
             self.storedBuddyList[idx].check?.toggle()
         } else {
             self.storedBuddyList[idx].check = true
         }
+    }
+    
+    func buddyListDidLoaded(by buddyList: [Buddy]) {
+        let storedBuddyList = self.buddyUseCase.fetchBuddy()
+        storedBuddyList.forEach( { buddy in
+            var checkedBuddy = buddy
+            checkedBuddy.check = true
+            if buddyList.contains(checkedBuddy) {
+                self.storedBuddyList.append(checkedBuddy)
+            } else {
+                self.storedBuddyList.append(buddy)
+            }
+        })
     }
     
     func buddySelectingDidCompleted() {

@@ -370,7 +370,7 @@ extension RegisterViewController: PictureViewDelegate {
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .photoLibrary
-        present(picker, animated: false, completion: nil)
+        present(picker, animated: true, completion: nil)
     }
 }
 

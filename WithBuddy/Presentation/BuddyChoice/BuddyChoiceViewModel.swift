@@ -57,7 +57,8 @@ class BuddyChoiceViewModel {
             if buddyList.contains(checkedBuddy) {
                 self.storedBuddyList.append(checkedBuddy)
             } else {
-                self.storedBuddyList.append(buddy)            }
+                self.storedBuddyList.append(buddy)
+            }
         })
     }
     

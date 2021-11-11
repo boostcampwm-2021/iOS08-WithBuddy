@@ -46,9 +46,9 @@ final class WBCalendarViewModel {
         self.totalDays.removeAll()
         for count in 0..<maxDayOfMonth {
             if count <= weekDay || numOfDaysInMonth + weekDay < count {
-                totalDays.append(0)
+                self.totalDays.append(0)
             } else {
-                totalDays.append(count - weekDay)
+                self.totalDays.append(count - weekDay)
             }
         }
     }

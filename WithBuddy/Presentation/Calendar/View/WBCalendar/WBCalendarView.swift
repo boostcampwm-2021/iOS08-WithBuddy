@@ -113,14 +113,14 @@ class WBCalendarView: UIView {
     }
     
     @objc private func minusMonth(_ sender: UIButton) {
-        let prevMonth = calendarManager.minusMonth(baseDate: firstDayOfThisMonth)
-        self.firstDayOfThisMonth = calendarManager.firstDateOfMonth(baseDate: prevMonth)
+        let prevMonth = self.calendarManager.minusMonth(baseDate: self.firstDayOfThisMonth)
+        self.firstDayOfThisMonth = self.calendarManager.firstDateOfMonth(baseDate: prevMonth)
         self.reload()
     }
     
     @objc private func plusMonth(_ sender: UIButton) {
-        let nextMonth = calendarManager.plusMonth(baseDate: firstDayOfThisMonth)
-        self.firstDayOfThisMonth = calendarManager.firstDateOfMonth(baseDate: nextMonth)
+        let nextMonth = self.calendarManager.plusMonth(baseDate: firstDayOfThisMonth)
+        self.firstDayOfThisMonth = self.calendarManager.firstDateOfMonth(baseDate: nextMonth)
         self.reload()
     }
     
@@ -163,9 +163,7 @@ extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, 
         let today = self.calendarManager.pickDay(baseDate: self.firstDayOfThisMonth, numberOfDay: numberOfDay)
         let numOfDay = self.wbcalendarViewModel.totalDays(index: indexPath.item)
         let faceOfDay = self.wbcalendarViewModel.totalFaces(index: indexPath.item)
-        if self.wbcalendarViewModel.isFace == false {
-            cell.update(day: numOfDay, face: "", today: today)
-        } else {
+        if self.wbcalendarViewModel.isFace {
             cell.update(day: numOfDay, face: faceOfDay, today: today)
         }
         return cell

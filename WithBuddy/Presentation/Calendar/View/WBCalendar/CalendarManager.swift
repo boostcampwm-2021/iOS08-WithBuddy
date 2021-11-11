@@ -14,19 +14,19 @@ final class CalendarManager {
     func plusMonth(baseDate: Date) -> Date {
         var dateComponents = DateComponents()
         dateComponents.month = 1
-        return calendar.date(byAdding: dateComponents, to: baseDate) ?? Date()
+        return self.calendar.date(byAdding: dateComponents, to: baseDate) ?? Date()
     }
     
     func minusMonth(baseDate: Date) -> Date {
         var dateComponents = DateComponents()
         dateComponents.month = -1
-        return calendar.date(byAdding: dateComponents, to: baseDate) ?? Date()
+        return self.calendar.date(byAdding: dateComponents, to: baseDate) ?? Date()
     }
     
     func pickDay(baseDate: Date, numberOfDay: Int) -> Date {
         var dateComponents = DateComponents()
         dateComponents.day = numberOfDay - 1
-        return calendar.date(byAdding: dateComponents, to: baseDate) ?? Date()
+        return self.calendar.date(byAdding: dateComponents, to: baseDate) ?? Date()
     }
     
     func month(baseDate: Date) -> String {
@@ -48,22 +48,22 @@ final class CalendarManager {
     }
     
     func numOfDaysInMonth(baseDate: Date) -> Int {
-        guard let range = calendar.range(of: .day, in: .month, for: baseDate) else { return 0 }
+        guard let range = self.calendar.range(of: .day, in: .month, for: baseDate) else { return 0 }
         return range.count
     }
     
     func firstDateOfMonth(baseDate: Date) -> Date {
-        let components = calendar.dateComponents([.year, .month], from: baseDate)
-        return calendar.date(from: components) ?? Date()
+        let components = self.calendar.dateComponents([.year, .month], from: baseDate)
+        return self.calendar.date(from: components) ?? Date()
     }
     
     func firstTimeOfDay(baseDate: Date) -> Date {
-        let components = calendar.dateComponents([.year, .month, .day], from: baseDate)
-        return calendar.date(from: components) ?? Date()
+        let components = self.calendar.dateComponents([.year, .month, .day], from: baseDate)
+        return self.calendar.date(from: components) ?? Date()
     }
     
     func weekDay(baseDate: Date) -> Int {
-        let components = calendar.dateComponents([.weekday], from: baseDate)
+        let components = self.calendar.dateComponents([.weekday], from: baseDate)
         return (components.weekday ?? 1) - 1
     }
     

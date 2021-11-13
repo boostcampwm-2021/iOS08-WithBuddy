@@ -330,6 +330,7 @@
 			children = (
 				BBF7FF41272FB95400B71C97 /* Common */,
 				85FA1D91272FEAE500825C64 /* Calendar */,
+				F7E8ABC2273BB7A6005F8306 /* Calendardetail */,
 				BB2D255B2731315900E7BF35 /* Chart */,
 				BBF7FF3E272FB6CC00B71C97 /* Register */,
 				F7E8ABC0273BB76D005F8306 /* Detail */,
@@ -396,7 +397,6 @@
 				85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */,
 				F7A7699627315AF800FF83EA /* HeaderView.swift */,
 				F7A7699E2732760300FF83EA /* WBCalendar */,
-				F7E8ABC2273BB7A6005F8306 /* Calendardetail */,
 			);
 			path = View;
 			sourceTree = "<group>";

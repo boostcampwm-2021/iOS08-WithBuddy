@@ -31,9 +31,21 @@ final class LatestOldChartView: UIView {
         self.nameLabel.text = name
     }
     
-    func update(latest: String, old: String) {
-        self.latestView.update(name: latest)
-        self.oldView.update(name: old)
+    func update(latestName: String, face: String) {
+        self.showStackView()
+        self.latestView.update(name: latestName, face: face)
+    }
+    
+    func update(oldName: String, face: String) {
+        self.showStackView()
+        self.oldView.update(name: oldName, face: face)
+    }
+    
+    private func showStackView() {
+        if self.stackView.isHidden {
+            self.defaultView.isHidden.toggle()
+            self.stackView.isHidden.toggle()
+        }
     }
     
     private func configure() {

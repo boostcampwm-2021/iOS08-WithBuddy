@@ -29,8 +29,10 @@ class LatestOldView: UIView {
         self.firstLabel.text = description
     }
     
-    func update(name: String) {
-        self.nameLabel.text = name
+    func update(name: String, face: String) {
+        let maxLenght = 10
+        self.nameLabel.text = String(name.prefix(maxLenght))
+        self.imageView.image = UIImage(named: face)
     }
     
     private func configure() {

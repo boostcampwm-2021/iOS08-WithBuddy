@@ -10,6 +10,7 @@
 		854AA75E27337A7200663911 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA75D27337A7200663911 /* SearchView.swift */; };
 		854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA76327338C2F00663911 /* ListCollectionViewCell.swift */; };
 		854AA7662733A37200663911 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA7652733A37200663911 /* ListViewModel.swift */; };
+		85BC8E14274131F300570FC4 /* ChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85BC8E13274131F300570FC4 /* ChartViewModel.swift */; };
 		85D262E8273CD703000190B8 /* PurposeChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262E7273CD703000190B8 /* PurposeChartView.swift */; };
 		85D262EA273CD71C000190B8 /* BubbleChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262E9273CD71C000190B8 /* BubbleChartView.swift */; };
 		85D262EC273CDEBE000190B8 /* LatestOldChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262EB273CDEBE000190B8 /* LatestOldChartView.swift */; };
@@ -69,6 +70,7 @@
 		854AA75D27337A7200663911 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		854AA76327338C2F00663911 /* ListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCollectionViewCell.swift; sourceTree = "<group>"; };
 		854AA7652733A37200663911 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
+		85BC8E13274131F300570FC4 /* ChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewModel.swift; sourceTree = "<group>"; };
 		85C236B427380D39001499E5 /* FaceColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceColor.swift; sourceTree = "<group>"; };
 		85D262E7273CD703000190B8 /* PurposeChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurposeChartView.swift; sourceTree = "<group>"; };
 		85D262E9273CD71C000190B8 /* BubbleChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleChartView.swift; sourceTree = "<group>"; };
@@ -137,6 +139,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		85BC8E11274131B000570FC4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BB2D255F2731317E00E7BF35 /* ChartViewController.swift */,
+				85D262E9273CD71C000190B8 /* BubbleChartView.swift */,
+				85D262E7273CD703000190B8 /* PurposeChartView.swift */,
+				85D262EB273CDEBE000190B8 /* LatestOldChartView.swift */,
+				85D262ED273CE6DD000190B8 /* WhiteView.swift */,
+				85D262F3273CF211000190B8 /* PurposeView.swift */,
+				85D262F5273CFEBF000190B8 /* LatestOldView.swift */,
+				85D262F7273D138E000190B8 /* DefaultView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		85BC8E12274131DE00570FC4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				85BC8E13274131F300570FC4 /* ChartViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		85C236B8273811EA001499E5 /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
@@ -224,16 +249,10 @@
 		BB2D255B2731315900E7BF35 /* Chart */ = {
 			isa = PBXGroup;
 			children = (
-				BB2D255F2731317E00E7BF35 /* ChartViewController.swift */,
-				85D262E9273CD71C000190B8 /* BubbleChartView.swift */,
-				85D262E7273CD703000190B8 /* PurposeChartView.swift */,
-				85D262EB273CDEBE000190B8 /* LatestOldChartView.swift */,
-				85D262ED273CE6DD000190B8 /* WhiteView.swift */,
+				85BC8E11274131B000570FC4 /* View */,
+				85BC8E12274131DE00570FC4 /* ViewModel */,
 				85D262EF273CE740000190B8 /* NameLabel.swift */,
 				85D262F1273CE7D6000190B8 /* TitleLabel.swift */,
-				85D262F3273CF211000190B8 /* PurposeView.swift */,
-				85D262F5273CFEBF000190B8 /* LatestOldView.swift */,
-				85D262F7273D138E000190B8 /* DefaultView.swift */,
 			);
 			path = Chart;
 			sourceTree = "<group>";
@@ -553,6 +572,7 @@
 				8A53C22F273B9EB200BB0C20 /* BuddyCustomViewController.swift in Sources */,
 				8A73D683273AC3B8001D5184 /* Purpose.swift in Sources */,
 				BB2D25B1273B582500E7BF35 /* PictureCollectionViewCell.swift in Sources */,
+				85BC8E14274131F300570FC4 /* ChartViewModel.swift in Sources */,
 				BB2D25C4273B901600E7BF35 /* GatheringEntity+CoreDataClass.swift in Sources */,
 				85D262EC273CDEBE000190B8 /* LatestOldChartView.swift in Sources */,
 				F7E8ABBE273A8D43005F8306 /* WBCalendarViewModel.swift in Sources */,

@@ -24,6 +24,7 @@
 		8A52C4F6273947E50025C562 /* defaultImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A52C4F5273947E50025C562 /* defaultImage.png */; };
 		8A53C22F273B9EB200BB0C20 /* BuddyCustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A53C22E273B9EB200BB0C20 /* BuddyCustomViewController.swift */; };
 		8A6320B527415A85006BB1C0 /* CGFloatExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6320B427415A85006BB1C0 /* CGFloatExtension.swift */; };
+		8A6320B72741673D006BB1C0 /* RegisterTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6320B62741673D006BB1C0 /* RegisterTitleLabel.swift */; };
 		8A73D679273A61EC001D5184 /* BuddyChoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D678273A61EC001D5184 /* BuddyChoiceViewController.swift */; };
 		8A73D67E273A6C4B001D5184 /* BuddyChoiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D67D273A6C4B001D5184 /* BuddyChoiceViewModel.swift */; };
 		8A73D683273AC3B8001D5184 /* Purpose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D682273AC3B8001D5184 /* Purpose.swift */; };
@@ -34,7 +35,6 @@
 		BB2D25A3273A550B00E7BF35 /* BuddyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A2273A550B00E7BF35 /* BuddyUseCase.swift */; };
 		BB2D25A5273A58A100E7BF35 /* GatheringUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A4273A58A100E7BF35 /* GatheringUseCase.swift */; };
 		BB2D25B1273B582500E7BF35 /* PictureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */; };
-		BB2D25B6273B582500E7BF35 /* PictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AB273B582500E7BF35 /* PictureView.swift */; };
 		BB2D25B9273B582500E7BF35 /* PurposeSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AE273B582500E7BF35 /* PurposeSelectView.swift */; };
 		BB2D25BA273B582500E7BF35 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */; };
 		BB2D25BD273B585200E7BF35 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25BC273B585200E7BF35 /* RegisterViewModel.swift */; };
@@ -85,6 +85,7 @@
 		8A52C4F5273947E50025C562 /* defaultImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultImage.png; sourceTree = "<group>"; };
 		8A53C22E273B9EB200BB0C20 /* BuddyCustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyCustomViewController.swift; sourceTree = "<group>"; };
 		8A6320B427415A85006BB1C0 /* CGFloatExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGFloatExtension.swift; sourceTree = "<group>"; };
+		8A6320B62741673D006BB1C0 /* RegisterTitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterTitleLabel.swift; sourceTree = "<group>"; };
 		8A73D678273A61EC001D5184 /* BuddyChoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyChoiceViewController.swift; sourceTree = "<group>"; };
 		8A73D67D273A6C4B001D5184 /* BuddyChoiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyChoiceViewModel.swift; sourceTree = "<group>"; };
 		8A73D682273AC3B8001D5184 /* Purpose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Purpose.swift; sourceTree = "<group>"; };
@@ -99,7 +100,6 @@
 		BB2D25A2273A550B00E7BF35 /* BuddyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyUseCase.swift; sourceTree = "<group>"; };
 		BB2D25A4273A58A100E7BF35 /* GatheringUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatheringUseCase.swift; sourceTree = "<group>"; };
 		BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCell.swift; sourceTree = "<group>"; };
-		BB2D25AB273B582500E7BF35 /* PictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureView.swift; sourceTree = "<group>"; };
 		BB2D25AE273B582500E7BF35 /* PurposeSelectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurposeSelectView.swift; sourceTree = "<group>"; };
 		BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		BB2D25BC273B585200E7BF35 /* RegisterViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
@@ -253,8 +253,8 @@
 			children = (
 				BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */,
 				BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */,
+				8A6320B62741673D006BB1C0 /* RegisterTitleLabel.swift */,
 				BB2D25AE273B582500E7BF35 /* PurposeSelectView.swift */,
-				BB2D25AB273B582500E7BF35 /* PictureView.swift */,
 				BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */,
 			);
 			path = View;
@@ -536,7 +536,6 @@
 				F7E8AC2F273CB5F9005F8306 /* Gathering.swift in Sources */,
 				F7A7699B2732588500FF83EA /* WBCalendarView.swift in Sources */,
 				8A6320B527415A85006BB1C0 /* CGFloatExtension.swift in Sources */,
-				BB2D25B6273B582500E7BF35 /* PictureView.swift in Sources */,
 				F7E8ABB8273A54A5005F8306 /* CalendarDetailView.swift in Sources */,
 				F7B69B8A273398C4005D2F32 /* CalendarManager.swift in Sources */,
 				F7E8ABBC273A6B17005F8306 /* CalendarDetailViewModel.swift in Sources */,
@@ -568,6 +567,7 @@
 				85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */,
 				854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */,
 				F7E8ABC5273BB814005F8306 /* GatheringDetailViewController.swift in Sources */,
+				8A6320B72741673D006BB1C0 /* RegisterTitleLabel.swift in Sources */,
 				BB2D25C2273B901600E7BF35 /* BuddyEntity+CoreDataClass.swift in Sources */,
 				85D262F2273CE7D6000190B8 /* TitleLabel.swift in Sources */,
 				BB2D25BD273B585200E7BF35 /* RegisterViewModel.swift in Sources */,

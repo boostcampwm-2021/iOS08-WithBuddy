@@ -8,10 +8,16 @@
 import UIKit
 
 extension CGFloat {
-    static let outsideTopInset = CGFloat(20)
-    static let innerTopInset = CGFloat(10)
-    static let outsideLeadingInset = CGFloat(20)
-    static let outsideTrailingInset = CGFloat(-20)
-    static let innerLeadingInset = CGFloat(20)
-    static let innerTrailingInset = CGFloat(-20)
+    static let outsidePartInset = CGFloat(20)
+    static let innerPartInset = CGFloat(10)
+    
+    static let registerViewOutsideLeadingInset = CGFloat(20)
+    static let registerViewOutsideTrailingInset = CGFloat(-20)
+    
+    static let backgroudInnerLeadingInset = CGFloat(20)
+    static let backgroudInnerTrailingInset = CGFloat(-20)
+    static let backgroudInnerTopInset = CGFloat(20)
+    static let backgroudInnerBottomInset = CGFloat(-20)
+    
+    static let pictureAddButonSize = CGFloat(30)
 }

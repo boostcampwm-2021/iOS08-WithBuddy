@@ -13,18 +13,18 @@ class RegisterViewController: UIViewController {
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
     
-    private lazy var dateTitleLabel = TitleLabel()
+    private lazy var dateTitleLabel = RegisterTitleLabel()
     private lazy var dateBackgroundView = UIView()
     private lazy var dateContentLabel = UILabel()
     private lazy var datePickButton = UIButton()
   
-    private lazy var placeTitleLabel = TitleLabel()
+    private lazy var placeTitleLabel = RegisterTitleLabel()
     private lazy var placeBackgroundView = UIView()
     private lazy var placeTextField = UITextField()
     
     private lazy var typeView = PurposeSelectView()
     
-    private lazy var buddyTitleLabel = TitleLabel()
+    private lazy var buddyTitleLabel = RegisterTitleLabel()
     private lazy var buddyAddButton = UIButton()
     private lazy var buddyCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
@@ -33,12 +33,18 @@ class RegisterViewController: UIViewController {
         return cell
     }
     
-    private lazy var memoTitleLabel = TitleLabel()
+    private lazy var memoTitleLabel = RegisterTitleLabel()
     private lazy var memoBackgroundView = UIView()
     private lazy var memoTextView = UITextView()
     
-    private lazy var pictureTitleLabel = TitleLabel()
-    private lazy var pictureView = PictureView()
+    private lazy var pictureTitleLabel = RegisterTitleLabel()
+    private lazy var pictureAddButton = UIButton()
+    private lazy var pictureCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
+    private lazy var pictureDataSource = UICollectionViewDiffableDataSource<Int, URL>(collectionView: self.pictureCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: URL) -> UICollectionViewCell? in
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PictureCollectionViewCell.identifier, for: indexPath) as? PictureCollectionViewCell else { preconditionFailure() }
+        cell.configure(url: itemIdentifier)
+        return cell
+    }
     
     private lazy var datePicker = UIDatePicker()
     private lazy var dateToolBar = UIToolbar()
@@ -92,7 +98,19 @@ class RegisterViewController: UIViewController {
         self.registerViewModel.$pictures
             .receive(on: DispatchQueue.main)
             .sink { [weak self] pictures in
-                self?.pictureView.pictureListReload(pictures)
+                var snapshot = NSDiffableDataSourceSnapshot<Int, URL>()
+                if pictures.isEmpty {
+                    guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else {
+                        return
+                    }
+                    let fileUrl = URL(fileURLWithPath: filePath)
+                    snapshot.appendSections([0])
+                    snapshot.appendItems([fileUrl])
+                } else {
+                    snapshot.appendSections([0])
+                    snapshot.appendItems(pictures)
+                }
+                self?.pictureDataSource.apply(snapshot, animatingDifferences: true)
             }
             .store(in: &self.cancellables)
     }
@@ -133,7 +151,7 @@ class RegisterViewController: UIViewController {
         self.configureTypeView()
         self.configureBuddyPart()
         self.configureMemoPart()
-        self.configurePictureView()
+        self.configurePicturePart()
     }
     
     private func configureScrollView() {
@@ -172,14 +190,12 @@ class RegisterViewController: UIViewController {
     private func configureDateTitle() {
         self.contentView.addSubview(self.dateTitleLabel)
         self.dateTitleLabel.text = "모임 날짜"
-        self.dateTitleLabel.textColor = UIColor(named: "LabelPurple")
         
         self.dateTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.dateTitleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: .innerTopInset),
-            self.dateTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.dateTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
-            self.dateTitleLabel.heightAnchor.constraint(equalToConstant: 45)
+            self.dateTitleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: .innerPartInset),
+            self.dateTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .registerViewOutsideLeadingInset),
+            self.dateTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .registerViewOutsideTrailingInset)
         ])
     }
     
@@ -190,9 +206,9 @@ class RegisterViewController: UIViewController {
         
         self.dateBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.dateBackgroundView.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: .innerTopInset),
-            self.dateBackgroundView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.dateBackgroundView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
+            self.dateBackgroundView.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: .innerPartInset),
+            self.dateBackgroundView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .registerViewOutsideLeadingInset),
+            self.dateBackgroundView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .registerViewOutsideTrailingInset),
             self.dateBackgroundView.heightAnchor.constraint(equalToConstant: 45)
         ])
     }
@@ -202,7 +218,7 @@ class RegisterViewController: UIViewController {
         
         self.dateContentLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.dateContentLabel.leftAnchor.constraint(equalTo: self.dateBackgroundView.leftAnchor, constant: .innerLeadingInset),
+            self.dateContentLabel.leftAnchor.constraint(equalTo: self.dateBackgroundView.leftAnchor, constant: .backgroudInnerLeadingInset),
             self.dateContentLabel.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
         ])
     }
@@ -215,7 +231,7 @@ class RegisterViewController: UIViewController {
         
         self.datePickButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.datePickButton.rightAnchor.constraint(equalTo: self.dateBackgroundView.rightAnchor, constant: .innerTrailingInset),
+            self.datePickButton.rightAnchor.constraint(equalTo: self.dateBackgroundView.rightAnchor, constant: .backgroudInnerTrailingInset),
             self.datePickButton.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
         ])
     }
@@ -268,14 +284,12 @@ class RegisterViewController: UIViewController {
     private func configurePlaceTitle() {
         self.contentView.addSubview(self.placeTitleLabel)
         self.placeTitleLabel.text = "모임 장소"
-        self.placeTitleLabel.textColor = UIColor(named: "LabelPurple")
         
         self.placeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.placeTitleLabel.topAnchor.constraint(equalTo: self.dateBackgroundView.bottomAnchor, constant: .outsideTopInset),
-            self.placeTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.placeTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
-            self.placeTitleLabel.heightAnchor.constraint(equalToConstant: 45)
+            self.placeTitleLabel.topAnchor.constraint(equalTo: self.dateBackgroundView.bottomAnchor, constant: .outsidePartInset),
+            self.placeTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .registerViewOutsideLeadingInset),
+            self.placeTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .registerViewOutsideTrailingInset)
         ])
     }
     
@@ -286,9 +300,9 @@ class RegisterViewController: UIViewController {
         
         self.placeBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.placeBackgroundView.topAnchor.constraint(equalTo: self.placeTitleLabel.bottomAnchor, constant: .innerTopInset),
-            self.placeBackgroundView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: .outsideLeadingInset),
-            self.placeBackgroundView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: .outsideTrailingInset),
+            self.placeBackgroundView.topAnchor.constraint(equalTo: self.placeTitleLabel.bottomAnchor, constant: .innerPartInset),
+            self.placeBackgroundView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: .registerViewOutsideLeadingInset),
+            self.placeBackgroundView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: .registerViewOutsideTrailingInset),
             self.placeBackgroundView.heightAnchor.constraint(equalToConstant: 45)
         ])
     }
@@ -303,8 +317,8 @@ class RegisterViewController: UIViewController {
         self.placeTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.placeTextField.topAnchor.constraint(equalTo: self.placeBackgroundView.topAnchor),
-            self.placeTextField.leftAnchor.constraint(equalTo: self.placeBackgroundView.leftAnchor, constant: .innerLeadingInset),
-            self.placeTextField.rightAnchor.constraint(equalTo: self.placeBackgroundView.rightAnchor, constant: .innerTrailingInset),
+            self.placeTextField.leftAnchor.constraint(equalTo: self.placeBackgroundView.leftAnchor, constant: .backgroudInnerLeadingInset),
+            self.placeTextField.rightAnchor.constraint(equalTo: self.placeBackgroundView.rightAnchor, constant: .backgroudInnerTrailingInset),
             self.placeTextField.bottomAnchor.constraint(equalTo: self.placeBackgroundView.bottomAnchor)
         ])
     }
@@ -333,14 +347,12 @@ class RegisterViewController: UIViewController {
     private func configureBuddyTitle() {
         self.contentView.addSubview(self.buddyTitleLabel)
         self.buddyTitleLabel.text = "버디 추가"
-        self.buddyTitleLabel.textColor = UIColor(named: "LabelPurple")
         
         self.buddyTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.buddyTitleLabel.topAnchor.constraint(equalTo: self.typeView.bottomAnchor, constant: .outsideTopInset),
-            self.buddyTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.buddyTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
-            self.buddyTitleLabel.heightAnchor.constraint(equalToConstant: 45)
+            self.buddyTitleLabel.topAnchor.constraint(equalTo: self.typeView.bottomAnchor, constant: .outsidePartInset),
+            self.buddyTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .registerViewOutsideLeadingInset),
+            self.buddyTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .registerViewOutsideTrailingInset)
         ])
     }
     
@@ -354,8 +366,8 @@ class RegisterViewController: UIViewController {
         
         self.buddyAddButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.buddyAddButton.topAnchor.constraint(equalTo: self.buddyTitleLabel.bottomAnchor, constant: .innerTopInset),
-            self.buddyAddButton.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: .outsideLeadingInset),
+            self.buddyAddButton.topAnchor.constraint(equalTo: self.buddyTitleLabel.bottomAnchor, constant: .innerPartInset),
+            self.buddyAddButton.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: .registerViewOutsideLeadingInset),
             self.buddyAddButton.widthAnchor.constraint(equalToConstant: 60),
             self.buddyAddButton.heightAnchor.constraint(equalTo: self.buddyAddButton.widthAnchor)
         ])
@@ -379,7 +391,7 @@ class RegisterViewController: UIViewController {
         NSLayoutConstraint.activate([
             self.buddyCollectionView.topAnchor.constraint(equalTo: self.buddyAddButton.topAnchor),
             self.buddyCollectionView.leftAnchor.constraint(equalTo: self.buddyAddButton.rightAnchor, constant: 10),
-            self.buddyCollectionView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: .outsideLeadingInset),
+            self.buddyCollectionView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: .registerViewOutsideLeadingInset),
             self.buddyCollectionView.heightAnchor.constraint(equalToConstant: 90)
         ])
     }
@@ -398,15 +410,13 @@ class RegisterViewController: UIViewController {
     
     private func configureMemoTitle() {
         self.contentView.addSubview(self.memoTitleLabel)
-        self.memoTitleLabel.text = "모임 장소"
-        self.memoTitleLabel.textColor = UIColor(named: "LabelPurple")
+        self.memoTitleLabel.text = "메모"
         
         self.memoTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.memoTitleLabel.topAnchor.constraint(equalTo: self.buddyCollectionView.bottomAnchor, constant: .outsideTopInset),
-            self.memoTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.memoTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
-            self.memoTitleLabel.heightAnchor.constraint(equalToConstant: 45)
+            self.memoTitleLabel.topAnchor.constraint(equalTo: self.buddyCollectionView.bottomAnchor, constant: .outsidePartInset),
+            self.memoTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .registerViewOutsideLeadingInset),
+            self.memoTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .registerViewOutsideTrailingInset)
         ])
     }
     
@@ -417,9 +427,9 @@ class RegisterViewController: UIViewController {
         
         self.memoBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.memoBackgroundView.topAnchor.constraint(equalTo: self.memoTitleLabel.bottomAnchor, constant: .innerTopInset),
-            self.memoBackgroundView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: .outsideLeadingInset),
-            self.memoBackgroundView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: .outsideTrailingInset),
+            self.memoBackgroundView.topAnchor.constraint(equalTo: self.memoTitleLabel.bottomAnchor, constant: .innerPartInset),
+            self.memoBackgroundView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: .registerViewOutsideLeadingInset),
+            self.memoBackgroundView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: .registerViewOutsideTrailingInset),
             self.memoBackgroundView.heightAnchor.constraint(equalToConstant: 140)
         ])
     }
@@ -437,25 +447,85 @@ class RegisterViewController: UIViewController {
         
         self.memoTextView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.memoTextView.topAnchor.constraint(equalTo: self.memoBackgroundView.topAnchor, constant: 20),
-            self.memoTextView.leftAnchor.constraint(equalTo: self.memoBackgroundView.leftAnchor, constant: 20),
-            self.memoTextView.rightAnchor.constraint(equalTo: self.memoBackgroundView.rightAnchor, constant: -20),
-            self.memoTextView.bottomAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor, constant: -20)
+            self.memoTextView.topAnchor.constraint(equalTo: self.memoBackgroundView.topAnchor, constant: .backgroudInnerTopInset),
+            self.memoTextView.leftAnchor.constraint(equalTo: self.memoBackgroundView.leftAnchor, constant: .backgroudInnerLeadingInset),
+            self.memoTextView.rightAnchor.constraint(equalTo: self.memoBackgroundView.rightAnchor, constant: .backgroudInnerTrailingInset),
+            self.memoTextView.bottomAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor, constant: .backgroudInnerBottomInset)
         ])
     }
     
     // MARK: - PicturePart
     
-    private func configurePictureView() {
-        self.contentView.addSubview(self.pictureView)
-        self.pictureView.translatesAutoresizingMaskIntoConstraints = false
+    private func configurePicturePart() {
+        self.configurePictureTitle()
+        self.configurePictureAddButton()
+        self.configurePictureCollectionView()
+    }
+    
+    private func configurePictureTitle() {
+        self.contentView.addSubview(self.pictureTitleLabel)
+        self.pictureTitleLabel.text = "사진"
+        
+        self.pictureTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.pictureView.topAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor, constant: .outsideTopInset),
-            self.pictureView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
-            self.pictureView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20),
-            self.pictureView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+            self.pictureTitleLabel.topAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor, constant: .outsidePartInset),
+            self.pictureTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .registerViewOutsideLeadingInset),
+            self.pictureTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .registerViewOutsideTrailingInset)
         ])
-        self.pictureView.delegate = self
+    }
+    
+    private func configurePictureAddButton() {
+        self.contentView.addSubview(self.pictureAddButton)
+        let config = UIImage.SymbolConfiguration(
+            pointSize: 30, weight: .medium, scale: .default)
+        let image = UIImage(systemName: "plus.square", withConfiguration: config)
+        self.pictureAddButton.setImage(image, for: .normal)
+        self.pictureAddButton.addTarget(self, action: #selector(self.onPictureButtonTouched(_:)), for: .touchUpInside)
+        
+        self.pictureAddButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.pictureAddButton.centerYAnchor.constraint(equalTo: self.pictureTitleLabel.centerYAnchor),
+            self.pictureAddButton.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: .registerViewOutsideTrailingInset),
+            self.pictureAddButton.widthAnchor.constraint(equalToConstant: .pictureAddButonSize),
+            self.pictureAddButton.heightAnchor.constraint(equalTo: self.pictureAddButton.widthAnchor)
+        ])
+    }
+    
+    private func configurePictureCollectionView() {
+        self.contentView.addSubview(self.pictureCollectionView)
+        self.pictureCollectionView.backgroundColor = .clear
+        self.pictureCollectionView.showsHorizontalScrollIndicator = false
+        self.pictureCollectionView.isUserInteractionEnabled = true
+        self.pictureCollectionView.delegate = self
+        
+        self.pictureCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.pictureCollectionView.topAnchor.constraint(equalTo: self.pictureTitleLabel.bottomAnchor, constant: .innerPartInset),
+            self.pictureCollectionView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: .registerViewOutsideLeadingInset),
+            self.pictureCollectionView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: .registerViewOutsideTrailingInset),
+            self.pictureCollectionView.heightAnchor.constraint(equalTo: self.pictureCollectionView.widthAnchor),
+            self.pictureCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+        ])
+        
+        self.pictureCollectionView.register(PictureCollectionViewCell.self, forCellWithReuseIdentifier: PictureCollectionViewCell.identifier)
+        
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1)))
+        item.contentInsets = .init(top: 0, leading: 5, bottom: 0, trailing: 5)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(0.9), heightDimension: .fractionalHeight(0.9)), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .groupPaging
+        section.contentInsets = .init(top: 0, leading: 16, bottom: 0, trailing: 16)
+        
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        
+        self.pictureCollectionView.collectionViewLayout = layout
+    }
+    
+    @objc private func onPictureButtonTouched(_ sender: UIButton) {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = .photoLibrary
+        present(picker, animated: true, completion: nil)
     }
     
     // MARK: - CompletePart
@@ -487,13 +557,22 @@ class RegisterViewController: UIViewController {
 
 extension RegisterViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
-            let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
-                                  image: UIImage(systemName: "trash")) { _ in
-                self.registerViewModel.didBuddyDeleteTouched(in: indexPath.item)
-            }
-            return UIMenu(title: "이 버디를", children: [delete])
-        })
+        if collectionView == self.pictureCollectionView {
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
+                let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash")) { _ in
+                    self.registerViewModel.didBuddyDeleteTouched(in: indexPath.item)
+                }
+                return UIMenu(title: "이 사진을", children: [delete])
+            })
+        } else {
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
+                let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
+                                      image: UIImage(systemName: "trash")) { _ in
+                    self.registerViewModel.didBuddyDeleteTouched(in: indexPath.item)
+                }
+                return UIMenu(title: "이 버디를", children: [delete])
+            })
+        }
     }
 }
 
@@ -548,19 +627,6 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
 extension RegisterViewController: PurposeViewDelegate {
     func purposeDidSelected(_ idx: Int) {
         self.registerViewModel.didTypeTouched(idx)
-    }
-}
-
-extension RegisterViewController: PictureViewDelegate {
-    func pictureDidDeleted(_ idx: Int) {
-        self.registerViewModel.didPictureDeleteTouched(in: idx)
-    }
-    
-    func pictureButtonDidTouched() {
-        let picker = UIImagePickerController()
-        picker.delegate = self
-        picker.sourceType = .photoLibrary
-        present(picker, animated: true, completion: nil)
     }
 }
 

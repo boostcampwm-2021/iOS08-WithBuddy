@@ -1,5 +1,5 @@
 //
-//  WBCalendarViewModel.swift
+//  CalendarViewModel.swift
 //  WithBuddy
 //
 //  Created by 이나정 on 2021/11/09.

@@ -10,24 +10,32 @@ import UIKit
 class WBCalendarView: UIView {
     
     private let calendarManager = CalendarManager()
-    private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
-    private let thisMonthLabel = UILabel()
-    private let prevMonthButton = UIButton()
-    private let nextMonthButton = UIButton()
-    private let weekStackView = UIStackView()
-    private let wbcalendarViewModel = WBCalendarViewModel()
+    private lazy var thisMonthLabel = UILabel()
+    private lazy var prevMonthButton = UIButton()
+    private lazy var nextMonthButton = UIButton()
+    private lazy var weekStackView = UIStackView()
+    private(set) lazy var collectionView = WBCalendarCollectionView()
+    private let wbcalendarViewModel = CalendarViewModel()
     
     private var firstDayOfThisMonth = Date()
     weak var delegate: CalendarCellSelectable?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.configureCalendar()
+//        self.configureCalendar()
+        self.configure()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.configureCalendar()
+    }
+    
+    private func configure() {
+        self.configureThisMonth()
+        self.configureButton()
+        self.configureWeekDays()
+        self.configureCollectionView()
     }
     
     func reload() {
@@ -94,17 +102,17 @@ class WBCalendarView: UIView {
             self.weekStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
         self.weekStackView.axis = .horizontal
-        self.weekStackView.addArrangedSubview(weekLabel(text: "일"))
-        self.weekStackView.addArrangedSubview(weekLabel(text: "월"))
-        self.weekStackView.addArrangedSubview(weekLabel(text: "화"))
-        self.weekStackView.addArrangedSubview(weekLabel(text: "수"))
-        self.weekStackView.addArrangedSubview(weekLabel(text: "목"))
-        self.weekStackView.addArrangedSubview(weekLabel(text: "금"))
-        self.weekStackView.addArrangedSubview(weekLabel(text: "토"))
+        self.weekStackView.addArrangedSubview(self.makeWeekLabel(text: "일"))
+        self.weekStackView.addArrangedSubview(self.makeWeekLabel(text: "월"))
+        self.weekStackView.addArrangedSubview(self.makeWeekLabel(text: "화"))
+        self.weekStackView.addArrangedSubview(self.makeWeekLabel(text: "수"))
+        self.weekStackView.addArrangedSubview(self.makeWeekLabel(text: "목"))
+        self.weekStackView.addArrangedSubview(self.makeWeekLabel(text: "금"))
+        self.weekStackView.addArrangedSubview(self.makeWeekLabel(text: "토"))
         self.weekStackView.distribution = .fillEqually
     }
     
-    private func weekLabel(text: String) -> UILabel {
+    private func makeWeekLabel(text: String) -> UILabel {
         let label = UILabel()
         label.text = text
         label.textColor = UIColor(named: "LabelPurple")
@@ -127,8 +135,6 @@ class WBCalendarView: UIView {
     private func configureCollectionView() {
         self.addSubview(collectionView)
         self.collectionView.dataSource = self
-        self.collectionView.delegate = self
-        self.collectionView.register(WBCalendarViewCell.self, forCellWithReuseIdentifier: WBCalendarViewCell.identifier)
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.collectionView.topAnchor.constraint(equalTo: self.weekStackView.bottomAnchor, constant: 10),
@@ -136,7 +142,6 @@ class WBCalendarView: UIView {
             self.collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             self.collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
-        self.collectionView.reloadData()
     }
     
     func reloadDays() {

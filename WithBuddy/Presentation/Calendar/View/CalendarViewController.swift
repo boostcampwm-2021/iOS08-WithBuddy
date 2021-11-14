@@ -9,13 +9,15 @@ import UIKit
 
 class CalendarViewController: UIViewController {
 
-    static let identifier = "CalendarViewController"
-    private let detailView = CalendarDetailView()
-    private let headerView = HeaderView()
-    private let calendarView = UIView()
-    private let wbCalendar = WBCalendarView()
-    private let scrollView = UIScrollView()
-    private let contentView = UIView()
+    private let detailView = CalendarDetailView() // 지워야 할 것
+    
+    private lazy var scrollView = UIScrollView()
+    private lazy var contentView = UIView()
+    private lazy var headerView = HeaderView()
+    private lazy var calendarView = UIView()
+    private lazy var wbCalendar = WBCalendarView()
+    
+    private let calendarViewModel = CalendarViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()

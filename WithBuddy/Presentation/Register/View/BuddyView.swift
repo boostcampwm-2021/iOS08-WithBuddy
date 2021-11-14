@@ -10,7 +10,6 @@ import Combine
 
 final class BuddyView: UIView {
     
-    private lazy var buddyTitleLabel = UILabel()
     private lazy var buddyAddButton = UIButton()
     private lazy var buddyCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     
@@ -45,22 +44,8 @@ final class BuddyView: UIView {
     }
     
     private func configure() {
-        self.configureTitleLabel()
         self.configureButton()
         self.configureCollectionView()
-    }
-    
-    private func configureTitleLabel() {
-        self.addSubview(self.buddyTitleLabel)
-        self.buddyTitleLabel.text = "만난 버디"
-        self.buddyTitleLabel.textColor = UIColor(named: "LabelPurple")
-        self.buddyTitleLabel.font = .boldSystemFont(ofSize: 20)
-        
-        self.buddyTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.buddyTitleLabel.topAnchor.constraint(equalTo: self.topAnchor),
-            self.buddyTitleLabel.leftAnchor.constraint(equalTo: self.leftAnchor)
-        ])
     }
     
     private func configureButton() {
@@ -73,7 +58,7 @@ final class BuddyView: UIView {
         
         self.buddyAddButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.buddyAddButton.topAnchor.constraint(equalTo: self.buddyTitleLabel.bottomAnchor, constant: 20),
+            self.buddyAddButton.topAnchor.constraint(equalTo: self.topAnchor),
             self.buddyAddButton.leftAnchor.constraint(equalTo: self.leftAnchor),
             self.buddyAddButton.widthAnchor.constraint(equalToConstant: 60),
             self.buddyAddButton.heightAnchor.constraint(equalTo: self.buddyAddButton.widthAnchor)
@@ -107,6 +92,7 @@ final class BuddyView: UIView {
     @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
         self.delegate?.buddyAddDidTouched()
     }
+    
 }
 
 extension BuddyView: UICollectionViewDelegate {

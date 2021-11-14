@@ -10,7 +10,6 @@ import Combine
 
 final class PictureView: UIView {
     
-    private lazy var pictureTitleLabel = UILabel()
     private lazy var pictureAddButton = UIButton()
     private lazy var pictureCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     
@@ -49,22 +48,8 @@ final class PictureView: UIView {
     }
     
     private func configure() {
-        self.configureTitleLabel()
         self.configureButton()
         self.configureCollectionView()
-    }
-    
-    private func configureTitleLabel() {
-        self.addSubview(self.pictureTitleLabel)
-        self.pictureTitleLabel.text = "사진"
-        self.pictureTitleLabel.textColor = UIColor(named: "LabelPurple")
-        self.pictureTitleLabel.font = .boldSystemFont(ofSize: 20)
-        
-        self.pictureTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.pictureTitleLabel.topAnchor.constraint(equalTo: self.topAnchor),
-            self.pictureTitleLabel.leftAnchor.constraint(equalTo: self.leftAnchor)
-        ])
     }
     
     private func configureButton() {
@@ -77,7 +62,7 @@ final class PictureView: UIView {
         
         self.pictureAddButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.pictureAddButton.centerYAnchor.constraint(equalTo: self.pictureTitleLabel.centerYAnchor),
+            self.pictureAddButton.centerYAnchor.constraint(equalTo: self.topAnchor),
             self.pictureAddButton.rightAnchor.constraint(equalTo: self.rightAnchor),
             self.pictureAddButton.widthAnchor.constraint(equalToConstant: 30),
             self.pictureAddButton.heightAnchor.constraint(equalTo: self.pictureAddButton.widthAnchor)
@@ -94,7 +79,7 @@ final class PictureView: UIView {
         
         self.pictureCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.pictureCollectionView.topAnchor.constraint(equalTo: self.pictureTitleLabel.bottomAnchor, constant: 20),
+            self.pictureCollectionView.topAnchor.constraint(equalTo: self.pictureAddButton.bottomAnchor, constant: 20),
             self.pictureCollectionView.leftAnchor.constraint(equalTo: self.leftAnchor),
             self.pictureCollectionView.rightAnchor.constraint(equalTo: self.rightAnchor),
             self.pictureCollectionView.heightAnchor.constraint(equalTo: self.pictureCollectionView.widthAnchor),
@@ -118,6 +103,7 @@ final class PictureView: UIView {
     @objc private func onPictureButtonTouched(_ sender: UIButton) {
         self.delegate?.pictureButtonDidTouched()
     }
+    
 }
 
 extension PictureView: UICollectionViewDelegate {

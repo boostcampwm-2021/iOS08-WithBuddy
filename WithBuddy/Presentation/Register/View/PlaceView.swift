@@ -10,7 +10,6 @@ import Combine
 
 final class PlaceView: UIView {
     
-    private lazy var placeTitleabel = UILabel()
     private lazy var placeBackgroundView = UIView()
     private lazy var placeTextField = UITextField()
     
@@ -27,22 +26,8 @@ final class PlaceView: UIView {
     }
     
     private func configure() {
-        self.configureTitleLabel()
         self.configureBackground()
         self.configureTextField()
-    }
-    
-    private func configureTitleLabel() {
-        self.addSubview(self.placeTitleabel)
-        self.placeTitleabel.text = "모임 장소"
-        self.placeTitleabel.textColor = UIColor(named: "LabelPurple")
-        self.placeTitleabel.font = .boldSystemFont(ofSize: 20)
-        
-        self.placeTitleabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.placeTitleabel.topAnchor.constraint(equalTo: self.topAnchor),
-            self.placeTitleabel.leftAnchor.constraint(equalTo: self.leftAnchor)
-        ])
     }
     
     private func configureBackground() {
@@ -52,7 +37,7 @@ final class PlaceView: UIView {
         
         self.placeBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.placeBackgroundView.topAnchor.constraint(equalTo: self.placeTitleabel.bottomAnchor, constant: 10),
+            self.placeBackgroundView.topAnchor.constraint(equalTo: self.topAnchor),
             self.placeBackgroundView.leftAnchor.constraint(equalTo: self.leftAnchor),
             self.placeBackgroundView.rightAnchor.constraint(equalTo: self.rightAnchor),
             self.placeBackgroundView.heightAnchor.constraint(equalToConstant: 45),
@@ -76,6 +61,7 @@ final class PlaceView: UIView {
             self.placeTextField.bottomAnchor.constraint(equalTo: self.placeBackgroundView.bottomAnchor)
         ])
     }
+    
 }
 
 extension PlaceView: UITextFieldDelegate {

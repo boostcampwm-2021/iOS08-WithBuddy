@@ -10,7 +10,6 @@ import Combine
 
 final class DateView: UIView {
     
-    private lazy var dateTitleLabel = UILabel()
     private lazy var dateBackgroundView = UIView()
     private lazy var dateLabel = UILabel()
     private lazy var dateButton = UIButton()
@@ -32,23 +31,9 @@ final class DateView: UIView {
     }
     
     private func configure() {
-        self.configureTitleLabel()
         self.configureBackground()
         self.configureLabel()
         self.configureButton()
-    }
-    
-    private func configureTitleLabel() {
-        self.addSubview(self.dateTitleLabel)
-        self.dateTitleLabel.text = "모임 날짜"
-        self.dateTitleLabel.textColor = UIColor(named: "LabelPurple")
-        self.dateTitleLabel.font = .boldSystemFont(ofSize: 20)
-        
-        self.dateTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.dateTitleLabel.topAnchor.constraint(equalTo: self.topAnchor),
-            self.dateTitleLabel.leftAnchor.constraint(equalTo: self.leftAnchor)
-        ])
     }
     
     private func configureBackground() {
@@ -58,7 +43,7 @@ final class DateView: UIView {
         
         self.dateBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.dateBackgroundView.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: 10),
+            self.dateBackgroundView.topAnchor.constraint(equalTo: self.topAnchor),
             self.dateBackgroundView.leftAnchor.constraint(equalTo: self.leftAnchor),
             self.dateBackgroundView.rightAnchor.constraint(equalTo: self.rightAnchor),
             self.dateBackgroundView.heightAnchor.constraint(equalToConstant: 45),
@@ -92,6 +77,7 @@ final class DateView: UIView {
     @objc private func onDateButtonTouched(_ sender: UIButton) {
         self.delegate?.dateButtonDidTouched()
     }
+    
 }
 
 protocol DateViewDelegate: AnyObject {

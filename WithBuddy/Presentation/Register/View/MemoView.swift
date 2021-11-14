@@ -10,7 +10,6 @@ import Combine
 
 final class MemoView: UIView {
 
-    private lazy var memoTitleLabel = UILabel()
     private lazy var memoBackgroundView = UIView()
     private lazy var memoTextView = UITextView()
    
@@ -27,22 +26,8 @@ final class MemoView: UIView {
     }
     
     private func configure() {
-        self.configureTitleLabel()
         self.configureBackground()
         self.configureTextField()
-    }
-    
-    private func configureTitleLabel() {
-        self.addSubview(self.memoTitleLabel)
-        self.memoTitleLabel.text = "메모"
-        self.memoTitleLabel.textColor = UIColor(named: "LabelPurple")
-        self.memoTitleLabel.font = .boldSystemFont(ofSize: 20)
-        
-        self.memoTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.memoTitleLabel.topAnchor.constraint(equalTo: self.topAnchor),
-            self.memoTitleLabel.leftAnchor.constraint(equalTo: self.leftAnchor)
-        ])
     }
     
     private func configureBackground() {
@@ -52,7 +37,7 @@ final class MemoView: UIView {
         
         self.memoBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.memoBackgroundView.topAnchor.constraint(equalTo: self.memoTitleLabel.bottomAnchor, constant: 20),
+            self.memoBackgroundView.topAnchor.constraint(equalTo: self.topAnchor),
             self.memoBackgroundView.leftAnchor.constraint(equalTo: self.leftAnchor),
             self.memoBackgroundView.rightAnchor.constraint(equalTo: self.rightAnchor),
             self.memoBackgroundView.heightAnchor.constraint(equalToConstant: 140),
@@ -79,6 +64,7 @@ final class MemoView: UIView {
             self.memoTextView.bottomAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor, constant: -20)
         ])
     }
+    
 }
 
 extension MemoView: UITextViewDelegate {

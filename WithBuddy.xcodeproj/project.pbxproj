@@ -34,7 +34,6 @@
 		BB2D25A5273A58A100E7BF35 /* GatheringUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A4273A58A100E7BF35 /* GatheringUseCase.swift */; };
 		BB2D25B1273B582500E7BF35 /* PictureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */; };
 		BB2D25B2273B582500E7BF35 /* MemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A7273B582500E7BF35 /* MemoView.swift */; };
-		BB2D25B3273B582500E7BF35 /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A8273B582500E7BF35 /* DateView.swift */; };
 		BB2D25B6273B582500E7BF35 /* PictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AB273B582500E7BF35 /* PictureView.swift */; };
 		BB2D25B7273B582500E7BF35 /* BuddySelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AC273B582500E7BF35 /* BuddySelectView.swift */; };
 		BB2D25B9273B582500E7BF35 /* PurposeSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AE273B582500E7BF35 /* PurposeSelectView.swift */; };
@@ -102,7 +101,6 @@
 		BB2D25A4273A58A100E7BF35 /* GatheringUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatheringUseCase.swift; sourceTree = "<group>"; };
 		BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCell.swift; sourceTree = "<group>"; };
 		BB2D25A7273B582500E7BF35 /* MemoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoView.swift; sourceTree = "<group>"; };
-		BB2D25A8273B582500E7BF35 /* DateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateView.swift; sourceTree = "<group>"; };
 		BB2D25AB273B582500E7BF35 /* PictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureView.swift; sourceTree = "<group>"; };
 		BB2D25AC273B582500E7BF35 /* BuddySelectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuddySelectView.swift; sourceTree = "<group>"; };
 		BB2D25AE273B582500E7BF35 /* PurposeSelectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurposeSelectView.swift; sourceTree = "<group>"; };
@@ -259,7 +257,6 @@
 			children = (
 				BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */,
 				BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */,
-				BB2D25A8273B582500E7BF35 /* DateView.swift */,
 				BB2D25B0273B582500E7BF35 /* PlaceView.swift */,
 				BB2D25AE273B582500E7BF35 /* PurposeSelectView.swift */,
 				BB2D25AC273B582500E7BF35 /* BuddySelectView.swift */,
@@ -570,7 +567,6 @@
 				BB2D25B1273B582500E7BF35 /* PictureCollectionViewCell.swift in Sources */,
 				BB2D25C4273B901600E7BF35 /* GatheringEntity+CoreDataClass.swift in Sources */,
 				85D262EC273CDEBE000190B8 /* LatestOldChartView.swift in Sources */,
-				BB2D25B3273B582500E7BF35 /* DateView.swift in Sources */,
 				F7E8ABBE273A8D43005F8306 /* WBCalendarViewModel.swift in Sources */,
 				85D262F8273D138E000190B8 /* DefaultView.swift in Sources */,
 				F7E8ABB42738133B005F8306 /* CalendarDetailViewController.swift in Sources */,

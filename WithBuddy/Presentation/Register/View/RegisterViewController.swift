@@ -13,7 +13,11 @@ class RegisterViewController: UIViewController {
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
     
-    private lazy var dateView = DateView()
+    private lazy var dateTitleLabel = TitleLabel()
+    private lazy var dateBackgroundView = UIView()
+    private lazy var dateContentLabel = UILabel()
+    private lazy var datePickButton = UIButton()
+    
     private lazy var placeView = PlaceView()
     private lazy var typeView = PurposeSelectView()
     private lazy var buddyView = BuddySelectView()
@@ -43,7 +47,7 @@ class RegisterViewController: UIViewController {
         self.registerViewModel.$startDateString
             .receive(on: DispatchQueue.main)
             .sink { [weak self] date in
-                self?.dateView.changeDateLebelText(date)
+                self?.dateContentLabel.text = date
             }
             .store(in: &self.cancellables)
         
@@ -100,7 +104,7 @@ class RegisterViewController: UIViewController {
         
         self.configureScrollView()
         self.configureContentView()
-        self.configureStartDateView()
+        self.configureDatePart()
         self.configurePlaceView()
         self.configureTypeView()
         self.configureBuddyView()
@@ -131,28 +135,118 @@ class RegisterViewController: UIViewController {
             self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor)
         ])
     }
- 
-    private func configureStartDateView() {
-        self.contentView.addSubview(self.dateView)
-        self.dateView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.dateView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 20),
-            self.dateView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
-            self.dateView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
-        ])
-        self.dateView.delegate = self
+    
+    // MARK: - DatePart
+    
+    private func configureDatePart() {
+        self.configureDateTitle()
+        self.configureDateBackground()
+        self.configureDateContent()
+        self.configureDatePickButton()
     }
+    
+    private func configureDateTitle() {
+        self.contentView.addSubview(self.dateTitleLabel)
+        self.dateTitleLabel.text = "모임 날짜"
+        self.dateTitleLabel.textColor = UIColor(named: "LabelPurple")
+        
+        self.dateTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.dateTitleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 20),
+            self.dateTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
+            self.dateTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+            self.dateTitleLabel.heightAnchor.constraint(equalToConstant: 45)
+        ])
+    }
+    
+    private func configureDateBackground() {
+        self.contentView.addSubview(self.dateBackgroundView)
+        self.dateBackgroundView.backgroundColor = .white
+        self.dateBackgroundView.layer.cornerRadius = 10
+        
+        self.dateBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.dateBackgroundView.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: 10),
+            self.dateBackgroundView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
+            self.dateBackgroundView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+            self.dateBackgroundView.heightAnchor.constraint(equalToConstant: 45)
+        ])
+    }
+    
+    private func configureDateContent() {
+        self.dateBackgroundView.addSubview(self.dateContentLabel)
+        
+        self.dateContentLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.dateContentLabel.leftAnchor.constraint(equalTo: self.dateBackgroundView.leftAnchor, constant: 20),
+            self.dateContentLabel.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
+        ])
+    }
+    
+    private func configureDatePickButton() {
+        self.dateBackgroundView.addSubview(self.datePickButton)
+        self.datePickButton.setImage(UIImage(systemName: "calendar"), for: .normal)
+        self.datePickButton.sizeToFit()
+        self.datePickButton.addTarget(self, action: #selector(self.onDateButtonTouched(_:)), for: .touchUpInside)
+        
+        self.datePickButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.datePickButton.rightAnchor.constraint(equalTo: self.dateBackgroundView.rightAnchor, constant: -20),
+            self.datePickButton.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
+        ])
+    }
+    
+    @objc private func onDateButtonTouched(_ sender: UIButton) {
+        self.view.addSubview(self.datePicker)
+        self.datePicker.translatesAutoresizingMaskIntoConstraints = false
+        self.datePicker.autoresizingMask = .flexibleWidth
+        self.datePicker.datePickerMode = .date
+        self.datePicker.preferredDatePickerStyle = .inline
+        self.datePicker.locale = Locale(identifier: "ko-KR")
+        self.datePicker.timeZone = .autoupdatingCurrent
+        self.datePicker.backgroundColor = .white
+        
+        NSLayoutConstraint.activate([
+            self.datePicker.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            self.datePicker.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            self.datePicker.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            self.datePicker.heightAnchor.constraint(equalToConstant: 300)
+        ])
+        
+        self.view.addSubview(self.dateToolBar)
+        self.dateToolBar.translatesAutoresizingMaskIntoConstraints = false
+        self.dateToolBar.barStyle = .default
+        self.dateToolBar.items = [UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.onDatePickDoneTouched))]
+        self.dateToolBar.sizeToFit()
+        
+        NSLayoutConstraint.activate([
+            self.dateToolBar.bottomAnchor.constraint(equalTo: self.datePicker.topAnchor),
+            self.dateToolBar.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            self.dateToolBar.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            self.dateToolBar.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+    
+    @objc private func onDatePickDoneTouched() {
+        self.registerViewModel.didStartDatePicked(self.datePicker.date)
+        self.datePicker.removeFromSuperview()
+        self.dateToolBar.removeFromSuperview()
+    }
+    
+    // MARK: - PlacePart
     
     private func configurePlaceView() {
         self.contentView.addSubview(self.placeView)
         self.placeView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.placeView.topAnchor.constraint(equalTo: self.dateView.bottomAnchor, constant: 40),
+            self.placeView.topAnchor.constraint(equalTo: self.dateBackgroundView.bottomAnchor, constant: 40),
             self.placeView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             self.placeView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
         ])
         self.placeView.delegate = self
     }
+    
+    // MARK: - PurposePart
     
     private func configureTypeView() {
         self.contentView.addSubview(self.typeView)
@@ -165,6 +259,8 @@ class RegisterViewController: UIViewController {
         self.typeView.delegate = self
     }
     
+    // MARK: - BuddyPart
+    
     private func configureBuddyView() {
         self.contentView.addSubview(self.buddyView)
         self.buddyView.translatesAutoresizingMaskIntoConstraints = false
@@ -175,6 +271,8 @@ class RegisterViewController: UIViewController {
         ])
         self.buddyView.delegate = self
     }
+    
+    // MARK: - MemoPart
     
     private func configureMemoView() {
         self.contentView.addSubview(self.memoView)
@@ -187,6 +285,8 @@ class RegisterViewController: UIViewController {
         self.memoView.delegate = self
     }
     
+    // MARK: - PicturePart
+    
     private func configurePictureView() {
         self.contentView.addSubview(self.pictureView)
         self.pictureView.translatesAutoresizingMaskIntoConstraints = false
@@ -198,6 +298,8 @@ class RegisterViewController: UIViewController {
         ])
         self.pictureView.delegate = self
     }
+    
+    // MARK: - CompletePart
     
     private func alertSuccess() {
         let alert = UIAlertController(title: "등록 완료", message: "모임 등록이 완료되었습니다!", preferredStyle: UIAlertController.Style.alert)
@@ -215,61 +317,13 @@ class RegisterViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    @objc private func onStartDoneTouched() {
-        self.registerViewModel.didStartDatePicked(self.datePicker.date)
-        self.datePicker.removeFromSuperview()
-        self.dateToolBar.removeFromSuperview()
-    }
-
-    @objc private func tapEmptySpace(){
-        self.view.endEditing(true)
-    }
-    
     @objc private func addGathering() {
         self.registerViewModel.didDoneTouched()
     }
-}
-
-extension RegisterViewController: DateViewDelegate {
     
-    func dateButtonDidTouched() {
-        self.configureDatePicker()
-        self.configureStartDateToolBar()
+    @objc private func tapEmptySpace(){
+        self.view.endEditing(true)
     }
-    
-    private func configureDatePicker() {
-        self.view.addSubview(self.datePicker)
-        self.datePicker.translatesAutoresizingMaskIntoConstraints = false
-        self.datePicker.autoresizingMask = .flexibleWidth
-        self.datePicker.datePickerMode = .date
-        self.datePicker.preferredDatePickerStyle = .inline
-        self.datePicker.locale = Locale(identifier: "ko-KR")
-        self.datePicker.timeZone = .autoupdatingCurrent
-        self.datePicker.backgroundColor = .white
-        
-        NSLayoutConstraint.activate([
-            self.datePicker.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            self.datePicker.leftAnchor.constraint(equalTo: self.view.leftAnchor),
-            self.datePicker.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-            self.datePicker.heightAnchor.constraint(equalToConstant: 300)
-        ])
-    }
-    
-    private func configureStartDateToolBar() {
-        self.view.addSubview(self.dateToolBar)
-        self.dateToolBar.translatesAutoresizingMaskIntoConstraints = false
-        self.dateToolBar.barStyle = .default
-        self.dateToolBar.items = [UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.onStartDoneTouched))]
-        self.dateToolBar.sizeToFit()
-        
-        NSLayoutConstraint.activate([
-            self.dateToolBar.bottomAnchor.constraint(equalTo: self.datePicker.topAnchor),
-            self.dateToolBar.leftAnchor.constraint(equalTo: self.view.leftAnchor),
-            self.dateToolBar.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-            self.dateToolBar.heightAnchor.constraint(equalToConstant: 50)
-        ])
-    }
-    
 }
 
 extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

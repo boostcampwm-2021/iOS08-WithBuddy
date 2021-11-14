@@ -24,7 +24,8 @@ final class ChartViewController: UIViewController {
         self.bind()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         self.viewModel.fetch()
     }
     
@@ -38,6 +39,12 @@ final class ChartViewController: UIViewController {
     }
     
     private func bind() {
+        self.viewModel.$purposeLank
+            .sink { [weak self] list in
+                self?.update(purposeList: list)
+            }
+            .store(in: &self.cancellables)
+        
         self.viewModel.$latestBuddy
             .sink { [weak self] buddy in
                 self?.update(latestBuddy: buddy)
@@ -109,6 +116,11 @@ final class ChartViewController: UIViewController {
         self.bubbleChartView.update(name: name)
         self.purposeChartView.update(name: name)
         self.latestOldChartView.update(name: name)
+    }
+    
+    private func update(purposeList: [String]?) {
+        guard let list = purposeList else { return }
+        self.purposeChartView.update(list: list)
     }
     
     private func update(latestBuddy: Buddy?) {

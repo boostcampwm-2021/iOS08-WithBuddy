@@ -23,8 +23,6 @@ class RegisterViewController: UIViewController {
     private lazy var datePicker = UIDatePicker()
     private lazy var dateToolBar = UIToolbar()
     
-    private lazy var addButton: UIBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addGathering))
-    
     private var registerViewModel = RegisterViewModel()
     private var cancellables: Set<AnyCancellable> = []
     
@@ -33,7 +31,7 @@ class RegisterViewController: UIViewController {
         self.bind()
         self.configure()
         self.registerViewModel.didStartDatePicked(Date())
-        self.navigationItem.rightBarButtonItem = self.addButton
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addGathering))
     }
     
     private func bind() {

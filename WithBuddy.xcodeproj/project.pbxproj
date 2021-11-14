@@ -23,7 +23,6 @@
 		85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D98272FEBE000825C64 /* ListViewController.swift */; };
 		8A52C4F6273947E50025C562 /* defaultImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A52C4F5273947E50025C562 /* defaultImage.png */; };
 		8A53C22F273B9EB200BB0C20 /* BuddyCustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A53C22E273B9EB200BB0C20 /* BuddyCustomViewController.swift */; };
-		8A6320A72741245D006BB1C0 /* TitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6320A62741245D006BB1C0 /* TitleLabel.swift */; };
 		8A73D679273A61EC001D5184 /* BuddyChoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D678273A61EC001D5184 /* BuddyChoiceViewController.swift */; };
 		8A73D67E273A6C4B001D5184 /* BuddyChoiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D67D273A6C4B001D5184 /* BuddyChoiceViewModel.swift */; };
 		8A73D683273AC3B8001D5184 /* Purpose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D682273AC3B8001D5184 /* Purpose.swift */; };
@@ -37,8 +36,8 @@
 		BB2D25B2273B582500E7BF35 /* MemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A7273B582500E7BF35 /* MemoView.swift */; };
 		BB2D25B3273B582500E7BF35 /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A8273B582500E7BF35 /* DateView.swift */; };
 		BB2D25B6273B582500E7BF35 /* PictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AB273B582500E7BF35 /* PictureView.swift */; };
-		BB2D25B7273B582500E7BF35 /* BuddyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AC273B582500E7BF35 /* BuddyView.swift */; };
-		BB2D25B9273B582500E7BF35 /* TypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AE273B582500E7BF35 /* TypeView.swift */; };
+		BB2D25B7273B582500E7BF35 /* BuddySelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AC273B582500E7BF35 /* BuddySelectView.swift */; };
+		BB2D25B9273B582500E7BF35 /* PurposeSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AE273B582500E7BF35 /* PurposeSelectView.swift */; };
 		BB2D25BA273B582500E7BF35 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */; };
 		BB2D25BB273B582500E7BF35 /* PlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25B0273B582500E7BF35 /* PlaceView.swift */; };
 		BB2D25BD273B585200E7BF35 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25BC273B585200E7BF35 /* RegisterViewModel.swift */; };
@@ -88,7 +87,6 @@
 		85FA1D98272FEBE000825C64 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		8A52C4F5273947E50025C562 /* defaultImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultImage.png; sourceTree = "<group>"; };
 		8A53C22E273B9EB200BB0C20 /* BuddyCustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyCustomViewController.swift; sourceTree = "<group>"; };
-		8A6320A62741245D006BB1C0 /* TitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleLabel.swift; sourceTree = "<group>"; };
 		8A73D678273A61EC001D5184 /* BuddyChoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyChoiceViewController.swift; sourceTree = "<group>"; };
 		8A73D67D273A6C4B001D5184 /* BuddyChoiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyChoiceViewModel.swift; sourceTree = "<group>"; };
 		8A73D682273AC3B8001D5184 /* Purpose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Purpose.swift; sourceTree = "<group>"; };
@@ -106,8 +104,8 @@
 		BB2D25A7273B582500E7BF35 /* MemoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoView.swift; sourceTree = "<group>"; };
 		BB2D25A8273B582500E7BF35 /* DateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateView.swift; sourceTree = "<group>"; };
 		BB2D25AB273B582500E7BF35 /* PictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureView.swift; sourceTree = "<group>"; };
-		BB2D25AC273B582500E7BF35 /* BuddyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuddyView.swift; sourceTree = "<group>"; };
-		BB2D25AE273B582500E7BF35 /* TypeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeView.swift; sourceTree = "<group>"; };
+		BB2D25AC273B582500E7BF35 /* BuddySelectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuddySelectView.swift; sourceTree = "<group>"; };
+		BB2D25AE273B582500E7BF35 /* PurposeSelectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurposeSelectView.swift; sourceTree = "<group>"; };
 		BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		BB2D25B0273B582500E7BF35 /* PlaceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceView.swift; sourceTree = "<group>"; };
 		BB2D25BC273B585200E7BF35 /* RegisterViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
@@ -261,11 +259,10 @@
 			children = (
 				BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */,
 				BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */,
-				8A6320A62741245D006BB1C0 /* TitleLabel.swift */,
 				BB2D25A8273B582500E7BF35 /* DateView.swift */,
 				BB2D25B0273B582500E7BF35 /* PlaceView.swift */,
-				BB2D25AE273B582500E7BF35 /* TypeView.swift */,
-				BB2D25AC273B582500E7BF35 /* BuddyView.swift */,
+				BB2D25AE273B582500E7BF35 /* PurposeSelectView.swift */,
+				BB2D25AC273B582500E7BF35 /* BuddySelectView.swift */,
 				BB2D25A7273B582500E7BF35 /* MemoView.swift */,
 				BB2D25AB273B582500E7BF35 /* PictureView.swift */,
 				BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */,
@@ -555,7 +552,6 @@
 				85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */,
 				F7E8AC38273CD428005F8306 /* UIView+Extension.swift in Sources */,
 				F7E8AC38273CD428005F8306 /* UIViewExtension.swift in Sources */,
-				8A6320A72741245D006BB1C0 /* TitleLabel.swift in Sources */,
 				BB2D25602731317E00E7BF35 /* ChartViewController.swift in Sources */,
 				F7A7699727315AF800FF83EA /* HeaderView.swift in Sources */,
 				85D262E8273CD703000190B8 /* PurposeChartView.swift in Sources */,
@@ -567,7 +563,7 @@
 				8A73D67E273A6C4B001D5184 /* BuddyChoiceViewModel.swift in Sources */,
 				854AA75E27337A7200663911 /* SearchView.swift in Sources */,
 				85D262F6273CFEBF000190B8 /* LatestOldView.swift in Sources */,
-				BB2D25B9273B582500E7BF35 /* TypeView.swift in Sources */,
+				BB2D25B9273B582500E7BF35 /* PurposeSelectView.swift in Sources */,
 				BB2D25BA273B582500E7BF35 /* RegisterViewController.swift in Sources */,
 				8A53C22F273B9EB200BB0C20 /* BuddyCustomViewController.swift in Sources */,
 				8A73D683273AC3B8001D5184 /* Purpose.swift in Sources */,
@@ -582,7 +578,7 @@
 				85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */,
 				854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */,
 				F7E8ABC5273BB814005F8306 /* GatheringDetailViewController.swift in Sources */,
-				BB2D25B7273B582500E7BF35 /* BuddyView.swift in Sources */,
+				BB2D25B7273B582500E7BF35 /* BuddySelectView.swift in Sources */,
 				BB2D25C2273B901600E7BF35 /* BuddyEntity+CoreDataClass.swift in Sources */,
 				85D262F2273CE7D6000190B8 /* TitleLabel.swift in Sources */,
 				BB2D25BD273B585200E7BF35 /* RegisterViewModel.swift in Sources */,

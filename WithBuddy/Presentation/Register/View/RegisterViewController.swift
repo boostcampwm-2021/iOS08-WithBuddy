@@ -15,8 +15,8 @@ class RegisterViewController: UIViewController {
     
     private lazy var dateView = DateView()
     private lazy var placeView = PlaceView()
-    private lazy var typeView = TypeView()
-    private lazy var buddyView = BuddyView()
+    private lazy var typeView = PurposeSelectView()
+    private lazy var buddyView = BuddySelectView()
     private lazy var memoView = MemoView()
     private lazy var pictureView = PictureView()
     
@@ -294,8 +294,8 @@ extension RegisterViewController: PlaceViewDelegate {
     }
 }
 
-extension RegisterViewController: TypeViewDelegate {
-    func typeDidSelected(_ idx: Int) {
+extension RegisterViewController: PurposeViewDelegate {
+    func purposeDidSelected(_ idx: Int) {
         self.registerViewModel.didTypeTouched(idx)
     }
 }

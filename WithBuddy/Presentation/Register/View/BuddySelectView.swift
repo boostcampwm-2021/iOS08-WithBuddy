@@ -1,5 +1,5 @@
 //
-//  BuddyView.swift
+//  BuddySelectView.swift
 //  WithBuddy
 //
 //  Created by Inwoo Park on 2021/11/06.
@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class BuddyView: UIView {
+final class BuddySelectView: UIView {
     
     private lazy var buddyAddButton = UIButton()
     private lazy var buddyCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
@@ -95,7 +95,7 @@ final class BuddyView: UIView {
     
 }
 
-extension BuddyView: UICollectionViewDelegate {
+extension BuddySelectView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
             let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),

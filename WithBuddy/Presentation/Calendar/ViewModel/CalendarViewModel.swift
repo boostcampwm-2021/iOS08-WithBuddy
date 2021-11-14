@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class WBCalendarViewModel {
+final class CalendarViewModel {
     
     private let calendarManager = CalendarManager()
     private let gatheringUseCase: GatheringUseCase

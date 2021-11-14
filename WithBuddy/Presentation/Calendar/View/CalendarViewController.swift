@@ -24,12 +24,6 @@ class CalendarViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configure()
-        
-        self.calendarViewModel.todaySubject
-        .receive(on: DispatchQueue.main)
-        .sink{ month in
-            self.wbCalendar.reloadMonthLabel(month: month)
-        }.store(in: &self.cancellables)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,6 +39,21 @@ class CalendarViewController: UIViewController {
         self.configureHeaderView()
         self.configureCalendarView()
         self.configurCalendar()
+        self.bind()
+    }
+    
+    private func bind() {
+        self.calendarViewModel.todaySubject
+        .receive(on: DispatchQueue.main)
+        .sink{ month in
+            self.wbCalendar.reloadMonthLabel(month: month)
+        }.store(in: &self.cancellables)
+        
+        self.wbCalendar.monthButtonSignal
+        .receive(on: DispatchQueue.main)
+        .sink{ number in
+            self.calendarViewModel.didMonthButtonTouched(number: number)
+        }.store(in: &self.cancellables)
     }
     
     private func configureScrollView() {

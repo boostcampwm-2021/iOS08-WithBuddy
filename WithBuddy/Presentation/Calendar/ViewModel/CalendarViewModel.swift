@@ -15,7 +15,8 @@ final class CalendarViewModel {
     private var thisMonthGathrtingList: [Gathering] = []
     private var totalDays = [Int]()
     private var totalFaces = [String]()
-    private var today = Calendar.current.startOfDay(for: Date())
+    private var currentMonth = Calendar.current.startOfDay(for: Date())
+    
     private(set) var todaySubject = PassthroughSubject<String, Never>()
     
     init() {
@@ -23,10 +24,19 @@ final class CalendarViewModel {
     }
     
     func viewDidAppear() {
-        self.today = Calendar.current.startOfDay(for: Date())
+        self.sendTodaySubject()
+    }
+    
+    func didMonthButtonTouched(number: Int) {
+        guard let month = Calendar.current.date(byAdding: .month, value: number, to: self.currentMonth) else { return }
+        self.currentMonth = month
+        self.sendTodaySubject()
+    }
+    
+    private func sendTodaySubject() {
         let dateformat = DateFormatter()
         dateformat.dateFormat = "yyyy년 M월"
-        self.todaySubject.send(dateformat.string(from: self.today))
+        self.todaySubject.send(dateformat.string(from: self.currentMonth))
     }
     
     var count: Int {

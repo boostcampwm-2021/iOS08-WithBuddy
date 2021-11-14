@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class WBCalendarView: UIView {
     
@@ -15,6 +16,8 @@ class WBCalendarView: UIView {
     private lazy var nextMonthButton = UIButton()
     private lazy var weekStackView = UIStackView()
     private(set) lazy var collectionView = WBCalendarCollectionView()
+    
+    private(set) var monthButtonSignal = PassthroughSubject<Int, Never>()
     private let wbcalendarViewModel = CalendarViewModel()
     
     private var firstDayOfThisMonth = Date()
@@ -124,15 +127,17 @@ class WBCalendarView: UIView {
     }
     
     @objc private func minusMonth(_ sender: UIButton) {
-        let prevMonth = self.calendarManager.minusMonth(baseDate: self.firstDayOfThisMonth)
-        self.firstDayOfThisMonth = self.calendarManager.firstDateOfMonth(baseDate: prevMonth)
-        self.reload()
+//        let prevMonth = self.calendarManager.minusMonth(baseDate: self.firstDayOfThisMonth)
+//        self.firstDayOfThisMonth = self.calendarManager.firstDateOfMonth(baseDate: prevMonth)
+//        self.reload()
+        self.monthButtonSignal.send(-1)
     }
     
     @objc private func plusMonth(_ sender: UIButton) {
-        let nextMonth = self.calendarManager.plusMonth(baseDate: firstDayOfThisMonth)
-        self.firstDayOfThisMonth = self.calendarManager.firstDateOfMonth(baseDate: nextMonth)
-        self.reload()
+//        let nextMonth = self.calendarManager.plusMonth(baseDate: firstDayOfThisMonth)
+//        self.firstDayOfThisMonth = self.calendarManager.firstDateOfMonth(baseDate: nextMonth)
+//        self.reload()
+        self.monthButtonSignal.send(1)
     }
     
     private func configureCollectionView() {

@@ -39,6 +39,12 @@ final class ChartViewController: UIViewController {
     }
     
     private func bind() {
+        self.viewModel.$buddyLank
+            .sink { [weak self] list in
+                self?.update(buddyList: list)
+            }
+            .store(in: &self.cancellables)
+        
         self.viewModel.$purposeLank
             .sink { [weak self] list in
                 self?.update(purposeList: list)
@@ -116,6 +122,11 @@ final class ChartViewController: UIViewController {
         self.bubbleChartView.update(name: name)
         self.purposeChartView.update(name: name)
         self.latestOldChartView.update(name: name)
+    }
+    
+    private func update(buddyList: [Buddy]?) {
+        guard let list = buddyList else { return }
+        self.bubbleChartView.update(list: list)
     }
     
     private func update(purposeList: [String]?) {

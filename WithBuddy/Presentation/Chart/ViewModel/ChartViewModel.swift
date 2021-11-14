@@ -17,6 +17,7 @@ final class ChartViewModel {
     private let gatheringUseCase: GatheringUseCase
     private let buddyUseCase: BuddyUseCase
     private var gatheringList: [Gathering] = []
+    private var buddyList: [Buddy] = []
     
     init() {
         self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
@@ -29,9 +30,35 @@ final class ChartViewModel {
     }
     
     func fetch() {
+        self.fetchGatheringAndBuddy()
+        self.fetchBuddyLank()
         self.fetchPurposeLank()
         self.fetchLatestBuddy()
         self.fetchOldBuddy()
+    }
+    
+    private func fetchGatheringAndBuddy() {
+        self.gatheringList = self.gatheringUseCase.fetchGathering()
+        self.buddyList = self.buddyUseCase.fetchBuddy()
+    }
+    
+    private func fetchBuddyLank() {
+        var buddyMap: [Buddy: Int] = [:]
+        self.buddyList.forEach { buddy in
+            buddyMap[buddy] = 0
+        }
+        
+        self.gatheringList.forEach { gathering in
+            gathering.buddyList.forEach { buddy in
+                buddyMap[buddy]? += 1
+            }
+        }
+        
+        let sortedBuddyList = buddyMap.sorted{ $0.1 > $1.1 }.map{ $0.key }
+        let index = min(5, sortedBuddyList.count - 1)
+        if Int.zero <= index {
+            self.buddyList = Array(sortedBuddyList[...index])
+        }
     }
     
     private func fetchPurposeLank() {
@@ -51,19 +78,18 @@ final class ChartViewModel {
         let sortedPurposeList = purposeMap.sorted{ $0.value > $1.value }.map{ $0.key }
         let index = min(3, sortedPurposeList.count - 1)
         if Int.zero <= index {
-            self.purposeLank = Array(sortedPurposeList[...index]).sorted{ $0 < $1 }
+            self.purposeLank = Array(sortedPurposeList[...index])
         }
     }
 
     private func fetchLatestBuddy() {
-        self.gatheringList = self.gatheringUseCase.fetchGathering()
         if let lastGathering = self.gatheringList.first {
             self.latestBuddy = lastGathering.buddyList.first
         }
     }
     
     private func fetchOldBuddy() {
-        var buddyList = Set(self.buddyUseCase.fetchBuddy())
+        var buddyList = Set(self.buddyList)
         
         gatheringList.forEach { gathering in
             gathering.buddyList.forEach { buddy in

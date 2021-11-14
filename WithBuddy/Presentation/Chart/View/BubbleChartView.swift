@@ -20,6 +20,7 @@ final class BubbleChartView: UIView {
     private let defaultView = DefaultView()
     
     private let maxLength = CGFloat(130)
+    private var maxCount = 0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,7 +37,31 @@ final class BubbleChartView: UIView {
     }
     
     func update(list: [Buddy]) {
+        let first = list.indices ~= 0 ? list[0] : nil
+        let second = list.indices ~= 1 ? list[1] : nil
+        let third = list.indices ~= 2 ? list[2] : nil
+        let fourth = list.indices ~= 3 ? list[3] : nil
+        let fifth = list.indices ~= 4 ? list[4] : nil
         
+        if first == nil {
+            self.defaultView.isHidden = false
+            return
+        }
+        
+        self.update(imageView: self.firstBubbleImageView, face: first?.face)
+        self.update(imageView: self.secondBubbleImageView, face: second?.face)
+        self.update(imageView: self.thirdBubbleImageView, face: third?.face)
+        self.update(imageView: self.fourthBubbleImageView, face: fourth?.face)
+        self.update(imageView: self.fifthBubbleImageView, face: fifth?.face)
+    }
+    
+    private func update(imageView: UIImageView, face: String?) {
+        if let face = face {
+            imageView.image = UIImage(named: face)
+            imageView.isHidden = false
+            return
+        }
+        imageView.isHidden = true
     }
     
     private func configure() {

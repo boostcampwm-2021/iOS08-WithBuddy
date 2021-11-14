@@ -57,7 +57,7 @@ final class ChartViewModel {
         let sortedBuddyList = buddyMap.sorted{ $0.1 > $1.1 }.map{ $0.key }
         let index = min(5, sortedBuddyList.count - 1)
         if Int.zero <= index {
-            self.buddyList = Array(sortedBuddyList[...index])
+            self.buddyLank = Array(sortedBuddyList[...index])
         }
     }
     

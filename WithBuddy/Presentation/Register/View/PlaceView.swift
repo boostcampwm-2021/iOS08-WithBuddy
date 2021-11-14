@@ -49,7 +49,7 @@ final class PlaceView: UIView {
         self.placeBackgroundView.addSubview(self.placeTextField)
         self.placeTextField.backgroundColor = .systemBackground
         if let color = UIColor(named: "LabelPurple") {
-            self.placeTextField.attributedPlaceholder = NSAttributedString(string: "장소를 적어주세요", attributes: [NSAttributedString.Key.foregroundColor: color])
+            self.placeTextField.attributedPlaceholder = NSAttributedString(string: "모임 장소를 적어주세요", attributes: [NSAttributedString.Key.foregroundColor: color])
         }
         self.placeTextField.delegate = self
         

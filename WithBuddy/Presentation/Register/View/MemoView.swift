@@ -53,7 +53,7 @@ final class MemoView: UIView {
         self.memoTextView.autocapitalizationType = .none
         self.memoTextView.autocorrectionType = .no
         self.memoTextView.delegate = self
-        self.memoTextView.text = "메모를 적어주세요."
+        self.memoTextView.text = "모임에 대한 메모를 적어주세요."
         self.memoTextView.textColor = UIColor(named: "LabelPurple")
         
         self.memoTextView.translatesAutoresizingMaskIntoConstraints = false
@@ -86,7 +86,7 @@ extension MemoView: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "메모를 적어주세요."
+            textView.text = "모임에 대한 메모를 적어주세요."
             textView.textColor = UIColor(named: "LabelPurple")
         }
     }

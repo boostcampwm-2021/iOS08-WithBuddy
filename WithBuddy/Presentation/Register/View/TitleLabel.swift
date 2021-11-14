@@ -1,5 +1,5 @@
 //
-//  TitleView.swift
+//  TitleLabel.swift
 //  WithBuddy
 //
 //  Created by Inwoo Park on 2021/11/14.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TitleView: UILabel {
+final class TitleLabel: UILabel {
     
     override init(frame: CGRect) {
         super.init(frame: frame)

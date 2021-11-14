@@ -17,8 +17,11 @@ class RegisterViewController: UIViewController {
     private lazy var dateBackgroundView = UIView()
     private lazy var dateContentLabel = UILabel()
     private lazy var datePickButton = UIButton()
+  
+    private lazy var placeTitleLabel = TitleLabel()
+    private lazy var placeBackgroundView = UIView()
+    private lazy var placeTextField = UITextField()
     
-    private lazy var placeView = PlaceView()
     private lazy var typeView = PurposeSelectView()
     private lazy var buddyView = BuddySelectView()
     private lazy var memoView = MemoView()
@@ -105,7 +108,7 @@ class RegisterViewController: UIViewController {
         self.configureScrollView()
         self.configureContentView()
         self.configureDatePart()
-        self.configurePlaceView()
+        self.configurePlacePart()
         self.configureTypeView()
         self.configureBuddyView()
         self.configureMemoView()
@@ -152,9 +155,9 @@ class RegisterViewController: UIViewController {
         
         self.dateTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.dateTitleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 20),
-            self.dateTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
-            self.dateTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+            self.dateTitleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: .innerTopInset),
+            self.dateTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
+            self.dateTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
             self.dateTitleLabel.heightAnchor.constraint(equalToConstant: 45)
         ])
     }
@@ -166,9 +169,9 @@ class RegisterViewController: UIViewController {
         
         self.dateBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.dateBackgroundView.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: 10),
-            self.dateBackgroundView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
-            self.dateBackgroundView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+            self.dateBackgroundView.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: .innerTopInset),
+            self.dateBackgroundView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
+            self.dateBackgroundView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
             self.dateBackgroundView.heightAnchor.constraint(equalToConstant: 45)
         ])
     }
@@ -178,7 +181,7 @@ class RegisterViewController: UIViewController {
         
         self.dateContentLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.dateContentLabel.leftAnchor.constraint(equalTo: self.dateBackgroundView.leftAnchor, constant: 20),
+            self.dateContentLabel.leftAnchor.constraint(equalTo: self.dateBackgroundView.leftAnchor, constant: .innerLeadingInset),
             self.dateContentLabel.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
         ])
     }
@@ -191,7 +194,7 @@ class RegisterViewController: UIViewController {
         
         self.datePickButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.datePickButton.rightAnchor.constraint(equalTo: self.dateBackgroundView.rightAnchor, constant: -20),
+            self.datePickButton.rightAnchor.constraint(equalTo: self.dateBackgroundView.rightAnchor, constant: .innerTrailingInset),
             self.datePickButton.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
         ])
     }
@@ -235,15 +238,54 @@ class RegisterViewController: UIViewController {
     
     // MARK: - PlacePart
     
-    private func configurePlaceView() {
-        self.contentView.addSubview(self.placeView)
-        self.placeView.translatesAutoresizingMaskIntoConstraints = false
+    private func configurePlacePart() {
+        self.configurePlaceTitle()
+        self.configurePlaceBackground()
+        self.configurePlaceTextField()
+    }
+    
+    private func configurePlaceTitle() {
+        self.contentView.addSubview(self.placeTitleLabel)
+        self.placeTitleLabel.text = "모임 장소"
+        self.placeTitleLabel.textColor = UIColor(named: "LabelPurple")
+        
+        self.placeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.placeView.topAnchor.constraint(equalTo: self.dateBackgroundView.bottomAnchor, constant: 40),
-            self.placeView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
-            self.placeView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
+            self.placeTitleLabel.topAnchor.constraint(equalTo: self.dateBackgroundView.bottomAnchor, constant: .outsideTopInset),
+            self.placeTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
+            self.placeTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
+            self.placeTitleLabel.heightAnchor.constraint(equalToConstant: 45)
         ])
-        self.placeView.delegate = self
+    }
+    
+    private func configurePlaceBackground() {
+        self.contentView.addSubview(self.placeBackgroundView)
+        self.placeBackgroundView.backgroundColor = .systemBackground
+        self.placeBackgroundView.layer.cornerRadius = 10
+        
+        self.placeBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.placeBackgroundView.topAnchor.constraint(equalTo: self.placeTitleLabel.bottomAnchor, constant: .innerTopInset),
+            self.placeBackgroundView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: .outsideLeadingInset),
+            self.placeBackgroundView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: .outsideTrailingInset),
+            self.placeBackgroundView.heightAnchor.constraint(equalToConstant: 45)
+        ])
+    }
+    
+    private func configurePlaceTextField() {
+        self.placeBackgroundView.addSubview(self.placeTextField)
+        if let color = UIColor(named: "LabelPurple") {
+            self.placeTextField.attributedPlaceholder = NSAttributedString(string: "모임 장소를 적어주세요", attributes: [NSAttributedString.Key.foregroundColor: color])
+        }
+        self.placeTextField.delegate = self
+        
+        self.placeTextField.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.placeTextField.topAnchor.constraint(equalTo: self.placeBackgroundView.topAnchor),
+            self.placeTextField.leftAnchor.constraint(equalTo: self.placeBackgroundView.leftAnchor, constant: .innerLeadingInset),
+            self.placeTextField.rightAnchor.constraint(equalTo: self.placeBackgroundView.rightAnchor, constant: .innerTrailingInset),
+            self.placeTextField.bottomAnchor.constraint(equalTo: self.placeBackgroundView.bottomAnchor)
+        ])
     }
     
     // MARK: - PurposePart
@@ -252,7 +294,7 @@ class RegisterViewController: UIViewController {
         self.contentView.addSubview(self.typeView)
         self.typeView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.typeView.topAnchor.constraint(equalTo: self.placeView.bottomAnchor, constant: 40),
+            self.typeView.topAnchor.constraint(equalTo: self.placeBackgroundView.bottomAnchor, constant: 40),
             self.typeView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             self.typeView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
         ])
@@ -326,6 +368,16 @@ class RegisterViewController: UIViewController {
     }
 }
 
+extension RegisterViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let text = textField.text {
+            self.registerViewModel.didPlaceFinished(text)
+        }
+        textField.resignFirstResponder()
+        return true
+    }
+}
+
 extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         guard let url = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
@@ -337,12 +389,6 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
-    }
-}
-
-extension RegisterViewController: PlaceViewDelegate {
-    func placeTextFieldDidReturn(_ place: String) {
-        self.registerViewModel.didPlaceFinished(place)
     }
 }
 

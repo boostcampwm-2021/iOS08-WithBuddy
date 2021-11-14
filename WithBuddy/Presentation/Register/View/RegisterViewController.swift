@@ -24,7 +24,6 @@ class RegisterViewController: UIViewController {
     
     private lazy var typeView = PurposeSelectView()
     
-//    private lazy var buddyView = BuddySelectView()
     private lazy var buddyTitleLabel = TitleLabel()
     private lazy var buddyAddButton = UIButton()
     private lazy var buddyCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
@@ -34,7 +33,11 @@ class RegisterViewController: UIViewController {
         return cell
     }
     
-    private lazy var memoView = MemoView()
+    private lazy var memoTitleLabel = TitleLabel()
+    private lazy var memoBackgroundView = UIView()
+    private lazy var memoTextView = UITextView()
+    
+    private lazy var pictureTitleLabel = TitleLabel()
     private lazy var pictureView = PictureView()
     
     private lazy var datePicker = UIDatePicker()
@@ -129,7 +132,7 @@ class RegisterViewController: UIViewController {
         self.configurePlacePart()
         self.configureTypeView()
         self.configureBuddyPart()
-        self.configureMemoView()
+        self.configureMemoPart()
         self.configurePictureView()
     }
     
@@ -387,15 +390,58 @@ class RegisterViewController: UIViewController {
     
     // MARK: - MemoPart
     
-    private func configureMemoView() {
-        self.contentView.addSubview(self.memoView)
-        self.memoView.translatesAutoresizingMaskIntoConstraints = false
+    private func configureMemoPart() {
+        self.configureMemoTitle()
+        self.configureMemoBackground()
+        self.configureMemoTextView()
+    }
+    
+    private func configureMemoTitle() {
+        self.contentView.addSubview(self.memoTitleLabel)
+        self.memoTitleLabel.text = "모임 장소"
+        self.memoTitleLabel.textColor = UIColor(named: "LabelPurple")
+        
+        self.memoTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.memoView.topAnchor.constraint(equalTo: self.buddyCollectionView.bottomAnchor, constant: 40),
-            self.memoView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
-            self.memoView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
+            self.memoTitleLabel.topAnchor.constraint(equalTo: self.buddyCollectionView.bottomAnchor, constant: .outsideTopInset),
+            self.memoTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
+            self.memoTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
+            self.memoTitleLabel.heightAnchor.constraint(equalToConstant: 45)
         ])
-        self.memoView.delegate = self
+    }
+    
+    private func configureMemoBackground() {
+        self.contentView.addSubview(self.memoBackgroundView)
+        self.memoBackgroundView.backgroundColor = .systemBackground
+        self.memoBackgroundView.layer.cornerRadius = 10
+        
+        self.memoBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.memoBackgroundView.topAnchor.constraint(equalTo: self.memoTitleLabel.bottomAnchor, constant: .innerTopInset),
+            self.memoBackgroundView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: .outsideLeadingInset),
+            self.memoBackgroundView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: .outsideTrailingInset),
+            self.memoBackgroundView.heightAnchor.constraint(equalToConstant: 140)
+        ])
+    }
+    
+    private func configureMemoTextView() {
+        self.memoBackgroundView.addSubview(self.memoTextView)
+        self.memoTextView.backgroundColor = .systemBackground
+        self.memoTextView.font =  UIFont.systemFont(ofSize: 15, weight: .medium)
+        self.memoTextView.textContentType = .none
+        self.memoTextView.autocapitalizationType = .none
+        self.memoTextView.autocorrectionType = .no
+        self.memoTextView.delegate = self
+        self.memoTextView.text = "모임에 대한 메모를 적어주세요."
+        self.memoTextView.textColor = UIColor(named: "LabelPurple")
+        
+        self.memoTextView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.memoTextView.topAnchor.constraint(equalTo: self.memoBackgroundView.topAnchor, constant: 20),
+            self.memoTextView.leftAnchor.constraint(equalTo: self.memoBackgroundView.leftAnchor, constant: 20),
+            self.memoTextView.rightAnchor.constraint(equalTo: self.memoBackgroundView.rightAnchor, constant: -20),
+            self.memoTextView.bottomAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor, constant: -20)
+        ])
     }
     
     // MARK: - PicturePart
@@ -404,7 +450,7 @@ class RegisterViewController: UIViewController {
         self.contentView.addSubview(self.pictureView)
         self.pictureView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.pictureView.topAnchor.constraint(equalTo: self.memoView.bottomAnchor, constant: 40),
+            self.pictureView.topAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor, constant: .outsideTopInset),
             self.pictureView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             self.pictureView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20),
             self.pictureView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
@@ -461,6 +507,30 @@ extension RegisterViewController: UITextFieldDelegate {
     }
 }
 
+extension RegisterViewController: UITextViewDelegate {
+    func textViewShouldReturn(_ textField: UITextField) -> Bool {
+        if let text = textField.text {
+            self.registerViewModel.didMemoFinished(text)
+        }
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor(named: "LabelPurple") {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "모임에 대한 메모를 적어주세요."
+            textView.textColor = UIColor(named: "LabelPurple")
+        }
+    }
+}
+
 extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         guard let url = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
@@ -478,12 +548,6 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
 extension RegisterViewController: PurposeViewDelegate {
     func purposeDidSelected(_ idx: Int) {
         self.registerViewModel.didTypeTouched(idx)
-    }
-}
-
-extension RegisterViewController: MemoViewDelegate {
-    func memoTextFieldDidReturn(_ text: String) {
-        self.registerViewModel.didMemoFinished(text)
     }
 }
 

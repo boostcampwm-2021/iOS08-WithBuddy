@@ -36,7 +36,6 @@
 		BB2D25B1273B582500E7BF35 /* PictureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */; };
 		BB2D25B2273B582500E7BF35 /* MemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A7273B582500E7BF35 /* MemoView.swift */; };
 		BB2D25B6273B582500E7BF35 /* PictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AB273B582500E7BF35 /* PictureView.swift */; };
-		BB2D25B7273B582500E7BF35 /* BuddySelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AC273B582500E7BF35 /* BuddySelectView.swift */; };
 		BB2D25B9273B582500E7BF35 /* PurposeSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AE273B582500E7BF35 /* PurposeSelectView.swift */; };
 		BB2D25BA273B582500E7BF35 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */; };
 		BB2D25BD273B585200E7BF35 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25BC273B585200E7BF35 /* RegisterViewModel.swift */; };
@@ -103,7 +102,6 @@
 		BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCell.swift; sourceTree = "<group>"; };
 		BB2D25A7273B582500E7BF35 /* MemoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoView.swift; sourceTree = "<group>"; };
 		BB2D25AB273B582500E7BF35 /* PictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureView.swift; sourceTree = "<group>"; };
-		BB2D25AC273B582500E7BF35 /* BuddySelectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuddySelectView.swift; sourceTree = "<group>"; };
 		BB2D25AE273B582500E7BF35 /* PurposeSelectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurposeSelectView.swift; sourceTree = "<group>"; };
 		BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		BB2D25BC273B585200E7BF35 /* RegisterViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
@@ -258,7 +256,6 @@
 				BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */,
 				BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */,
 				BB2D25AE273B582500E7BF35 /* PurposeSelectView.swift */,
-				BB2D25AC273B582500E7BF35 /* BuddySelectView.swift */,
 				BB2D25A7273B582500E7BF35 /* MemoView.swift */,
 				BB2D25AB273B582500E7BF35 /* PictureView.swift */,
 				BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */,
@@ -575,7 +572,6 @@
 				85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */,
 				854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */,
 				F7E8ABC5273BB814005F8306 /* GatheringDetailViewController.swift in Sources */,
-				BB2D25B7273B582500E7BF35 /* BuddySelectView.swift in Sources */,
 				BB2D25C2273B901600E7BF35 /* BuddyEntity+CoreDataClass.swift in Sources */,
 				85D262F2273CE7D6000190B8 /* TitleLabel.swift in Sources */,
 				BB2D25BD273B585200E7BF35 /* RegisterViewModel.swift in Sources */,

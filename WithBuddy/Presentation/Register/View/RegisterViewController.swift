@@ -23,7 +23,17 @@ class RegisterViewController: UIViewController {
     private lazy var placeTextField = UITextField()
     
     private lazy var typeView = PurposeSelectView()
-    private lazy var buddyView = BuddySelectView()
+    
+//    private lazy var buddyView = BuddySelectView()
+    private lazy var buddyTitleLabel = TitleLabel()
+    private lazy var buddyAddButton = UIButton()
+    private lazy var buddyCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
+    private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifier, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
+        cell.update(image: UIImage(named: itemIdentifier.face), text: itemIdentifier.name)
+        return cell
+    }
+    
     private lazy var memoView = MemoView()
     private lazy var pictureView = PictureView()
     
@@ -64,7 +74,15 @@ class RegisterViewController: UIViewController {
         self.registerViewModel.$buddyList
             .receive(on: DispatchQueue.main)
             .sink { [weak self] buddyList in
-                self?.buddyView.buddyListReload(buddyList)
+                var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
+                if buddyList.isEmpty {
+                    snapshot.appendSections([0])
+                    snapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "FacePurple1")])
+                } else {
+                    snapshot.appendSections([0])
+                    snapshot.appendItems(buddyList)
+                }
+                self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
             }
             .store(in: &self.cancellables)
         
@@ -110,7 +128,7 @@ class RegisterViewController: UIViewController {
         self.configureDatePart()
         self.configurePlacePart()
         self.configureTypeView()
-        self.configureBuddyView()
+        self.configureBuddyPart()
         self.configureMemoView()
         self.configurePictureView()
     }
@@ -303,15 +321,68 @@ class RegisterViewController: UIViewController {
     
     // MARK: - BuddyPart
     
-    private func configureBuddyView() {
-        self.contentView.addSubview(self.buddyView)
-        self.buddyView.translatesAutoresizingMaskIntoConstraints = false
+    private func configureBuddyPart() {
+        self.configureBuddyTitle()
+        self.configureBuddyAddButton()
+        self.configureBuddyCollectionView()
+    }
+    
+    private func configureBuddyTitle() {
+        self.contentView.addSubview(self.buddyTitleLabel)
+        self.buddyTitleLabel.text = "버디 추가"
+        self.buddyTitleLabel.textColor = UIColor(named: "LabelPurple")
+        
+        self.buddyTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.buddyView.topAnchor.constraint(equalTo: self.typeView.bottomAnchor, constant: 40),
-            self.buddyView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
-            self.buddyView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
+            self.buddyTitleLabel.topAnchor.constraint(equalTo: self.typeView.bottomAnchor, constant: .outsideTopInset),
+            self.buddyTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
+            self.buddyTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
+            self.buddyTitleLabel.heightAnchor.constraint(equalToConstant: 45)
         ])
-        self.buddyView.delegate = self
+    }
+    
+    private func configureBuddyAddButton() {
+        self.contentView.addSubview(self.buddyAddButton)
+        let config = UIImage.SymbolConfiguration(
+            pointSize: 60, weight: .medium, scale: .default)
+        let image = UIImage(systemName: "plus.circle", withConfiguration: config)
+        self.buddyAddButton.setImage(image, for: .normal)
+        self.buddyAddButton.addTarget(self, action: #selector(self.onBuddyAddButtonTouched(_:)), for: .touchUpInside)
+        
+        self.buddyAddButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.buddyAddButton.topAnchor.constraint(equalTo: self.buddyTitleLabel.bottomAnchor, constant: .innerTopInset),
+            self.buddyAddButton.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: .outsideLeadingInset),
+            self.buddyAddButton.widthAnchor.constraint(equalToConstant: 60),
+            self.buddyAddButton.heightAnchor.constraint(equalTo: self.buddyAddButton.widthAnchor)
+        ])
+    }
+    
+    private func configureBuddyCollectionView() {
+        self.contentView.addSubview(self.buddyCollectionView)
+        self.buddyCollectionView.backgroundColor = .clear
+        self.buddyCollectionView.showsHorizontalScrollIndicator = false
+        self.buddyCollectionView.delegate = self
+        
+        self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
+        
+        let layout = UICollectionViewFlowLayout.init()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 60, height: 90)
+        
+        self.buddyCollectionView.collectionViewLayout = layout
+        
+        self.buddyCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.buddyCollectionView.topAnchor.constraint(equalTo: self.buddyAddButton.topAnchor),
+            self.buddyCollectionView.leftAnchor.constraint(equalTo: self.buddyAddButton.rightAnchor, constant: 10),
+            self.buddyCollectionView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: .outsideLeadingInset),
+            self.buddyCollectionView.heightAnchor.constraint(equalToConstant: 90)
+        ])
+    }
+    
+    @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
+        self.registerViewModel.addBuddyDidTouched()
     }
     
     // MARK: - MemoPart
@@ -320,7 +391,7 @@ class RegisterViewController: UIViewController {
         self.contentView.addSubview(self.memoView)
         self.memoView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.memoView.topAnchor.constraint(equalTo: self.buddyView.bottomAnchor, constant: 40),
+            self.memoView.topAnchor.constraint(equalTo: self.buddyCollectionView.bottomAnchor, constant: 40),
             self.memoView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             self.memoView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
         ])
@@ -368,6 +439,18 @@ class RegisterViewController: UIViewController {
     }
 }
 
+extension RegisterViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
+            let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
+                                  image: UIImage(systemName: "trash")) { _ in
+                self.registerViewModel.didBuddyDeleteTouched(in: indexPath.item)
+            }
+            return UIMenu(title: "이 버디를", children: [delete])
+        })
+    }
+}
+
 extension RegisterViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text {
@@ -395,16 +478,6 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
 extension RegisterViewController: PurposeViewDelegate {
     func purposeDidSelected(_ idx: Int) {
         self.registerViewModel.didTypeTouched(idx)
-    }
-}
-
-extension RegisterViewController: BuddyViewDelegate {
-    func buddyDidDeleted(_ idx: Int) {
-        self.registerViewModel.didBuddyDeleteTouched(in: idx)
-    }
-    
-    func buddyAddDidTouched() {
-        self.registerViewModel.addBuddyDidTouched()
     }
 }
 

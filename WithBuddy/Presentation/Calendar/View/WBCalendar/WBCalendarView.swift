@@ -38,10 +38,14 @@ class WBCalendarView: UIView {
         self.configureCollectionView()
     }
     
+    func reloadMonthLabel(month: String) {
+        self.thisMonthLabel.text = month
+    }
+    
     func reload() {
-        self.reloadThisMonth()
-        self.reloadDays()
-        self.reloadFace()
+//        self.reloadThisMonth()
+//        self.reloadDays()
+//        self.reloadFace()
     }
     
     private func configureCalendar() {
@@ -55,11 +59,11 @@ class WBCalendarView: UIView {
     }
 
     private func reloadThisMonth() {
-        let numOfDays = self.calendarManager.numOfDaysInMonth(baseDate: firstDayOfThisMonth)
-        self.firstDayOfThisMonth = calendarManager.firstDateOfMonth(baseDate: firstDayOfThisMonth)
-        self.wbcalendarViewModel.thisMonthGatheringList(thisMonth: firstDayOfThisMonth, numOfDays: numOfDays)
-        self.thisMonthLabel.text = calendarManager.year(baseDate: firstDayOfThisMonth) + "년 "
-                                + calendarManager.month(baseDate: firstDayOfThisMonth) + "월"
+//        let numOfDays = self.calendarManager.numOfDaysInMonth(baseDate: firstDayOfThisMonth)
+//        self.firstDayOfThisMonth = calendarManager.firstDateOfMonth(baseDate: firstDayOfThisMonth)
+//        self.wbcalendarViewModel.thisMonthGatheringList(thisMonth: firstDayOfThisMonth, numOfDays: numOfDays)
+//        self.thisMonthLabel.text = calendarManager.year(baseDate: firstDayOfThisMonth) + "년 "
+//                                + calendarManager.month(baseDate: firstDayOfThisMonth) + "월"
     }
     
     private func configureThisMonth() {
@@ -69,8 +73,7 @@ class WBCalendarView: UIView {
         self.thisMonthLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.thisMonthLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 20),
-            self.thisMonthLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            self.thisMonthLabel.widthAnchor.constraint(equalToConstant: thisMonthLabel.intrinsicContentSize.width + 10)
+            self.thisMonthLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
     }
     

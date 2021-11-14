@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class CalendarViewController: UIViewController {
 
@@ -18,14 +19,22 @@ class CalendarViewController: UIViewController {
     private lazy var wbCalendar = WBCalendarView()
     
     private let calendarViewModel = CalendarViewModel()
+    private var cancellables: Set<AnyCancellable> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configure()
+        
+        self.calendarViewModel.todaySubject
+        .receive(on: DispatchQueue.main)
+        .sink{ month in
+            self.wbCalendar.reloadMonthLabel(month: month)
+        }.store(in: &self.cancellables)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.wbCalendar.reload()
+        self.calendarViewModel.viewDidAppear()
     }
     
     private func configure() {

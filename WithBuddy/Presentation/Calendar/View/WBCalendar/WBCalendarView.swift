@@ -10,7 +10,7 @@ import Combine
 
 class WBCalendarView: UIView {
     
-    private let calendarManager = CalendarManager()
+    private let calendarManager = CalendarUseCase()
     private lazy var thisMonthLabel = UILabel()
     private lazy var prevMonthButton = UIButton()
     private lazy var nextMonthButton = UIButton()
@@ -142,7 +142,6 @@ class WBCalendarView: UIView {
     
     private func configureCollectionView() {
         self.addSubview(collectionView)
-        self.collectionView.dataSource = self
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.collectionView.topAnchor.constraint(equalTo: self.weekStackView.bottomAnchor, constant: 10),
@@ -164,45 +163,45 @@ class WBCalendarView: UIView {
     
 }
 
-extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.wbcalendarViewModel.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifier, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
-        let numberOfDay = self.wbcalendarViewModel.totalDays(index: indexPath.item)
-        let today = self.calendarManager.pickDay(baseDate: self.firstDayOfThisMonth, numberOfDay: numberOfDay)
-        let numOfDay = self.wbcalendarViewModel.totalDays(index: indexPath.item)
-        let faceOfDay = self.wbcalendarViewModel.totalFaces(index: indexPath.item)
-        if self.wbcalendarViewModel.isFace {
-            cell.update(day: numOfDay, face: faceOfDay, today: today)
-        }
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let numberOfDay = self.wbcalendarViewModel.totalDays(index: indexPath.item)
-        let today = self.calendarManager.pickDay(baseDate: self.firstDayOfThisMonth, numberOfDay: numberOfDay)
-        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
-        cell.animateButtonTap(duration: 0.4, scale: 0.90)
-        if self.wbcalendarViewModel.isGathering(in: today) {
-            self.delegate?.presentCellDetail(selectedDate: today)
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (self.frame.size.width) / 7
-        let height = (self.frame.size.width) / 6
-        return CGSize(width: width, height: height)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
-}
+//extension WBCalendarView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+//
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return self.wbcalendarViewModel.count
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifier, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
+//        let numberOfDay = self.wbcalendarViewModel.totalDays(index: indexPath.item)
+//        let today = self.calendarManager.pickDay(baseDate: self.firstDayOfThisMonth, numberOfDay: numberOfDay)
+//        let numOfDay = self.wbcalendarViewModel.totalDays(index: indexPath.item)
+//        let faceOfDay = self.wbcalendarViewModel.totalFaces(index: indexPath.item)
+//        if self.wbcalendarViewModel.isFace {
+//            cell.update(day: numOfDay, face: faceOfDay, today: today)
+//        }
+//        return cell
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        let numberOfDay = self.wbcalendarViewModel.totalDays(index: indexPath.item)
+//        let today = self.calendarManager.pickDay(baseDate: self.firstDayOfThisMonth, numberOfDay: numberOfDay)
+//        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
+//        cell.animateButtonTap(duration: 0.4, scale: 0.90)
+//        if self.wbcalendarViewModel.isGathering(in: today) {
+//            self.delegate?.presentCellDetail(selectedDate: today)
+//        }
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        let width = (self.frame.size.width) / 7
+//        let height = (self.frame.size.width) / 6
+//        return CGSize(width: width, height: height)
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+//        return 0
+//    }
+//
+//}
 
 protocol CalendarCellSelectable: AnyObject {
     func presentCellDetail(selectedDate: Date)

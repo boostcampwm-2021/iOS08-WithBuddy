@@ -85,4 +85,8 @@ class WBCalendarViewCell: UICollectionViewCell {
         }
     }
     
+    func update(day: Int) {
+        self.dayOfCell.text = day > 0 ? String(day) : ""
+    }
+    
 }

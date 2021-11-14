@@ -44,16 +44,22 @@ class CalendarViewController: UIViewController {
     
     private func bind() {
         self.calendarViewModel.todaySubject
-        .receive(on: DispatchQueue.main)
-        .sink{ month in
-            self.wbCalendar.reloadMonthLabel(month: month)
-        }.store(in: &self.cancellables)
+            .receive(on: DispatchQueue.main)
+            .sink{ month in
+                self.wbCalendar.reloadMonthLabel(month: month)
+            }.store(in: &self.cancellables)
+        
+        self.calendarViewModel.didDaysReloadSignal
+            .receive(on: DispatchQueue.main)
+            .sink{ _ in
+                self.wbCalendar.collectionView.reloadData()
+            }.store(in: &self.cancellables)
         
         self.wbCalendar.monthButtonSignal
-        .receive(on: DispatchQueue.main)
-        .sink{ number in
-            self.calendarViewModel.didMonthButtonTouched(number: number)
-        }.store(in: &self.cancellables)
+            .receive(on: DispatchQueue.main)
+            .sink{ number in
+                self.calendarViewModel.didMonthButtonTouched(number: number)
+            }.store(in: &self.cancellables)
     }
     
     private func configureScrollView() {
@@ -108,6 +114,7 @@ class CalendarViewController: UIViewController {
     
     private func configurCalendar() {
         self.calendarView.addSubview(wbCalendar)
+        self.wbCalendar.collectionView.dataSource = self
         self.wbCalendar.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.wbCalendar.leadingAnchor.constraint(equalTo: self.calendarView.leadingAnchor, constant: 15),
@@ -157,6 +164,20 @@ extension CalendarViewController: gatheringListDelegate {
         self.tabBarController?.dismiss(animated: true, completion: {
             self.navigationController?.pushViewController(GatheringDetailViewController(), animated: true)
         })
+    }
+    
+}
+
+extension CalendarViewController: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        self.calendarViewModel.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifier, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
+        cell.update(day: self.calendarViewModel.totalDays(index: indexPath.item))
+        return cell
     }
     
 }

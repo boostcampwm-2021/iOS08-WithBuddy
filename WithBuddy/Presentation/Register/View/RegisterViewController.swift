@@ -13,8 +13,7 @@ class RegisterViewController: UIViewController {
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
     
-    private lazy var startDateView = StartDateView()
-    private lazy var endDateView = EndDateView()
+    private lazy var dateView = DateView()
     private lazy var placeView = PlaceView()
     private lazy var typeView = TypeView()
     private lazy var buddyView = BuddyView()
@@ -34,7 +33,6 @@ class RegisterViewController: UIViewController {
         self.bind()
         self.configure()
         self.registerViewModel.didStartDatePicked(Date())
-        self.registerViewModel.didEndDatePicked(Date())
         self.navigationItem.rightBarButtonItem = self.addButton
     }
     
@@ -47,14 +45,7 @@ class RegisterViewController: UIViewController {
         self.registerViewModel.$startDateString
             .receive(on: DispatchQueue.main)
             .sink { [weak self] date in
-                self?.startDateView.changeDateLebelText(date)
-            }
-            .store(in: &self.cancellables)
-        
-        self.registerViewModel.$endDateString
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] date in
-                self?.endDateView.changeDateLebelText(date)
+                self?.dateView.changeDateLebelText(date)
             }
             .store(in: &self.cancellables)
         
@@ -112,7 +103,6 @@ class RegisterViewController: UIViewController {
         self.configureScrollView()
         self.configureContentView()
         self.configureStartDateView()
-        self.configureEndDateView()
         self.configurePlaceView()
         self.configureTypeView()
         self.configureBuddyView()
@@ -145,32 +135,21 @@ class RegisterViewController: UIViewController {
     }
  
     private func configureStartDateView() {
-        self.contentView.addSubview(self.startDateView)
-        self.startDateView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(self.dateView)
+        self.dateView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.startDateView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 20),
-            self.startDateView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
-            self.startDateView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
+            self.dateView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 20),
+            self.dateView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
+            self.dateView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
         ])
-        self.startDateView.delegate = self
-    }
-    
-    private func configureEndDateView() {
-        self.contentView.addSubview(self.endDateView)
-        self.endDateView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.endDateView.topAnchor.constraint(equalTo: self.startDateView.bottomAnchor, constant: 40),
-            self.endDateView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
-            self.endDateView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
-        ])
-        self.endDateView.delegate = self
+        self.dateView.delegate = self
     }
     
     private func configurePlaceView() {
         self.contentView.addSubview(self.placeView)
         self.placeView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.placeView.topAnchor.constraint(equalTo: self.endDateView.bottomAnchor, constant: 40),
+            self.placeView.topAnchor.constraint(equalTo: self.dateView.bottomAnchor, constant: 40),
             self.placeView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             self.placeView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20)
         ])
@@ -243,12 +222,6 @@ class RegisterViewController: UIViewController {
         self.datePicker.removeFromSuperview()
         self.dateToolBar.removeFromSuperview()
     }
-    
-    @objc private func onEndDoneTouched() {
-        self.registerViewModel.didEndDatePicked(self.datePicker.date)
-        self.datePicker.removeFromSuperview()
-        self.dateToolBar.removeFromSuperview()
-    }
 
     @objc private func tapEmptySpace(){
         self.view.endEditing(true)
@@ -259,15 +232,11 @@ class RegisterViewController: UIViewController {
     }
 }
 
-extension RegisterViewController: StartDateViewDelegate, EndDateViewDelegate {
-    func startDateButtonDidTouched() {
+extension RegisterViewController: DateViewDelegate {
+    
+    func dateButtonDidTouched() {
         self.configureDatePicker()
         self.configureStartDateToolBar()
-    }
-    
-    func endDateButtonDidTouched() {
-        self.configureDatePicker()
-        self.configureEndDateToolBar()
     }
     
     private func configureDatePicker() {
@@ -303,20 +272,6 @@ extension RegisterViewController: StartDateViewDelegate, EndDateViewDelegate {
         ])
     }
     
-    private func configureEndDateToolBar() {
-        self.view.addSubview(self.dateToolBar)
-        self.dateToolBar.translatesAutoresizingMaskIntoConstraints = false
-        self.dateToolBar.barStyle = .default
-        self.dateToolBar.items = [UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.onEndDoneTouched))]
-        self.dateToolBar.sizeToFit()
-        
-        NSLayoutConstraint.activate([
-            self.dateToolBar.bottomAnchor.constraint(equalTo: self.datePicker.topAnchor),
-            self.dateToolBar.leftAnchor.constraint(equalTo: self.view.leftAnchor),
-            self.dateToolBar.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-            self.dateToolBar.heightAnchor.constraint(equalToConstant: 50)
-        ])
-    }
 }
 
 extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

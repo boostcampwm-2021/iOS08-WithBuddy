@@ -1,5 +1,5 @@
 //
-//  StartDateView.swift
+//  DateView.swift
 //  WithBuddy
 //
 //  Created by Inwoo Park on 2021/11/06.
@@ -8,14 +8,14 @@
 import UIKit
 import Combine
 
-final class StartDateView: UIView {
+final class DateView: UIView {
     
     private lazy var dateTitleLabel = UILabel()
     private lazy var dateBackgroundView = UIView()
     private lazy var dateLabel = UILabel()
     private lazy var dateButton = UIButton()
     
-    weak var delegate: StartDateViewDelegate?
+    weak var delegate: DateViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,7 +40,7 @@ final class StartDateView: UIView {
     
     private func configureTitleLabel() {
         self.addSubview(self.dateTitleLabel)
-        self.dateTitleLabel.text = "모임 시작일"
+        self.dateTitleLabel.text = "모임 날짜"
         self.dateTitleLabel.textColor = UIColor(named: "LabelPurple")
         self.dateTitleLabel.font = .boldSystemFont(ofSize: 20)
         
@@ -90,10 +90,10 @@ final class StartDateView: UIView {
     }
     
     @objc private func onDateButtonTouched(_ sender: UIButton) {
-        self.delegate?.startDateButtonDidTouched()
+        self.delegate?.dateButtonDidTouched()
     }
 }
 
-protocol StartDateViewDelegate: AnyObject {
-    func startDateButtonDidTouched()
+protocol DateViewDelegate: AnyObject {
+    func dateButtonDidTouched()
 }

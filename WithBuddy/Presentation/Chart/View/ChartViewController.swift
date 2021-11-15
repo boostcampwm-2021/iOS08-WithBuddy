@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 final class ChartViewController: UIViewController {
     
@@ -14,10 +15,18 @@ final class ChartViewController: UIViewController {
     private let bubbleChartView = BubbleChartView()
     private let purposeChartView = PurposeChartView()
     private let latestOldChartView = LatestOldChartView()
+    private let viewModel = ChartViewModel()
+    private var cancellables: Set<AnyCancellable> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configure()
+        self.bind()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.viewModel.fetch()
     }
     
     private func configure() {
@@ -27,6 +36,32 @@ final class ChartViewController: UIViewController {
         self.configurePurposeChartView()
         self.configureLatestOldChartView()
         self.update(name: "정아")
+    }
+    
+    private func bind() {
+        self.viewModel.$buddyLank
+            .sink { [weak self] list in
+                self?.update(buddyList: list)
+            }
+            .store(in: &self.cancellables)
+        
+        self.viewModel.$purposeLank
+            .sink { [weak self] list in
+                self?.update(purposeList: list)
+            }
+            .store(in: &self.cancellables)
+        
+        self.viewModel.$latestBuddy
+            .sink { [weak self] buddy in
+                self?.update(latestBuddy: buddy)
+            }
+            .store(in: &self.cancellables)
+        
+        self.viewModel.$oldBuddy
+            .sink { [weak self] buddy in
+                self?.update(oldBuddy: buddy)
+            }
+            .store(in: &self.cancellables)
     }
     
     private func configureScrollView() {
@@ -89,8 +124,24 @@ final class ChartViewController: UIViewController {
         self.latestOldChartView.update(name: name)
     }
     
-    private func update(latest: String, old: String) {
-        self.latestOldChartView.update(latest: latest, old: old)
+    private func update(buddyList: [Buddy]?) {
+        guard let list = buddyList else { return }
+        self.bubbleChartView.update(list: list)
+    }
+    
+    private func update(purposeList: [String]?) {
+        guard let list = purposeList else { return }
+        self.purposeChartView.update(list: list)
+    }
+    
+    private func update(latestBuddy: Buddy?) {
+        guard let buddy = latestBuddy else { return }
+        self.latestOldChartView.update(latestName: buddy.name, face: buddy.face)
+    }
+    
+    private func update(oldBuddy: Buddy?) {
+        guard let buddy = oldBuddy else { return }
+        self.latestOldChartView.update(oldName: buddy.name, face: buddy.face)
     }
 
 }

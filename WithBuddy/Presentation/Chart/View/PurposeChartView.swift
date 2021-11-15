@@ -32,12 +32,39 @@ final class PurposeChartView: UIView {
         self.nameLabel.text = name
     }
     
+    func update(list: [String]) {
+        let first = list.indices ~= 0 ? list[0] : nil
+        let second = list.indices ~= 1 ? list[1] : nil
+        let third = list.indices ~= 2 ? list[2] : nil
+        let fourth = list.indices ~= 3 ? list[3] : nil
+        
+        if first == nil {
+            self.configureDefaultPurpose()
+            return
+        }
+        
+        self.update(name: first, view: firstPurposeView)
+        self.update(name: second, view: secondPurposeView)
+        self.update(name: third, view: thirdPurposeView)
+        self.update(name: fourth, view: fourthPurposeView)
+    }
+    
+    private func update(name: String?, view: PurposeView) {
+        if let name = name {
+            view.update(image: name, purpose: name)
+            view.isHidden = false
+            return
+        }
+        view.isHidden = true
+    }
+    
     private func configure() {
         self.configureNameLabel()
         self.configureWhiteView()
         self.configureTitleLabel()
         self.configureStackView()
         self.configurePurposeView()
+        self.configureDefaultPurpose()
     }
     
     private func configureNameLabel() {
@@ -88,6 +115,13 @@ final class PurposeChartView: UIView {
         self.stackView.addArrangedSubview(self.secondPurposeView)
         self.stackView.addArrangedSubview(self.thirdPurposeView)
         self.stackView.addArrangedSubview(self.fourthPurposeView)
+    }
+    
+    private func configureDefaultPurpose() {
+        self.firstPurposeView.isHidden = false
+        self.secondPurposeView.isHidden = false
+        self.thirdPurposeView.isHidden = false
+        self.fourthPurposeView.isHidden = false
         self.firstPurposeView.update(image: "DefaultHobby", purpose: "취미")
         self.secondPurposeView.update(image: "DefaultStudy", purpose: "공부")
         self.thirdPurposeView.update(image: "DefaultMeal", purpose: "식사")

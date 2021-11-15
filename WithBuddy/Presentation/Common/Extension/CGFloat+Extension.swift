@@ -11,8 +11,8 @@ extension CGFloat {
     static let outsidePartInset = CGFloat(20)
     static let innerPartInset = CGFloat(10)
     
-    static let registerViewOutsideLeadingInset = CGFloat(20)
-    static let registerViewOutsideTrailingInset = CGFloat(-20)
+    static let outsideLeadingInset = CGFloat(20)
+    static let outsideTrailingInset = CGFloat(-20)
     
     static let backgroudInnerLeadingInset = CGFloat(20)
     static let backgroudInnerTrailingInset = CGFloat(-20)

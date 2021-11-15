@@ -23,7 +23,6 @@ enum RegisterError: LocalizedError {
 class RegisterViewModel {
     
     private var startDate: Date?
-    private var endDate: Date?
     private var place: String?
     private var checkedPurposeList: [Purpose] {
         return self.purposeList.filter( { $0.check })
@@ -33,7 +32,6 @@ class RegisterViewModel {
     private(set) var registerFailSignal = PassthroughSubject<RegisterError, Never>()
     
     @Published private(set) var startDateString: String?
-    @Published private(set) var endDateString: String?
     @Published private(set) var purposeList: [Purpose] = PlaceType.allCases.map({ Purpose(type: $0, check: false) })
     @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var memo: String?
@@ -50,28 +48,6 @@ class RegisterViewModel {
         
         self.startDate = Calendar.current.startOfDay(for: date)
         self.startDateString = dateFormatter.string(from: date)
-        
-        if let endDate = self.endDate,
-           endDate < date {
-            self.endDate = self.startDate
-            self.endDateString = self.startDateString
-        }
-    }
-    
-    func didEndDatePicked(_ date: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko-KR")
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
-        
-        if let startDate = startDate,
-           startDate > date {
-            self.endDate = self.startDate
-            self.endDateString = self.startDateString
-            return
-        }
-        self.endDate = Calendar.current.startOfDay(for: date)
-        self.endDateString = dateFormatter.string(from: date)
     }
     
     func didPlaceFinished(_ place: String) {
@@ -114,11 +90,10 @@ class RegisterViewModel {
         if self.buddyList.isEmpty {
             self.registerFailSignal.send(RegisterError.noBuddy)
         } else {
-            guard let startDate = startDate,
-                  let endDate = endDate else {
+            guard let startDate = startDate else {
                 return
             }
-            self.gatheringUseCase.insertGathering(Gathering(startDate: startDate, endDate: endDate, place: self.place, purpose: self.checkedPurposeList.map{ "\($0.type)" }, buddyList: self.buddyList, memo: self.memo, picture: self.pictures))
+            self.gatheringUseCase.insertGathering(Gathering(startDate: startDate, endDate: Date(), place: self.place, purpose: ["\(PlaceType.culture)", "\(PlaceType.study)", "\(PlaceType.etc)"], buddyList: self.buddyList, memo: self.memo, picture: self.pictures))
             self.registerDoneSignal.send()
         }
     }

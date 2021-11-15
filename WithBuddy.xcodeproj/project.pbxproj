@@ -23,6 +23,8 @@
 		85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D98272FEBE000825C64 /* ListViewController.swift */; };
 		8A52C4F6273947E50025C562 /* defaultImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A52C4F5273947E50025C562 /* defaultImage.png */; };
 		8A53C22F273B9EB200BB0C20 /* BuddyCustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A53C22E273B9EB200BB0C20 /* BuddyCustomViewController.swift */; };
+		8A6320B527415A85006BB1C0 /* CGFloat+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6320B427415A85006BB1C0 /* CGFloat+Extension.swift */; };
+		8A6320B72741673D006BB1C0 /* RegisterTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6320B62741673D006BB1C0 /* RegisterTitleLabel.swift */; };
 		8A73D679273A61EC001D5184 /* BuddyChoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D678273A61EC001D5184 /* BuddyChoiceViewController.swift */; };
 		8A73D67E273A6C4B001D5184 /* BuddyChoiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D67D273A6C4B001D5184 /* BuddyChoiceViewModel.swift */; };
 		8A73D683273AC3B8001D5184 /* Purpose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D682273AC3B8001D5184 /* Purpose.swift */; };
@@ -33,14 +35,7 @@
 		BB2D25A3273A550B00E7BF35 /* BuddyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A2273A550B00E7BF35 /* BuddyUseCase.swift */; };
 		BB2D25A5273A58A100E7BF35 /* GatheringUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A4273A58A100E7BF35 /* GatheringUseCase.swift */; };
 		BB2D25B1273B582500E7BF35 /* PictureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */; };
-		BB2D25B2273B582500E7BF35 /* MemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A7273B582500E7BF35 /* MemoView.swift */; };
-		BB2D25B3273B582500E7BF35 /* StartDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25A8273B582500E7BF35 /* StartDateView.swift */; };
-		BB2D25B6273B582500E7BF35 /* PictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AB273B582500E7BF35 /* PictureView.swift */; };
-		BB2D25B7273B582500E7BF35 /* BuddyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AC273B582500E7BF35 /* BuddyView.swift */; };
-		BB2D25B8273B582500E7BF35 /* EndDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AD273B582500E7BF35 /* EndDateView.swift */; };
-		BB2D25B9273B582500E7BF35 /* TypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AE273B582500E7BF35 /* TypeView.swift */; };
 		BB2D25BA273B582500E7BF35 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */; };
-		BB2D25BB273B582500E7BF35 /* PlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25B0273B582500E7BF35 /* PlaceView.swift */; };
 		BB2D25BD273B585200E7BF35 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25BC273B585200E7BF35 /* RegisterViewModel.swift */; };
 		BB2D25C2273B901600E7BF35 /* BuddyEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25BE273B901600E7BF35 /* BuddyEntity+CoreDataClass.swift */; };
 		BB2D25C4273B901600E7BF35 /* GatheringEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25C0273B901600E7BF35 /* GatheringEntity+CoreDataClass.swift */; };
@@ -88,6 +83,8 @@
 		85FA1D98272FEBE000825C64 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		8A52C4F5273947E50025C562 /* defaultImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultImage.png; sourceTree = "<group>"; };
 		8A53C22E273B9EB200BB0C20 /* BuddyCustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyCustomViewController.swift; sourceTree = "<group>"; };
+		8A6320B427415A85006BB1C0 /* CGFloat+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extension.swift"; sourceTree = "<group>"; };
+		8A6320B62741673D006BB1C0 /* RegisterTitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterTitleLabel.swift; sourceTree = "<group>"; };
 		8A73D678273A61EC001D5184 /* BuddyChoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyChoiceViewController.swift; sourceTree = "<group>"; };
 		8A73D67D273A6C4B001D5184 /* BuddyChoiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyChoiceViewModel.swift; sourceTree = "<group>"; };
 		8A73D682273AC3B8001D5184 /* Purpose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Purpose.swift; sourceTree = "<group>"; };
@@ -102,14 +99,7 @@
 		BB2D25A2273A550B00E7BF35 /* BuddyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyUseCase.swift; sourceTree = "<group>"; };
 		BB2D25A4273A58A100E7BF35 /* GatheringUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatheringUseCase.swift; sourceTree = "<group>"; };
 		BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCell.swift; sourceTree = "<group>"; };
-		BB2D25A7273B582500E7BF35 /* MemoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoView.swift; sourceTree = "<group>"; };
-		BB2D25A8273B582500E7BF35 /* StartDateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartDateView.swift; sourceTree = "<group>"; };
-		BB2D25AB273B582500E7BF35 /* PictureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PictureView.swift; sourceTree = "<group>"; };
-		BB2D25AC273B582500E7BF35 /* BuddyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuddyView.swift; sourceTree = "<group>"; };
-		BB2D25AD273B582500E7BF35 /* EndDateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndDateView.swift; sourceTree = "<group>"; };
-		BB2D25AE273B582500E7BF35 /* TypeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeView.swift; sourceTree = "<group>"; };
 		BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
-		BB2D25B0273B582500E7BF35 /* PlaceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceView.swift; sourceTree = "<group>"; };
 		BB2D25BC273B585200E7BF35 /* RegisterViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		BB2D25BE273B901600E7BF35 /* BuddyEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BuddyEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		BB2D25C0273B901600E7BF35 /* GatheringEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GatheringEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -260,15 +250,9 @@
 			isa = PBXGroup;
 			children = (
 				BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */,
-				BB2D25AC273B582500E7BF35 /* BuddyView.swift */,
-				BB2D25AD273B582500E7BF35 /* EndDateView.swift */,
-				BB2D25A7273B582500E7BF35 /* MemoView.swift */,
 				BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */,
-				BB2D25AB273B582500E7BF35 /* PictureView.swift */,
-				BB2D25B0273B582500E7BF35 /* PlaceView.swift */,
+				8A6320B62741673D006BB1C0 /* RegisterTitleLabel.swift */,
 				BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */,
-				BB2D25A8273B582500E7BF35 /* StartDateView.swift */,
-				BB2D25AE273B582500E7BF35 /* TypeView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -436,6 +420,7 @@
 			isa = PBXGroup;
 			children = (
 				F7E8AC37273CD428005F8306 /* UIView+Extension.swift */,
+				8A6320B427415A85006BB1C0 /* CGFloat+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -546,7 +531,7 @@
 				F7E8AC3B273CD4DC005F8306 /* FaceColor.swift in Sources */,
 				F7E8AC2F273CB5F9005F8306 /* Gathering.swift in Sources */,
 				F7A7699B2732588500FF83EA /* WBCalendarView.swift in Sources */,
-				BB2D25B6273B582500E7BF35 /* PictureView.swift in Sources */,
+				8A6320B527415A85006BB1C0 /* CGFloat+Extension.swift in Sources */,
 				F7E8ABB8273A54A5005F8306 /* CalendarDetailView.swift in Sources */,
 				F7B69B8A273398C4005D2F32 /* CalendarManager.swift in Sources */,
 				F7E8ABBC273A6B17005F8306 /* CalendarDetailViewModel.swift in Sources */,
@@ -554,26 +539,22 @@
 				F7B69B8C27339EF9005D2F32 /* WBCalendarViewCell.swift in Sources */,
 				85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */,
 				F7E8AC38273CD428005F8306 /* UIView+Extension.swift in Sources */,
+				F7E8AC38273CD428005F8306 /* UIView+Extension.swift in Sources */,
 				BB2D25602731317E00E7BF35 /* ChartViewController.swift in Sources */,
 				F7A7699727315AF800FF83EA /* HeaderView.swift in Sources */,
 				85D262E8273CD703000190B8 /* PurposeChartView.swift in Sources */,
 				BBF7FF40272FB7B700B71C97 /* TabBarViewController.swift in Sources */,
-				BB2D25B8273B582500E7BF35 /* EndDateView.swift in Sources */,
-				BB2D25B2273B582500E7BF35 /* MemoView.swift in Sources */,
-				BB2D25BB273B582500E7BF35 /* PlaceView.swift in Sources */,
 				BB2D254B2730D97000E7BF35 /* PlaceType.swift in Sources */,
 				BB2D255E2731317100E7BF35 /* SettingViewController.swift in Sources */,
 				8A73D67E273A6C4B001D5184 /* BuddyChoiceViewModel.swift in Sources */,
 				854AA75E27337A7200663911 /* SearchView.swift in Sources */,
 				85D262F6273CFEBF000190B8 /* LatestOldView.swift in Sources */,
-				BB2D25B9273B582500E7BF35 /* TypeView.swift in Sources */,
 				BB2D25BA273B582500E7BF35 /* RegisterViewController.swift in Sources */,
 				8A53C22F273B9EB200BB0C20 /* BuddyCustomViewController.swift in Sources */,
 				8A73D683273AC3B8001D5184 /* Purpose.swift in Sources */,
 				BB2D25B1273B582500E7BF35 /* PictureCollectionViewCell.swift in Sources */,
 				BB2D25C4273B901600E7BF35 /* GatheringEntity+CoreDataClass.swift in Sources */,
 				85D262EC273CDEBE000190B8 /* LatestOldChartView.swift in Sources */,
-				BB2D25B3273B582500E7BF35 /* StartDateView.swift in Sources */,
 				F7E8ABBE273A8D43005F8306 /* WBCalendarViewModel.swift in Sources */,
 				85D262F8273D138E000190B8 /* DefaultView.swift in Sources */,
 				F7E8ABB42738133B005F8306 /* CalendarDetailViewController.swift in Sources */,
@@ -581,7 +562,7 @@
 				85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */,
 				854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */,
 				F7E8ABC5273BB814005F8306 /* GatheringDetailViewController.swift in Sources */,
-				BB2D25B7273B582500E7BF35 /* BuddyView.swift in Sources */,
+				8A6320B72741673D006BB1C0 /* RegisterTitleLabel.swift in Sources */,
 				BB2D25C2273B901600E7BF35 /* BuddyEntity+CoreDataClass.swift in Sources */,
 				85D262F2273CE7D6000190B8 /* TitleLabel.swift in Sources */,
 				BB2D25BD273B585200E7BF35 /* RegisterViewModel.swift in Sources */,

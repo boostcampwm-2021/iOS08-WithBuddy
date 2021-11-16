@@ -101,24 +101,24 @@ class SettingViewController: UIViewController {
     private func configureRemoveAllGatheringButton() {
         self.view.addSubview(self.removeAllGatheringButton)
         self.removeAllGatheringButton.setTitle("모임 목록 초기화", for: .normal)
-        self.makeButtonLayer(button: self.removeAllGatheringButton, upperbutton: self.userNameUnderbar)
+        self.makeButtonLayer(button: self.removeAllGatheringButton, upperView: self.userNameUnderbar)
     }
     
     private func configureManageBuddyButton() {
         self.view.addSubview(self.manageBuddyButton)
         self.manageBuddyButton.setTitle("버디 관리", for: .normal)
         self.manageBuddyButton.addTarget(self, action: #selector(moveToBuddyManage), for: .touchUpInside)
-        self.makeButtonLayer(button: self.manageBuddyButton, upperbutton: self.removeAllGatheringButton)
+        self.makeButtonLayer(button: self.manageBuddyButton, upperView: self.removeAllGatheringButton)
     }
 
     private func configureDeveloperInfo() {
         self.view.addSubview(self.developerInfoButton)
         self.developerInfoButton.setTitle("개발자 정보", for: .normal)
         self.developerInfoButton.addTarget(self, action: #selector(moveToDeveloperInfo), for: .touchUpInside)
-        self.makeButtonLayer(button: self.developerInfoButton, upperbutton: self.manageBuddyButton)
+        self.makeButtonLayer(button: self.developerInfoButton, upperView: self.manageBuddyButton)
     }
     
-    private func makeButtonLayer(button: UIButton, upperbutton: UIView) {
+    private func makeButtonLayer(button: UIButton, upperView: UIView) {
         button.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
         button.contentHorizontalAlignment = .left
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
@@ -128,7 +128,7 @@ class SettingViewController: UIViewController {
         NSLayoutConstraint.activate([
             button.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 30),
             button.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30),
-            button.topAnchor.constraint(equalTo: upperbutton.bottomAnchor, constant: 15),
+            button.topAnchor.constraint(equalTo: upperView.bottomAnchor, constant: 15),
             button.heightAnchor.constraint(equalToConstant: button.intrinsicContentSize.height * 1.5)
         ])
     }

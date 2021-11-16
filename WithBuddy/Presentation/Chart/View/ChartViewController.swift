@@ -39,13 +39,13 @@ final class ChartViewController: UIViewController {
     }
     
     private func bind() {
-        self.viewModel.$buddyLank
+        self.viewModel.$buddyRank
             .sink { [weak self] list in
                 self?.update(buddyList: list)
             }
             .store(in: &self.cancellables)
         
-        self.viewModel.$purposeLank
+        self.viewModel.$purposeRank
             .sink { [weak self] list in
                 self?.update(purposeList: list)
             }

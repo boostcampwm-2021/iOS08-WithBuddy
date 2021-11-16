@@ -21,6 +21,7 @@ final class CalendarDetailViewModel {
         self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
         self.calendarUseCase = CalendarUseCase()
         self.dayLabel = self.calendarUseCase.convertToString(day: self.selectedDate)
+        self.fetch()
     }
     
     var count: Int {

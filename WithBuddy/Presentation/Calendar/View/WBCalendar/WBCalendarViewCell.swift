@@ -12,7 +12,7 @@ class WBCalendarViewCell: UICollectionViewCell {
     static let identifier = "WBCalendarViewCell"
     private var buddyImageView = UIImageView()
     
-    var dayOfCell: UILabel = {
+    private var dayOfCell: UILabel = {
         let label = UILabel()
         label.text = ""
         label.font = .boldSystemFont(ofSize: 10)
@@ -85,8 +85,11 @@ class WBCalendarViewCell: UICollectionViewCell {
         }
     }
     
-    func update(day: Int) {
+    func update(day: Int, face: String) {
         self.dayOfCell.text = day > 0 ? String(day) : ""
+        if !face.isEmpty {
+            self.buddyImageView.image = UIImage(named: face)
+        }
     }
     
 }

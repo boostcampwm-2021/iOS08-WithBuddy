@@ -26,14 +26,12 @@ class CalendarViewController: UIViewController {
         self.configure()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        self.wbCalendar.reload()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         self.calendarViewModel.viewDidAppear()
     }
     
     private func configure() {
-        self.wbCalendar.delegate = self
-        self.detailView.delegate = self
         self.configureScrollView()
         self.configureContentView()
         self.configureHeaderView()
@@ -43,13 +41,19 @@ class CalendarViewController: UIViewController {
     }
     
     private func bind() {
-        self.calendarViewModel.todaySubject
+        self.calendarViewModel.monthSubject
             .receive(on: DispatchQueue.main)
             .sink{ month in
                 self.wbCalendar.reloadMonthLabel(month: month)
             }.store(in: &self.cancellables)
         
         self.calendarViewModel.didDaysReloadSignal
+            .receive(on: DispatchQueue.main)
+            .sink{ _ in
+                self.wbCalendar.collectionView.reloadData()
+            }.store(in: &self.cancellables)
+        
+        self.calendarViewModel.didGatheringReloadSignal
             .receive(on: DispatchQueue.main)
             .sink{ _ in
                 self.wbCalendar.collectionView.reloadData()
@@ -126,57 +130,17 @@ class CalendarViewController: UIViewController {
     
 }
 
-extension CalendarViewController: CalendarCellSelectable {
-    
-    func presentCellDetail(selectedDate: Date) {
-        self.presentDetailModal()
-        self.configureDetailLabel(selectedDate: selectedDate)
-    }
-    
-    func presentDetailModal() {
-        let calendarDetailNavigationController = UINavigationController(rootViewController: CalendarDetailViewController())
-        calendarDetailNavigationController.modalPresentationStyle = .pageSheet
-        if let sheet = calendarDetailNavigationController.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-        }
-        self.tabBarController?.present(calendarDetailNavigationController, animated: true, completion: nil)
-        calendarDetailNavigationController.view.addSubview(detailView)
-        self.detailView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.detailView.leadingAnchor.constraint(equalTo: calendarDetailNavigationController.view.leadingAnchor),
-            self.detailView.trailingAnchor.constraint(equalTo: calendarDetailNavigationController.view.trailingAnchor),
-            self.detailView.topAnchor.constraint(equalTo: calendarDetailNavigationController.view.topAnchor),
-            self.detailView.bottomAnchor.constraint(equalTo: calendarDetailNavigationController.view.bottomAnchor),
-            self.detailView.widthAnchor.constraint(equalTo: calendarDetailNavigationController.view.widthAnchor),
-            self.detailView.heightAnchor.constraint(equalTo: calendarDetailNavigationController.view.heightAnchor)
-        ])
-    }
-    
-    func configureDetailLabel(selectedDate: Date) {
-        self.detailView.saveSelecetedDate(selectedDate: selectedDate)
-    }
-    
-}
-
-extension CalendarViewController: gatheringListDelegate {
-    
-    func gatheringListTouched() {
-        self.tabBarController?.dismiss(animated: true, completion: {
-            self.navigationController?.pushViewController(GatheringDetailViewController(), animated: true)
-        })
-    }
-    
-}
-
 extension CalendarViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        self.calendarViewModel.count
+        self.calendarViewModel.maxDayOfMonth
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifier, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
-        cell.update(day: self.calendarViewModel.totalDays(index: indexPath.item))
+        let day = self.calendarViewModel.totalDays.indices ~= indexPath.item ? self.calendarViewModel.totalDays[indexPath.item] : 0
+        let face = self.calendarViewModel.totalFaces.indices ~= indexPath.item ? self.calendarViewModel.totalFaces[indexPath.item] : ""
+        cell.update(day: day, face: face)
         return cell
     }
     

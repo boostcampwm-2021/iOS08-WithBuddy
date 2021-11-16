@@ -376,7 +376,7 @@ class RegisterViewController: UIViewController {
 
     @objc func collectionViewDidTouched(_ sender: UITapGestureRecognizer) {
        if let indexPath = self.purposeCollectionView.indexPathForItem(at: sender.location(in: self.purposeCollectionView)) {
-           self.registerViewModel.didTypeTouched(indexPath.item)
+           self.registerViewModel.didPurposeTouched(indexPath.item)
        }
     }
     
@@ -621,19 +621,27 @@ extension RegisterViewController: UICollectionViewDelegate {
 }
 
 extension RegisterViewController: UITextFieldDelegate {
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text {
-            self.registerViewModel.didPlaceFinished(text)
+            self.registerViewModel.didPlaceChanged(text)
         }
         textField.resignFirstResponder()
         return true
     }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        self.registerViewModel.didPlaceChanged(text)
+    }
+    
 }
 
 extension RegisterViewController: UITextViewDelegate {
+    
     func textViewShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text {
-            self.registerViewModel.didMemoFinished(text)
+            self.registerViewModel.didMemoChanged(text)
         }
         textField.resignFirstResponder()
         return true
@@ -652,6 +660,12 @@ extension RegisterViewController: UITextViewDelegate {
             textView.textColor = UIColor(named: "LabelPurple")
         }
     }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        guard let text = textView.text else { return }
+        self.registerViewModel.didMemoChanged(text)
+    }
+    
 }
 
 extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

@@ -50,11 +50,11 @@ class RegisterViewModel {
         self.startDateString = dateFormatter.string(from: date)
     }
     
-    func didPlaceFinished(_ place: String) {
+    func didPlaceChanged(_ place: String) {
         self.place = place
     }
     
-    func didTypeTouched(_ idx: Int) {
+    func didPurposeTouched(_ idx: Int) {
         self.purposeList[idx].check.toggle()
     }
     
@@ -66,7 +66,7 @@ class RegisterViewModel {
         self.buddyList = buddyList
     }
     
-    func didMemoFinished(_ memo: String) {
+    func didMemoChanged(_ memo: String) {
         self.memo = memo
     }
     

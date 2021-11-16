@@ -94,12 +94,14 @@ class SettingViewController: UIViewController {
     func configureManageBuddyButton() {
         self.view.addSubview(self.manageBuddyButton)
         self.manageBuddyButton.setTitle("버디 관리", for: .normal)
+        self.manageBuddyButton.addTarget(self, action: #selector(moveToBuddyManage), for: .touchUpInside)
         self.makeButtonLayer(button: self.manageBuddyButton, upperbutton: self.removeAllGatheringButton)
     }
 
     func configureDeveloperInfo() {
         self.view.addSubview(self.developerInfoButton)
         self.developerInfoButton.setTitle("개발자 정보", for: .normal)
+        self.developerInfoButton.addTarget(self, action: #selector(moveToDeveloperInfo), for: .touchUpInside)
         self.makeButtonLayer(button: self.developerInfoButton, upperbutton: self.manageBuddyButton)
     }
     
@@ -118,9 +120,16 @@ class SettingViewController: UIViewController {
         ])
     }
     
-    @objc private func moveToBuddyChoice(_ sender: UIButton) {
+    @objc private func moveToBuddyManage(_ sender: UIButton) {
         self.tabBarController?.dismiss(animated: true, completion: {
-            self.navigationController?.pushViewController(BuddyChoiceViewController(), animated: true)
+            self.navigationController?.pushViewController(BuddyManageViewController(), animated: true)
         })
     }
+    
+    @objc private func moveToDeveloperInfo(_ sender: UIButton) {
+        self.tabBarController?.dismiss(animated: true, completion: {
+            self.navigationController?.pushViewController(DeveloperInfoViewController(), animated: true)
+        })
+    }
+    
 }

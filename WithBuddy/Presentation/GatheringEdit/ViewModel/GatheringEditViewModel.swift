@@ -11,7 +11,6 @@ import Combine
 class GatheringEditViewModel {
     
     private var date: Date?
-    private var place: String?
     private var checkedPurposeList: [Purpose] {
         return self.purposeList.filter( { $0.check })
     }
@@ -19,6 +18,7 @@ class GatheringEditViewModel {
     private(set) var editDoneSignal = PassthroughSubject<Void, Never>()
     private(set) var editFailSignal = PassthroughSubject<RegisterError, Never>()
     
+    @Published private(set) var place: String?
     @Published private(set) var dateString: String?
     @Published private(set) var purposeList: [Purpose] = PlaceType.allCases.map({ Purpose(type: $0, check: false) })
     @Published private(set) var buddyList: [Buddy] = []
@@ -75,7 +75,7 @@ class GatheringEditViewModel {
     }
     
     func didDoneTouched() {
-        // 여기서 편집된 내용을 저장하는 처리를 합니다. 
+        // TODO: 여기서 편집된 내용을 저장하는 처리를 합니다! (미구현)
     }
     
     func didAddBuddyTouched() {

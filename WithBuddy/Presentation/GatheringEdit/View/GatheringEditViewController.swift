@@ -67,26 +67,50 @@ class GatheringEditViewController: UIViewController {
     }
     
     private func bind() {
-        self.dataBind()
-        self.signalBind()
+        self.bindDateString()
+        self.bindPlace()
+        self.bindPurposeList()
+        self.bindBuddyList()
+        self.bindMemo()
+        self.bindPictures()
+        self.bindSignal()
     }
     
     func configure(by gathering: Gathering) {
         self.gatheringEditViewModel.didDatePicked(gathering.startDate)
         self.gatheringEditViewModel.didPlaceChanged(gathering.place ?? "")
         for (idx, place) in PlaceType.allCases.enumerated() {
-            print(idx, place)
+            if gathering.purpose.contains(place.description) {
+                self.gatheringEditViewModel.didPurposeTouched(idx)
+            }
+        }
+        self.gatheringEditViewModel.didBuddyUpdated(gathering.buddyList)
+        self.gatheringEditViewModel.didMemoChanged(gathering.memo ?? "")
+        guard let pictures = gathering.picture else { return }
+        for url in pictures {
+            self.gatheringEditViewModel.didPicturePicked(url)
         }
     }
     
-    private func dataBind() {
+    private func bindDateString() {
         self.gatheringEditViewModel.$dateString
             .receive(on: DispatchQueue.main)
             .sink { [weak self] date in
                 self?.dateContentLabel.text = date
             }
             .store(in: &self.cancellables)
-        
+    }
+    
+    private func bindPlace() {
+        self.gatheringEditViewModel.$place
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] place in
+                self?.placeTextField.text = place
+            }
+            .store(in: &self.cancellables)
+    }
+    
+    private func bindPurposeList() {
         self.gatheringEditViewModel.$purposeList
             .receive(on: DispatchQueue.main)
             .sink { [weak self] purposeList in
@@ -96,7 +120,9 @@ class GatheringEditViewController: UIViewController {
                 self?.purposeDataSource.apply(snapshot, animatingDifferences: true)
             }
             .store(in: &self.cancellables)
-        
+    }
+    
+    private func bindBuddyList() {
         self.gatheringEditViewModel.$buddyList
             .receive(on: DispatchQueue.main)
             .sink { [weak self] buddyList in
@@ -111,15 +137,24 @@ class GatheringEditViewController: UIViewController {
                 self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
             }
             .store(in: &self.cancellables)
-        
+    }
+    
+    private func bindMemo() {
+        self.gatheringEditViewModel.$memo
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] memo in
+                self?.memoTextView.text = memo
+            }
+            .store(in: &self.cancellables)
+    }
+    
+    private func bindPictures() {
         self.gatheringEditViewModel.$pictures
             .receive(on: DispatchQueue.main)
             .sink { [weak self] pictures in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, URL>()
                 if pictures.isEmpty {
-                    guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else {
-                        return
-                    }
+                    guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else { return }
                     let fileUrl = URL(fileURLWithPath: filePath)
                     snapshot.appendSections([0])
                     snapshot.appendItems([fileUrl])
@@ -132,7 +167,7 @@ class GatheringEditViewController: UIViewController {
             .store(in: &self.cancellables)
     }
     
-    private func signalBind() {
+    private func bindSignal() {
         self.gatheringEditViewModel.editDoneSignal
             .receive(on: DispatchQueue.main)
             .sink{ [weak self] in
@@ -326,9 +361,6 @@ class GatheringEditViewController: UIViewController {
     
     private func configurePlaceTextField() {
         self.placeBackgroundView.addSubview(self.placeTextField)
-        if let color = UIColor(named: "LabelPurple") {
-            self.placeTextField.attributedPlaceholder = NSAttributedString(string: "모임 장소를 적어주세요", attributes: [NSAttributedString.Key.foregroundColor: color])
-        }
         self.placeTextField.delegate = self
         
         self.placeTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -494,8 +526,6 @@ class GatheringEditViewController: UIViewController {
         self.memoTextView.autocapitalizationType = .none
         self.memoTextView.autocorrectionType = .no
         self.memoTextView.delegate = self
-        self.memoTextView.text = "모임에 대한 메모를 적어주세요."
-        self.memoTextView.textColor = UIColor(named: "LabelPurple")
         
         self.memoTextView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

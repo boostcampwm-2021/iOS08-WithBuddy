@@ -15,7 +15,6 @@ class SettingViewController: UIViewController {
     private let modifyButton = UIButton()
     private let removeAllGatheringButton = UIButton()
     private let manageBuddyButton = UIButton()
-    private let opensourceLicenseButton = UIButton()
     private let developerInfoButton = UIButton()
     
     override func viewDidLoad() {

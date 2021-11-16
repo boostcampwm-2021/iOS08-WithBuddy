@@ -361,9 +361,10 @@ class RegisterViewController: UIViewController {
         self.purposeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
 
         let purposeFlowLayout = UICollectionViewFlowLayout()
-        purposeFlowLayout.itemSize = CGSize(width: .purposeWidth, height: .purposeHeight)
+        let purposeWidth = (self.view.frame.width - (.outsideLeadingInset * 2))/5 - .innerPartInset
+        purposeFlowLayout.itemSize = CGSize(width: purposeWidth, height: .purposeHeight)
         self.purposeCollectionView.collectionViewLayout = purposeFlowLayout
-        
+
         self.purposeCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.purposeCollectionView.topAnchor.constraint(equalTo: self.purposeTitleLabel.bottomAnchor, constant: .innerPartInset),
@@ -440,7 +441,7 @@ class RegisterViewController: UIViewController {
     }
     
     @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
-        self.registerViewModel.addBuddyDidTouched()
+        self.registerViewModel.didAddBuddyTouched()
     }
     
     // MARK: - MemoPart
@@ -669,6 +670,6 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
 
 extension RegisterViewController: BuddyChoiceDelegate {
     func buddySelectingDidCompleted(_ buddyList: [Buddy]) {
-        self.registerViewModel.buddyDidUpdated(buddyList)
+        self.registerViewModel.didBuddyUpdated(buddyList)
     }
 }

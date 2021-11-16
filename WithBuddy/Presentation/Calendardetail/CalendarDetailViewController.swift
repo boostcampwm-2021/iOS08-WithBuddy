@@ -38,13 +38,13 @@ class CalendarDetailViewController: UIViewController {
         self.calendarDetailViewModel.$dayLabel
         .receive(on: DispatchQueue.main)
         .sink{ label in
-            self.detailLabel.text = label + "모임"
+            self.detailLabel.text = label + " 모임"
         }.store(in: &self.cancellables)
         
         self.calendarDetailViewModel.$gatheringList
         .receive(on: DispatchQueue.main)
         .sink{ gatheringList in
-            print(gatheringList.count)
+            self.detailCollectionView.reloadData()
         }.store(in: &self.cancellables)
     }
     

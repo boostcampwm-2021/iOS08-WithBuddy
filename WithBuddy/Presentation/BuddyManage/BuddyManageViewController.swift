@@ -47,6 +47,7 @@ class BuddyManageViewController: UIViewController {
         self.configureSearchView()
         self.configureButton()
         self.configureBuddyCollectionView()
+        self.buddyManageViewModel.buddyListDidLoaded()
     }
     
     private func configureSearchView() {

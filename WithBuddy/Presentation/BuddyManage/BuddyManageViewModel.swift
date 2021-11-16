@@ -23,17 +23,8 @@ class BuddyManageViewModel {
         self.storedBuddyList.append(buddy)
     }
     
-    func buddyListDidLoaded(by buddyList: [Buddy]) {
-        let storedBuddyList = self.buddyUseCase.fetchBuddy()
-        storedBuddyList.forEach( { buddy in
-            var checkedBuddy = buddy
-            checkedBuddy.check = true
-            if buddyList.contains(checkedBuddy) {
-                self.storedBuddyList.append(checkedBuddy)
-            } else {
-                self.storedBuddyList.append(buddy)
-            }
-        })
+    func buddyListDidLoaded() {
+        self.storedBuddyList = self.buddyUseCase.fetchBuddy()
     }
     
 }

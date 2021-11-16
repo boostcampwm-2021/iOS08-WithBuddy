@@ -440,7 +440,7 @@ class RegisterViewController: UIViewController {
     }
     
     @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
-        self.registerViewModel.addBuddyDidTouched()
+        self.registerViewModel.didAddBuddyTouched()
     }
     
     // MARK: - MemoPart
@@ -669,6 +669,6 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
 
 extension RegisterViewController: BuddyChoiceDelegate {
     func buddySelectingDidCompleted(_ buddyList: [Buddy]) {
-        self.registerViewModel.buddyDidUpdated(buddyList)
+        self.registerViewModel.didBuddyUpdated(buddyList)
     }
 }

@@ -58,11 +58,11 @@ class RegisterViewModel {
         self.purposeList[idx].check.toggle()
     }
     
-    func buddyDidAdded(_ buddy: Buddy) {
+    func didBuddyAdded(_ buddy: Buddy) {
         self.buddyList.insert(buddy, at: 0)
     }
     
-    func buddyDidUpdated(_ buddyList: [Buddy]) {
+    func didBuddyUpdated(_ buddyList: [Buddy]) {
         self.buddyList = buddyList
     }
     
@@ -98,7 +98,7 @@ class RegisterViewModel {
         }
     }
     
-    func addBuddyDidTouched() {
+    func didAddBuddyTouched() {
         self.addBuddySignal.send(self.buddyList)
     }
     

@@ -48,17 +48,24 @@ final class BubbleChartView: UIView {
             return
         }
         
-        self.update(imageView: self.firstBubbleImageView, face: first?.face)
-        self.update(imageView: self.secondBubbleImageView, face: second?.face)
-        self.update(imageView: self.thirdBubbleImageView, face: third?.face)
-        self.update(imageView: self.fourthBubbleImageView, face: fourth?.face)
-        self.update(imageView: self.fifthBubbleImageView, face: fifth?.face)
+        let constantX = CGFloat(60)
+        let constantY = CGFloat(50)
+        self.defaultView.isHidden = true
+        self.update(imageView: self.firstBubbleImageView, face: first?.face, xValue: 0, yValue: 0)
+        self.update(imageView: self.secondBubbleImageView, face: second?.face, xValue: -constantX, yValue: -constantY)
+        self.update(imageView: self.thirdBubbleImageView, face: third?.face, xValue: constantX, yValue: constantY)
+        self.update(imageView: self.fourthBubbleImageView, face: fourth?.face, xValue: -constantX, yValue: constantY)
+        self.update(imageView: self.fifthBubbleImageView, face: fifth?.face, xValue: constantX, yValue: -constantY)
     }
     
-    private func update(imageView: UIImageView, face: String?) {
+    private func update(imageView: UIImageView, face: String?, xValue: CGFloat, yValue: CGFloat) {
         if let face = face {
             imageView.image = UIImage(named: face)
             imageView.isHidden = false
+            if imageView != self.firstBubbleImageView {
+                let firstOrigin = self.firstBubbleImageView.frame.origin
+                imageView.frame = CGRect(x: firstOrigin.x + xValue, y: firstOrigin.y + yValue, width: self.maxLength, height: self.maxLength)
+            }
             return
         }
         imageView.isHidden = true
@@ -126,23 +133,10 @@ final class BubbleChartView: UIView {
     }
     
     private func configureBubbles() {
-        let constantX = CGFloat(60)
-        let constantY = CGFloat(50)
-        self.configureBubble(imageView: self.secondBubbleImageView, xValue: -constantX, yValue: -constantY)
-        self.configureBubble(imageView: self.thirdBubbleImageView, xValue: constantX, yValue: constantY)
-        self.configureBubble(imageView: self.fourthBubbleImageView, xValue: -constantX, yValue: constantY)
-        self.configureBubble(imageView: self.fifthBubbleImageView, xValue: constantX, yValue: -constantY)
-    }
-    
-    private func configureBubble(imageView: UIImageView, xValue: CGFloat, yValue: CGFloat) {
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "FacePink1")
-        NSLayoutConstraint.activate([
-            imageView.centerXAnchor.constraint(equalTo: self.firstBubbleImageView.centerXAnchor, constant: xValue),
-            imageView.centerYAnchor.constraint(equalTo: self.firstBubbleImageView.centerYAnchor, constant: yValue),
-            imageView.widthAnchor.constraint(equalToConstant: self.maxLength),
-            imageView.heightAnchor.constraint(equalToConstant: self.maxLength)
-        ])
+        self.secondBubbleImageView.isHidden = true
+        self.thirdBubbleImageView.isHidden = true
+        self.fourthBubbleImageView.isHidden = true
+        self.fifthBubbleImageView.isHidden = true
     }
     
     private func configureDefaultView() {

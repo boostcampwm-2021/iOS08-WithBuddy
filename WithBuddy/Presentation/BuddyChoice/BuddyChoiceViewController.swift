@@ -134,6 +134,19 @@ class BuddyChoiceViewController: UIViewController {
         self.buddyChoiceViewModel.buddySelectingDidCompleted()
     }
     
+    private func searchBuddy(by text: String) {
+        let buddyList = self.buddyChoiceViewModel.storedBuddyList
+        let filtered = buddyList.filter{ $0.name.contains(text) }
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
+        snapshot.appendSections([0])
+        if text.isEmpty {
+            snapshot.appendItems(buddyList)
+        } else {
+            snapshot.appendItems(filtered)
+        }
+        self.buddyDataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
 }
 
 extension BuddyChoiceViewController: UITextFieldDelegate {
@@ -141,6 +154,11 @@ extension BuddyChoiceViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        self.searchBuddy(by: text)
     }
     
 }

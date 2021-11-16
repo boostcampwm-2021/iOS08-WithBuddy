@@ -361,7 +361,7 @@ class RegisterViewController: UIViewController {
         self.purposeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
 
         let purposeFlowLayout = UICollectionViewFlowLayout()
-        let purposeWidth = (self.view.frame.width-40)/5 - 10
+        let purposeWidth = (self.view.frame.width - (.outsideLeadingInset * 2))/5 - .innerPartInset
         purposeFlowLayout.itemSize = CGSize(width: purposeWidth, height: .purposeHeight)
         self.purposeCollectionView.collectionViewLayout = purposeFlowLayout
 

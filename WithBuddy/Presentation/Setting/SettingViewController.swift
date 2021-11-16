@@ -22,12 +22,12 @@ class SettingViewController: UIViewController {
         self.configure()
     }
     
-    func configure() {
+    private func configure() {
         self.configureUserInfo()
         self.configureButtons()
     }
     
-    func configureUserInfo() {
+    private func configureUserInfo() {
         self.view.addSubview(self.userImageView)
         self.userImageView.image = UIImage(named: "FacePurple3")
         self.userImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -78,33 +78,33 @@ class SettingViewController: UIViewController {
         })
     }
     
-    func configureButtons() {
+    private func configureButtons() {
         self.configureRemoveAllGatheringButton()
         self.configureManageBuddyButton()
         self.configureDeveloperInfo()
     }
     
-    func configureRemoveAllGatheringButton() {
+    private func configureRemoveAllGatheringButton() {
         self.view.addSubview(self.removeAllGatheringButton)
         self.removeAllGatheringButton.setTitle("모임 목록 초기화", for: .normal)
         self.makeButtonLayer(button: self.removeAllGatheringButton, upperbutton: self.userNameUnderbar)
     }
     
-    func configureManageBuddyButton() {
+    private func configureManageBuddyButton() {
         self.view.addSubview(self.manageBuddyButton)
         self.manageBuddyButton.setTitle("버디 관리", for: .normal)
         self.manageBuddyButton.addTarget(self, action: #selector(moveToBuddyManage), for: .touchUpInside)
         self.makeButtonLayer(button: self.manageBuddyButton, upperbutton: self.removeAllGatheringButton)
     }
 
-    func configureDeveloperInfo() {
+    private func configureDeveloperInfo() {
         self.view.addSubview(self.developerInfoButton)
         self.developerInfoButton.setTitle("개발자 정보", for: .normal)
         self.developerInfoButton.addTarget(self, action: #selector(moveToDeveloperInfo), for: .touchUpInside)
         self.makeButtonLayer(button: self.developerInfoButton, upperbutton: self.manageBuddyButton)
     }
     
-    func makeButtonLayer(button: UIButton, upperbutton: UIView) {
+    private func makeButtonLayer(button: UIButton, upperbutton: UIView) {
         button.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
         button.contentHorizontalAlignment = .left
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)

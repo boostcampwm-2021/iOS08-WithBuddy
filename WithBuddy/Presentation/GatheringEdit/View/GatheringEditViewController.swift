@@ -1,14 +1,14 @@
 //
-//  GatheringDetailViewController.swift
+//  GatheringEditViewController.swift
 //  WithBuddy
 //
-//  Created by 이나정 on 2021/11/10.
+//  Created by Inwoo Park on 2021/11/16.
 //
 
 import UIKit
 import Combine
 
-class GatheringDetailViewController: UIViewController {
+class GatheringEditViewController: UIViewController {
     
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
@@ -16,6 +16,7 @@ class GatheringDetailViewController: UIViewController {
     private lazy var dateTitleLabel = RegisterTitleLabel()
     private lazy var dateBackgroundView = UIView()
     private lazy var dateContentLabel = UILabel()
+    private lazy var datePickButton = UIButton()
   
     private lazy var placeTitleLabel = RegisterTitleLabel()
     private lazy var placeBackgroundView = UIView()
@@ -30,6 +31,7 @@ class GatheringDetailViewController: UIViewController {
     }
     
     private lazy var buddyTitleLabel = RegisterTitleLabel()
+    private lazy var buddyAddButton = UIButton()
     private lazy var buddyCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifier, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
@@ -42,6 +44,7 @@ class GatheringDetailViewController: UIViewController {
     private lazy var memoTextView = UITextView()
     
     private lazy var pictureTitleLabel = RegisterTitleLabel()
+    private lazy var pictureAddButton = UIButton()
     private lazy var pictureCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     private lazy var pictureDataSource = UICollectionViewDiffableDataSource<Int, URL>(collectionView: self.pictureCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: URL) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PictureCollectionViewCell.identifier, for: indexPath) as? PictureCollectionViewCell else { preconditionFailure() }
@@ -49,16 +52,112 @@ class GatheringDetailViewController: UIViewController {
         return cell
     }
     
-    private var gatheringDetailViewModel = GatheringDetailViewModel()
+    private lazy var datePicker = UIDatePicker()
+    private lazy var dateToolBar = UIToolbar()
+    
+    private var gatheringEditViewModel = GatheringEditViewModel()
     private var cancellables: Set<AnyCancellable> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configure()
         self.bind()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .done, target: self, action: #selector(self.editGathering))
+        self.configure()
+        self.gatheringEditViewModel.didDatePicked(Date())
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addGathering))
     }
-
+    
+    private func bind() {
+        self.dataBind()
+        self.signalBind()
+    }
+    
+    func configure(by gathering: Gathering) {
+        self.gatheringEditViewModel.didDatePicked(gathering.startDate)
+        self.gatheringEditViewModel.didPlaceChanged(gathering.place ?? "")
+        for (idx, place) in PlaceType.allCases.enumerated() {
+            print(idx, place)
+        }
+    }
+    
+    private func dataBind() {
+        self.gatheringEditViewModel.$dateString
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] date in
+                self?.dateContentLabel.text = date
+            }
+            .store(in: &self.cancellables)
+        
+        self.gatheringEditViewModel.$purposeList
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] purposeList in
+                var snapshot = NSDiffableDataSourceSnapshot<Int, Purpose>()
+                snapshot.appendSections([0])
+                snapshot.appendItems(purposeList)
+                self?.purposeDataSource.apply(snapshot, animatingDifferences: true)
+            }
+            .store(in: &self.cancellables)
+        
+        self.gatheringEditViewModel.$buddyList
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] buddyList in
+                var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
+                if buddyList.isEmpty {
+                    snapshot.appendSections([0])
+                    snapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "FacePurple1")])
+                } else {
+                    snapshot.appendSections([0])
+                    snapshot.appendItems(buddyList)
+                }
+                self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
+            }
+            .store(in: &self.cancellables)
+        
+        self.gatheringEditViewModel.$pictures
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] pictures in
+                var snapshot = NSDiffableDataSourceSnapshot<Int, URL>()
+                if pictures.isEmpty {
+                    guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else {
+                        return
+                    }
+                    let fileUrl = URL(fileURLWithPath: filePath)
+                    snapshot.appendSections([0])
+                    snapshot.appendItems([fileUrl])
+                } else {
+                    snapshot.appendSections([0])
+                    snapshot.appendItems(pictures)
+                }
+                self?.pictureDataSource.apply(snapshot, animatingDifferences: true)
+            }
+            .store(in: &self.cancellables)
+    }
+    
+    private func signalBind() {
+        self.gatheringEditViewModel.editDoneSignal
+            .receive(on: DispatchQueue.main)
+            .sink{ [weak self] in
+                self?.alertSuccess()
+            }
+            .store(in: &self.cancellables)
+        
+        self.gatheringEditViewModel.editFailSignal
+            .receive(on: DispatchQueue.main)
+            .sink{ [weak self] result in
+                self?.alertError(result)
+            }
+            .store(in: &self.cancellables)
+        
+        self.gatheringEditViewModel.addBuddySignal
+            .receive(on: DispatchQueue.main)
+            .sink{ [weak self] buddyList in
+                let buddyChoiceViewController = BuddyChoiceViewController()
+                buddyChoiceViewController.delegate = self
+                buddyChoiceViewController.configureBuddyList(by: buddyList)
+                self?.navigationController?.pushViewController(buddyChoiceViewController, animated: true)
+            }
+            .store(in: &self.cancellables)
+    }
+    
     private func configure() {
         self.view.backgroundColor = UIColor(named: "BackgroundPurple")
         
@@ -70,76 +169,6 @@ class GatheringDetailViewController: UIViewController {
         self.configureBuddyPart()
         self.configureMemoPart()
         self.configurePicturePart()
-    }
-    
-    private func bind() {
-        self.signalBind()
-        self.dataBind()
-    }
-    
-    private func signalBind() {
-        self.gatheringDetailViewModel.goEditSignal
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] gathering in
-                let gatheringEditViewController = GatheringEditViewController()
-                gatheringEditViewController.configure(by: gathering)
-                self?.navigationController?.pushViewController(gatheringEditViewController, animated: true)
-            })
-            .store(in: &cancellables)
-    }
-    
-    private func dataBind() {
-        self.gatheringDetailViewModel.$gathering
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] gathering in
-                guard let gathering = gathering else { return }
-                let dateFormatter = DateFormatter()
-                dateFormatter.locale = Locale(identifier: "ko-KR")
-                dateFormatter.dateStyle = .long
-                dateFormatter.timeStyle = .none
-                self?.dateContentLabel.text = dateFormatter.string(from: gathering.startDate)
-                self?.placeTextField.text = gathering.place
-
-                var purposeSnapshot = NSDiffableDataSourceSnapshot<Int, Purpose>()
-                purposeSnapshot.appendSections([0])
-                let purposeList = PlaceType.allCases.map({ placeType -> Purpose? in
-                    if gathering.purpose.contains(placeType.description) { return Purpose(type: placeType, check: true) }
-                    return nil
-                }).compactMap({ $0 })
-                purposeSnapshot.appendItems(purposeList)
-                self?.purposeDataSource.apply(purposeSnapshot, animatingDifferences: true)
-                
-                var buddySnapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
-                if gathering.buddyList.isEmpty {
-                    buddySnapshot.appendSections([0])
-                    buddySnapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "FacePurple1")])
-                } else {
-                    buddySnapshot.appendSections([0])
-                    buddySnapshot.appendItems(gathering.buddyList)
-                }
-                self?.buddyDataSource.apply(buddySnapshot, animatingDifferences: true)
-                self?.memoTextView.text = gathering.memo
-            
-                guard let pictures = gathering.picture else { return }
-                var pictureSnapshot = NSDiffableDataSourceSnapshot<Int, URL>()
-                if pictures.isEmpty {
-                    guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else {
-                        return
-                    }
-                    let fileUrl = URL(fileURLWithPath: filePath)
-                    pictureSnapshot.appendSections([0])
-                    pictureSnapshot.appendItems([fileUrl])
-                } else {
-                    pictureSnapshot.appendSections([0])
-                    pictureSnapshot.appendItems(pictures)
-                }
-                self?.pictureDataSource.apply(pictureSnapshot, animatingDifferences: true)
-            })
-            .store(in: &self.cancellables)
-    }
-    
-    func configure(by gathering: Gathering) {
-        self.gatheringDetailViewModel.didGatheringChanged(to: gathering)
     }
     
     private func configureScrollView() {
@@ -155,6 +184,7 @@ class GatheringDetailViewController: UIViewController {
     
     private func configureContentView() {
         self.scrollView.addSubview(self.contentView)
+        self.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapEmptySpace)))
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
@@ -171,6 +201,7 @@ class GatheringDetailViewController: UIViewController {
         self.configureDateTitle()
         self.configureDateBackground()
         self.configureDateContent()
+        self.configureDatePickButton()
     }
     
     private func configureDateTitle() {
@@ -209,6 +240,56 @@ class GatheringDetailViewController: UIViewController {
         ])
     }
     
+    private func configureDatePickButton() {
+        self.dateBackgroundView.addSubview(self.datePickButton)
+        self.datePickButton.setImage(UIImage(systemName: "calendar"), for: .normal)
+        self.datePickButton.sizeToFit()
+        self.datePickButton.addTarget(self, action: #selector(self.onDateButtonTouched(_:)), for: .touchUpInside)
+        
+        self.datePickButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.datePickButton.trailingAnchor.constraint(equalTo: self.dateBackgroundView.trailingAnchor, constant: .backgroudInnerTrailingInset),
+            self.datePickButton.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
+        ])
+    }
+    
+    @objc private func onDateButtonTouched(_ sender: UIButton) {
+        self.view.addSubview(self.datePicker)
+        self.datePicker.translatesAutoresizingMaskIntoConstraints = false
+        self.datePicker.autoresizingMask = .flexibleWidth
+        self.datePicker.datePickerMode = .date
+        self.datePicker.preferredDatePickerStyle = .inline
+        self.datePicker.locale = Locale(identifier: "ko-KR")
+        self.datePicker.timeZone = .autoupdatingCurrent
+        self.datePicker.backgroundColor = .white
+        
+        NSLayoutConstraint.activate([
+            self.datePicker.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            self.datePicker.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.datePicker.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.datePicker.heightAnchor.constraint(equalToConstant: 300)
+        ])
+        
+        self.view.addSubview(self.dateToolBar)
+        self.dateToolBar.translatesAutoresizingMaskIntoConstraints = false
+        self.dateToolBar.barStyle = .default
+        self.dateToolBar.items = [UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.onDatePickDoneTouched))]
+        self.dateToolBar.sizeToFit()
+        
+        NSLayoutConstraint.activate([
+            self.dateToolBar.bottomAnchor.constraint(equalTo: self.datePicker.topAnchor),
+            self.dateToolBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.dateToolBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            self.dateToolBar.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+    
+    @objc private func onDatePickDoneTouched() {
+        self.gatheringEditViewModel.didDatePicked(self.datePicker.date)
+        self.datePicker.removeFromSuperview()
+        self.dateToolBar.removeFromSuperview()
+    }
+    
     // MARK: - PlacePart
     
     private func configurePlacePart() {
@@ -245,7 +326,10 @@ class GatheringDetailViewController: UIViewController {
     
     private func configurePlaceTextField() {
         self.placeBackgroundView.addSubview(self.placeTextField)
-        self.placeTextField.isUserInteractionEnabled = false
+        if let color = UIColor(named: "LabelPurple") {
+            self.placeTextField.attributedPlaceholder = NSAttributedString(string: "모임 장소를 적어주세요", attributes: [NSAttributedString.Key.foregroundColor: color])
+        }
+        self.placeTextField.delegate = self
         
         self.placeTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -265,7 +349,7 @@ class GatheringDetailViewController: UIViewController {
     
     private func configurePurposeTitle() {
         self.contentView.addSubview(self.purposeTitleLabel)
-        self.purposeTitleLabel.text = "모임 목적"
+        self.purposeTitleLabel.text = "목적 선택"
         
         self.purposeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -279,7 +363,9 @@ class GatheringDetailViewController: UIViewController {
         self.contentView.addSubview(self.purposeCollectionView)
         self.purposeCollectionView.backgroundColor = .clear
         self.purposeCollectionView.showsHorizontalScrollIndicator = false
-        self.purposeCollectionView.isUserInteractionEnabled = false
+        self.purposeCollectionView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.collectionViewDidTouched(_:)))
+        self.purposeCollectionView.addGestureRecognizer(tap)
         self.purposeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
 
         let purposeFlowLayout = UICollectionViewFlowLayout()
@@ -292,20 +378,27 @@ class GatheringDetailViewController: UIViewController {
             self.purposeCollectionView.topAnchor.constraint(equalTo: self.purposeTitleLabel.bottomAnchor, constant: .innerPartInset),
             self.purposeCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
             self.purposeCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
-            self.purposeCollectionView.heightAnchor.constraint(equalToConstant: .purposeHeight)
+            self.purposeCollectionView.heightAnchor.constraint(equalToConstant: .purposeWholeHeight)
         ])
+    }
+
+    @objc func collectionViewDidTouched(_ sender: UITapGestureRecognizer) {
+       if let indexPath = self.purposeCollectionView.indexPathForItem(at: sender.location(in: self.purposeCollectionView)) {
+           self.gatheringEditViewModel.didPurposeTouched(indexPath.item)
+       }
     }
     
     // MARK: - BuddyPart
     
     private func configureBuddyPart() {
         self.configureBuddyTitle()
+        self.configureBuddyAddButton()
         self.configureBuddyCollectionView()
     }
     
     private func configureBuddyTitle() {
         self.contentView.addSubview(self.buddyTitleLabel)
-        self.buddyTitleLabel.text = "만난 버디"
+        self.buddyTitleLabel.text = "버디 추가"
         
         self.buddyTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -315,10 +408,28 @@ class GatheringDetailViewController: UIViewController {
         ])
     }
     
+    private func configureBuddyAddButton() {
+        self.contentView.addSubview(self.buddyAddButton)
+        let config = UIImage.SymbolConfiguration(
+            pointSize: .buddyWidth, weight: .medium, scale: .default)
+        let image = UIImage(systemName: "plus.circle", withConfiguration: config)
+        self.buddyAddButton.setImage(image, for: .normal)
+        self.buddyAddButton.addTarget(self, action: #selector(self.onBuddyAddButtonTouched(_:)), for: .touchUpInside)
+        
+        self.buddyAddButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.buddyAddButton.topAnchor.constraint(equalTo: self.buddyTitleLabel.bottomAnchor, constant: .innerPartInset),
+            self.buddyAddButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
+            self.buddyAddButton.widthAnchor.constraint(equalToConstant: .buddyWidth),
+            self.buddyAddButton.heightAnchor.constraint(equalTo: self.buddyAddButton.widthAnchor)
+        ])
+    }
+    
     private func configureBuddyCollectionView() {
         self.contentView.addSubview(self.buddyCollectionView)
         self.buddyCollectionView.backgroundColor = .clear
         self.buddyCollectionView.showsHorizontalScrollIndicator = false
+        self.buddyCollectionView.delegate = self
         
         self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
         
@@ -330,11 +441,15 @@ class GatheringDetailViewController: UIViewController {
         
         self.buddyCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.buddyCollectionView.topAnchor.constraint(equalTo: self.buddyTitleLabel.bottomAnchor, constant: .innerPartInset),
-            self.buddyCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.buddyCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
+            self.buddyCollectionView.topAnchor.constraint(equalTo: self.buddyAddButton.topAnchor),
+            self.buddyCollectionView.leadingAnchor.constraint(equalTo: self.buddyAddButton.trailingAnchor, constant: .buddyButtonInset),
+            self.buddyCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideLeadingInset),
             self.buddyCollectionView.heightAnchor.constraint(equalToConstant: .buddyHeight)
         ])
+    }
+    
+    @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
+        self.gatheringEditViewModel.didAddBuddyTouched()
     }
     
     // MARK: - MemoPart
@@ -378,7 +493,9 @@ class GatheringDetailViewController: UIViewController {
         self.memoTextView.textContentType = .none
         self.memoTextView.autocapitalizationType = .none
         self.memoTextView.autocorrectionType = .no
-        self.memoTextView.isUserInteractionEnabled = false
+        self.memoTextView.delegate = self
+        self.memoTextView.text = "모임에 대한 메모를 적어주세요."
+        self.memoTextView.textColor = UIColor(named: "LabelPurple")
         
         self.memoTextView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -393,6 +510,7 @@ class GatheringDetailViewController: UIViewController {
     
     private func configurePicturePart() {
         self.configurePictureTitle()
+        self.configurePictureAddButton()
         self.configurePictureCollectionView()
     }
     
@@ -408,11 +526,29 @@ class GatheringDetailViewController: UIViewController {
         ])
     }
     
+    private func configurePictureAddButton() {
+        self.contentView.addSubview(self.pictureAddButton)
+        let config = UIImage.SymbolConfiguration(
+            pointSize: 30, weight: .medium, scale: .default)
+        let image = UIImage(systemName: "plus.square", withConfiguration: config)
+        self.pictureAddButton.setImage(image, for: .normal)
+        self.pictureAddButton.addTarget(self, action: #selector(self.onPictureButtonTouched(_:)), for: .touchUpInside)
+        
+        self.pictureAddButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.pictureAddButton.centerYAnchor.constraint(equalTo: self.pictureTitleLabel.centerYAnchor),
+            self.pictureAddButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
+            self.pictureAddButton.widthAnchor.constraint(equalToConstant: .pictureAddButonSize),
+            self.pictureAddButton.heightAnchor.constraint(equalTo: self.pictureAddButton.widthAnchor)
+        ])
+    }
+    
     private func configurePictureCollectionView() {
         self.contentView.addSubview(self.pictureCollectionView)
         self.pictureCollectionView.backgroundColor = .clear
         self.pictureCollectionView.showsHorizontalScrollIndicator = false
         self.pictureCollectionView.isUserInteractionEnabled = true
+        self.pictureCollectionView.delegate = self
         
         self.pictureCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -437,8 +573,125 @@ class GatheringDetailViewController: UIViewController {
         self.pictureCollectionView.collectionViewLayout = layout
     }
     
-    @objc private func editGathering() {
-        self.gatheringDetailViewModel.didEditButtonTouched()
+    @objc private func onPictureButtonTouched(_ sender: UIButton) {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = .photoLibrary
+        present(picker, animated: true, completion: nil)
     }
     
+    // MARK: - CompletePart
+    
+    private func alertSuccess() {
+        let alert = UIAlertController(title: "편집 완료", message: "모임 편집이 완료되었습니다!", preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: { _ in
+            self.navigationController?.popViewController(animated: true)
+        })
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func alertError(_ error: RegisterError) {
+        let alert = UIAlertController(title: "등록 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @objc private func addGathering() {
+        self.gatheringEditViewModel.didDoneTouched()
+    }
+    
+    @objc private func tapEmptySpace(){
+        self.view.endEditing(true)
+    }
+}
+
+extension GatheringEditViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        if collectionView == self.pictureCollectionView {
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
+                let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash")) { _ in
+                    self.gatheringEditViewModel.didBuddyDeleteTouched(in: indexPath.item)
+                }
+                return UIMenu(title: "이 사진을", children: [delete])
+            })
+        } else {
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
+                let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
+                                      image: UIImage(systemName: "trash")) { _ in
+                    self.gatheringEditViewModel.didBuddyDeleteTouched(in: indexPath.item)
+                }
+                return UIMenu(title: "이 버디를", children: [delete])
+            })
+        }
+    }
+}
+
+extension GatheringEditViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let text = textField.text {
+            self.gatheringEditViewModel.didPlaceChanged(text)
+        }
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        self.gatheringEditViewModel.didPlaceChanged(text)
+    }
+    
+}
+
+extension GatheringEditViewController: UITextViewDelegate {
+    
+    func textViewShouldReturn(_ textField: UITextField) -> Bool {
+        if let text = textField.text {
+            self.gatheringEditViewModel.didMemoChanged(text)
+        }
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor(named: "LabelPurple") {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "모임에 대한 메모를 적어주세요."
+            textView.textColor = UIColor(named: "LabelPurple")
+        }
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        guard let text = textView.text else { return }
+        self.gatheringEditViewModel.didMemoChanged(text)
+    }
+    
+}
+
+extension GatheringEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        guard let url = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
+            return
+        }
+        self.gatheringEditViewModel.didPicturePicked(url)
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+}
+
+extension GatheringEditViewController: BuddyChoiceDelegate {
+    func buddySelectingDidCompleted(_ buddyList: [Buddy]) {
+        self.gatheringEditViewModel.didBuddyUpdated(buddyList)
+    }
 }

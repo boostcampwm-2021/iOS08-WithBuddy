@@ -46,7 +46,7 @@ class WBCalendarView: UIView {
         self.thisMonthLabel.font = .boldSystemFont(ofSize: 17)
         self.thisMonthLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.thisMonthLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 20),
+            self.thisMonthLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 35),
             self.thisMonthLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
     }
@@ -62,11 +62,9 @@ class WBCalendarView: UIView {
         self.nextMonthButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.prevMonthButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor),
-            self.prevMonthButton.trailingAnchor.constraint(equalTo: self.thisMonthLabel.leadingAnchor),
-            self.prevMonthButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            self.prevMonthButton.trailingAnchor.constraint(equalTo: self.thisMonthLabel.leadingAnchor, constant: -15),
             self.nextMonthButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor),
-            self.nextMonthButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            self.nextMonthButton.leadingAnchor.constraint(equalTo: self.thisMonthLabel.trailingAnchor)
+            self.nextMonthButton.leadingAnchor.constraint(equalTo: self.thisMonthLabel.trailingAnchor, constant: 15)
         ])
     }
     
@@ -75,8 +73,8 @@ class WBCalendarView: UIView {
         self.weekStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.weekStackView.topAnchor.constraint(equalTo: self.thisMonthLabel.bottomAnchor, constant: 30),
-            self.weekStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            self.weekStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+            self.weekStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),
+            self.weekStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -15)
         ])
         self.weekStackView.axis = .horizontal
         self.weekStackView.addArrangedSubview(self.makeWeekLabel(text: "일"))
@@ -87,6 +85,18 @@ class WBCalendarView: UIView {
         self.weekStackView.addArrangedSubview(self.makeWeekLabel(text: "금"))
         self.weekStackView.addArrangedSubview(self.makeWeekLabel(text: "토"))
         self.weekStackView.distribution = .fillEqually
+    }
+    
+    private func configureCollectionView() {
+        self.addSubview(collectionView)
+        self.collectionView.alwaysBounceVertical = false
+        self.collectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.collectionView.topAnchor.constraint(equalTo: self.weekStackView.bottomAnchor, constant: 10),
+            self.collectionView.leadingAnchor.constraint(equalTo: self.weekStackView.leadingAnchor),
+            self.collectionView.trailingAnchor.constraint(equalTo: self.weekStackView.trailingAnchor),
+            self.collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10)
+        ])
     }
     
     private func makeWeekLabel(text: String) -> UILabel {
@@ -103,17 +113,6 @@ class WBCalendarView: UIView {
     
     @objc private func plusMonth(_ sender: UIButton) {
         self.monthButtonSignal.send(1)
-    }
-    
-    private func configureCollectionView() {
-        self.addSubview(collectionView)
-        self.collectionView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.collectionView.topAnchor.constraint(equalTo: self.weekStackView.bottomAnchor, constant: 10),
-            self.collectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            self.collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            self.collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        ])
     }
     
 }

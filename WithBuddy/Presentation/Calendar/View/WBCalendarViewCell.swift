@@ -32,6 +32,7 @@ class WBCalendarViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        self.backgroundColor = .systemBackground
         self.buddyImageView.image = nil
     }
     
@@ -55,11 +56,6 @@ class WBCalendarViewCell: UICollectionViewCell {
         self.layer.cornerRadius = 0
     }
     
-    private func highlightToday() {
-        self.backgroundColor = UIColor(named: "BackgroundPurple")
-        self.layer.cornerRadius = 10
-    }
-    
     private func configureBuddyImageView() {
         self.addSubview(buddyImageView)
         self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -72,24 +68,16 @@ class WBCalendarViewCell: UICollectionViewCell {
         ])
     }
     
-    func update(day: Int, face: String, today: Date) {
-        self.configureCell()
-        self.dayOfCell.text = day > 0 ? String(day) : ""
-        if face.isEmpty == false {
-            self.buddyImageView.image = UIImage(named: face)
-        }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMdd"
-        if dateFormatter.string(from: Date()) == dateFormatter.string(from: today) {
-            self.highlightToday()
-        }
-    }
-    
     func update(day: Int, face: String) {
         self.dayOfCell.text = day > 0 ? String(day) : ""
         if !face.isEmpty {
             self.buddyImageView.image = UIImage(named: face)
         }
+    }
+    
+    func highlightCell() {
+        self.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.layer.cornerRadius = 10
     }
     
 }

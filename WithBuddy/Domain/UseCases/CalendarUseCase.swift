@@ -51,22 +51,16 @@ final class CalendarUseCase {
         return self.calendar.date(byAdding: dateComponents, to: baseDate) ?? Date()
     }
     
-    func month(baseDate: Date) -> String {
+    func month(baseDate: Date) -> Int {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "M"
-        return dateFormatter.string(from: baseDate)
+        return Int(dateFormatter.string(from: baseDate)) ?? 0
     }
     
-    func year(baseDate: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy"
-        return dateFormatter.string(from: baseDate)
-    }
-    
-    func day(baseDate: Date) -> String {
+    func day(baseDate: Date) -> Int {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd"
-        return dateFormatter.string(from: baseDate)
+        return Int(dateFormatter.string(from: baseDate)) ?? 0
     }
     
 }

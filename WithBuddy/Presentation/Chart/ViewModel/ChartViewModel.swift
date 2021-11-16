@@ -9,8 +9,8 @@ import Foundation
 
 final class ChartViewModel {
     
-    @Published private(set) var buddyLank: [Buddy] = []
-    @Published private(set) var purposeLank: [String] = []
+    @Published private(set) var buddyRank: [Buddy] = []
+    @Published private(set) var purposeRank: [String] = []
     @Published private(set) var latestBuddy: Buddy?
     @Published private(set) var oldBuddy: Buddy?
     
@@ -57,7 +57,7 @@ final class ChartViewModel {
         let sortedBuddyList = buddyMap.sorted{ $0.1 > $1.1 }.map{ $0.key }
         let index = min(5, sortedBuddyList.count - 1)
         if Int.zero <= index {
-            self.buddyLank = Array(sortedBuddyList[...index])
+            self.buddyRank = Array(sortedBuddyList[...index])
         }
     }
     
@@ -66,22 +66,27 @@ final class ChartViewModel {
         
         self.gatheringList.forEach { gathering in
             gathering.purpose.forEach { purpose in
-                if purposeMap.keys.contains(purpose) {
-                    purposeMap[purpose]? += 1
-                    
-                } else {
-                    purposeMap[purpose] = 1
+                if purpose != "Etc" {
+                    if purposeMap.keys.contains(purpose) {
+                        purposeMap[purpose]? += 1
+                    } else {
+                        purposeMap[purpose] = 1
+                    }
                 }
             }
         }
         
-        let sortedPurposeList = purposeMap.sorted{ $0.value > $1.value }.map{ $0.key }
+        let sortedPurposeList = purposeMap.sorted {
+            if $0.value == $1.value { return $0.key < $1.key }
+            return $0.value > $1.value
+        }.map{ $0.key }
+        
         let index = min(3, sortedPurposeList.count - 1)
         if Int.zero <= index {
-            self.purposeLank = Array(sortedPurposeList[...index])
+            self.purposeRank = Array(sortedPurposeList[...index])
         }
     }
-
+    
     private func fetchLatestBuddy() {
         if let lastGathering = self.gatheringList.first {
             self.latestBuddy = lastGathering.buddyList.first

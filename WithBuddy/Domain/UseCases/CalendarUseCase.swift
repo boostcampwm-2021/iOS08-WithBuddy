@@ -45,10 +45,12 @@ final class CalendarUseCase {
         return (components.weekday ?? 1) - 1
     }
     
-    func pickDay(baseDate: Date, numberOfDay: Int) -> Date {
-        var dateComponents = DateComponents()
-        dateComponents.day = numberOfDay - 1
-        return self.calendar.date(byAdding: dateComponents, to: baseDate) ?? Date()
+    func makeDay(month: Date, day: Int) -> Date {
+        return self.calendar.date(
+            byAdding: .day,
+            value: day - 1,
+            to: firstDateOfMonth(baseDate: month)
+        ) ?? Date()
     }
     
     func month(baseDate: Date) -> Int {

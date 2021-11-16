@@ -12,9 +12,10 @@ final class CalendarDetailViewModel {
     @Published private(set) var gatheringList: [Gathering] = []
     private let gatheringUseCase: GatheringUseCase
     
-    init() {
+    init(selectedDate: Date) {
+        print(selectedDate)
         self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
-        self.configure()
+        self.
     }
     
     var count: Int {

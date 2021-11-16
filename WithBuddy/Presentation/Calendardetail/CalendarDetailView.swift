@@ -101,3 +101,4 @@ extension CalendarDetailView: UICollectionViewDataSource, UICollectionViewDelega
 protocol GatheringListDelegate: AnyObject {
     func gatheringListTouched(_: Gathering)
 }
+

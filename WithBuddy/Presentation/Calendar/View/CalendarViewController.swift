@@ -141,6 +141,7 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
                 selectedDate: self.calendarViewModel.findDate(index: indexPath.item)
             )
         )
+        calendarDetailViewController.delegate = self
         
         if let presentationController = calendarDetailViewController.presentationController as? UISheetPresentationController {
             presentationController.detents = [.medium(), .large()]
@@ -150,15 +151,13 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
 }
-//
-//extension CalendarViewController: GatheringListDelegate {
-//    
-//    func gatheringListTouched(_ gathering: Gathering) {
-//        self.tabBarController?.dismiss(animated: true, completion: {
-//            let gatheringDetailViewController = GatheringDetailViewController()
-//            gatheringDetailViewController.configure(by: gathering)
-//            self.navigationController?.pushViewController(gatheringDetailViewController, animated: true)
-//        })
-//    }
-//    
-//}
+
+extension CalendarViewController: GatheringListDelegate {
+    
+    func gatheringListTouched(_ gathering: Gathering) {
+            let gatheringDetailViewController = GatheringDetailViewController()
+            gatheringDetailViewController.configure(by: gathering)
+            self.navigationController?.pushViewController(gatheringDetailViewController, animated: true)
+    }
+    
+}

@@ -15,6 +15,8 @@ class CalendarDetailViewController: UIViewController {
     private var calendarDetailViewModel: CalendarDetailViewModel
     private var cancellables: Set<AnyCancellable> = []
     
+    weak var delegate: GatheringListDelegate?
+    
     init(calendarDetailViewModel: CalendarDetailViewModel) {
         self.calendarDetailViewModel = calendarDetailViewModel
         super.init(nibName: nil, bundle: nil)
@@ -98,4 +100,14 @@ extension CalendarDetailViewController: UICollectionViewDelegate, UICollectionVi
         return CGSize(width: self.detailCollectionView.frame.width, height: 150)
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.dismiss(animated: true, completion: {
+            self.delegate?.gatheringListTouched(self.calendarDetailViewModel[indexPath.item])
+        })
+    }
+    
+}
+
+protocol GatheringListDelegate: AnyObject {
+    func gatheringListTouched(_: Gathering)
 }

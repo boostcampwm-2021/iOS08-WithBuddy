@@ -49,12 +49,16 @@ class GatheringDetailViewController: UIViewController {
         return cell
     }
     
+    private var gatheringDetailViewModel = GatheringDetailViewModel()
+    private var cancellables: Set<AnyCancellable> = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configure()
+        self.bind()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .done, target: self, action: #selector(self.editGathering))
     }
-    
+
     private func configure() {
         self.view.backgroundColor = UIColor(named: "BackgroundPurple")
         
@@ -68,52 +72,74 @@ class GatheringDetailViewController: UIViewController {
         self.configurePicturePart()
     }
     
+    private func bind() {
+        self.signalBind()
+        self.dataBind()
+    }
+    
+    private func signalBind() {
+        self.gatheringDetailViewModel.goEditSignal
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] gathering in
+                let gatheringEditViewController = GatheringEditViewController()
+                gatheringEditViewController.configure(by: gathering)
+                self?.navigationController?.pushViewController(gatheringEditViewController, animated: true)
+            })
+            .store(in: &cancellables)
+    }
+    
+    private func dataBind() {
+        self.gatheringDetailViewModel.$gathering
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] gathering in
+                guard let gathering = gathering else { return }
+                let dateFormatter = DateFormatter()
+                dateFormatter.locale = Locale(identifier: "ko-KR")
+                dateFormatter.dateStyle = .long
+                dateFormatter.timeStyle = .none
+                self?.dateContentLabel.text = dateFormatter.string(from: gathering.startDate)
+                self?.placeTextField.text = gathering.place
+
+                var purposeSnapshot = NSDiffableDataSourceSnapshot<Int, Purpose>()
+                purposeSnapshot.appendSections([0])
+                let purposeList = PlaceType.allCases.map({ placeType -> Purpose? in
+                    if gathering.purpose.contains(placeType.description) { return Purpose(type: placeType, check: true) }
+                    return nil
+                }).compactMap({ $0 })
+                purposeSnapshot.appendItems(purposeList)
+                self?.purposeDataSource.apply(purposeSnapshot, animatingDifferences: true)
+                
+                var buddySnapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
+                if gathering.buddyList.isEmpty {
+                    buddySnapshot.appendSections([0])
+                    buddySnapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "FacePurple1")])
+                } else {
+                    buddySnapshot.appendSections([0])
+                    buddySnapshot.appendItems(gathering.buddyList)
+                }
+                self?.buddyDataSource.apply(buddySnapshot, animatingDifferences: true)
+                self?.memoTextView.text = gathering.memo
+            
+                guard let pictures = gathering.picture else { return }
+                var pictureSnapshot = NSDiffableDataSourceSnapshot<Int, URL>()
+                if pictures.isEmpty {
+                    guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else {
+                        return
+                    }
+                    let fileUrl = URL(fileURLWithPath: filePath)
+                    pictureSnapshot.appendSections([0])
+                    pictureSnapshot.appendItems([fileUrl])
+                } else {
+                    pictureSnapshot.appendSections([0])
+                    pictureSnapshot.appendItems(pictures)
+                }
+                self?.pictureDataSource.apply(pictureSnapshot, animatingDifferences: true)
+            })
+            .store(in: &self.cancellables)
+    }
+    
     func configure(by gathering: Gathering) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko-KR")
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
-        self.dateContentLabel.text = dateFormatter.string(from: gathering.startDate)
-        
-        self.placeTextField.text = gathering.place
-        
-        var purposeSnapshot = NSDiffableDataSourceSnapshot<Int, Purpose>()
-        purposeSnapshot.appendSections([0])
-        let purposeList = PlaceType.allCases.map({ placeType -> Purpose? in
-            if gathering.purpose.contains(placeType.description) {
-                return Purpose(type: placeType, check: true)
-            }
-            return nil
-        }).compactMap({ $0 })
-        purposeSnapshot.appendItems(purposeList)
-        self.purposeDataSource.apply(purposeSnapshot, animatingDifferences: true)
-        
-        var buddySnapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
-        if gathering.buddyList.isEmpty {
-            buddySnapshot.appendSections([0])
-            buddySnapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "FacePurple1")])
-        } else {
-            buddySnapshot.appendSections([0])
-            buddySnapshot.appendItems(gathering.buddyList)
-        }
-        self.buddyDataSource.apply(buddySnapshot, animatingDifferences: true)
-        
-        self.memoTextView.text = gathering.memo
-        
-        guard let pictures = gathering.picture else { return }
-        var pictureSnapshot = NSDiffableDataSourceSnapshot<Int, URL>()
-        if pictures.isEmpty {
-            guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else {
-                return
-            }
-            let fileUrl = URL(fileURLWithPath: filePath)
-            pictureSnapshot.appendSections([0])
-            pictureSnapshot.appendItems([fileUrl])
-        } else {
-            pictureSnapshot.appendSections([0])
-            pictureSnapshot.appendItems(pictures)
-        }
-        self.pictureDataSource.apply(pictureSnapshot, animatingDifferences: true)
+        self.gatheringDetailViewModel.didGatheringChanged(to: gathering)
     }
     
     private func configureScrollView() {
@@ -412,7 +438,7 @@ class GatheringDetailViewController: UIViewController {
     }
     
     @objc private func editGathering() {
-        
+        self.gatheringDetailViewModel.didEditButtonTouched()
     }
     
 }

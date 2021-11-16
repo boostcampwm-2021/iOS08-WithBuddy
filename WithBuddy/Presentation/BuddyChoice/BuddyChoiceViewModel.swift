@@ -54,7 +54,7 @@ class BuddyChoiceViewModel {
         storedBuddyList.forEach( { buddy in
             var checkedBuddy = buddy
             checkedBuddy.check = true
-            if buddyList.contains(checkedBuddy) {
+            if buddyList.contains(checkedBuddy) || buddyList.contains(buddy) {
                 self.storedBuddyList.append(checkedBuddy)
             } else {
                 self.storedBuddyList.append(buddy)

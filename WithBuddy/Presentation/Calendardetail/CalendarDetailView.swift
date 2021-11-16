@@ -14,7 +14,7 @@ class CalendarDetailView: UIView {
     private let calendarDetailViewModel = CalendarDetailViewModel()
     
     var selectedDate = Date()
-    weak var delegate: gatheringListDelegate?
+    weak var delegate: GatheringListDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -87,7 +87,8 @@ extension CalendarDetailView: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? ListCollectionViewCell {
             cell.animateButtonTap(duration: 0.4, scale: 0.95)
-            self.delegate?.gatheringListTouched()
+            let gathering = self.calendarDetailViewModel[indexPath.item]
+            self.delegate?.gatheringListTouched(gathering)
         }
     }
     
@@ -97,6 +98,6 @@ extension CalendarDetailView: UICollectionViewDataSource, UICollectionViewDelega
     
 }
 
-protocol gatheringListDelegate: AnyObject {
-    func gatheringListTouched()
+protocol GatheringListDelegate: AnyObject {
+    func gatheringListTouched(_: Gathering)
 }

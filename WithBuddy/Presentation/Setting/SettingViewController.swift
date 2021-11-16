@@ -28,6 +28,13 @@ class SettingViewController: UIViewController {
     }
     
     private func configureUserInfo() {
+        self.configureUserImage()
+        self.configureUserName()
+        self.configureUserNameUnderbar()
+        self.configureModifyButton()
+    }
+    
+    private func configureUserImage() {
         self.view.addSubview(self.userImageView)
         self.userImageView.image = UIImage(named: "FacePurple3")
         self.userImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -37,6 +44,9 @@ class SettingViewController: UIViewController {
             self.userImageView.widthAnchor.constraint(equalToConstant: 150),
             self.userImageView.heightAnchor.constraint(equalToConstant: 150)
         ])
+    }
+    
+    private func configureUserName() {
         self.view.addSubview(self.userNameTextField)
         self.userNameTextField.text = "나정나정"
         self.userNameTextField.isUserInteractionEnabled  = false
@@ -47,7 +57,9 @@ class SettingViewController: UIViewController {
             self.userNameTextField.widthAnchor.constraint(equalToConstant: self.userNameTextField.intrinsicContentSize.width + 20),
             self.userNameTextField.centerXAnchor.constraint(equalTo: self.userImageView.centerXAnchor)
         ])
-        
+    }
+    
+    private func configureUserNameUnderbar() {
         self.view.addSubview(self.userNameUnderbar)
         self.userNameUnderbar.backgroundColor = UIColor(named: "LabelPurple")
         self.userNameUnderbar.translatesAutoresizingMaskIntoConstraints = false
@@ -57,7 +69,9 @@ class SettingViewController: UIViewController {
             self.userNameUnderbar.topAnchor.constraint(equalTo: self.userNameTextField.bottomAnchor, constant: 5),
             self.userNameUnderbar.centerXAnchor.constraint(equalTo: self.userNameTextField.centerXAnchor)
         ])
-        
+    }
+    
+    private func configureModifyButton() {
         self.view.addSubview(self.modifyButton)
         self.modifyButton.setTitle("편집", for: .normal)
         self.modifyButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)

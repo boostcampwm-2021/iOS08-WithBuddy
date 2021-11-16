@@ -361,9 +361,10 @@ class RegisterViewController: UIViewController {
         self.purposeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
 
         let purposeFlowLayout = UICollectionViewFlowLayout()
-        purposeFlowLayout.itemSize = CGSize(width: .purposeWidth, height: .purposeHeight)
+        let purposeWidth = (self.view.frame.width-40)/5 - 10
+        purposeFlowLayout.itemSize = CGSize(width: purposeWidth, height: .purposeHeight)
         self.purposeCollectionView.collectionViewLayout = purposeFlowLayout
-        
+
         self.purposeCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.purposeCollectionView.topAnchor.constraint(equalTo: self.purposeTitleLabel.bottomAnchor, constant: .innerPartInset),

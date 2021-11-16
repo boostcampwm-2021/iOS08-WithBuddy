@@ -48,6 +48,8 @@
 		BBF7FF47272FC78100B71C97 /* Cafe24Ssurround.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF46272FC78100B71C97 /* Cafe24Ssurround.ttf */; };
 		BBF7FF49272FC78C00B71C97 /* Cafe24SsurroundAir.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF48272FC78C00B71C97 /* Cafe24SsurroundAir.ttf */; };
 		BBF7FF4C272FD7F200B71C97 /* withBuddyLaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF4B272FD7F200B71C97 /* withBuddyLaunchScreen.png */; };
+		F78F14962743A5C90034E740 /* BuddyManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78F14952743A5C90034E740 /* BuddyManageViewController.swift */; };
+		F78F14992743A6200034E740 /* DeveloperInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78F14982743A6200034E740 /* DeveloperInfoViewController.swift */; };
 		F7A7699727315AF800FF83EA /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7699627315AF800FF83EA /* HeaderView.swift */; };
 		F7A7699B2732588500FF83EA /* WBCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7699A2732588500FF83EA /* WBCalendarView.swift */; };
 		F7B69B8A273398C4005D2F32 /* CalendarUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B69B89273398C4005D2F32 /* CalendarUseCase.swift */; };
@@ -118,6 +120,8 @@
 		BBF7FF46272FC78100B71C97 /* Cafe24Ssurround.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cafe24Ssurround.ttf; sourceTree = "<group>"; };
 		BBF7FF48272FC78C00B71C97 /* Cafe24SsurroundAir.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cafe24SsurroundAir.ttf; sourceTree = "<group>"; };
 		BBF7FF4B272FD7F200B71C97 /* withBuddyLaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = withBuddyLaunchScreen.png; sourceTree = "<group>"; };
+		F78F14952743A5C90034E740 /* BuddyManageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyManageViewController.swift; sourceTree = "<group>"; };
+		F78F14982743A6200034E740 /* DeveloperInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperInfoViewController.swift; sourceTree = "<group>"; };
 		F7A7699627315AF800FF83EA /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		F7A7699A2732588500FF83EA /* WBCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WBCalendarView.swift; sourceTree = "<group>"; };
 		F7B69B89273398C4005D2F32 /* CalendarUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarUseCase.swift; sourceTree = "<group>"; };
@@ -339,8 +343,10 @@
 				F7E8ABC0273BB76D005F8306 /* Detail */,
 				8A73D677273A61C5001D5184 /* BuddyChoice */,
 				8A53C22D273B9E5E00BB0C20 /* BuddyCustom */,
+				F78F14942743A5B00034E740 /* BuddyManage */,
 				85FA1D97272FEBBB00825C64 /* List */,
 				BB2D255C2731315E00E7BF35 /* Setting */,
+				F78F14972743A60F0034E740 /* DeveloperInfo */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -382,6 +388,22 @@
 				BBF7FF45272FC75F00B71C97 /* Fonts */,
 			);
 			path = Resource;
+			sourceTree = "<group>";
+		};
+		F78F14942743A5B00034E740 /* BuddyManage */ = {
+			isa = PBXGroup;
+			children = (
+				F78F14952743A5C90034E740 /* BuddyManageViewController.swift */,
+			);
+			path = BuddyManage;
+			sourceTree = "<group>";
+		};
+		F78F14972743A60F0034E740 /* DeveloperInfo */ = {
+			isa = PBXGroup;
+			children = (
+				F78F14982743A6200034E740 /* DeveloperInfoViewController.swift */,
+			);
+			path = DeveloperInfo;
 			sourceTree = "<group>";
 		};
 		F7A7699F2732762900FF83EA /* View */ = {
@@ -535,6 +557,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F78F14962743A5C90034E740 /* BuddyManageViewController.swift in Sources */,
 				85D262F4273CF211000190B8 /* PurposeView.swift in Sources */,
 				85D262EE273CE6DD000190B8 /* WhiteView.swift in Sources */,
 				F7E8AC3E273CD4E6005F8306 /* ImageTextCollectionViewCell.swift in Sources */,
@@ -551,6 +574,7 @@
 				F7B69B8A273398C4005D2F32 /* CalendarUseCase.swift in Sources */,
 				F7E8ABBC273A6B17005F8306 /* CalendarDetailViewModel.swift in Sources */,
 				85D262EA273CD71C000190B8 /* BubbleChartView.swift in Sources */,
+				F78F14992743A6200034E740 /* DeveloperInfoViewController.swift in Sources */,
 				F7B69B8C27339EF9005D2F32 /* WBCalendarViewCell.swift in Sources */,
 				85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */,
 				F7E8AC38273CD428005F8306 /* UIView+Extension.swift in Sources */,

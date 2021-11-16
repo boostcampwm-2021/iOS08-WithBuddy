@@ -54,8 +54,8 @@ class CalendarDetailView: UIView {
     func configureDetailCollectionView() {
         self.detailCollectionView.backgroundColor = UIColor(named: "BackgroundPurple")
         self.addSubview(detailCollectionView)
-        self.detailCollectionView.dataSource = self
-        self.detailCollectionView.delegate = self
+//        self.detailCollectionView.dataSource = self
+//        self.detailCollectionView.delegate = self
         self.detailCollectionView.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: ListCollectionViewCell.identifier)
         self.detailCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -68,35 +68,35 @@ class CalendarDetailView: UIView {
     
 }
 
-extension CalendarDetailView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+//extension CalendarDetailView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        self.calendarDetailViewModel.listOfDay(selectedDate: self.selectedDate)
-        return self.calendarDetailViewModel.count
-    }
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        self.calendarDetailViewModel.listOfDay(selectedDate: self.selectedDate)
+//        return self.calendarDetailViewModel.count
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListCollectionViewCell.identifier, for: indexPath)
+//                as? ListCollectionViewCell else { return UICollectionViewCell() }
+//        self.calendarDetailViewModel.listOfDay(selectedDate: self.selectedDate)
+//        let gathering = self.calendarDetailViewModel[indexPath.item]
+//        cell.update(date: gathering.startDate, buddyImageList: gathering.buddyList.map{ $0.face }, typeList: gathering.purpose)
+//        return cell
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        if let cell = collectionView.cellForItem(at: indexPath) as? ListCollectionViewCell {
+//            cell.animateButtonTap(duration: 0.4, scale: 0.95)
+//            let gathering = self.calendarDetailViewModel[indexPath.item]
+//            self.delegate?.gatheringListTouched(gathering)
+//        }
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        return CGSize(width: self.frame.width-40, height: 150)
+//    }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListCollectionViewCell.identifier, for: indexPath)
-                as? ListCollectionViewCell else { return UICollectionViewCell() }
-        self.calendarDetailViewModel.listOfDay(selectedDate: self.selectedDate)
-        let gathering = self.calendarDetailViewModel[indexPath.item]
-        cell.update(date: gathering.startDate, buddyImageList: gathering.buddyList.map{ $0.face }, typeList: gathering.purpose)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? ListCollectionViewCell {
-            cell.animateButtonTap(duration: 0.4, scale: 0.95)
-            let gathering = self.calendarDetailViewModel[indexPath.item]
-            self.delegate?.gatheringListTouched(gathering)
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.frame.width-40, height: 150)
-    }
-    
-}
+//}
 
 protocol GatheringListDelegate: AnyObject {
     func gatheringListTouched(_: Gathering)

@@ -12,13 +12,15 @@ final class CalendarDetailViewModel {
     @Published private(set) var dayLabel: String = ""
     @Published private(set) var gatheringList: [Gathering] = []
     
+    private let selectedDate: Date
     private let gatheringUseCase: GatheringUseCase
     private let calendarUseCase: CalendarUseCase
     
     init(selectedDate: Date) {
+        self.selectedDate = selectedDate
         self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
         self.calendarUseCase = CalendarUseCase()
-        self.dayLabel = self.calendarUseCase.convertToString(day: selectedDate)
+        self.dayLabel = self.calendarUseCase.convertToString(day: self.selectedDate)
     }
     
     var count: Int {
@@ -29,16 +31,8 @@ final class CalendarDetailViewModel {
         return self.gatheringList[index]
     }
     
-    private func configure() {
-        self.fetch()
-    }
-    
     private func fetch() {
-        self.gatheringList = self.gatheringUseCase.fetchGathering()
-    }
-    
-    func listOfDay(selectedDate: Date) {
-        self.gatheringList = self.gatheringUseCase.fetchGathering(including: selectedDate)
+        self.gatheringList = self.gatheringUseCase.fetchGathering(including: self.selectedDate)
     }
 
 }

@@ -9,12 +9,14 @@ import UIKit
 
 class SettingViewController: UIViewController {
 
-    static let identifier = "SettingViewController"
     private let userImageView = UIImageView()
     private let userNameTextField = UITextField()
     private let userNameUnderbar = UIView()
     private let modifyButton = UIButton()
     private let removeAllGatheringButton = UIButton()
+    private let manageBuddyButton = UIButton()
+    private let opensourceLicenseButton = UIButton()
+    private let developerInfoButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +29,7 @@ class SettingViewController: UIViewController {
     }
     
     func configureUserInfo() {
-        self.view.addSubview(userImageView)
+        self.view.addSubview(self.userImageView)
         self.userImageView.image = UIImage(named: "FacePurple3")
         self.userImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -36,7 +38,7 @@ class SettingViewController: UIViewController {
             self.userImageView.widthAnchor.constraint(equalToConstant: 150),
             self.userImageView.heightAnchor.constraint(equalToConstant: 150)
         ])
-        self.view.addSubview(userNameTextField)
+        self.view.addSubview(self.userNameTextField)
         self.userNameTextField.text = "나정나정"
         self.userNameTextField.isUserInteractionEnabled  = false
         self.userNameTextField.textAlignment = .center
@@ -47,7 +49,7 @@ class SettingViewController: UIViewController {
             self.userNameTextField.centerXAnchor.constraint(equalTo: self.userImageView.centerXAnchor)
         ])
         
-        self.view.addSubview(userNameUnderbar)
+        self.view.addSubview(self.userNameUnderbar)
         self.userNameUnderbar.backgroundColor = UIColor(named: "LabelPurple")
         self.userNameUnderbar.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -57,11 +59,11 @@ class SettingViewController: UIViewController {
             self.userNameUnderbar.centerXAnchor.constraint(equalTo: self.userNameTextField.centerXAnchor)
         ])
         
-        self.view.addSubview(modifyButton)
+        self.view.addSubview(self.modifyButton)
         self.modifyButton.setTitle("편집", for: .normal)
         self.modifyButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
         self.modifyButton.sizeToFit()
-        self.modifyButton.addTarget(self, action: #selector(moveToBuddyCustom), for: .touchUpInside)
+        self.modifyButton.addTarget(self, action: #selector(self.moveToBuddyCustom), for: .touchUpInside)
         self.modifyButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.modifyButton.topAnchor.constraint(equalTo: self.userImageView.topAnchor),
@@ -79,22 +81,46 @@ class SettingViewController: UIViewController {
     
     func configureButtons() {
         self.configureRemoveAllGatheringButton()
+        self.configureManageBuddyButton()
+        self.configureDeveloperInfo()
     }
     
     func configureRemoveAllGatheringButton() {
-        self.view.addSubview(removeAllGatheringButton)
+        self.view.addSubview(self.removeAllGatheringButton)
         self.removeAllGatheringButton.setTitle("모임 목록 초기화", for: .normal)
-        self.removeAllGatheringButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
-        self.removeAllGatheringButton.contentHorizontalAlignment = .left
-        self.removeAllGatheringButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
-        self.removeAllGatheringButton.backgroundColor = .systemBackground
-        self.removeAllGatheringButton.layer.cornerRadius = 10
-        self.removeAllGatheringButton.translatesAutoresizingMaskIntoConstraints = false
+        self.makeButtonLayer(button: self.removeAllGatheringButton, upperbutton: self.userNameUnderbar)
+    }
+    
+    func configureManageBuddyButton() {
+        self.view.addSubview(self.manageBuddyButton)
+        self.manageBuddyButton.setTitle("버디 관리", for: .normal)
+        self.makeButtonLayer(button: self.manageBuddyButton, upperbutton: self.removeAllGatheringButton)
+    }
+
+    func configureDeveloperInfo() {
+        self.view.addSubview(self.developerInfoButton)
+        self.developerInfoButton.setTitle("개발자 정보", for: .normal)
+        self.makeButtonLayer(button: self.developerInfoButton, upperbutton: self.manageBuddyButton)
+    }
+    
+    func makeButtonLayer(button: UIButton, upperbutton: UIView) {
+        button.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
+        button.contentHorizontalAlignment = .left
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+        button.backgroundColor = .systemBackground
+        button.layer.cornerRadius = 10
+        button.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.removeAllGatheringButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 30),
-            self.removeAllGatheringButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30),
-            self.removeAllGatheringButton.topAnchor.constraint(equalTo: self.userNameUnderbar.bottomAnchor, constant: 30),
-            self.removeAllGatheringButton.heightAnchor.constraint(equalToConstant: self.removeAllGatheringButton.intrinsicContentSize.height * 1.5)
+            button.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 30),
+            button.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30),
+            button.topAnchor.constraint(equalTo: upperbutton.bottomAnchor, constant: 15),
+            button.heightAnchor.constraint(equalToConstant: button.intrinsicContentSize.height * 1.5)
         ])
+    }
+    
+    @objc private func moveToBuddyChoice(_ sender: UIButton) {
+        self.tabBarController?.dismiss(animated: true, completion: {
+            self.navigationController?.pushViewController(BuddyChoiceViewController(), animated: true)
+        })
     }
 }

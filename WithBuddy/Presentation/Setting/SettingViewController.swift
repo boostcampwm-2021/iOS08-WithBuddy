@@ -14,6 +14,7 @@ class SettingViewController: UIViewController {
     private let userNameTextField = UITextField()
     private let userNameUnderbar = UIView()
     private let modifyButton = UIButton()
+    private let removeAllGatheringButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +23,7 @@ class SettingViewController: UIViewController {
     
     func configure() {
         self.configureUserInfo()
+        self.configureButtons()
     }
     
     func configureUserInfo() {
@@ -41,8 +43,18 @@ class SettingViewController: UIViewController {
         self.userNameTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.userNameTextField.topAnchor.constraint(equalTo: self.userImageView.bottomAnchor),
-            self.userNameTextField.widthAnchor.constraint(equalToConstant: 200),
+            self.userNameTextField.widthAnchor.constraint(equalToConstant: self.userNameTextField.intrinsicContentSize.width + 20),
             self.userNameTextField.centerXAnchor.constraint(equalTo: self.userImageView.centerXAnchor)
+        ])
+        
+        self.view.addSubview(userNameUnderbar)
+        self.userNameUnderbar.backgroundColor = UIColor(named: "LabelPurple")
+        self.userNameUnderbar.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.userNameUnderbar.widthAnchor.constraint(equalTo: self.userNameTextField.widthAnchor),
+            self.userNameUnderbar.heightAnchor.constraint(equalToConstant: 1),
+            self.userNameUnderbar.topAnchor.constraint(equalTo: self.userNameTextField.bottomAnchor, constant: 5),
+            self.userNameUnderbar.centerXAnchor.constraint(equalTo: self.userNameTextField.centerXAnchor)
         ])
         
         self.view.addSubview(modifyButton)
@@ -63,5 +75,26 @@ class SettingViewController: UIViewController {
         self.tabBarController?.dismiss(animated: true, completion: {
             self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
         })
+    }
+    
+    func configureButtons() {
+        self.configureRemoveAllGatheringButton()
+    }
+    
+    func configureRemoveAllGatheringButton() {
+        self.view.addSubview(removeAllGatheringButton)
+        self.removeAllGatheringButton.setTitle("모임 목록 초기화", for: .normal)
+        self.removeAllGatheringButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
+        self.removeAllGatheringButton.contentHorizontalAlignment = .left
+        self.removeAllGatheringButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+        self.removeAllGatheringButton.backgroundColor = .systemBackground
+        self.removeAllGatheringButton.layer.cornerRadius = 10
+        self.removeAllGatheringButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.removeAllGatheringButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 30),
+            self.removeAllGatheringButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -30),
+            self.removeAllGatheringButton.topAnchor.constraint(equalTo: self.userNameUnderbar.bottomAnchor, constant: 30),
+            self.removeAllGatheringButton.heightAnchor.constraint(equalToConstant: self.removeAllGatheringButton.intrinsicContentSize.height * 1.5)
+        ])
     }
 }

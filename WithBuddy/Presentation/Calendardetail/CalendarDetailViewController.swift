@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import Combine
 
 class CalendarDetailViewController: UIViewController {
     
     private lazy var detailLabel = UILabel()
     private lazy var detailCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     private var calendarDetailViewModel: CalendarDetailViewModel
+    private var cancellables: Set<AnyCancellable> = []
     
     init(calendarDetailViewModel: CalendarDetailViewModel) {
         self.calendarDetailViewModel = calendarDetailViewModel
@@ -26,11 +28,15 @@ class CalendarDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(named: "BackgroundPurple")
-        self.configure()
+        self.bind()
     }
     
-    private func configure() {
-        
+    private func bind() {
+        self.calendarDetailViewModel.$dayLabel
+        .receive(on: DispatchQueue.main)
+        .sink{ label in
+            self.detailLabel.text = label + "모임"
+        }.store(in: &self.cancellables)
     }
 
 }

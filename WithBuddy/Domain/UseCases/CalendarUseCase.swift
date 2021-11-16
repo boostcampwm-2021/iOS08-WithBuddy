@@ -21,6 +21,12 @@ final class CalendarUseCase {
         return dateFormatter.string(from: month)
     }
     
+    func convertToString(day: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy년 M월 dd일"
+        return dateFormatter.string(from: day)
+    }
+    
     func findFirstDayIndex(of month: Date) -> Int {
         let firstDay = self.firstDateOfMonth(baseDate: month)
         return self.weekDay(baseDate: firstDay)

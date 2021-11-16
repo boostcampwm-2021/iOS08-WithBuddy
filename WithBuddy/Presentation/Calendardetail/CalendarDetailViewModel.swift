@@ -9,13 +9,16 @@ import Foundation
 
 final class CalendarDetailViewModel {
     
+    @Published private(set) var dayLabel: String = ""
     @Published private(set) var gatheringList: [Gathering] = []
+    
     private let gatheringUseCase: GatheringUseCase
+    private let calendarUseCase: CalendarUseCase
     
     init(selectedDate: Date) {
-        print(selectedDate)
         self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
-        self.
+        self.calendarUseCase = CalendarUseCase()
+        self.dayLabel = self.calendarUseCase.convertToString(day: selectedDate)
     }
     
     var count: Int {

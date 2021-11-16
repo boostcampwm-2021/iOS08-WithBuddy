@@ -11,7 +11,7 @@ class CalendarDetailView: UIView {
     
     private var detailLabel = UILabel()
     private var detailCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
-    private let calendarDetailViewModel = CalendarDetailViewModel()
+    private let calendarDetailViewModel = CalendarDetailViewModel(selectedDate: Date())
     
     var selectedDate = Date()
     weak var delegate: GatheringListDelegate?

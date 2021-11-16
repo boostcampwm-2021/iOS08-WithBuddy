@@ -124,7 +124,7 @@ final class ChartViewController: UIViewController {
         self.latestOldChartView.update(name: name)
     }
     
-    private func update(buddyList: [Buddy]?) {
+    private func update(buddyList: [(Buddy, Int)]?) {
         guard let list = buddyList else { return }
         self.bubbleChartView.update(list: list)
     }

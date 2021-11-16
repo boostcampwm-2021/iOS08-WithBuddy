@@ -20,7 +20,7 @@ final class BubbleChartView: UIView {
     private let defaultView = DefaultView()
     
     private let maxLength = CGFloat(130)
-    private var maxCount = 0
+    private var maxCount: Int?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,7 +36,7 @@ final class BubbleChartView: UIView {
         self.nameLabel.text = name
     }
     
-    func update(list: [Buddy]) {
+    func update(list: [(Buddy, Int)]) {
         let first = list.indices ~= 0 ? list[0] : nil
         let second = list.indices ~= 1 ? list[1] : nil
         let third = list.indices ~= 2 ? list[2] : nil
@@ -48,23 +48,29 @@ final class BubbleChartView: UIView {
             return
         }
         
-        let constantX = CGFloat(60)
-        let constantY = CGFloat(50)
+        let constant = CGFloat(1)
         self.defaultView.isHidden = true
-        self.update(imageView: self.firstBubbleImageView, face: first?.face, xValue: 0, yValue: 0)
-        self.update(imageView: self.secondBubbleImageView, face: second?.face, xValue: -constantX, yValue: -constantY)
-        self.update(imageView: self.thirdBubbleImageView, face: third?.face, xValue: constantX, yValue: constantY)
-        self.update(imageView: self.fourthBubbleImageView, face: fourth?.face, xValue: -constantX, yValue: constantY)
-        self.update(imageView: self.fifthBubbleImageView, face: fifth?.face, xValue: constantX, yValue: -constantY)
+        self.maxCount = first?.1
+        self.update(imageView: self.firstBubbleImageView, face: first?.0.face, count: 0, xValue: 0, yValue: 0)
+        self.update(imageView: self.secondBubbleImageView, face: second?.0.face, count: second?.1, xValue: -constant, yValue: -constant)
+        self.update(imageView: self.thirdBubbleImageView, face: third?.0.face, count: third?.1, xValue: constant, yValue: constant)
+        self.update(imageView: self.fourthBubbleImageView, face: fourth?.0.face, count: fourth?.1, xValue: -constant, yValue: constant)
+        self.update(imageView: self.fifthBubbleImageView, face: fifth?.0.face, count: fifth?.1, xValue: constant, yValue: -constant)
     }
     
-    private func update(imageView: UIImageView, face: String?, xValue: CGFloat, yValue: CGFloat) {
-        if let face = face {
+    private func update(imageView: UIImageView, face: String?, count: Int?, xValue: CGFloat, yValue: CGFloat) {
+        if let face = face, let count = count, let maxCount = self.maxCount {
             imageView.image = UIImage(named: face)
             imageView.isHidden = false
             if imageView != self.firstBubbleImageView {
-                let firstOrigin = self.firstBubbleImageView.frame.origin
-                imageView.frame = CGRect(x: firstOrigin.x + xValue, y: firstOrigin.y + yValue, width: self.maxLength, height: self.maxLength)
+                let firstFrame = self.firstBubbleImageView.frame
+                let firstCenterX = firstFrame.origin.x + (firstFrame.width / 2)
+                let firstCenterY = firstFrame.origin.y + (firstFrame.height / 2)
+                let centerX = ((firstFrame.width / 3) + (imageView.frame.width / 5)) * xValue
+                let centerY = ((firstFrame.height / 3) + (imageView.frame.height / 5)) * yValue
+                let length = self.maxLength * (CGFloat(count) / CGFloat(maxCount))
+                imageView.frame = CGRect(x: 0, y: 0, width: length, height: length)
+                imageView.center = CGPoint(x: firstCenterX + centerX, y: firstCenterY + centerY)
             }
             return
         }

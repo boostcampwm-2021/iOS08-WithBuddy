@@ -9,8 +9,6 @@ import UIKit
 import Combine
 
 class CalendarViewController: UIViewController {
-
-    private let detailView = CalendarDetailView() // 지워야 할 것
     
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
@@ -117,7 +115,7 @@ class CalendarViewController: UIViewController {
     
 }
 
-extension CalendarViewController: UICollectionViewDataSource {
+extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         self.calendarViewModel.maxDayOfMonth

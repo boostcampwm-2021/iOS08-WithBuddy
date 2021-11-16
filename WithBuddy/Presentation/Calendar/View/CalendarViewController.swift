@@ -6,34 +6,60 @@
 //
 
 import UIKit
+import Combine
 
 class CalendarViewController: UIViewController {
-
-    static let identifier = "CalendarViewController"
-    private let detailView = CalendarDetailView()
-    private let headerView = HeaderView()
-    private let calendarView = UIView()
-    private let wbCalendar = WBCalendarView()
-    private let scrollView = UIScrollView()
-    private let contentView = UIView()
+    
+    private lazy var scrollView = UIScrollView()
+    private lazy var contentView = UIView()
+    private lazy var headerView = HeaderView()
+    private lazy var calendarView = WBCalendarView()
+    
+    private let calendarViewModel = CalendarViewModel()
+    private var cancellables: Set<AnyCancellable> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configure()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        self.wbCalendar.reload()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.calendarViewModel.viewDidAppear()
     }
     
     private func configure() {
-        self.wbCalendar.delegate = self
-        self.detailView.delegate = self
+        self.bind()
         self.configureScrollView()
         self.configureContentView()
         self.configureHeaderView()
-        self.configureCalendarView()
         self.configurCalendar()
+    }
+    
+    private func bind() {
+        self.calendarViewModel.monthSubject
+            .receive(on: DispatchQueue.main)
+            .sink{ month in
+                self.calendarView.reloadMonthLabel(month: month)
+            }.store(in: &self.cancellables)
+        
+        self.calendarViewModel.didDaysReloadSignal
+            .receive(on: DispatchQueue.main)
+            .sink{ _ in
+                self.calendarView.collectionView.reloadData()
+            }.store(in: &self.cancellables)
+        
+        self.calendarViewModel.didGatheringReloadSignal
+            .receive(on: DispatchQueue.main)
+            .sink{ _ in
+                self.calendarView.collectionView.reloadData()
+            }.store(in: &self.cancellables)
+        
+        self.calendarView.monthButtonSignal
+            .receive(on: DispatchQueue.main)
+            .sink{ number in
+                self.calendarViewModel.didMonthButtonTouched(number: number)
+            }.store(in: &self.cancellables)
     }
     
     private func configureScrollView() {
@@ -72,71 +98,40 @@ class CalendarViewController: UIViewController {
         ])
     }
     
-    private func configureCalendarView() {
+    private func configurCalendar() {
         self.contentView.addSubview(calendarView)
         self.calendarView.backgroundColor = .systemBackground
         self.calendarView.layer.cornerRadius = 10
+        self.calendarView.collectionView.dataSource = self
         self.calendarView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.calendarView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: 10),
-            self.calendarView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10),
             self.calendarView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
             self.calendarView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
-            self.calendarView.heightAnchor.constraint(equalToConstant: 530)
-        ])
-    }
-    
-    private func configurCalendar() {
-        self.calendarView.addSubview(wbCalendar)
-        self.wbCalendar.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.wbCalendar.leadingAnchor.constraint(equalTo: self.calendarView.leadingAnchor, constant: 15),
-            self.wbCalendar.trailingAnchor.constraint(equalTo: self.calendarView.trailingAnchor, constant: -15),
-            self.wbCalendar.topAnchor.constraint(equalTo: self.calendarView.topAnchor, constant: 15),
-            self.wbCalendar.bottomAnchor.constraint(equalTo: self.calendarView.bottomAnchor, constant: -15)
+            self.calendarView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: 10),
+            self.calendarView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
+            self.calendarView.heightAnchor.constraint(equalTo: self.calendarView.widthAnchor, multiplier: 1.6)
         ])
     }
     
 }
 
-extension CalendarViewController: CalendarCellSelectable {
+extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
-    func presentCellDetail(selectedDate: Date) {
-        self.presentDetailModal()
-        self.configureDetailLabel(selectedDate: selectedDate)
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        self.calendarViewModel.maxDayOfMonth
     }
     
-    func presentDetailModal() {
-        let calendarDetailNavigationController = UINavigationController(rootViewController: CalendarDetailViewController())
-        calendarDetailNavigationController.modalPresentationStyle = .pageSheet
-        if let sheet = calendarDetailNavigationController.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifier, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
+        let day = self.calendarViewModel.totalDays.indices ~= indexPath.item ? self.calendarViewModel.totalDays[indexPath.item] : 0
+        let face = self.calendarViewModel.totalFaces.indices ~= indexPath.item ? self.calendarViewModel.totalFaces[indexPath.item] : ""
+        cell.update(day: day, face: face)
+        
+        if let index = self.calendarViewModel.isSameMonth, index == indexPath.item {
+            cell.highlightCell()
         }
-        self.tabBarController?.present(calendarDetailNavigationController, animated: true, completion: nil)
-        calendarDetailNavigationController.view.addSubview(detailView)
-        self.detailView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.detailView.leadingAnchor.constraint(equalTo: calendarDetailNavigationController.view.leadingAnchor),
-            self.detailView.trailingAnchor.constraint(equalTo: calendarDetailNavigationController.view.trailingAnchor),
-            self.detailView.topAnchor.constraint(equalTo: calendarDetailNavigationController.view.topAnchor),
-            self.detailView.bottomAnchor.constraint(equalTo: calendarDetailNavigationController.view.bottomAnchor),
-            self.detailView.widthAnchor.constraint(equalTo: calendarDetailNavigationController.view.widthAnchor),
-            self.detailView.heightAnchor.constraint(equalTo: calendarDetailNavigationController.view.heightAnchor)
-        ])
-    }
-    
-    func configureDetailLabel(selectedDate: Date) {
-        self.detailView.saveSelecetedDate(selectedDate: selectedDate)
-    }
-    
-}
-
-extension CalendarViewController: gatheringListDelegate {
-    
-    func gatheringListTouched() {
-        self.tabBarController?.dismiss(animated: true, completion: {
-            self.navigationController?.pushViewController(GatheringDetailViewController(), animated: true)
-        })
+        
+        return cell
     }
     
 }

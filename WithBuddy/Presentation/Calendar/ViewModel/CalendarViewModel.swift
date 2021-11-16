@@ -46,6 +46,10 @@ final class CalendarViewModel {
         self.reloadFaces()
     }
     
+    func findDate(index: Int) -> Date {
+        self.calendarUseCase.makeDay(month: self.calendarMonth, day: self.totalDays[index])
+    }
+    
     private func sendMonthSubject() {
         self.monthSubject.send(self.calendarUseCase.convertToString(month: self.calendarMonth))
     }

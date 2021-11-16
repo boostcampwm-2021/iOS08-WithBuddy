@@ -21,6 +21,12 @@ final class CalendarUseCase {
         return dateFormatter.string(from: month)
     }
     
+    func convertToString(day: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy년 M월 dd일"
+        return dateFormatter.string(from: day)
+    }
+    
     func findFirstDayIndex(of month: Date) -> Int {
         let firstDay = self.firstDateOfMonth(baseDate: month)
         return self.weekDay(baseDate: firstDay)
@@ -45,10 +51,12 @@ final class CalendarUseCase {
         return (components.weekday ?? 1) - 1
     }
     
-    func pickDay(baseDate: Date, numberOfDay: Int) -> Date {
-        var dateComponents = DateComponents()
-        dateComponents.day = numberOfDay - 1
-        return self.calendar.date(byAdding: dateComponents, to: baseDate) ?? Date()
+    func makeDay(month: Date, day: Int) -> Date {
+        return self.calendar.date(
+            byAdding: .day,
+            value: day - 1,
+            to: firstDateOfMonth(baseDate: month)
+        ) ?? Date()
     }
     
     func month(baseDate: Date) -> Int {

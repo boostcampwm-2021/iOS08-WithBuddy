@@ -102,6 +102,7 @@ class CalendarViewController: UIViewController {
         self.contentView.addSubview(calendarView)
         self.calendarView.backgroundColor = .systemBackground
         self.calendarView.layer.cornerRadius = 10
+        self.calendarView.collectionView.delegate = self
         self.calendarView.collectionView.dataSource = self
         self.calendarView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -134,16 +135,29 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let calendarDetailViewController = CalendarDetailViewController(
+            calendarDetailViewModel: CalendarDetailViewModel(
+                selectedDate: self.calendarViewModel.findDate(index: indexPath.item)
+            )
+        )
+        calendarDetailViewController.delegate = self
+        
+        if let presentationController = calendarDetailViewController.presentationController as? UISheetPresentationController {
+            presentationController.detents = [.medium(), .large()]
+        }
+        
+        self.present(calendarDetailViewController, animated: true)
+    }
+    
 }
 
 extension CalendarViewController: GatheringListDelegate {
     
     func gatheringListTouched(_ gathering: Gathering) {
-        self.tabBarController?.dismiss(animated: true, completion: {
             let gatheringDetailViewController = GatheringDetailViewController()
             gatheringDetailViewController.configure(by: gathering)
             self.navigationController?.pushViewController(gatheringDetailViewController, animated: true)
-        })
     }
     
 }

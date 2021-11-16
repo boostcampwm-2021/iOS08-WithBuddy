@@ -52,7 +52,7 @@ class GatheringDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configure()
-//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .done, target: self, action: #selector(self.addGathering))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .done, target: self, action: #selector(self.editGathering))
     }
     
     private func configure() {
@@ -68,6 +68,54 @@ class GatheringDetailViewController: UIViewController {
         self.configurePicturePart()
     }
     
+    func configure(by gathering: Gathering) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ko-KR")
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .none
+        self.dateContentLabel.text = dateFormatter.string(from: gathering.startDate)
+        
+        self.placeTextField.text = gathering.place
+        
+        var purposeSnapshot = NSDiffableDataSourceSnapshot<Int, Purpose>()
+        purposeSnapshot.appendSections([0])
+        let purposeList = PlaceType.allCases.map({ placeType -> Purpose? in
+            if gathering.purpose.contains(placeType.description) {
+                return Purpose(type: placeType, check: true)
+            }
+            return nil
+        }).compactMap({ $0 })
+        purposeSnapshot.appendItems(purposeList)
+        self.purposeDataSource.apply(purposeSnapshot, animatingDifferences: true)
+        
+        var buddySnapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
+        if gathering.buddyList.isEmpty {
+            buddySnapshot.appendSections([0])
+            buddySnapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "FacePurple1")])
+        } else {
+            buddySnapshot.appendSections([0])
+            buddySnapshot.appendItems(gathering.buddyList)
+        }
+        self.buddyDataSource.apply(buddySnapshot, animatingDifferences: true)
+        
+        self.memoTextView.text = gathering.memo
+        
+        guard let pictures = gathering.picture else { return }
+        var pictureSnapshot = NSDiffableDataSourceSnapshot<Int, URL>()
+        if pictures.isEmpty {
+            guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else {
+                return
+            }
+            let fileUrl = URL(fileURLWithPath: filePath)
+            pictureSnapshot.appendSections([0])
+            pictureSnapshot.appendItems([fileUrl])
+        } else {
+            pictureSnapshot.appendSections([0])
+            pictureSnapshot.appendItems(pictures)
+        }
+        self.pictureDataSource.apply(pictureSnapshot, animatingDifferences: true)
+    }
+    
     private func configureScrollView() {
         self.view.addSubview(self.scrollView)
         self.scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -81,7 +129,6 @@ class GatheringDetailViewController: UIViewController {
     
     private func configureContentView() {
         self.scrollView.addSubview(self.contentView)
-        self.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapEmptySpace)))
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
@@ -172,9 +219,6 @@ class GatheringDetailViewController: UIViewController {
     
     private func configurePlaceTextField() {
         self.placeBackgroundView.addSubview(self.placeTextField)
-        if let color = UIColor(named: "LabelPurple") {
-            self.placeTextField.attributedPlaceholder = NSAttributedString(string: "모임 장소를 적어주세요", attributes: [NSAttributedString.Key.foregroundColor: color])
-        }
         self.placeTextField.isUserInteractionEnabled = false
         
         self.placeTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -195,7 +239,7 @@ class GatheringDetailViewController: UIViewController {
     
     private func configurePurposeTitle() {
         self.contentView.addSubview(self.purposeTitleLabel)
-        self.purposeTitleLabel.text = "목적 선택"
+        self.purposeTitleLabel.text = "모임 목적"
         
         self.purposeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -235,7 +279,7 @@ class GatheringDetailViewController: UIViewController {
     
     private func configureBuddyTitle() {
         self.contentView.addSubview(self.buddyTitleLabel)
-        self.buddyTitleLabel.text = "버디 추가"
+        self.buddyTitleLabel.text = "만난 버디"
         
         self.buddyTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -308,8 +352,6 @@ class GatheringDetailViewController: UIViewController {
         self.memoTextView.textContentType = .none
         self.memoTextView.autocapitalizationType = .none
         self.memoTextView.autocorrectionType = .no
-        self.memoTextView.text = "모임에 대한 메모를 적어주세요."
-        self.memoTextView.textColor = UIColor(named: "LabelPurple")
         self.memoTextView.isUserInteractionEnabled = false
         
         self.memoTextView.translatesAutoresizingMaskIntoConstraints = false
@@ -369,25 +411,8 @@ class GatheringDetailViewController: UIViewController {
         self.pictureCollectionView.collectionViewLayout = layout
     }
     
-    // MARK: - CompletePart
-    
-    private func alertSuccess() {
-        let alert = UIAlertController(title: "등록 완료", message: "모임 등록이 완료되었습니다!", preferredStyle: UIAlertController.Style.alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: { _ in
-            self.navigationController?.popViewController(animated: true)
-        })
-        alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
+    @objc private func editGathering() {
+        
     }
     
-    private func alertError(_ error: RegisterError) {
-        let alert = UIAlertController(title: "등록 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
-        alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    @objc private func tapEmptySpace(){
-        self.view.endEditing(true)
-    }
 }

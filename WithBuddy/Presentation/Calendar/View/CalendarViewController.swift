@@ -135,3 +135,15 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
 }
+
+extension CalendarViewController: GatheringListDelegate {
+    
+    func gatheringListTouched(_ gathering: Gathering) {
+        self.tabBarController?.dismiss(animated: true, completion: {
+            let gatheringDetailViewController = GatheringDetailViewController()
+            gatheringDetailViewController.configure(by: gathering)
+            self.navigationController?.pushViewController(gatheringDetailViewController, animated: true)
+        })
+    }
+    
+}

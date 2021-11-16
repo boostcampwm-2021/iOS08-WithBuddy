@@ -28,3 +28,17 @@ class BuddyCustomViewController: UIViewController {
     }
     
 }
+
+extension BuddyCustomViewController: UITextFieldDelegate {
+    
+    private func checkLengthOfName(textField: UITextField!, maxLength: Int) {
+        guard let text = textField.text else { return }
+        if text.count > maxLength {
+            textField.deleteBackward()
+        }
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        self.checkLengthOfName(textField: textField, maxLength: 10)
+    }
+}

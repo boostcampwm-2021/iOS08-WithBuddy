@@ -58,6 +58,15 @@ final class BubbleChartView: UIView {
         self.update(imageView: self.fifthBubbleImageView, face: fifth?.0.face, count: fifth?.1, xValue: constant, yValue: -constant)
     }
     
+    func resetBubbles() {
+        let size = CGSize(width: CGFloat.zero, height: CGFloat.zero)
+        self.firstBubbleImageView.frame.size = size
+        self.secondBubbleImageView.frame.size = size
+        self.thirdBubbleImageView.frame.size = size
+        self.fourthBubbleImageView.frame.size = size
+        self.fifthBubbleImageView.frame.size = size
+    }
+    
     private func update(imageView: UIImageView, face: String?, count: Int?, xValue: CGFloat, yValue: CGFloat) {
         if let face = face, let count = count, let maxCount = self.maxCount {
             imageView.image = UIImage(named: face)

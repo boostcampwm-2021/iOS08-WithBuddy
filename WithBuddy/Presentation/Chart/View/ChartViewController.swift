@@ -29,6 +29,10 @@ final class ChartViewController: UIViewController {
         self.viewModel.fetch()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        self.bubbleChartView.resetBubbles()
+    }
+    
     private func configure() {
         self.configureScrollView()
         self.configureContentView()

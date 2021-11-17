@@ -58,6 +58,14 @@ final class BubbleChartView: UIView {
         self.update(imageView: self.fifthBubbleImageView, face: fifth?.0.face, count: fifth?.1, xValue: constant, yValue: -constant)
     }
     
+    func resetBubbles() {
+        self.firstBubbleImageView.frame.size = CGSize.zero
+        self.secondBubbleImageView.frame.size = CGSize.zero
+        self.thirdBubbleImageView.frame.size = CGSize.zero
+        self.fourthBubbleImageView.frame.size = CGSize.zero
+        self.fifthBubbleImageView.frame.size = CGSize.zero
+    }
+    
     private func update(imageView: UIImageView, face: String?, count: Int?, xValue: CGFloat, yValue: CGFloat) {
         if let face = face, let count = count, let maxCount = self.maxCount {
             imageView.image = UIImage(named: face)
@@ -138,8 +146,9 @@ final class BubbleChartView: UIView {
     }
     
     private func configureFirstBubble() {
-        self.firstBubbleImageView.translatesAutoresizingMaskIntoConstraints = false
         self.firstBubbleImageView.image = UIImage(named: "FacePurple1")
+        self.firstBubbleImageView.isHidden =  true
+        self.firstBubbleImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.firstBubbleImageView.centerXAnchor.constraint(equalTo: self.whiteView.centerXAnchor),
             self.firstBubbleImageView.centerYAnchor.constraint(equalTo: self.whiteView.centerYAnchor),

@@ -34,6 +34,10 @@ final class BuddyUseCase {
                      face: self.makeRandomFace())
     }
     
+    func updateBuddy(_ buddy: Buddy) {
+        self.coreDataManager.updateBuddy(buddy)
+    }
+    
     private func makeRandomFace() -> String {
         let colorList = [FaceColor.blue, FaceColor.green, FaceColor.pink, FaceColor.purple, FaceColor.red, FaceColor.yellow]
         guard let color = colorList.randomElement() else { return "FacePurple1" }

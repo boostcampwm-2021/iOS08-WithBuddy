@@ -81,7 +81,7 @@ extension CoreDataManager: CoreDataManagable {
         let midnightOfDay = Calendar.current.startOfDay(for: day)
         
         let request = GatheringEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "startDate <= %@ AND endDate >= %@", midnightOfDay as NSDate, midnightOfDay as NSDate)
+        request.predicate = NSPredicate(format: "date <= %@ AND date >= %@", midnightOfDay as NSDate, midnightOfDay as NSDate)
         return self.fetch(request: request)
     }
     
@@ -96,7 +96,7 @@ extension CoreDataManager: CoreDataManagable {
         let endDateOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startDateOfMonth) ?? Date()
         
         let request = GatheringEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "startDate >= %@ AND startDate <= %@", startDateOfMonth as NSDate, endDateOfMonth as NSDate)
+        request.predicate = NSPredicate(format: "date >= %@ AND date <= %@", startDateOfMonth as NSDate, endDateOfMonth as NSDate)
         return self.fetch(request: request)
     }
     

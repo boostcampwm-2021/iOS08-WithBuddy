@@ -77,7 +77,7 @@ class GatheringEditViewController: UIViewController {
     }
     
     func configure(by gathering: Gathering) {
-        self.gatheringEditViewModel.didDatePicked(gathering.startDate)
+        self.gatheringEditViewModel.didDatePicked(gathering.date)
         self.gatheringEditViewModel.didPlaceChanged(gathering.place ?? "")
         for (idx, place) in PlaceType.allCases.enumerated() {
             if gathering.purpose.contains(place.description) {

@@ -22,7 +22,7 @@ enum RegisterError: LocalizedError {
 
 class RegisterViewModel {
     
-    private var startDate: Date?
+    private var date: Date?
     private var place: String?
     private var checkedPurposeList: [Purpose] {
         return self.purposeList.filter( { $0.check })
@@ -31,7 +31,7 @@ class RegisterViewModel {
     private(set) var registerDoneSignal = PassthroughSubject<Void, Never>()
     private(set) var registerFailSignal = PassthroughSubject<RegisterError, Never>()
     
-    @Published private(set) var startDateString: String?
+    @Published private(set) var dateString: String?
     @Published private(set) var purposeList: [Purpose] = PlaceType.allCases.map({ Purpose(type: $0, check: false) })
     @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var memo: String?
@@ -46,8 +46,8 @@ class RegisterViewModel {
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .none
         
-        self.startDate = Calendar.current.startOfDay(for: date)
-        self.startDateString = dateFormatter.string(from: date)
+        self.date = Calendar.current.startOfDay(for: date)
+        self.dateString = dateFormatter.string(from: date)
     }
     
     func didPlaceChanged(_ place: String) {
@@ -90,10 +90,10 @@ class RegisterViewModel {
         if self.buddyList.isEmpty {
             self.registerFailSignal.send(RegisterError.noBuddy)
         } else {
-            guard let startDate = startDate else {
+            guard let date = date else {
                 return
             }
-            self.gatheringUseCase.insertGathering(Gathering(startDate: startDate, endDate: Date(), place: self.place, purpose: ["\(PlaceType.culture)", "\(PlaceType.study)", "\(PlaceType.etc)"], buddyList: self.buddyList, memo: self.memo, picture: self.pictures))
+            self.gatheringUseCase.insertGathering(Gathering(id: UUID(), date: date, place: self.place, purpose: self.checkedPurposeList.map{ $0.type.description }, buddyList: self.buddyList, memo: self.memo, picture: self.pictures))
             self.registerDoneSignal.send()
         }
     }

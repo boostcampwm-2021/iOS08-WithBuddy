@@ -72,7 +72,7 @@ class RegisterViewController: UIViewController {
     }
     
     private func dataBind() {
-        self.registerViewModel.$startDateString
+        self.registerViewModel.$dateString
             .receive(on: DispatchQueue.main)
             .sink { [weak self] date in
                 self?.dateContentLabel.text = date

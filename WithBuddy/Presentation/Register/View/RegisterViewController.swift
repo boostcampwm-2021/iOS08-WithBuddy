@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import Photos
 
 class RegisterViewController: UIViewController {
     
@@ -16,7 +17,6 @@ class RegisterViewController: UIViewController {
     private lazy var dateTitleLabel = RegisterTitleLabel()
     private lazy var dateBackgroundView = UIView()
     private lazy var datePicker = UIDatePicker()
-  
     private lazy var placeTitleLabel = RegisterTitleLabel()
     private lazy var placeBackgroundView = UIView()
     private lazy var placeTextField = UITextField()
@@ -305,12 +305,12 @@ class RegisterViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.collectionViewDidTouched(_:)))
         self.purposeCollectionView.addGestureRecognizer(tap)
         self.purposeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
-
+        
         let purposeFlowLayout = UICollectionViewFlowLayout()
         let purposeWidth = (self.view.frame.width - (.outsideLeadingInset * 2))/5 - .innerPartInset
         purposeFlowLayout.itemSize = CGSize(width: purposeWidth, height: .purposeHeight)
         self.purposeCollectionView.collectionViewLayout = purposeFlowLayout
-
+        
         self.purposeCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.purposeCollectionView.topAnchor.constraint(equalTo: self.purposeTitleLabel.bottomAnchor, constant: .innerPartInset),
@@ -319,11 +319,11 @@ class RegisterViewController: UIViewController {
             self.purposeCollectionView.heightAnchor.constraint(equalToConstant: .purposeWholeHeight)
         ])
     }
-
+    
     @objc func collectionViewDidTouched(_ sender: UITapGestureRecognizer) {
-       if let indexPath = self.purposeCollectionView.indexPathForItem(at: sender.location(in: self.purposeCollectionView)) {
-           self.registerViewModel.didPurposeTouched(indexPath.item)
-       }
+        if let indexPath = self.purposeCollectionView.indexPathForItem(at: sender.location(in: self.purposeCollectionView)) {
+            self.registerViewModel.didPurposeTouched(indexPath.item)
+        }
     }
     
     // MARK: - BuddyPart
@@ -511,11 +511,31 @@ class RegisterViewController: UIViewController {
         self.pictureCollectionView.collectionViewLayout = layout
     }
     
-    @objc private func onPictureButtonTouched(_ sender: UIButton) {
+    private func requestAuthorization() {
+        PHPhotoLibrary.requestAuthorization { state in
+            DispatchQueue.main.async {
+                if state == .authorized {
+                    self.presentImagePicker()
+                } else {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }
+        }
+    }
+    
+    private func presentImagePicker() {
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .photoLibrary
-        present(picker, animated: true, completion: nil)
+        self.present(picker, animated: true, completion: nil)
+    }
+    
+    @objc private func onPictureButtonTouched(_ sender: UIButton) {
+        switch PHPhotoLibrary.authorizationStatus() {
+        case .authorized: self.presentImagePicker()
+        case .notDetermined: self.requestAuthorization()
+        default: break
+        }
     }
     
     // MARK: - CompletePart

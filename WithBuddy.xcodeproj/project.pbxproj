@@ -325,10 +325,10 @@
 		BB2D25A0273A46C100E7BF35 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */,
 				BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */,
 				BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */,
 				8A6320B62741673D006BB1C0 /* RegisterTitleLabel.swift */,
-				BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

@@ -14,17 +14,17 @@ class BuddyCustomViewController: UIViewController {
     
     private var nameTextField = UITextField()
     private var lineView = UIView()
-    private var myBuddyImageView = UIImageView()
+    private var buddyImageView = UIImageView()
     
     private var colorTitleLabel = TitleLabel()
-    private var colorCollectionView = UICollectionView()
+    private var colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     
     private var faceTitleLabel = TitleLabel()
-    private var faceCollectionView = UICollectionView()
+    private var faceCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .systemBackground
+        self.view.backgroundColor = UIColor(named: "BackgroundPurple")
         
         self.configure()
     }
@@ -66,17 +66,34 @@ class BuddyCustomViewController: UIViewController {
     
     private func configureNameTextField() {
         self.contentView.addSubview(self.nameTextField)
+        self.nameTextField.placeholder = "이름을 입력하세요."
+        self.nameTextField.delegate = self
+        self.nameTextField.textAlignment = .center
+        
         self.nameTextField.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.nameTextField.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
+            self.nameTextField.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor)
+        ])
     }
     
     private func configureLineView() {
         self.contentView.addSubview(self.lineView)
+        self.lineView.backgroundColor = UIColor(named: "LabelPurple")
+        
         self.lineView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.lineView.topAnchor.constraint(equalTo: self.nameTextField.bottomAnchor, constant: 5),
+            self.lineView.leadingAnchor.constraint(equalTo: self.nameTextField.leadingAnchor),
+            self.lineView.trailingAnchor.constraint(equalTo: self.nameTextField.trailingAnchor),
+            self.lineView.heightAnchor.constraint(equalToConstant: 1),
+            self.lineView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+        ])
     }
     
     private func configureMyBuddyImageView() {
-        self.contentView.addSubview(self.myBuddyImageView)
-        self.myBuddyImageView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(self.buddyImageView)
+        self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func configureColorTitleLabel() {
@@ -99,4 +116,17 @@ class BuddyCustomViewController: UIViewController {
         self.faceCollectionView.translatesAutoresizingMaskIntoConstraints = false
     }
     
+}
+
+extension BuddyCustomViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let char = string.cString(using: String.Encoding.utf8) {
+             let isBackSpace = strcmp(char, "\\b")
+             if isBackSpace == -92 {
+                 return true
+             }
+         }
+        guard let text = textField.text else { return true }
+        return text.count < 10
+    }
 }

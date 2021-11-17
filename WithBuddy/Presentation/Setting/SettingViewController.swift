@@ -94,6 +94,16 @@ class SettingViewController: UIViewController {
         self.view.addSubview(self.removeAllGatheringButton)
         self.removeAllGatheringButton.setTitle("모임 목록 초기화", for: .normal)
         self.makeButtonLayer(button: self.removeAllGatheringButton, upperView: self.userNameTextField, constant: 100)
+        self.removeAllGatheringButton.addTarget(self, action: #selector(removeAlert), for: .touchUpInside)
+    }
+    
+    @objc private func removeAlert() {
+        let alert = UIAlertController(title: nil, message: "모임 목록을 정말로 초기화하시겠습니까?", preferredStyle: UIAlertController.Style.alert)
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+        let okAction = UIAlertAction(title: "OK", style: .destructive)
+        alert.addAction(cancelAction)
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
     }
 
     private func configureManageBuddyButton() {

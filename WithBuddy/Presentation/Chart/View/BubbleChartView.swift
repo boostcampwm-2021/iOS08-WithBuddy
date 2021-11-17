@@ -147,8 +147,9 @@ final class BubbleChartView: UIView {
     }
     
     private func configureFirstBubble() {
-        self.firstBubbleImageView.translatesAutoresizingMaskIntoConstraints = false
         self.firstBubbleImageView.image = UIImage(named: "FacePurple1")
+        self.firstBubbleImageView.isHidden =  true
+        self.firstBubbleImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.firstBubbleImageView.centerXAnchor.constraint(equalTo: self.whiteView.centerXAnchor),
             self.firstBubbleImageView.centerYAnchor.constraint(equalTo: self.whiteView.centerYAnchor),

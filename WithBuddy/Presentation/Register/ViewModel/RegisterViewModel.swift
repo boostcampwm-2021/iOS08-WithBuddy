@@ -88,6 +88,8 @@ class RegisterViewModel {
     func didDoneTouched() {
         if self.buddyList.isEmpty {
             self.registerFailSignal.send(RegisterError.noBuddy)
+        } else if self.checkedPurposeList.isEmpty {
+            self.registerFailSignal.send(RegisterError.noType)
         } else {
             guard let date = date else {
                 return

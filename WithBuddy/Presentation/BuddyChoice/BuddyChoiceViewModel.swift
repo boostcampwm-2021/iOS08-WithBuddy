@@ -33,6 +33,7 @@ class BuddyChoiceViewModel {
     private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
     
     func buddyDidADeleted(in idx: Int) {
+        self.buddyUseCase.deleteBuddy(storedBuddyList[idx])
         self.storedBuddyList.remove(at: idx)
     }
     

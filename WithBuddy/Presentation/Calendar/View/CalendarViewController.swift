@@ -136,6 +136,10 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? WBCalendarViewCell,
+              !self.calendarViewModel.totalFaces[indexPath.item].isEmpty else { return }
+        cell.animateButtonTap(duration: 0.4, scale: 0.9)
+        
         let calendarDetailViewController = CalendarDetailViewController(
             calendarDetailViewModel: CalendarDetailViewModel(
                 selectedDate: self.calendarViewModel.findDate(index: indexPath.item)

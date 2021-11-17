@@ -34,6 +34,7 @@ class WBCalendarView: UIView {
         self.configureButton()
         self.configureWeekDays()
         self.configureCollectionView()
+        self.configureTapGesture()
     }
     
     func reloadMonthLabel(month: String) {
@@ -99,6 +100,15 @@ class WBCalendarView: UIView {
         ])
     }
     
+    private func configureTapGesture() {
+        let swipeLeftToRight = UISwipeGestureRecognizer(target: self, action: #selector(minusMonth(_:)))
+        swipeLeftToRight.direction = UISwipeGestureRecognizer.Direction.right
+        self.collectionView.addGestureRecognizer(swipeLeftToRight)
+        let swipeRightToLeft = UISwipeGestureRecognizer(target: self, action: #selector(plusMonth(_:)))
+        swipeRightToLeft.direction = UISwipeGestureRecognizer.Direction.left
+        self.collectionView.addGestureRecognizer(swipeRightToLeft)
+    }
+    
     private func makeWeekLabel(text: String) -> UILabel {
         let label = UILabel()
         label.text = text
@@ -108,11 +118,14 @@ class WBCalendarView: UIView {
     }
     
     @objc private func minusMonth(_ sender: UIButton) {
+        self.collectionView.leftToRightAnimation()
         self.monthButtonSignal.send(-1)
     }
     
     @objc private func plusMonth(_ sender: UIButton) {
+        self.collectionView.rightToLeftAnimation()
         self.monthButtonSignal.send(1)
     }
     
 }
+

@@ -54,7 +54,10 @@ final class ChartViewModel {
             }
         }
         
-        let sortedBuddyList = buddyMap.sorted{ $0.1 > $1.1 }
+        let sortedBuddyList = buddyMap.sorted{
+            if $0.value == $1.value { return $0.key.name < $1.key.name }
+            return $0.value > $1.value
+        }
         let index = min(5, sortedBuddyList.count - 1)
         if Int.zero <= index {
             self.buddyRank = Array(sortedBuddyList[...index].map{ ($0.key, $0.value) })

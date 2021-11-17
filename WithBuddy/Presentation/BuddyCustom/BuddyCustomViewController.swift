@@ -147,7 +147,8 @@ class BuddyCustomViewController: UIViewController {
             self.faceCollectionView.topAnchor.constraint(equalTo: self.faceTitleLabel.bottomAnchor, constant: 10),
             self.faceCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
             self.faceCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
-            self.faceCollectionView.heightAnchor.constraint(equalToConstant: 120)
+            self.faceCollectionView.heightAnchor.constraint(equalToConstant: 120),
+            self.faceCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
         ])
     }
     
@@ -155,13 +156,9 @@ class BuddyCustomViewController: UIViewController {
 
 extension BuddyCustomViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if let char = string.cString(using: String.Encoding.utf8) {
-             let isBackSpace = strcmp(char, "\\b")
-             if isBackSpace == -92 {
-                 return true
-             }
-         }
-        guard let text = textField.text else { return true }
-        return text.count < 10
+        if textField.text?.count ?? 0 > 10 {
+            textField.deleteBackward()
+        }
+        return true
     }
 }

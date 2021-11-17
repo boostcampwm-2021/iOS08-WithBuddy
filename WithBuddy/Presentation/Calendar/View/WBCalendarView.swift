@@ -14,6 +14,7 @@ class WBCalendarView: UIView {
     private lazy var thisMonthLabel = UILabel()
     private lazy var prevMonthButton = UIButton()
     private lazy var nextMonthButton = UIButton()
+    private lazy var todayButton = UIButton()
     private lazy var weekStackView = UIStackView()
     private(set) lazy var collectionView = WBCalendarCollectionView()
     
@@ -32,6 +33,7 @@ class WBCalendarView: UIView {
     private func configure() {
         self.configureThisMonth()
         self.configureButton()
+        self.configureTodayButton()
         self.configureWeekDays()
         self.configureCollectionView()
         self.configureTapGesture()
@@ -53,24 +55,40 @@ class WBCalendarView: UIView {
     }
     
     private func configureButton() {
-        self.addSubview(prevMonthButton)
-        self.addSubview(nextMonthButton)
+        self.addSubview(self.prevMonthButton)
+        self.addSubview(self.nextMonthButton)
         self.prevMonthButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
         self.nextMonthButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
-        self.prevMonthButton.addTarget(self, action: #selector(minusMonth), for: .touchUpInside)
-        self.nextMonthButton.addTarget(self, action: #selector(plusMonth), for: .touchUpInside)
+        self.prevMonthButton.addTarget(self, action: #selector(self.minusMonth), for: .touchUpInside)
+        self.nextMonthButton.addTarget(self, action: #selector(self.plusMonth), for: .touchUpInside)
         self.prevMonthButton.translatesAutoresizingMaskIntoConstraints = false
         self.nextMonthButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.prevMonthButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor),
-            self.prevMonthButton.trailingAnchor.constraint(equalTo: self.thisMonthLabel.leadingAnchor, constant: -15),
+            self.prevMonthButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 100),
             self.nextMonthButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor),
-            self.nextMonthButton.leadingAnchor.constraint(equalTo: self.thisMonthLabel.trailingAnchor, constant: 15)
+            self.nextMonthButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -100)
+        ])
+    }
+    
+    private func configureTodayButton() {
+        self.addSubview(self.todayButton)
+        self.todayButton.setTitle("Today", for: .normal)
+        self.todayButton.backgroundColor = UIColor(named: "LabelPurple")
+        self.todayButton.layer.cornerRadius = 5
+        self.todayButton.tintColor = .white
+        self.todayButton.titleLabel?.font = .systemFont(ofSize: 13)
+        self.todayButton.addTarget(self, action: #selector(self.thisMonth), for: .touchUpInside)
+        self.todayButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.todayButton.widthAnchor.constraint(equalToConstant: 10 +  (self.todayButton.titleLabel?.intrinsicContentSize.width ?? 0)),
+            self.todayButton.leadingAnchor.constraint(equalTo: self.nextMonthButton.trailingAnchor, constant: 15),
+            self.todayButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor)
         ])
     }
     
     private func configureWeekDays() {
-        self.addSubview(weekStackView)
+        self.addSubview(self.weekStackView)
         self.weekStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.weekStackView.topAnchor.constraint(equalTo: self.thisMonthLabel.bottomAnchor, constant: 30),
@@ -89,7 +107,7 @@ class WBCalendarView: UIView {
     }
     
     private func configureCollectionView() {
-        self.addSubview(collectionView)
+        self.addSubview(self.collectionView)
         self.collectionView.alwaysBounceVertical = false
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -101,10 +119,10 @@ class WBCalendarView: UIView {
     }
     
     private func configureTapGesture() {
-        let swipeLeftToRight = UISwipeGestureRecognizer(target: self, action: #selector(minusMonth(_:)))
+        let swipeLeftToRight = UISwipeGestureRecognizer(target: self, action: #selector(self.minusMonth))
         swipeLeftToRight.direction = UISwipeGestureRecognizer.Direction.right
         self.collectionView.addGestureRecognizer(swipeLeftToRight)
-        let swipeRightToLeft = UISwipeGestureRecognizer(target: self, action: #selector(plusMonth(_:)))
+        let swipeRightToLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.plusMonth))
         swipeRightToLeft.direction = UISwipeGestureRecognizer.Direction.left
         self.collectionView.addGestureRecognizer(swipeRightToLeft)
     }
@@ -117,13 +135,18 @@ class WBCalendarView: UIView {
         return label
     }
     
+    @objc private func thisMonth(_ sender: UIButton) {
+        self.collectionView.fadeAnimation()
+        self.monthButtonSignal.send(0)
+    }
+    
     @objc private func minusMonth(_ sender: UIButton) {
-        self.collectionView.leftToRightAnimation()
+        self.collectionView.fadeAnimation()
         self.monthButtonSignal.send(-1)
     }
     
     @objc private func plusMonth(_ sender: UIButton) {
-        self.collectionView.rightToLeftAnimation()
+        self.collectionView.fadeAnimation()
         self.monthButtonSignal.send(1)
     }
     

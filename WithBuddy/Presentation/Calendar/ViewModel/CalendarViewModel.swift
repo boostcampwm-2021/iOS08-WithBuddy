@@ -39,7 +39,7 @@ final class CalendarViewModel {
     }
     
     func didMonthButtonTouched(number: Int) {
-        guard let month = self.calendarUseCase.changeMonth(self.calendarMonth, by: number) else { return }
+        guard let month = number == 0 ? Date() : self.calendarUseCase.changeMonth(self.calendarMonth, by: number) else { return }
         self.calendarMonth = month
         self.sendMonthSubject()
         self.reloadDays()

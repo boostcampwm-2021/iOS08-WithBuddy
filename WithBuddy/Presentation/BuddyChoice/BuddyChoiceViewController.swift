@@ -118,7 +118,12 @@ class BuddyChoiceViewController: UIViewController {
     }
     
     private func alertError(_ error: BuddyChoiceError) {
-        let alert = UIAlertController(title: "등록 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
+        var titleMessage = ""
+        switch error {
+        case .oneMoreGathering: titleMessage = "삭제 실패"
+        case .noBuddy: titleMessage = "등록 실패"
+        }
+        let alert = UIAlertController(title: titleMessage, message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)

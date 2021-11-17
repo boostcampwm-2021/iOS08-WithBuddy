@@ -12,7 +12,7 @@ protocol CoreDataManagable {
     @discardableResult func insertGathering(_ gathering: Gathering) -> Bool
     @discardableResult func insertBuddy(_ buddy: Buddy) -> Bool
     @discardableResult func updateBuddy(_ buddy: Buddy) -> Bool
-    @discardableResult func deleteBuddy(_ buddy: Buddy) -> Bool
+    @discardableResult func deleteBuddy(_ buddy: Buddy) throws -> Bool
     func fetchAllBuddy() -> [BuddyEntity]
     func fetchAllGathering() -> [GatheringEntity]
     func fetchBuddy(name: String) -> [BuddyEntity]
@@ -144,11 +144,16 @@ extension CoreDataManager: CoreDataManagable {
     }
     
     @discardableResult
-    func deleteBuddy(_ buddy: Buddy) -> Bool {
+    func deleteBuddy(_ buddy: Buddy) throws -> Bool {
         let request = BuddyEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", buddy.id as CVarArg )
         
         guard let buddyEntity = self.fetch(request: request).first else { return false }
+        if let gatheringList = buddyEntity.gatheringList,
+           !gatheringList.isEmpty {
+            throw BuddyChoiceError.oneMoreGathering
+        }
+        
         context.delete(buddyEntity)
         
         do {

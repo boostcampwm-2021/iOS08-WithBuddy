@@ -38,8 +38,12 @@ final class BuddyUseCase {
         self.coreDataManager.updateBuddy(buddy)
     }
     
-    func deleteBuddy(_ buddy: Buddy) {
-        self.coreDataManager.deleteBuddy(buddy)
+    func deleteBuddy(_ buddy: Buddy) throws {
+        do {
+            try self.coreDataManager.deleteBuddy(buddy)
+        } catch {
+            throw error
+        }
     }
     
     private func makeRandomFace() -> String {

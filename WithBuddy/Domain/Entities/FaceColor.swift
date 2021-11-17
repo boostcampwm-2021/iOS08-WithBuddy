@@ -7,11 +7,24 @@
 
 import Foundation
 
-enum FaceColor {
-    static let blue = "FaceBlue"
-    static let green = "FaceGreen"
-    static let pink = "FacePink"
-    static let purple = "FacePurple"
-    static let red = "FaceRed"
-    static let yellow = "FaceYellow"
+enum FaceColor: CaseIterable, CustomStringConvertible {
+    
+    case blue
+    case green
+    case pink
+    case purple
+    case red
+    case yellow
+    
+    var description: String {
+        switch self {
+        case .blue: return "FaceBlue"
+        case .green : return "FaceGreen"
+        case .pink: return "FacePink"
+        case .purple: return "FacePurple"
+        case .red: return "FaceRed"
+        case .yellow: return "FaceYellow"
+        }
+    }
+    
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class BuddyCustomViewController: UIViewController {
     
@@ -18,15 +19,39 @@ class BuddyCustomViewController: UIViewController {
     
     private var colorTitleLabel = TitleLabel()
     private var colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
+    private lazy var colorDataSource = UICollectionViewDiffableDataSource<Int, Face>(collectionView: self.colorCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Face) -> UICollectionViewCell? in
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as? ImageCollectionViewCell else { preconditionFailure() }
+        cell.update(image: UIImage(named: itemIdentifier.description), check: itemIdentifier.check)
+        return cell
+    }
     
     private var faceTitleLabel = TitleLabel()
     private var faceCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
+    
+    private var buddyCustomViewModel = BuddyCustomViewModel()
+    private var cancellables: Set<AnyCancellable> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(named: "BackgroundPurple")
         
         self.configure()
+        self.bind()
+    }
+    
+    private func bind() {
+        self.buddyCustomViewModel.$color
+            .receive(on: DispatchQueue.main)
+            .sink { color in
+                var snapshot = NSDiffableDataSourceSnapshot<Int, Face>()
+                snapshot.appendSections([0])
+                snapshot.appendItems(FaceColor.allCases.map({ Face(description: $0.description, check: $0 == color) }))
+                self.colorDataSource.apply(snapshot, animatingDifferences: true)
+                if let color = color {
+                    self.buddyImageView.image = UIImage(named: "\(color)1")
+                }
+            }
+            .store(in: &self.cancellables)
     }
     
     private func configure() {
@@ -118,7 +143,9 @@ class BuddyCustomViewController: UIViewController {
     
     private func configureColorCollectionView() {
         self.contentView.addSubview(self.colorCollectionView)
-        self.colorCollectionView.backgroundColor = .blue
+        self.colorCollectionView.backgroundColor = .clear
+        self.colorCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
+        self.colorCollectionView.delegate = self
         
         self.colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -162,5 +189,11 @@ extension BuddyCustomViewController: UITextFieldDelegate {
             textField.deleteBackward()
         }
         return true
+    }
+}
+
+extension BuddyCustomViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.buddyCustomViewModel.colorDidChosen(in: indexPath.item)
     }
 }

@@ -27,7 +27,6 @@ class BuddyManageViewController: UIViewController {
         super.viewDidLoad()
         self.configure()
         self.bind()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.popView))
     }
     
     private func bind() {
@@ -96,10 +95,6 @@ class BuddyManageViewController: UIViewController {
             self.buddyCollectionView.trailingAnchor.constraint(equalTo: self.searchView.trailingAnchor),
             self.buddyCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
-    }
-    
-    @objc func popView() {
-        self.navigationController?.popViewController(animated: true)
     }
     
     @objc private func newBuddyButtonTouched(_ sender: UIButton) {

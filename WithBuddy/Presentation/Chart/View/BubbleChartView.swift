@@ -63,18 +63,28 @@ final class BubbleChartView: UIView {
             imageView.image = UIImage(named: face)
             imageView.isHidden = false
             if imageView != self.firstBubbleImageView {
+                let bubbleLength = (self.maxLength / 2) * (1 + (CGFloat(count) / CGFloat(maxCount)))
                 let firstFrame = self.firstBubbleImageView.frame
                 let firstCenterX = firstFrame.origin.x + (firstFrame.width / 2)
                 let firstCenterY = firstFrame.origin.y + (firstFrame.height / 2)
-                let centerX = ((firstFrame.width / 3) + (imageView.frame.width / 5)) * xValue
-                let centerY = ((firstFrame.height / 3) + (imageView.frame.height / 5)) * yValue
-                let length = self.maxLength * (CGFloat(count) / CGFloat(maxCount))
-                imageView.frame = CGRect(x: 0, y: 0, width: length, height: length)
-                imageView.center = CGPoint(x: firstCenterX + centerX, y: firstCenterY + centerY)
+                let centerX = ((firstFrame.width / 4) + (bubbleLength / 4)) * xValue
+                let centerY = ((firstFrame.height / 4) + (bubbleLength / 4)) * yValue
+                imageView.frame.size = CGSize(width: 0, height: 0)
+                imageView.center = CGPoint(x: firstCenterX + (centerX / 2), y: firstCenterY + (centerY / 2))
+                UIView.animate(withDuration: 1) {
+                    imageView.frame.size = CGSize(width: bubbleLength, height: bubbleLength)
+                    imageView.center = CGPoint(x: firstCenterX + centerX, y: firstCenterY + centerY)
+                }
             }
             return
         }
         imageView.isHidden = true
+    }
+    
+    private func animateBubble(imageView: UIImageView, count: Int?, length: CGFloat) {
+        UIView.animate(withDuration: 1) {
+            imageView.frame.size = CGSize(width: length, height: length)
+        }
     }
     
     private func configure() {
@@ -82,6 +92,8 @@ final class BubbleChartView: UIView {
         self.configureTitleLabel()
         self.configureWhiteView()
         self.configureChart()
+        self.configureFirstBubble()
+        self.configureBubbles()
         self.configureDefaultView()
     }
     
@@ -123,8 +135,6 @@ final class BubbleChartView: UIView {
         self.whiteView.addSubview(self.fourthBubbleImageView)
         self.whiteView.addSubview(self.fifthBubbleImageView)
         self.whiteView.addSubview(self.firstBubbleImageView)
-        self.configureFirstBubble()
-        self.configureBubbles()
     }
     
     private func configureFirstBubble() {
@@ -139,10 +149,15 @@ final class BubbleChartView: UIView {
     }
     
     private func configureBubbles() {
-        self.secondBubbleImageView.isHidden = true
-        self.thirdBubbleImageView.isHidden = true
-        self.fourthBubbleImageView.isHidden = true
-        self.fifthBubbleImageView.isHidden = true
+        self.configureBubble(imageView: self.secondBubbleImageView)
+        self.configureBubble(imageView: self.thirdBubbleImageView)
+        self.configureBubble(imageView: self.fourthBubbleImageView)
+        self.configureBubble(imageView: self.fifthBubbleImageView)
+    }
+    
+    private func configureBubble(imageView: UIImageView) {
+        imageView.isHidden = true
+        imageView.frame.size = CGSize(width: 0, height: 0)
     }
     
     private func configureDefaultView() {

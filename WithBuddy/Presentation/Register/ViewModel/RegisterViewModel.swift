@@ -22,8 +22,9 @@ enum RegisterError: LocalizedError {
 
 class RegisterViewModel {
     
-    private var startDate: Date?
+    private var date: Date?
     private var place: String?
+    private var memo: String?
     private var checkedPurposeList: [Purpose] {
         return self.purposeList.filter( { $0.check })
     }
@@ -31,23 +32,15 @@ class RegisterViewModel {
     private(set) var registerDoneSignal = PassthroughSubject<Void, Never>()
     private(set) var registerFailSignal = PassthroughSubject<RegisterError, Never>()
     
-    @Published private(set) var startDateString: String?
     @Published private(set) var purposeList: [Purpose] = PlaceType.allCases.map({ Purpose(type: $0, check: false) })
     @Published private(set) var buddyList: [Buddy] = []
-    @Published private(set) var memo: String?
     @Published private(set) var pictures: [URL] = []
     
     private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
     private var gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
     
     func didStartDatePicked(_ date: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko-KR")
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
-        
-        self.startDate = Calendar.current.startOfDay(for: date)
-        self.startDateString = dateFormatter.string(from: date)
+        self.date = date
     }
     
     func didPlaceChanged(_ place: String) {
@@ -89,11 +82,13 @@ class RegisterViewModel {
     func didDoneTouched() {
         if self.buddyList.isEmpty {
             self.registerFailSignal.send(RegisterError.noBuddy)
+        } else if self.checkedPurposeList.isEmpty {
+            self.registerFailSignal.send(RegisterError.noType)
         } else {
-            guard let startDate = startDate else {
+            guard let date = date else {
                 return
             }
-            self.gatheringUseCase.insertGathering(Gathering(startDate: startDate, endDate: Date(), place: self.place, purpose: ["\(PlaceType.culture)", "\(PlaceType.study)", "\(PlaceType.etc)"], buddyList: self.buddyList, memo: self.memo, picture: self.pictures))
+            self.gatheringUseCase.insertGathering(Gathering(id: UUID(), date: date, place: self.place, purpose: self.checkedPurposeList.map{ $0.type.description }, buddyList: self.buddyList, memo: self.memo, picture: self.pictures))
             self.registerDoneSignal.send()
         }
     }

@@ -92,7 +92,7 @@ extension CalendarDetailViewController: UICollectionViewDelegate, UICollectionVi
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListCollectionViewCell.identifier, for: indexPath)
                         as? ListCollectionViewCell else { return UICollectionViewCell() }
         let gathering = self.calendarDetailViewModel[indexPath.item]
-        cell.update(date: gathering.startDate, buddyImageList: gathering.buddyList.map{ $0.face }, typeList: gathering.purpose)
+        cell.update(date: gathering.date, buddyImageList: gathering.buddyList.map{ $0.face }, typeList: gathering.purpose)
         return cell
     }
     

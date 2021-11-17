@@ -22,6 +22,7 @@ protocol CoreDataManagable {
 final class CoreDataManager {
 
     static let shared = CoreDataManager()
+    let calendarUseCase = CalendarUseCase()
     
     private init() {}
 
@@ -78,25 +79,20 @@ extension CoreDataManager: CoreDataManagable {
     }
     
     func fetchGathering(including day: Date) -> [GatheringEntity] {
-        let midnightOfDay = Calendar.current.startOfDay(for: day)
+        let midnightOfDay = self.calendarUseCase.firstTimeOfDay(baseDate: day)
+        let midnightOfNextDay = self.calendarUseCase.nextDay(baseDate: midnightOfDay)
         
         let request = GatheringEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "startDate <= %@ AND endDate >= %@", midnightOfDay as NSDate, midnightOfDay as NSDate)
+        request.predicate = NSPredicate(format: "date >= %@ AND date < %@", midnightOfDay as NSDate, midnightOfNextDay as NSDate)
         return self.fetch(request: request)
     }
     
     func fetchGaterhing(month: Date) -> [GatheringEntity] {
-        let calendar = Calendar.current
-        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: month)
-        components.day = 1
-        components.hour = 00
-        components.minute = 00
-        components.second = 00
-        let startDateOfMonth = calendar.date(from: components) ?? Date()
-        let endDateOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startDateOfMonth) ?? Date()
+        let startDateOfMonth = self.calendarUseCase.firstDateOfMonth(baseDate: month)
+        let startDateOfNextMonth = self.calendarUseCase.nextMonth(baseDate: startDateOfMonth)
         
         let request = GatheringEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "startDate >= %@ AND startDate <= %@", startDateOfMonth as NSDate, endDateOfMonth as NSDate)
+        request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startDateOfMonth as NSDate, startDateOfNextMonth as NSDate)
         return self.fetch(request: request)
     }
     

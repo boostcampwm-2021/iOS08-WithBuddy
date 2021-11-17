@@ -8,11 +8,13 @@
 import Foundation
 
 struct Gathering: Hashable {
-    var startDate: Date
-    var endDate: Date
+    
+    var id: UUID
+    var date: Date
     var place: String?
     var purpose: [String]
     var buddyList: [Buddy]
     var memo: String?
     var picture: [URL]?
+    
 }

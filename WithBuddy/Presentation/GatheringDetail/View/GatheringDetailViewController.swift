@@ -97,7 +97,7 @@ class GatheringDetailViewController: UIViewController {
                 dateFormatter.locale = Locale(identifier: "ko-KR")
                 dateFormatter.dateStyle = .long
                 dateFormatter.timeStyle = .none
-                self?.dateContentLabel.text = dateFormatter.string(from: gathering.startDate)
+                self?.dateContentLabel.text = dateFormatter.string(from: gathering.date)
                 self?.placeTextField.text = gathering.place
 
                 var purposeSnapshot = NSDiffableDataSourceSnapshot<Int, Purpose>()

@@ -91,8 +91,10 @@ final class ChartViewModel {
     }
     
     private func fetchLatestBuddy() {
-        if let lastGathering = self.gatheringList.first {
-            self.latestBuddy = lastGathering.buddyList.first
+        let currentDate = Date()
+        for gathering in self.gatheringList where gathering.date < currentDate {
+            self.latestBuddy = gathering.buddyList.first
+            return
         }
     }
     

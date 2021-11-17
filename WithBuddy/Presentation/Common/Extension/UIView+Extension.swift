@@ -19,22 +19,12 @@ extension UIView {
         }
     }
     
-    func rightToLeftAnimation(duration: TimeInterval = 0.5, completionDelegate: AnyObject? = nil) {
-        let leftToRightTransition = CATransition()
+    func fadeAnimation(duration: TimeInterval = 0.5, completionDelegate: AnyObject? = nil) {
+        let fadeAnimation = CATransition()
 
-        leftToRightTransition.type = CATransitionType.fade
-        leftToRightTransition.subtype = CATransitionSubtype.fromRight
-        leftToRightTransition.duration = duration
-        self.layer.add(leftToRightTransition, forKey: "leftToRightTransition")
-    }
-    
-    func leftToRightAnimation(duration: TimeInterval = 0.5, completionDelegate: AnyObject? = nil) {
-        let rightToLeftTransition = CATransition()
-
-        rightToLeftTransition.type = CATransitionType.fade
-        rightToLeftTransition.subtype = CATransitionSubtype.fromLeft
-        rightToLeftTransition.duration = duration
-        self.layer.add(rightToLeftTransition, forKey: "rightToLeftTransition")
+        fadeAnimation.type = CATransitionType.fade
+        fadeAnimation.duration = duration
+        self.layer.add(fadeAnimation, forKey: "fadeAnimation")
     }
     
 }

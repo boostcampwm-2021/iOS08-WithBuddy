@@ -9,7 +9,7 @@ import Foundation
 
 final class ChartViewModel {
     
-    @Published private(set) var buddyRank: [Buddy] = []
+    @Published private(set) var buddyRank: [(Buddy, Int)] = []
     @Published private(set) var purposeRank: [String] = []
     @Published private(set) var latestBuddy: Buddy?
     @Published private(set) var oldBuddy: Buddy?
@@ -54,10 +54,13 @@ final class ChartViewModel {
             }
         }
         
-        let sortedBuddyList = buddyMap.sorted{ $0.1 > $1.1 }.map{ $0.key }
+        let sortedBuddyList = buddyMap.sorted{
+            if $0.value == $1.value { return $0.key.name < $1.key.name }
+            return $0.value > $1.value
+        }
         let index = min(5, sortedBuddyList.count - 1)
         if Int.zero <= index {
-            self.buddyRank = Array(sortedBuddyList[...index])
+            self.buddyRank = Array(sortedBuddyList[...index].map{ ($0.key, $0.value) })
         }
     }
     

@@ -66,7 +66,7 @@ class BuddyCustomViewController: UIViewController {
     
     private func configureNameTextField() {
         self.contentView.addSubview(self.nameTextField)
-        self.nameTextField.placeholder = "이름을 입력하세요."
+        self.nameTextField.placeholder = "버디이름을 입력해주세요."
         self.nameTextField.delegate = self
         self.nameTextField.textAlignment = .center
         
@@ -86,34 +86,69 @@ class BuddyCustomViewController: UIViewController {
             self.lineView.topAnchor.constraint(equalTo: self.nameTextField.bottomAnchor, constant: 5),
             self.lineView.leadingAnchor.constraint(equalTo: self.nameTextField.leadingAnchor),
             self.lineView.trailingAnchor.constraint(equalTo: self.nameTextField.trailingAnchor),
-            self.lineView.heightAnchor.constraint(equalToConstant: 1),
-            self.lineView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+            self.lineView.heightAnchor.constraint(equalToConstant: 1)
         ])
     }
     
     private func configureMyBuddyImageView() {
         self.contentView.addSubview(self.buddyImageView)
+        self.buddyImageView.image = UIImage(named: "FaceBlue1")
+        
         self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.buddyImageView.topAnchor.constraint(equalTo: self.lineView.bottomAnchor, constant: 10),
+            self.buddyImageView.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
+            self.buddyImageView.widthAnchor.constraint(equalToConstant: 250),
+            self.buddyImageView.heightAnchor.constraint(equalToConstant: 250)
+        ])
     }
     
     private func configureColorTitleLabel() {
         self.contentView.addSubview(self.colorTitleLabel)
+        self.colorTitleLabel.text = "색상"
+        
         self.colorTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.colorTitleLabel.topAnchor.constraint(equalTo: self.buddyImageView.bottomAnchor, constant: 20),
+            self.colorTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20)
+        ])
     }
     
     private func configureColorCollectionView() {
         self.contentView.addSubview(self.colorCollectionView)
+        self.colorCollectionView.backgroundColor = .blue
+        
         self.colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.colorCollectionView.topAnchor.constraint(equalTo: self.colorTitleLabel.bottomAnchor, constant: 10),
+            self.colorCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
+            self.colorCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+            self.colorCollectionView.heightAnchor.constraint(equalToConstant: 60)
+        ])
     }
     
     private func configureFaceTitleLabel() {
         self.contentView.addSubview(self.faceTitleLabel)
+        self.faceTitleLabel.text = "얼굴"
+        
         self.faceTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.faceTitleLabel.topAnchor.constraint(equalTo: self.colorCollectionView.bottomAnchor, constant: 20),
+            self.faceTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20)
+        ])
     }
     
     private func configureFaceCollectionView() {
         self.contentView.addSubview(self.faceCollectionView)
+        self.faceCollectionView.backgroundColor = .blue
+        
         self.faceCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.faceCollectionView.topAnchor.constraint(equalTo: self.faceTitleLabel.bottomAnchor, constant: 10),
+            self.faceCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
+            self.faceCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+            self.faceCollectionView.heightAnchor.constraint(equalToConstant: 120)
+        ])
     }
     
 }

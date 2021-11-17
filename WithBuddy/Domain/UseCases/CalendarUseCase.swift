@@ -36,9 +36,17 @@ final class CalendarUseCase {
         return calendar.startOfDay(for: baseDate)
     }
     
+    func nextDay(baseDate: Date) -> Date {
+        return self.calendar.date(byAdding: DateComponents(day: 1), to: baseDate) ?? Date()
+    }
+    
     func firstDateOfMonth(baseDate: Date) -> Date {
         let components = self.calendar.dateComponents([.year, .month], from: baseDate)
         return self.calendar.date(from: components) ?? Date()
+    }
+    
+    func nextMonth(baseDate: Date) -> Date {
+        return self.calendar.date(byAdding: DateComponents(month: 1), to: baseDate) ?? Date()
     }
     
     func numOfDaysInMonth(baseDate: Date) -> Int {

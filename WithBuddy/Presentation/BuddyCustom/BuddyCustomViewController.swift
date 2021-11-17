@@ -66,7 +66,9 @@ class BuddyCustomViewController: UIViewController {
     
     private func configureNameTextField() {
         self.contentView.addSubview(self.nameTextField)
-        self.nameTextField.placeholder = "버디이름을 입력해주세요."
+        if let color = UIColor(named: "LabelPurple") {
+            self.nameTextField.attributedPlaceholder = NSAttributedString(string: "버디이름을 입력해주세요.", attributes: [NSAttributedString.Key.foregroundColor: color])
+        }
         self.nameTextField.delegate = self
         self.nameTextField.textAlignment = .center
         

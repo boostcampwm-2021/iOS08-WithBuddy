@@ -248,8 +248,7 @@ class RegisterViewController: UIViewController {
     @objc private func onDateButtonTouched(_ sender: UIButton) {
         self.view.addSubview(self.datePicker)
         self.datePicker.translatesAutoresizingMaskIntoConstraints = false
-        self.datePicker.autoresizingMask = .flexibleWidth
-        self.datePicker.datePickerMode = .date
+        self.datePicker.datePickerMode = .dateAndTime
         self.datePicker.preferredDatePickerStyle = .inline
         self.datePicker.locale = Locale(identifier: "ko-KR")
         self.datePicker.timeZone = .autoupdatingCurrent
@@ -259,7 +258,7 @@ class RegisterViewController: UIViewController {
             self.datePicker.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             self.datePicker.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             self.datePicker.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            self.datePicker.heightAnchor.constraint(equalToConstant: 300)
+            self.datePicker.heightAnchor.constraint(equalToConstant: 450)
         ])
         
         self.view.addSubview(self.dateToolBar)

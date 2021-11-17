@@ -42,11 +42,10 @@ class RegisterViewModel {
     
     func didStartDatePicked(_ date: Date) {
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko-KR")
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
+        dateFormatter.dateFormat = "yyyy년 M월 d일  a h시 m분"
+        dateFormatter.locale = Locale(identifier: "ko_KR")
         
-        self.date = Calendar.current.startOfDay(for: date)
+        self.date = date
         self.dateString = dateFormatter.string(from: date)
     }
     

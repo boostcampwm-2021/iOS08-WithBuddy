@@ -38,6 +38,7 @@ final class ListViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.listViewModel.fetch()
+        self.searchView.reset()
     }
     
     private func configure() {
@@ -96,6 +97,7 @@ final class ListViewController: UIViewController {
             snapshot.appendItems(gatheringList)
         } else {
             snapshot.appendItems(filtered)
+            self.listViewModel.searched(list: filtered)
         }
         self.listDataSource.apply(snapshot, animatingDifferences: true)
     }
@@ -120,6 +122,12 @@ extension ListViewController: UICollectionViewDelegate, UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.view.frame.width-40, height: 150)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let viewController = GatheringDetailViewController()
+        viewController.configure(by: self.listViewModel[indexPath.item])
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
     
 }

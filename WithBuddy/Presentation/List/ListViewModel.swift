@@ -10,6 +10,9 @@ import Foundation
 final class ListViewModel {
     
     @Published private(set) var gatheringList: [Gathering] = []
+    private(set) var searchedList: [Gathering] = []
+    private(set) var isSearched: Bool = false
+    
     private let buddyUseCase: BuddyUseCase
     private let gatheringUseCase: GatheringUseCase
     
@@ -24,7 +27,19 @@ final class ListViewModel {
     }
     
     subscript(index: Int) -> Gathering {
-        return self.gatheringList.reversed()[index]
+        if self.isSearched {
+            return self.searchedList[index]
+        }
+        return self.gatheringList[index]
+    }
+    
+    func searched(list: [Gathering]) {
+        if list.isEmpty {
+            self.isSearched = false
+            return
+        }
+        self.isSearched = true
+        self.searchedList = list
     }
     
     private func configure() {
@@ -33,6 +48,7 @@ final class ListViewModel {
     
     func fetch() {
         self.gatheringList = self.gatheringUseCase.fetchGathering()
+        self.isSearched = false
     }
     
 }

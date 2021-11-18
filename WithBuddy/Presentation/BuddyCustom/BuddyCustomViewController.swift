@@ -19,7 +19,7 @@ class BuddyCustomViewController: UIViewController {
     
     private var colorTitleLabel = TitleLabel()
     private var colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
-    private lazy var colorDataSource = UICollectionViewDiffableDataSource<Int, Face>(collectionView: self.colorCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Face) -> UICollectionViewCell? in
+    private lazy var colorDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.colorCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as? ImageCollectionViewCell else { preconditionFailure() }
         cell.update(image: UIImage(named: itemIdentifier.description), check: itemIdentifier.check)
         return cell
@@ -27,6 +27,11 @@ class BuddyCustomViewController: UIViewController {
     
     private var faceTitleLabel = TitleLabel()
     private var faceCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
+    private lazy var faceDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.colorCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as? ImageCollectionViewCell else { preconditionFailure() }
+        cell.update(image: UIImage(named: itemIdentifier.description), check: itemIdentifier.check)
+        return cell
+    }
     
     private var buddyCustomViewModel = BuddyCustomViewModel()
     private var cancellables: Set<AnyCancellable> = []
@@ -40,16 +45,30 @@ class BuddyCustomViewController: UIViewController {
     }
     
     private func bind() {
-        self.buddyCustomViewModel.$color
+        self.buddyCustomViewModel.$faceColor
             .receive(on: DispatchQueue.main)
             .sink { color in
-                var snapshot = NSDiffableDataSourceSnapshot<Int, Face>()
+                var snapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
                 snapshot.appendSections([0])
-                snapshot.appendItems(FaceColor.allCases.map({ Face(description: $0.description, check: $0 == color) }))
+                snapshot.appendItems(FaceColor.allCases.map({ CheckableInfo(description: $0.description, check: $0 == color) }))
                 self.colorDataSource.apply(snapshot, animatingDifferences: true)
-                if let color = color {
-                    self.buddyImageView.image = UIImage(named: "\(color)1")
-                }
+            }
+            .store(in: &self.cancellables)
+        
+        self.buddyCustomViewModel.$faceNumber
+            .receive(on: DispatchQueue.main)
+            .sink { faceNumber in
+                var snapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
+                snapshot.appendSections([0])
+                snapshot.appendItems([])
+                self.colorDataSource.apply(snapshot, animatingDifferences: true)
+            }
+            .store(in: &self.cancellables)
+        
+        self.buddyCustomViewModel.$face
+            .receive(on: DispatchQueue.main)
+            .sink { face in
+                self.buddyImageView.image = UIImage(named: "\(face)")
             }
             .store(in: &self.cancellables)
     }
@@ -119,7 +138,6 @@ class BuddyCustomViewController: UIViewController {
     
     private func configureMyBuddyImageView() {
         self.contentView.addSubview(self.buddyImageView)
-        self.buddyImageView.image = UIImage(named: "FaceBlue1")
         
         self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -169,7 +187,7 @@ class BuddyCustomViewController: UIViewController {
     
     private func configureFaceCollectionView() {
         self.contentView.addSubview(self.faceCollectionView)
-        self.faceCollectionView.backgroundColor = .blue
+        self.colorCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
         
         self.faceCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

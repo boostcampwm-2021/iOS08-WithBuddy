@@ -24,9 +24,9 @@ class GatheringEditViewController: UIViewController {
     
     private lazy var purposeTitleLabel = RegisterTitleLabel()
     private lazy var purposeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
-    private lazy var purposeDataSource = UICollectionViewDiffableDataSource<Int, Purpose>(collectionView: self.purposeCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Purpose) -> UICollectionViewCell? in
+    private lazy var purposeDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.purposeCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifier, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
-        cell.update(image: UIImage(named: "\(itemIdentifier.type)"), text: "\(itemIdentifier.type)", check: itemIdentifier.check)
+        cell.update(image: UIImage(named: "\(itemIdentifier.description)"), text: "\(itemIdentifier.description)", check: itemIdentifier.check)
         return cell
     }
     
@@ -114,7 +114,7 @@ class GatheringEditViewController: UIViewController {
         self.gatheringEditViewModel.$purposeList
             .receive(on: DispatchQueue.main)
             .sink { [weak self] purposeList in
-                var snapshot = NSDiffableDataSourceSnapshot<Int, Purpose>()
+                var snapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
                 snapshot.appendSections([0])
                 snapshot.appendItems(purposeList)
                 self?.purposeDataSource.apply(snapshot, animatingDifferences: true)

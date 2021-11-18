@@ -9,11 +9,11 @@ import UIKit
 
 extension UIView {
     
-    func animateButtonTap(duration: Double, scale: Float) {
-        UIView.animate(withDuration: duration/2) { [weak self] in
+    func animateButtonTap(scale: Float) {
+        UIView.animate(withDuration: 0.2) { [weak self] in
             self?.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
         } completion: { [weak self] _ in
-            UIView.animate(withDuration: duration/2) {
+            UIView.animate(withDuration: 0.2) {
                 self?.transform = CGAffineTransform.identity
             }
         }

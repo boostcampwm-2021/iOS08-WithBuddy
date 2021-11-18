@@ -325,7 +325,7 @@ class RegisterViewController: UIViewController {
             self.registerViewModel.didPurposeTouched(indexPath.item)
             
             guard let cell = self.purposeCollectionView.cellForItem(at: indexPath) as? ImageTextCollectionViewCell  else { return }
-            cell.animateButtonTap(duration: 0.4, scale: 0.8)
+            cell.animateButtonTap(scale: 0.8)
         }
     }
     
@@ -391,7 +391,7 @@ class RegisterViewController: UIViewController {
     }
     
     @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
-        self.buddyAddButton.animateButtonTap(duration: 0.4, scale: 0.8)
+        self.buddyAddButton.animateButtonTap(scale: 0.8)
         self.registerViewModel.didAddBuddyTouched()
     }
     
@@ -537,7 +537,7 @@ class RegisterViewController: UIViewController {
     }
     
     @objc private func onPictureButtonTouched(_ sender: UIButton) {
-        self.pictureAddButton.animateButtonTap(duration: 0.4, scale: 0.8)
+        self.pictureAddButton.animateButtonTap(scale: 0.8)
         switch PHPhotoLibrary.authorizationStatus() {
         case .authorized: self.presentImagePicker()
         case .notDetermined: self.requestAuthorization()

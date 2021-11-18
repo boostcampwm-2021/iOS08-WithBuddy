@@ -167,7 +167,7 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? ImageTextCollectionViewCell else { return }
-        cell.animateButtonTap(duration: 0.4, scale: 0.8)
+        cell.animateButtonTap(scale: 0.8)
         
         self.buddyChoiceViewModel.buddyDidChecked(in: indexPath.item)
     }

@@ -79,7 +79,7 @@ class SettingViewController: UIViewController {
     }
     
     @objc private func moveToBuddyCustom(_ sender: UIButton) {
-        self.modifyButton.animateButtonTap(duration: 0.4, scale: 0.9)
+        self.modifyButton.animateButtonTap(scale: 0.9)
         self.tabBarController?.dismiss(animated: true, completion: {
             self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
         })
@@ -99,7 +99,7 @@ class SettingViewController: UIViewController {
     }
     
     @objc private func removeAlert() {
-        self.removeAllGatheringButton.animateButtonTap(duration: 0.4, scale: 0.9)
+        self.removeAllGatheringButton.animateButtonTap(scale: 0.9)
         let alert = UIAlertController(title: nil, message: "모임 목록을 정말로 초기화하시겠습니까?", preferredStyle: UIAlertController.Style.alert)
         let cancelAction = UIAlertAction(title: "취소", style: .cancel)
         let okAction = UIAlertAction(title: "OK", style: .destructive)
@@ -138,14 +138,14 @@ class SettingViewController: UIViewController {
     }
     
     @objc private func moveToBuddyManage(_ sender: UIButton) {
-        self.manageBuddyButton.animateButtonTap(duration: 0.4, scale: 0.9)
+        self.manageBuddyButton.animateButtonTap(scale: 0.9)
         self.tabBarController?.dismiss(animated: true, completion: {
             self.navigationController?.pushViewController(BuddyManageViewController(), animated: true)
         })
     }
     
     @objc private func moveToDeveloperInfo(_ sender: UIButton) {
-        self.developerInfoButton.animateButtonTap(duration: 0.4, scale: 0.9)
+        self.developerInfoButton.animateButtonTap(scale: 0.9)
         self.tabBarController?.dismiss(animated: true, completion: {
             self.navigationController?.pushViewController(DeveloperInfoViewController(), animated: true)
         })

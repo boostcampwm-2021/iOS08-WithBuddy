@@ -22,75 +22,44 @@ enum RegisterError: LocalizedError {
 
 class RegisterViewModel {
     
-    private var startDate: Date?
-    private var endDate: Date?
+    private var date: Date?
     private var place: String?
-    private var checkedPurposeList: [Purpose] {
+    private var memo: String?
+    private var checkedPurposeList: [CheckableInfo] {
         return self.purposeList.filter( { $0.check })
     }
     private(set) var addBuddySignal = PassthroughSubject<[Buddy], Never>()
     private(set) var registerDoneSignal = PassthroughSubject<Void, Never>()
     private(set) var registerFailSignal = PassthroughSubject<RegisterError, Never>()
     
-    @Published private(set) var startDateString: String?
-    @Published private(set) var endDateString: String?
-    @Published private(set) var purposeList: [Purpose] = PlaceType.allCases.map({ Purpose(type: $0, check: false) })
+    @Published private(set) var purposeList: [CheckableInfo] = PlaceType.allCases.map({ CheckableInfo(description: "\($0)", check: false) })
     @Published private(set) var buddyList: [Buddy] = []
-    @Published private(set) var memo: String?
     @Published private(set) var pictures: [URL] = []
     
-    private var buddyUseCase = BuddyUseCase()
-    private var gatheringUseCase = GatheringUseCase()
+    private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
+    private var gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
     
-    func didStartDatePicked(_ date: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko-KR")
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
-        
-        self.startDate = date
-        self.startDateString = dateFormatter.string(from: date)
-        
-        if let endDate = self.endDate,
-           endDate < date {
-            self.endDate = self.startDate
-            self.endDateString = self.startDateString
-        }
+    func didDatePicked(_ date: Date) {
+        self.date = date
     }
     
-    func didEndDatePicked(_ date: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko-KR")
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
-        
-        if let startDate = startDate,
-           startDate > date {
-            self.endDate = self.startDate
-            self.endDateString = self.startDateString
-            return
-        }
-        self.endDate = date
-        self.endDateString = dateFormatter.string(from: date)
-    }
-    
-    func didPlaceFinished(_ place: String) {
+    func didPlaceChanged(_ place: String) {
         self.place = place
     }
     
-    func didTypeTouched(_ idx: Int) {
+    func didPurposeTouched(_ idx: Int) {
         self.purposeList[idx].check.toggle()
     }
     
-    func buddyDidAdded(_ buddy: Buddy) {
+    func didBuddyAdded(_ buddy: Buddy) {
         self.buddyList.insert(buddy, at: 0)
     }
     
-    func buddyDidUpdated(_ buddyList: [Buddy]) {
+    func didBuddyUpdated(_ buddyList: [Buddy]) {
         self.buddyList = buddyList
     }
     
-    func didMemoFinished(_ memo: String) {
+    func didMemoChanged(_ memo: String) {
         self.memo = memo
     }
     
@@ -113,17 +82,18 @@ class RegisterViewModel {
     func didDoneTouched() {
         if self.buddyList.isEmpty {
             self.registerFailSignal.send(RegisterError.noBuddy)
+        } else if self.checkedPurposeList.isEmpty {
+            self.registerFailSignal.send(RegisterError.noType)
         } else {
-            guard let startDate = startDate,
-                  let endDate = endDate else {
+            guard let date = date else {
                 return
             }
-            self.gatheringUseCase.insertGathering(Gathering(startDate: startDate, endDate: endDate, place: self.place, purpose: ["\(PlaceType.culture)", "\(PlaceType.study)", "\(PlaceType.etc)"], buddyList: self.buddyList, memo: self.memo, picture: self.pictures))
+            self.gatheringUseCase.insertGathering(Gathering(id: UUID(), date: date, place: self.place, purpose: self.checkedPurposeList.map{ $0.description }, buddyList: self.buddyList, memo: self.memo, picture: self.pictures))
             self.registerDoneSignal.send()
         }
     }
     
-    func addBuddyDidTouched() {
+    func didAddBuddyTouched() {
         self.addBuddySignal.send(self.buddyList)
     }
     

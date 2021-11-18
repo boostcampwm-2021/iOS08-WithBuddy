@@ -118,22 +118,38 @@ class BuddyChoiceViewController: UIViewController {
     }
     
     private func alertError(_ error: BuddyChoiceError) {
-        let alert = UIAlertController(title: "등록 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
+        var titleMessage = ""
+        switch error {
+        case .oneMoreGathering: titleMessage = "삭제 실패"
+        case .noBuddy: titleMessage = "등록 실패"
+        }
+        let alert = UIAlertController(title: titleMessage, message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
     }
     
     @objc private func newBuddyButtonTouched(_ sender: UIButton) {
-        let buddyFaceUseCase = BuddyFaceUseCase()
-        let uuid = UUID()
-        let newBuddy = Buddy(id: uuid, name: uuid.uuidString, face: buddyFaceUseCase.random())
-        self.buddyChoiceViewModel.buddyDidAdded(newBuddy)
-        self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
+        let buddyCustomViewController = BuddyCustomViewController()
+        buddyCustomViewController.delegate = self
+        self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
     }
     
     @objc private func completeButtonTouched() {
         self.buddyChoiceViewModel.buddySelectingDidCompleted()
+    }
+    
+    private func searchBuddy(by text: String) {
+        let buddyList = self.buddyChoiceViewModel.storedBuddyList
+        let filtered = buddyList.filter{ $0.name.contains(text) }
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
+        snapshot.appendSections([0])
+        if text.isEmpty {
+            snapshot.appendItems(buddyList)
+        } else {
+            snapshot.appendItems(filtered)
+        }
+        self.buddyDataSource.apply(snapshot, animatingDifferences: true)
     }
     
 }
@@ -145,11 +161,19 @@ extension BuddyChoiceViewController: UITextFieldDelegate {
         return true
     }
     
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        self.searchBuddy(by: text)
+    }
+    
 }
 
 extension BuddyChoiceViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? ImageTextCollectionViewCell else { return }
+        cell.animateButtonTap(scale: 0.8)
+        
         self.buddyChoiceViewModel.buddyDidChecked(in: indexPath.item)
     }
     
@@ -167,6 +191,12 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
         })
     }
     
+}
+
+extension BuddyChoiceViewController: BuddyCustomDelegate {
+    func buddyCustomDidCompleted(_ buddy: Buddy) {
+        self.buddyChoiceViewModel.buddyDidAdded(buddy)
+    }
 }
 
 protocol BuddyChoiceDelegate: AnyObject {

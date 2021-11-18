@@ -12,8 +12,8 @@ import CoreData
 @objc(GatheringEntity)
 public class GatheringEntity: NSManagedObject {
     
-    @NSManaged public var startDate: Date
-    @NSManaged public var endDate: Date
+    @NSManaged public var id: UUID
+    @NSManaged public var date: Date
     @NSManaged public var purpose: [String]
     @NSManaged public var place: String?
     @NSManaged public var memo: String?
@@ -46,8 +46,8 @@ extension GatheringEntity {
     
     convenience init(context: NSManagedObjectContext, gathering: Gathering) {
         self.init(context: context)
-        self.startDate = gathering.startDate
-        self.endDate = gathering.endDate
+        self.id = gathering.id
+        self.date = gathering.date
         self.place = gathering.place
         self.purpose = gathering.purpose
         self.memo = gathering.memo
@@ -55,12 +55,20 @@ extension GatheringEntity {
     }
     
     func toDomain() -> Gathering {
-        return Gathering(startDate: self.startDate,
-                         endDate: self.endDate,
+        return Gathering(id: self.id,
+                         date: self.date,
                          place: self.place,
                          purpose: self.purpose,
-                         buddyList: self.buddyList.map{ $0.toDomain() },
+                         buddyList: self.buddyList.map{ $0.toDomain() }.sorted(),
                          memo: self.memo,
                          picture: self.picture)
     }
+}
+
+extension GatheringEntity: Comparable {
+    
+    public static func < (lhs: GatheringEntity, rhs: GatheringEntity) -> Bool {
+        return lhs.date < rhs.date
+    }
+
 }

@@ -10,10 +10,12 @@ import Combine
 
 enum BuddyChoiceError: LocalizedError {
     case noBuddy
+    case oneMoreGathering
     
     var errorDescription: String? {
         switch self {
         case .noBuddy: return "최소 한명 이상의 버디를 추가해 주세요."
+        case .oneMoreGathering: return "해당 버디가 한개 이상의 모임에 속해 있습니다."
         }
     }
 }
@@ -30,10 +32,16 @@ class BuddyChoiceViewModel {
         })
     }
     
-    private var buddyUseCase = BuddyUseCase()
+    private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
     
     func buddyDidADeleted(in idx: Int) {
-        self.storedBuddyList.remove(at: idx)
+        do {
+            try self.buddyUseCase.deleteBuddy(storedBuddyList[idx])
+            self.storedBuddyList.remove(at: idx)
+        } catch let error {
+            guard let error = error as? BuddyChoiceError else { return }
+            self.failSignal.send(error)
+        }
     }
     
     func buddyDidAdded(_ buddy: Buddy) {
@@ -54,7 +62,7 @@ class BuddyChoiceViewModel {
         storedBuddyList.forEach( { buddy in
             var checkedBuddy = buddy
             checkedBuddy.check = true
-            if buddyList.contains(checkedBuddy) {
+            if buddyList.contains(checkedBuddy) || buddyList.contains(buddy) {
                 self.storedBuddyList.append(checkedBuddy)
             } else {
                 self.storedBuddyList.append(buddy)

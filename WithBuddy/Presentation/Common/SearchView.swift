@@ -22,6 +22,10 @@ final class SearchView: UIView {
         self.configure()
     }
     
+    func reset() {
+        self.searchTextField.text = ""
+    }
+    
     private func configure() {
         self.backgroundColor = .systemBackground
         self.configureButton()

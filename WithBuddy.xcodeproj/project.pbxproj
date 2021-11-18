@@ -648,8 +648,6 @@
 				85BC8E14274131F300570FC4 /* ChartViewModel.swift in Sources */,
 				BB2D25C4273B901600E7BF35 /* GatheringEntity+CoreDataClass.swift in Sources */,
 				85D262EC273CDEBE000190B8 /* LatestOldChartView.swift in Sources */,
-				F7E8ABBE273A8D43005F8306 /* CalendarViewModel.swift in Sources */,
-				F7E8ABBE273A8D43005F8306 /* CalendarViewModel.swift in Sources */,
 				8AD6691F2744D94B00158E1A /* BuddyCustomViewModel.swift in Sources */,
 				85D262F8273D138E000190B8 /* DefaultView.swift in Sources */,
 				F7E8ABB42738133B005F8306 /* CalendarDetailViewController.swift in Sources */,

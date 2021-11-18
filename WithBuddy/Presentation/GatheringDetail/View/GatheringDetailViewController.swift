@@ -112,7 +112,7 @@ class GatheringDetailViewController: UIViewController {
                 var buddySnapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
                 if gathering.buddyList.isEmpty {
                     buddySnapshot.appendSections([0])
-                    buddySnapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "FacePurple1")])
+                    buddySnapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "DefaultFace")])
                 } else {
                     buddySnapshot.appendSections([0])
                     buddySnapshot.appendItems(gathering.buddyList)

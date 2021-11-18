@@ -20,6 +20,7 @@ protocol CoreDataManagable {
     func fetchGathering(including day: Date) -> [GatheringEntity]
     func fetchGaterhing(month: Date) -> [GatheringEntity]
     func updateGathering(_ gathering: Gathering)
+    func deleteGathering(_ gatheringId: UUID)
 }
 
 final class CoreDataManager {
@@ -180,6 +181,20 @@ extension CoreDataManager: CoreDataManagable {
             gatheringEntity.removeFromBuddyList(buddyEntity)
         }
         gatheringEntity.addToBuddyList(NSSet(array: self.fetchBuddyEntity(of: gathering.buddyList)))
+        
+        do {
+            try self.context.save()
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func deleteGathering(_ gatheringId: UUID) {
+        let request = GatheringEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", gatheringId as CVarArg)
+        
+        guard let gatheringEntity = self.fetch(request: request).first else { return }
+        self.context.delete(gatheringEntity)
         
         do {
             try self.context.save()

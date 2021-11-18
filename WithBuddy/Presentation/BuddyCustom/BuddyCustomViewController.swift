@@ -46,6 +46,10 @@ class BuddyCustomViewController: UIViewController {
         self.bind()
     }
     
+    func configure(by buddy: Buddy) {
+        self.buddyCustomViewModel.buddyDidInserted(buddy)
+    }
+    
     private func bind() {
         self.buddyCustomViewModel.$face
             .receive(on: DispatchQueue.main)

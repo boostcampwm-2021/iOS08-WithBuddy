@@ -15,8 +15,7 @@ class GatheringEditViewController: UIViewController {
     
     private lazy var dateTitleLabel = RegisterTitleLabel()
     private lazy var dateBackgroundView = UIView()
-    private lazy var dateContentLabel = UILabel()
-    private lazy var datePickButton = UIButton()
+    private lazy var datePicker = UIDatePicker()
   
     private lazy var placeTitleLabel = RegisterTitleLabel()
     private lazy var placeBackgroundView = UIView()
@@ -52,9 +51,7 @@ class GatheringEditViewController: UIViewController {
         return cell
     }
     
-    private lazy var datePicker = UIDatePicker()
-    private lazy var dateToolBar = UIToolbar()
-    
+    weak var delegate: GatheringEditDelegate?
     private var gatheringEditViewModel = GatheringEditViewModel()
     private var cancellables: Set<AnyCancellable> = []
     
@@ -67,7 +64,6 @@ class GatheringEditViewController: UIViewController {
     }
     
     private func bind() {
-        self.bindDateString()
         self.bindPlace()
         self.bindPurposeList()
         self.bindBuddyList()
@@ -77,6 +73,8 @@ class GatheringEditViewController: UIViewController {
     }
     
     func configure(by gathering: Gathering) {
+        self.gatheringEditViewModel.gatheringId = gathering.id
+        self.datePicker.date = gathering.date
         self.gatheringEditViewModel.didDatePicked(gathering.date)
         self.gatheringEditViewModel.didPlaceChanged(gathering.place ?? "")
         for (idx, place) in PlaceType.allCases.enumerated() {
@@ -90,15 +88,6 @@ class GatheringEditViewController: UIViewController {
         for url in pictures {
             self.gatheringEditViewModel.didPicturePicked(url)
         }
-    }
-    
-    private func bindDateString() {
-        self.gatheringEditViewModel.$dateString
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] date in
-                self?.dateContentLabel.text = date
-            }
-            .store(in: &self.cancellables)
     }
     
     private func bindPlace() {
@@ -170,8 +159,8 @@ class GatheringEditViewController: UIViewController {
     private func bindSignal() {
         self.gatheringEditViewModel.editDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] in
-                self?.alertSuccess()
+            .sink{ [weak self] gathering in
+                self?.alertSuccess(gathering: gathering)
             }
             .store(in: &self.cancellables)
         
@@ -235,8 +224,7 @@ class GatheringEditViewController: UIViewController {
     private func configureDatePart() {
         self.configureDateTitle()
         self.configureDateBackground()
-        self.configureDateContent()
-        self.configureDatePickButton()
+        self.configureDatePicker()
     }
     
     private func configureDateTitle() {
@@ -265,64 +253,22 @@ class GatheringEditViewController: UIViewController {
         ])
     }
     
-    private func configureDateContent() {
-        self.dateBackgroundView.addSubview(self.dateContentLabel)
-        
-        self.dateContentLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.dateContentLabel.leadingAnchor.constraint(equalTo: self.dateBackgroundView.leadingAnchor, constant: .backgroudInnerLeadingInset),
-            self.dateContentLabel.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
-        ])
-    }
-    
-    private func configureDatePickButton() {
-        self.dateBackgroundView.addSubview(self.datePickButton)
-        self.datePickButton.setImage(UIImage(systemName: "calendar"), for: .normal)
-        self.datePickButton.sizeToFit()
-        self.datePickButton.addTarget(self, action: #selector(self.onDateButtonTouched(_:)), for: .touchUpInside)
-        
-        self.datePickButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.datePickButton.trailingAnchor.constraint(equalTo: self.dateBackgroundView.trailingAnchor, constant: .backgroudInnerTrailingInset),
-            self.datePickButton.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
-        ])
-    }
-    
-    @objc private func onDateButtonTouched(_ sender: UIButton) {
-        self.view.addSubview(self.datePicker)
-        self.datePicker.translatesAutoresizingMaskIntoConstraints = false
-        self.datePicker.autoresizingMask = .flexibleWidth
-        self.datePicker.datePickerMode = .date
-        self.datePicker.preferredDatePickerStyle = .inline
+    private func configureDatePicker() {
+        self.dateBackgroundView.addSubview(self.datePicker)
+        self.datePicker.datePickerMode = .dateAndTime
+        self.datePicker.preferredDatePickerStyle = .compact
         self.datePicker.locale = Locale(identifier: "ko-KR")
         self.datePicker.timeZone = .autoupdatingCurrent
-        self.datePicker.backgroundColor = .white
+        self.datePicker.addTarget(self, action: #selector(didDateChanged(_:)), for: .valueChanged)
         
+        self.datePicker.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.datePicker.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            self.datePicker.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            self.datePicker.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            self.datePicker.heightAnchor.constraint(equalToConstant: 300)
-        ])
-        
-        self.view.addSubview(self.dateToolBar)
-        self.dateToolBar.translatesAutoresizingMaskIntoConstraints = false
-        self.dateToolBar.barStyle = .default
-        self.dateToolBar.items = [UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.onDatePickDoneTouched))]
-        self.dateToolBar.sizeToFit()
-        
-        NSLayoutConstraint.activate([
-            self.dateToolBar.bottomAnchor.constraint(equalTo: self.datePicker.topAnchor),
-            self.dateToolBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            self.dateToolBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            self.dateToolBar.heightAnchor.constraint(equalToConstant: 50)
+            self.datePicker.leadingAnchor.constraint(equalTo: self.dateBackgroundView.leadingAnchor, constant: .backgroudInnerLeadingInset),
+            self.datePicker.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
         ])
     }
-    
-    @objc private func onDatePickDoneTouched() {
-        self.gatheringEditViewModel.didDatePicked(self.datePicker.date)
-        self.datePicker.removeFromSuperview()
-        self.dateToolBar.removeFromSuperview()
+    @objc private func didDateChanged(_ sender: UIDatePicker) {
+        self.gatheringEditViewModel.didDatePicked(sender.date)
     }
     
     // MARK: - PlacePart
@@ -617,9 +563,10 @@ class GatheringEditViewController: UIViewController {
     
     // MARK: - CompletePart
     
-    private func alertSuccess() {
+    private func alertSuccess(gathering: Gathering) {
         let alert = UIAlertController(title: "편집 완료", message: "모임 편집이 완료되었습니다!", preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in
+            self.delegate?.didGatheringEdited(to: gathering)
             self.navigationController?.popViewController(animated: true)
         })
         alert.addAction(action)
@@ -729,4 +676,8 @@ extension GatheringEditViewController: BuddyChoiceDelegate {
     func buddySelectingDidCompleted(_ buddyList: [Buddy]) {
         self.gatheringEditViewModel.didBuddyUpdated(buddyList)
     }
+}
+
+protocol GatheringEditDelegate: AnyObject {
+    func didGatheringEdited(to gathering: Gathering)
 }

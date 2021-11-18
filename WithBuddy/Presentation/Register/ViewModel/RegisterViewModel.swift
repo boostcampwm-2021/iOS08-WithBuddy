@@ -39,7 +39,7 @@ class RegisterViewModel {
     private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
     private var gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
     
-    func didStartDatePicked(_ date: Date) {
+    func didDatePicked(_ date: Date) {
         self.date = date
     }
     

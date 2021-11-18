@@ -35,4 +35,8 @@ final class GatheringUseCase {
         self.coreDataManager.insertGathering(gathering)
     }
     
+    func updateGathering(_ gathering: Gathering) {
+        self.coreDataManager.updateGathering(gathering)
+    }
+    
 }

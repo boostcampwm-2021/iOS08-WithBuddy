@@ -15,7 +15,7 @@ class GatheringDetailViewController: UIViewController {
     
     private lazy var dateTitleLabel = RegisterTitleLabel()
     private lazy var dateBackgroundView = UIView()
-    private lazy var dateContentLabel = UILabel()
+    private lazy var datePicker = UIDatePicker()
   
     private lazy var placeTitleLabel = RegisterTitleLabel()
     private lazy var placeBackgroundView = UIView()
@@ -83,6 +83,7 @@ class GatheringDetailViewController: UIViewController {
             .sink(receiveValue: { [weak self] gathering in
                 let gatheringEditViewController = GatheringEditViewController()
                 gatheringEditViewController.configure(by: gathering)
+                gatheringEditViewController.delegate = self
                 self?.navigationController?.pushViewController(gatheringEditViewController, animated: true)
             })
             .store(in: &cancellables)
@@ -93,11 +94,7 @@ class GatheringDetailViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] gathering in
                 guard let gathering = gathering else { return }
-                let dateFormatter = DateFormatter()
-                dateFormatter.locale = Locale(identifier: "ko-KR")
-                dateFormatter.dateStyle = .long
-                dateFormatter.timeStyle = .none
-                self?.dateContentLabel.text = dateFormatter.string(from: gathering.date)
+                self?.datePicker.date = gathering.date
                 self?.placeTextField.text = gathering.place
 
                 var purposeSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
@@ -170,7 +167,7 @@ class GatheringDetailViewController: UIViewController {
     private func configureDatePart() {
         self.configureDateTitle()
         self.configureDateBackground()
-        self.configureDateContent()
+        self.configureDatePicker()
     }
     
     private func configureDateTitle() {
@@ -199,13 +196,18 @@ class GatheringDetailViewController: UIViewController {
         ])
     }
     
-    private func configureDateContent() {
-        self.dateBackgroundView.addSubview(self.dateContentLabel)
+    private func configureDatePicker() {
+        self.dateBackgroundView.addSubview(self.datePicker)
+        self.datePicker.datePickerMode = .dateAndTime
+        self.datePicker.preferredDatePickerStyle = .compact
+        self.datePicker.locale = Locale(identifier: "ko-KR")
+        self.datePicker.timeZone = .autoupdatingCurrent
+        self.datePicker.isUserInteractionEnabled = false
         
-        self.dateContentLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.datePicker.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.dateContentLabel.leadingAnchor.constraint(equalTo: self.dateBackgroundView.leadingAnchor, constant: .backgroudInnerLeadingInset),
-            self.dateContentLabel.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
+            self.datePicker.leadingAnchor.constraint(equalTo: self.dateBackgroundView.leadingAnchor, constant: .backgroudInnerLeadingInset),
+            self.datePicker.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
         ])
     }
     
@@ -439,6 +441,14 @@ class GatheringDetailViewController: UIViewController {
     
     @objc private func editGathering() {
         self.gatheringDetailViewModel.didEditButtonTouched()
+    }
+    
+}
+
+extension GatheringDetailViewController: GatheringEditDelegate {
+    
+    func didGatheringEdited(to gathering: Gathering) {
+        self.gatheringDetailViewModel.didGatheringChanged(to: gathering)
     }
     
 }

@@ -19,6 +19,7 @@ protocol CoreDataManagable {
     func fetchGathering(including name: String) -> [GatheringEntity]
     func fetchGathering(including day: Date) -> [GatheringEntity]
     func fetchGaterhing(month: Date) -> [GatheringEntity]
+    func updateGathering(_ gathering: Gathering)
 }
 
 final class CoreDataManager {
@@ -162,6 +163,28 @@ extension CoreDataManager: CoreDataManagable {
         } catch {
             print(error.localizedDescription)
             return false
+        }
+    }
+    
+    func updateGathering(_ gathering: Gathering) {
+        let request = GatheringEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", gathering.id as CVarArg)
+        
+        guard let gatheringEntity = self.fetch(request: request).first else { return }
+        gatheringEntity.date = gathering.date
+        gatheringEntity.place = gathering.place
+        gatheringEntity.purpose = gathering.purpose
+        gatheringEntity.memo = gathering.memo
+        gatheringEntity.picture = gathering.picture
+        gatheringEntity.buddyList.forEach{ buddyEntity in
+            gatheringEntity.removeFromBuddyList(buddyEntity)
+        }
+        gatheringEntity.addToBuddyList(NSSet(array: self.fetchBuddyEntity(of: gathering.buddyList)))
+        
+        do {
+            try self.context.save()
+        } catch {
+            print(error.localizedDescription)
         }
     }
     

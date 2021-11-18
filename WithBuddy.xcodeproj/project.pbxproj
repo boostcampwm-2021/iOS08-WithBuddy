@@ -36,6 +36,7 @@
 		8AD6691F2744D94B00158E1A /* BuddyCustomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD6691E2744D94B00158E1A /* BuddyCustomViewModel.swift */; };
 		8AD669212744F12300158E1A /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD669202744F12300158E1A /* ImageCollectionViewCell.swift */; };
 		8AF3152727461A8800BDDF85 /* CheckableInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3152627461A8800BDDF85 /* CheckableInfo.swift */; };
+		8AF3152927461EA600BDDF85 /* Face.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3152827461EA600BDDF85 /* Face.swift */; };
 		BB0EF0DE2740FA15003B4B6F /* WBCalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0EF0DD2740FA15003B4B6F /* WBCalendarCollectionView.swift */; };
 		BB2D254B2730D97000E7BF35 /* PlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D25482730D97000E7BF35 /* PlaceType.swift */; };
 		BB2D255E2731317100E7BF35 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D255D2731317100E7BF35 /* SettingViewController.swift */; };
@@ -103,6 +104,7 @@
 		8AD6691E2744D94B00158E1A /* BuddyCustomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyCustomViewModel.swift; sourceTree = "<group>"; };
 		8AD669202744F12300158E1A /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		8AF3152627461A8800BDDF85 /* CheckableInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckableInfo.swift; sourceTree = "<group>"; };
+		8AF3152827461EA600BDDF85 /* Face.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Face.swift; sourceTree = "<group>"; };
 		BB0EF0DD2740FA15003B4B6F /* WBCalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WBCalendarCollectionView.swift; sourceTree = "<group>"; };
 		BB2D25462730D97000E7BF35 /* Buddy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buddy.swift; sourceTree = "<group>"; };
 		BB2D25482730D97000E7BF35 /* PlaceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceType.swift; sourceTree = "<group>"; };
@@ -278,11 +280,12 @@
 		BB2D25452730D95C00E7BF35 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
-				BB2D25462730D97000E7BF35 /* Buddy.swift */,
-				BB2D25482730D97000E7BF35 /* PlaceType.swift */,
-				85C236B427380D39001499E5 /* FaceColor.swift */,
 				BB2D25842739197600E7BF35 /* Gathering.swift */,
+				BB2D25462730D97000E7BF35 /* Buddy.swift */,
 				8AF3152627461A8800BDDF85 /* CheckableInfo.swift */,
+				BB2D25482730D97000E7BF35 /* PlaceType.swift */,
+				8AF3152827461EA600BDDF85 /* Face.swift */,
+				85C236B427380D39001499E5 /* FaceColor.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -620,6 +623,7 @@
 				85D262EE273CE6DD000190B8 /* WhiteView.swift in Sources */,
 				F7E8AC3E273CD4E6005F8306 /* ImageTextCollectionViewCell.swift in Sources */,
 				F7E8AC3C273CD4E2005F8306 /* AppDelegate.swift in Sources */,
+				8AF3152927461EA600BDDF85 /* Face.swift in Sources */,
 				F7E8AC3D273CD4E2005F8306 /* SceneDelegate.swift in Sources */,
 				F7E8AC39273CD4DC005F8306 /* WithBuddyModel.xcdatamodeld in Sources */,
 				F7E8AC3A273CD4DC005F8306 /* Buddy.swift in Sources */,

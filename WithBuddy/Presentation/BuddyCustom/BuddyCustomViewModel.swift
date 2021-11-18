@@ -9,17 +9,17 @@ import Foundation
 import Combine
 
 class BuddyCustomViewModel {
-    @Published private(set) var faceColor: FaceColor = FaceColor.purple
-    @Published private(set) var faceNumber: Int = 1
-    @Published private(set) var face: String = "\(FaceColor.purple)1"
+    private var faceColor: FaceColor = .purple
+    private var faceNumber: Int = 1
+    @Published private(set) var face: Face = Face(color: .purple, number: 1)
     
     func colorDidChosen(in idx: Int) {
         self.faceColor = FaceColor.allCases[idx]
-        self.face = FaceColor.allCases[idx].description + "\(faceNumber)"
+        self.face = Face(color: self.faceColor, number: self.faceNumber)
     }
     
     func faceDidChosen(in idx: Int) {
         self.faceNumber = idx + 1
-        self.face = faceColor.description + "\(idx + 1)"
+        self.face = Face(color: self.faceColor, number: self.faceNumber)
     }
 }

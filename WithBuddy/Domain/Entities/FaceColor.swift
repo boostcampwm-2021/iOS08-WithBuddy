@@ -9,19 +9,19 @@ import Foundation
 
 enum FaceColor: CaseIterable, CustomStringConvertible {
     
+    case purple
     case blue
     case green
     case pink
-    case purple
     case red
     case yellow
     
     var description: String {
         switch self {
+        case .purple: return "FacePurple"
         case .blue: return "FaceBlue"
         case .green : return "FaceGreen"
         case .pink: return "FacePink"
-        case .purple: return "FacePurple"
         case .red: return "FaceRed"
         case .yellow: return "FaceYellow"
         }

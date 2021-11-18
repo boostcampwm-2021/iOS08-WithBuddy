@@ -78,7 +78,7 @@ class GatheringEditViewModel {
             id: gatheringId,
             date: date,
             place: self.place,
-            purpose: self.checkedPurposeList.map{ $0.type.description },
+            purpose: self.checkedPurposeList.map{ $0.description },
             buddyList: self.buddyList,
             memo: self.memo,
             picture: self.pictures

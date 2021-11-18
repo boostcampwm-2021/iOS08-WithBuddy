@@ -50,7 +50,7 @@ class CalendarDetailViewController: UIViewController {
     
     private func configure() {
         self.configureDetailLabel()
-        self.configureDetailCollectionView()
+        self.configureTableView()
     }
     
     private func configureDetailLabel() {
@@ -65,7 +65,7 @@ class CalendarDetailViewController: UIViewController {
         ])
     }
     
-    private func configureDetailCollectionView() {
+    private func configureTableView() {
         self.view.addSubview(detailTableView)
         self.detailTableView.backgroundColor = UIColor(named: "BackgroundPurple")
         self.detailTableView.delegate = self
@@ -112,7 +112,7 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
 
         let editAction = UIContextualAction(style: .normal, title: "편집") { _, _, completion in
             self.dismiss(animated: true) {
-                self.delegate?.editGathering(self   .calendarDetailViewModel[indexPath.row])
+                self.delegate?.editGathering(self.calendarDetailViewModel[indexPath.row])
             }
             completion(true)
         }

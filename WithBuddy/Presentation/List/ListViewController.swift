@@ -43,7 +43,7 @@ final class ListViewController: UIViewController {
     
     private func configure() {
         self.configureSearchView()
-        self.configureCollectionView()
+        self.configureTableView()
     }
     
     private func bind() {
@@ -67,7 +67,7 @@ final class ListViewController: UIViewController {
         ])
     }
     
-    private func configureCollectionView() {
+    private func configureTableView() {
         self.view.addSubview(self.listTableView)
         self.listTableView.delegate = self
         self.listTableView.backgroundColor = .clear

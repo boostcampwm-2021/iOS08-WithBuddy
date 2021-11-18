@@ -129,7 +129,7 @@ class GatheringEditViewController: UIViewController {
                 var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
                 if buddyList.isEmpty {
                     snapshot.appendSections([0])
-                    snapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "FacePurple1")])
+                    snapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "DefaultFace")])
                 } else {
                     snapshot.appendSections([0])
                     snapshot.appendItems(buddyList)

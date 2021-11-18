@@ -105,9 +105,9 @@ class BuddyManageViewController: UIViewController {
     }
     
     @objc private func newBuddyButtonTouched(_ sender: UIButton) {
-        let buddyUsecase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
-        self.buddyManageViewModel.buddyDidAdded(buddyUsecase.makeRandomBuddy())
-        self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
+        let buddyCustomViewController = BuddyCustomViewController()
+        buddyCustomViewController.delegate = self
+        self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
     }
     
     private func searchBuddy(by text: String) {
@@ -162,4 +162,10 @@ extension BuddyManageViewController: UICollectionViewDelegate {
         })
     }
 
+}
+
+extension BuddyManageViewController: BuddyCustomDelegate {
+    func buddyCustomDidCompleted(_ buddy: Buddy) {
+        self.buddyManageViewModel.buddyDidAdded(buddy)
+    }
 }

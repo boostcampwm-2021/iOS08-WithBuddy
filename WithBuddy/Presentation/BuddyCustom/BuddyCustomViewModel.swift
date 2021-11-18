@@ -42,7 +42,7 @@ class BuddyCustomViewModel {
     }
     
     func didDoneTouched() {
-        if self.name.count < 3 {
+        if self.name.count < 2 {
             self.failSignal.send(BuddyCustomError.nameLength)
         } else {
             var newBuddy = Buddy(id: UUID(), name: self.name, face: "\(self.face)")

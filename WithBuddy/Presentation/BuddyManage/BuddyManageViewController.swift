@@ -39,6 +39,13 @@ class BuddyManageViewController: UIViewController {
                 self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
             }
             .store(in: &self.cancellables)
+        
+        self.buddyManageViewModel.failSignal
+            .receive(on: DispatchQueue.main)
+            .sink { result in
+                self.alertError(result)
+            }
+            .store(in: &self.cancellables)
     }
     
     private func configure() {
@@ -114,6 +121,13 @@ class BuddyManageViewController: UIViewController {
             snapshot.appendItems(filtered)
         }
         self.buddyDataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    private func alertError(_ error: BuddyChoiceError) {
+        let alert = UIAlertController(title: "삭제 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
     }
     
 }

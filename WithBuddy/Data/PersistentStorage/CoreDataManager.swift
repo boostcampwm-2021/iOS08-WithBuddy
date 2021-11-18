@@ -12,13 +12,14 @@ protocol CoreDataManagable {
     @discardableResult func insertGathering(_ gathering: Gathering) -> Bool
     @discardableResult func insertBuddy(_ buddy: Buddy) -> Bool
     @discardableResult func updateBuddy(_ buddy: Buddy) -> Bool
-    @discardableResult func deleteBuddy(_ buddy: Buddy) -> Bool
+    @discardableResult func deleteBuddy(_ buddy: Buddy) throws -> Bool
     func fetchAllBuddy() -> [BuddyEntity]
     func fetchAllGathering() -> [GatheringEntity]
     func fetchBuddy(name: String) -> [BuddyEntity]
     func fetchGathering(including name: String) -> [GatheringEntity]
     func fetchGathering(including day: Date) -> [GatheringEntity]
     func fetchGaterhing(month: Date) -> [GatheringEntity]
+    func updateGathering(_ gathering: Gathering)
 }
 
 final class CoreDataManager {
@@ -144,12 +145,17 @@ extension CoreDataManager: CoreDataManagable {
     }
     
     @discardableResult
-    func deleteBuddy(_ buddy: Buddy) -> Bool {
+    func deleteBuddy(_ buddy: Buddy) throws -> Bool {
         let request = BuddyEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", buddy.id as CVarArg )
         
         guard let buddyEntity = self.fetch(request: request).first else { return false }
-        context.delete(buddyEntity)
+        if let gatheringList = buddyEntity.gatheringList,
+           !gatheringList.isEmpty {
+            throw BuddyChoiceError.oneMoreGathering
+        }
+        
+        self.context.delete(buddyEntity)
         
         do {
             try self.context.save()
@@ -157,6 +163,28 @@ extension CoreDataManager: CoreDataManagable {
         } catch {
             print(error.localizedDescription)
             return false
+        }
+    }
+    
+    func updateGathering(_ gathering: Gathering) {
+        let request = GatheringEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", gathering.id as CVarArg)
+        
+        guard let gatheringEntity = self.fetch(request: request).first else { return }
+        gatheringEntity.date = gathering.date
+        gatheringEntity.place = gathering.place
+        gatheringEntity.purpose = gathering.purpose
+        gatheringEntity.memo = gathering.memo
+        gatheringEntity.picture = gathering.picture
+        gatheringEntity.buddyList.forEach{ buddyEntity in
+            gatheringEntity.removeFromBuddyList(buddyEntity)
+        }
+        gatheringEntity.addToBuddyList(NSSet(array: self.fetchBuddyEntity(of: gathering.buddyList)))
+        
+        do {
+            try self.context.save()
+        } catch {
+            print(error.localizedDescription)
         }
     }
     

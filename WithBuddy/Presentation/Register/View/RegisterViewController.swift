@@ -58,7 +58,7 @@ class RegisterViewController: UIViewController {
         super.viewDidLoad()
         self.bind()
         self.configure()
-        self.registerViewModel.didStartDatePicked(Date())
+        self.registerViewModel.didDatePicked(Date())
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addGathering))
     }
     
@@ -225,7 +225,7 @@ class RegisterViewController: UIViewController {
         ])
     }
     @objc private func didDateChanged(_ sender: UIDatePicker) {
-        self.registerViewModel.didStartDatePicked(sender.date)
+        self.registerViewModel.didDatePicked(sender.date)
     }
     
     // MARK: - PlacePart

@@ -10,12 +10,13 @@ import Combine
 
 class GatheringEditViewModel {
     
+    var gatheringId: UUID?
     private var date: Date?
     private var checkedPurposeList: [CheckableInfo] {
         return self.purposeList.filter( { $0.check })
     }
     private(set) var addBuddySignal = PassthroughSubject<[Buddy], Never>()
-    private(set) var editDoneSignal = PassthroughSubject<Void, Never>()
+    private(set) var editDoneSignal = PassthroughSubject<Gathering, Never>()
     private(set) var editFailSignal = PassthroughSubject<RegisterError, Never>()
     
     @Published private(set) var place: String?
@@ -29,13 +30,7 @@ class GatheringEditViewModel {
     private var gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
     
     func didDatePicked(_ date: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko-KR")
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
-        
-        self.date = Calendar.current.startOfDay(for: date)
-        self.dateString = dateFormatter.string(from: date)
+        self.date = date
     }
     
     func didPlaceChanged(_ place: String) {
@@ -75,7 +70,22 @@ class GatheringEditViewModel {
     }
     
     func didDoneTouched() {
-        // TODO: 여기서 편집된 내용을 저장하는 처리를 합니다! (미구현)
+        guard let gatheringId = gatheringId,
+              let date = date else {
+                  return
+              }
+        let gathering = Gathering(
+            id: gatheringId,
+            date: date,
+            place: self.place,
+            purpose: self.checkedPurposeList.map{ $0.description },
+            buddyList: self.buddyList,
+            memo: self.memo,
+            picture: self.pictures
+        )
+        
+        self.gatheringUseCase.updateGathering(gathering)
+        self.editDoneSignal.send(gathering)
     }
     
     func didAddBuddyTouched() {

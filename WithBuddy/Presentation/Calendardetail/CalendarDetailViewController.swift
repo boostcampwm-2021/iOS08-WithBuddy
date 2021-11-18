@@ -43,7 +43,7 @@ class CalendarDetailViewController: UIViewController {
         
         self.calendarDetailViewModel.$gatheringList
         .receive(on: DispatchQueue.main)
-        .sink{ gatheringList in
+        .sink{ _ in
             self.detailCollectionView.reloadData()
         }.store(in: &self.cancellables)
     }

@@ -39,4 +39,8 @@ final class GatheringUseCase {
         self.coreDataManager.updateGathering(gathering)
     }
     
+    func deleteGathering(_ gatheringId: UUID) {
+        self.coreDataManager.deleteGathering(gatheringId)
+    }
+    
 }

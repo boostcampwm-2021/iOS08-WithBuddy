@@ -168,6 +168,8 @@
 				85D262F3273CF211000190B8 /* PurposeView.swift */,
 				85D262F5273CFEBF000190B8 /* LatestOldView.swift */,
 				85D262F7273D138E000190B8 /* DefaultView.swift */,
+				85D262EF273CE740000190B8 /* NameLabel.swift */,
+				85D262F1273CE7D6000190B8 /* TitleLabel.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -314,8 +316,6 @@
 			children = (
 				85BC8E11274131B000570FC4 /* View */,
 				85BC8E12274131DE00570FC4 /* ViewModel */,
-				85D262EF273CE740000190B8 /* NameLabel.swift */,
-				85D262F1273CE7D6000190B8 /* TitleLabel.swift */,
 			);
 			path = Chart;
 			sourceTree = "<group>";

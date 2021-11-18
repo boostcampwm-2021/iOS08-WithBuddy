@@ -35,10 +35,12 @@ class BuddyCustomViewController: UIViewController {
     
     private var buddyCustomViewModel = BuddyCustomViewModel()
     private var cancellables: Set<AnyCancellable> = []
+    weak var delegate: BuddyCustomDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.completeCustom))
         
         self.configure()
         self.bind()
@@ -63,6 +65,21 @@ class BuddyCustomViewController: UIViewController {
                 self.faceDataSource.apply(faceSnapshot, animatingDifferences: true)
                 
                 self.buddyImageView.image = UIImage(named: "\(face)")
+            }
+            .store(in: &self.cancellables)
+        
+        self.buddyCustomViewModel.doneSignal
+            .receive(on: DispatchQueue.main)
+            .sink{ buddy in
+                self.delegate?.buddyCustomDidCompleted(buddy)
+                self.navigationController?.popViewController(animated: true)
+            }
+            .store(in: &self.cancellables)
+        
+        self.buddyCustomViewModel.failSignal
+            .receive(on: DispatchQueue.main)
+            .sink{ result in
+                self.alertError(result)
             }
             .store(in: &self.cancellables)
     }
@@ -159,12 +176,18 @@ class BuddyCustomViewController: UIViewController {
         self.colorCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
         self.colorCollectionView.delegate = self
         
+        let flowLayout = UICollectionViewFlowLayout()
+        let width = (self.view.frame.width - (.outsideLeadingInset * 2))/6 - .innerPartInset
+        flowLayout.itemSize = CGSize(width: width, height: width)
+        flowLayout.scrollDirection = .horizontal
+        self.colorCollectionView.collectionViewLayout = flowLayout
+        
         self.colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.colorCollectionView.topAnchor.constraint(equalTo: self.colorTitleLabel.bottomAnchor, constant: 10),
             self.colorCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
             self.colorCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
-            self.colorCollectionView.heightAnchor.constraint(equalToConstant: 60)
+            self.colorCollectionView.heightAnchor.constraint(equalToConstant: width)
         ])
     }
     
@@ -185,24 +208,47 @@ class BuddyCustomViewController: UIViewController {
         self.faceCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
         self.faceCollectionView.delegate = self
 
+        let flowLayout = UICollectionViewFlowLayout()
+        let width = (self.view.frame.width - (.outsideLeadingInset * 2))/5 - .innerPartInset
+        let totalHeight = width*2 + 20
+        flowLayout.itemSize = CGSize(width: width, height: width)
+        self.faceCollectionView.collectionViewLayout = flowLayout
+        
         self.faceCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.faceCollectionView.topAnchor.constraint(equalTo: self.faceTitleLabel.bottomAnchor, constant: 10),
             self.faceCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
             self.faceCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
-            self.faceCollectionView.heightAnchor.constraint(equalToConstant: 120),
+            self.faceCollectionView.heightAnchor.constraint(equalToConstant: totalHeight),
             self.faceCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
         ])
+    }
+    
+    private func alertError(_ error: BuddyCustomError) {
+        let alert = UIAlertController(title: "추가 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @objc private func completeCustom() {
+        self.buddyCustomViewModel.didDoneTouched()
     }
     
 }
 
 extension BuddyCustomViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if textField.text?.count ?? 0 > 10 {
+        guard let text = textField.text else { return true }
+        if text.count > 10 {
             textField.deleteBackward()
         }
         return true
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        self.buddyCustomViewModel.nameDidChaged(name: text)
     }
 }
 
@@ -214,4 +260,8 @@ extension BuddyCustomViewController: UICollectionViewDelegate {
             self.buddyCustomViewModel.faceDidChosen(in: indexPath.item)
         }
     }
+}
+
+protocol BuddyCustomDelegate: AnyObject {
+    func buddyCustomDidCompleted(_: Buddy)
 }

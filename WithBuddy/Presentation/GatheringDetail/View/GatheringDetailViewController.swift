@@ -23,9 +23,9 @@ class GatheringDetailViewController: UIViewController {
     
     private lazy var purposeTitleLabel = RegisterTitleLabel()
     private lazy var purposeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
-    private lazy var purposeDataSource = UICollectionViewDiffableDataSource<Int, Purpose>(collectionView: self.purposeCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Purpose) -> UICollectionViewCell? in
+    private lazy var purposeDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.purposeCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifier, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
-        cell.update(image: UIImage(named: "\(itemIdentifier.type)"), text: "\(itemIdentifier.type)", check: itemIdentifier.check)
+        cell.update(image: UIImage(named: "\(itemIdentifier.description)"), text: "\(itemIdentifier.description)", check: itemIdentifier.check)
         return cell
     }
     
@@ -100,10 +100,10 @@ class GatheringDetailViewController: UIViewController {
                 self?.dateContentLabel.text = dateFormatter.string(from: gathering.date)
                 self?.placeTextField.text = gathering.place
 
-                var purposeSnapshot = NSDiffableDataSourceSnapshot<Int, Purpose>()
+                var purposeSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
                 purposeSnapshot.appendSections([0])
-                let purposeList = PlaceType.allCases.map({ placeType -> Purpose? in
-                    if gathering.purpose.contains(placeType.description) { return Purpose(type: placeType, check: true) }
+                let purposeList = PlaceType.allCases.map({ placeType -> CheckableInfo? in
+                    if gathering.purpose.contains(placeType.description) { return CheckableInfo(description: "\(placeType)", check: true) }
                     return nil
                 }).compactMap({ $0 })
                 purposeSnapshot.appendItems(purposeList)

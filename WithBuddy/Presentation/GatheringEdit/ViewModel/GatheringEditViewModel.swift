@@ -11,7 +11,7 @@ import Combine
 class GatheringEditViewModel {
     
     private var date: Date?
-    private var checkedPurposeList: [Purpose] {
+    private var checkedPurposeList: [CheckableInfo] {
         return self.purposeList.filter( { $0.check })
     }
     private(set) var addBuddySignal = PassthroughSubject<[Buddy], Never>()
@@ -20,7 +20,7 @@ class GatheringEditViewModel {
     
     @Published private(set) var place: String?
     @Published private(set) var dateString: String?
-    @Published private(set) var purposeList: [Purpose] = PlaceType.allCases.map({ Purpose(type: $0, check: false) })
+    @Published private(set) var purposeList: [CheckableInfo] = PlaceType.allCases.map({ CheckableInfo(description: "\($0)", check: false) })
     @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var memo: String?
     @Published private(set) var pictures: [URL] = []

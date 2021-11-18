@@ -20,9 +20,10 @@ enum BuddyCustomError: LocalizedError {
 
 class BuddyCustomViewModel {
     private var id: UUID?
-    private var name: String = ""
+    @Published private(set) var name: String = ""
     @Published private(set) var face: Face = Face(color: .purple, number: 1)
-    private(set) var doneSignal = PassthroughSubject<Buddy, Never>()
+    private(set) var addDoneSignal = PassthroughSubject<Buddy, Never>()
+    private(set) var editDoneSignal = PassthroughSubject<Buddy, Never>()
     private(set) var failSignal = PassthroughSubject<BuddyCustomError, Never>()
     
     func buddyDidInserted(_ buddy: Buddy) {
@@ -60,8 +61,10 @@ class BuddyCustomViewModel {
             var newBuddy = Buddy(id: UUID(), name: self.name, face: "\(self.face)")
             if let id = self.id {
                 newBuddy.id = id
+                self.editDoneSignal.send(newBuddy)
+            } else {
+                self.addDoneSignal.send(newBuddy)
             }
-            self.doneSignal.send(newBuddy)
         }
     }
 }

@@ -152,7 +152,10 @@ extension BuddyManageViewController: UICollectionViewDelegate {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
             let edit = UIAction(title: NSLocalizedString("편집", comment: ""),
                                 image: UIImage(systemName: "pencil.circle")) { _ in
-                self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
+                let buddyCustomViewController = BuddyCustomViewController()
+                buddyCustomViewController.delegate = self
+                buddyCustomViewController.configure(by: self.buddyManageViewModel[indexPath.item])
+                self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
             }
             let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
                                   image: UIImage(systemName: "trash")) { _ in
@@ -165,6 +168,10 @@ extension BuddyManageViewController: UICollectionViewDelegate {
 }
 
 extension BuddyManageViewController: BuddyCustomDelegate {
+    func buddyEditDidCompleted(_ buddy: Buddy) {
+        self.buddyManageViewModel.buddyDidEdited(buddy)
+    }
+    
     func buddyCustomDidCompleted(_ buddy: Buddy) {
         self.buddyManageViewModel.buddyDidAdded(buddy)
     }

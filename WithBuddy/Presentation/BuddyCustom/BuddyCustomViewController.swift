@@ -72,10 +72,25 @@ class BuddyCustomViewController: UIViewController {
             }
             .store(in: &self.cancellables)
         
-        self.buddyCustomViewModel.doneSignal
+        self.buddyCustomViewModel.$name
+            .receive(on: DispatchQueue.main)
+            .sink{ text in
+                self.nameTextField.text = text
+            }
+            .store(in: &self.cancellables)
+        
+        self.buddyCustomViewModel.addDoneSignal
             .receive(on: DispatchQueue.main)
             .sink{ buddy in
                 self.delegate?.buddyCustomDidCompleted(buddy)
+                self.navigationController?.popViewController(animated: true)
+            }
+            .store(in: &self.cancellables)
+        
+        self.buddyCustomViewModel.editDoneSignal
+            .receive(on: DispatchQueue.main)
+            .sink{ buddy in
+                self.delegate?.buddyEditDidCompleted(buddy)
                 self.navigationController?.popViewController(animated: true)
             }
             .store(in: &self.cancellables)
@@ -268,4 +283,5 @@ extension BuddyCustomViewController: UICollectionViewDelegate {
 
 protocol BuddyCustomDelegate: AnyObject {
     func buddyCustomDidCompleted(_: Buddy)
+    func buddyEditDidCompleted(_: Buddy)
 }

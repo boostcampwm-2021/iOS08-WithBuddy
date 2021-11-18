@@ -43,7 +43,7 @@ class CalendarDetailViewController: UIViewController {
         
         self.calendarDetailViewModel.$gatheringList
         .receive(on: DispatchQueue.main)
-        .sink{ gatheringList in
+        .sink{ _ in
             self.detailTableView.reloadData()
         }.store(in: &self.cancellables)
     }
@@ -99,6 +99,24 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
         self.dismiss(animated: true, completion: {
             self.delegate?.gatheringListTouched(self.calendarDetailViewModel[indexPath.item])
         })
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { _, _, completion in
+            self.calendarDetailViewModel.deleteGathering(index: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            completion(true)
+        }
+        deleteAction.backgroundColor = UIColor(named: "GraphRed")
+        deleteAction.image = UIImage(named: "FaceRed1")
+
+        let editAction = UIContextualAction(style: .normal, title: "편집") { _, _, completion in
+            completion(true)
+        }
+        editAction.backgroundColor = UIColor(named: "GraphPurple2")
+        editAction.image = UIImage(named: "FacePurple1")
+
+        return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

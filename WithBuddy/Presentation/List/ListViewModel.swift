@@ -42,6 +42,10 @@ final class ListViewModel {
         self.searchedList = list
     }
     
+    func deleteGathering(index: Int) {
+        self.gatheringList.remove(at: index)
+    }
+    
     private func configure() {
         self.fetch()
     }

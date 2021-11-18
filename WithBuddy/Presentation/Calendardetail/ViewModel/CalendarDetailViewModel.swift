@@ -32,6 +32,10 @@ final class CalendarDetailViewModel {
         return self.gatheringList[index]
     }
     
+    func deleteGathering(index: Int) {
+        self.gatheringList.remove(at: index)
+    }
+    
     private func fetch() {
         self.gatheringList = self.gatheringUseCase.fetchGathering(including: self.selectedDate)
     }

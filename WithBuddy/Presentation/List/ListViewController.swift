@@ -102,6 +102,10 @@ final class ListViewController: UIViewController {
         self.listDataSource.apply(snapshot, animatingDifferences: true)
     }
     
+    private func deleteGathering(index: Int) {
+        self.listViewModel.deleteGathering(index: index)
+    }
+    
 }
 
 extension ListViewController: UITextFieldDelegate {
@@ -135,6 +139,27 @@ extension ListViewController: UITableViewDelegate {
         let viewController = GatheringDetailViewController()
         viewController.configure(by: self.listViewModel[indexPath.item])
         self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { _, _, completion in
+            self.deleteGathering(index: indexPath.row)
+            completion(true)
+        }
+        deleteAction.backgroundColor = UIColor(named: "GraphRed")
+        deleteAction.image = UIImage(named: "FaceRed1")
+
+        let editAction = UIContextualAction(style: .normal, title: "편집") { _, _, completion in
+            completion(true)
+        }
+        editAction.backgroundColor = UIColor(named: "GraphPurple2")
+        editAction.image = UIImage(named: "FacePurple1")
+
+        return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

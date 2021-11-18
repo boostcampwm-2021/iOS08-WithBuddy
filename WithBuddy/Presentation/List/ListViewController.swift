@@ -125,6 +125,9 @@ extension ListViewController: UICollectionViewDelegate, UICollectionViewDelegate
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? ListCollectionViewCell else { return }
+        cell.animateButtonTap(duration: 0.4, scale: 0.9)
+        
         let viewController = GatheringDetailViewController()
         viewController.configure(by: self.listViewModel[indexPath.item])
         self.navigationController?.pushViewController(viewController, animated: true)

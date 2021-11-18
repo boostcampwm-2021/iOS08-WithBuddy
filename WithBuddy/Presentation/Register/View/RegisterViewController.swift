@@ -323,6 +323,9 @@ class RegisterViewController: UIViewController {
     @objc func collectionViewDidTouched(_ sender: UITapGestureRecognizer) {
         if let indexPath = self.purposeCollectionView.indexPathForItem(at: sender.location(in: self.purposeCollectionView)) {
             self.registerViewModel.didPurposeTouched(indexPath.item)
+            
+            guard let cell = self.purposeCollectionView.cellForItem(at: indexPath) as? ImageTextCollectionViewCell  else { return }
+            cell.animateButtonTap(duration: 0.4, scale: 0.8)
         }
     }
     
@@ -352,6 +355,7 @@ class RegisterViewController: UIViewController {
             pointSize: .buddyWidth, weight: .medium, scale: .default)
         let image = UIImage(systemName: "plus.circle", withConfiguration: config)
         self.buddyAddButton.setImage(image, for: .normal)
+        self.buddyAddButton.tintColor = UIColor(named: "LabelPurple")
         self.buddyAddButton.addTarget(self, action: #selector(self.onBuddyAddButtonTouched(_:)), for: .touchUpInside)
         
         self.buddyAddButton.translatesAutoresizingMaskIntoConstraints = false
@@ -387,6 +391,7 @@ class RegisterViewController: UIViewController {
     }
     
     @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
+        self.buddyAddButton.animateButtonTap(duration: 0.4, scale: 0.8)
         self.registerViewModel.didAddBuddyTouched()
     }
     
@@ -470,6 +475,7 @@ class RegisterViewController: UIViewController {
             pointSize: 30, weight: .medium, scale: .default)
         let image = UIImage(systemName: "plus.square", withConfiguration: config)
         self.pictureAddButton.setImage(image, for: .normal)
+        self.pictureAddButton.tintColor = UIColor(named: "LablePurple")
         self.pictureAddButton.addTarget(self, action: #selector(self.onPictureButtonTouched(_:)), for: .touchUpInside)
         
         self.pictureAddButton.translatesAutoresizingMaskIntoConstraints = false
@@ -531,6 +537,7 @@ class RegisterViewController: UIViewController {
     }
     
     @objc private func onPictureButtonTouched(_ sender: UIButton) {
+        self.pictureAddButton.animateButtonTap(duration: 0.4, scale: 0.8)
         switch PHPhotoLibrary.authorizationStatus() {
         case .authorized: self.presentImagePicker()
         case .notDetermined: self.requestAuthorization()

@@ -101,6 +101,9 @@ extension CalendarDetailViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? ListCollectionViewCell else { return }
+        cell.animateButtonTap(duration: 0.4, scale: 0.9)
+        
         self.dismiss(animated: true, completion: {
             self.delegate?.gatheringListTouched(self.calendarDetailViewModel[indexPath.item])
         })

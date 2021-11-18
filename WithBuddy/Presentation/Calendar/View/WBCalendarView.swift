@@ -138,6 +138,7 @@ class WBCalendarView: UIView {
     @objc private func thisMonth(_ sender: UIButton) {
         self.collectionView.fadeAnimation()
         self.monthButtonSignal.send(0)
+        self.todayButton.animateButtonTap(duration: 0.4, scale: 0.9)
     }
     
     @objc private func minusMonth(_ sender: UIButton) {
@@ -151,4 +152,3 @@ class WBCalendarView: UIView {
     }
     
 }
-

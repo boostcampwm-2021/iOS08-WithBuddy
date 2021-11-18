@@ -417,6 +417,9 @@ class GatheringEditViewController: UIViewController {
     @objc func collectionViewDidTouched(_ sender: UITapGestureRecognizer) {
        if let indexPath = self.purposeCollectionView.indexPathForItem(at: sender.location(in: self.purposeCollectionView)) {
            self.gatheringEditViewModel.didPurposeTouched(indexPath.item)
+           
+           guard let cell = self.purposeCollectionView.cellForItem(at: indexPath) as? ImageTextCollectionViewCell  else { return }
+           cell.animateButtonTap(duration: 0.4, scale: 0.8)
        }
     }
     
@@ -481,6 +484,7 @@ class GatheringEditViewController: UIViewController {
     }
     
     @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
+        self.buddyAddButton.animateButtonTap(duration: 0.4, scale: 0.8)
         self.gatheringEditViewModel.didAddBuddyTouched()
     }
     
@@ -604,6 +608,7 @@ class GatheringEditViewController: UIViewController {
     }
     
     @objc private func onPictureButtonTouched(_ sender: UIButton) {
+        self.pictureAddButton.animateButtonTap(duration: 0.4, scale: 0.8)
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .photoLibrary

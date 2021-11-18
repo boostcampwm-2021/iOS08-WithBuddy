@@ -43,7 +43,8 @@ final class ListViewModel {
     }
     
     func deleteGathering(index: Int) {
-        self.gatheringList.remove(at: index)
+        let gathering = self.gatheringList.remove(at: index)
+        self.gatheringUseCase.deleteGathering(gathering.id)
     }
     
     private func configure() {

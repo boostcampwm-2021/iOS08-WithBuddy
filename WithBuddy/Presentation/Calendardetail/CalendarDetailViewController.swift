@@ -11,7 +11,7 @@ import Combine
 class CalendarDetailViewController: UIViewController {
     
     private lazy var detailLabel = UILabel()
-    private lazy var detailCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private lazy var detailTableView = UITableView()
     private var calendarDetailViewModel: CalendarDetailViewModel
     private var cancellables: Set<AnyCancellable> = []
     
@@ -43,8 +43,8 @@ class CalendarDetailViewController: UIViewController {
         
         self.calendarDetailViewModel.$gatheringList
         .receive(on: DispatchQueue.main)
-        .sink{ _ in
-            self.detailCollectionView.reloadData()
+        .sink{ gatheringList in
+            self.detailTableView.reloadData()
         }.store(in: &self.cancellables)
     }
     
@@ -66,49 +66,45 @@ class CalendarDetailViewController: UIViewController {
     }
     
     private func configureDetailCollectionView() {
-        self.view.addSubview(detailCollectionView)
-        self.detailCollectionView.backgroundColor = UIColor(named: "BackgroundPurple")
-        self.detailCollectionView.delegate = self
-        self.detailCollectionView.dataSource = self
-        self.detailCollectionView.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: ListCollectionViewCell.identifier)
-        self.detailCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(detailTableView)
+        self.detailTableView.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.detailTableView.delegate = self
+        self.detailTableView.dataSource = self
+        self.detailTableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
+        self.detailTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.detailCollectionView.topAnchor.constraint(equalTo: self.detailLabel.bottomAnchor, constant: 20),
-            self.detailCollectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 15),
-            self.detailCollectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -15),
-            self.detailCollectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -20)
+            self.detailTableView.topAnchor.constraint(equalTo: self.detailLabel.bottomAnchor, constant: 20),
+            self.detailTableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 15),
+            self.detailTableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -15),
+            self.detailTableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -20)
         ])
     }
     
 }
 
-extension CalendarDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         self.calendarDetailViewModel.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListCollectionViewCell.identifier, for: indexPath)
-                        as? ListCollectionViewCell else { return UICollectionViewCell() }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier, for: indexPath)
+                        as? ListTableViewCell else { return UITableViewCell() }
         let gathering = self.calendarDetailViewModel[indexPath.item]
         cell.update(date: gathering.date, buddyImageList: gathering.buddyList.map{ $0.face }, typeList: gathering.purpose)
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.detailCollectionView.frame.width, height: 150)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? ListCollectionViewCell else { return }
-        cell.animateButtonTap(scale: 0.9)
-        
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.dismiss(animated: true, completion: {
             self.delegate?.gatheringListTouched(self.calendarDetailViewModel[indexPath.item])
         })
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return CGFloat.tableViewHeight
+    }
+
 }
 
 protocol GatheringListDelegate: AnyObject {

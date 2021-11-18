@@ -11,10 +11,10 @@ import Combine
 final class ListViewController: UIViewController {
     
     private let searchView = SearchView()
-    private let listCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let listTableView = UITableView()
     
-    private lazy var listDataSource = UICollectionViewDiffableDataSource<Int, Gathering>(collectionView: self.listCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Gathering) -> UICollectionViewCell? in
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ListCollectionViewCell.identifier, for: indexPath) as? ListCollectionViewCell else { return UICollectionViewCell() }
+    private lazy var listDataSource = UITableViewDiffableDataSource<Int, Gathering>(tableView: self.listTableView) { (tableView: UITableView, indexPath: IndexPath, itemIdentifier: Gathering) -> UITableViewCell? in
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier, for: indexPath) as? ListTableViewCell else { return UITableViewCell() }
         cell.update(date: itemIdentifier.date, buddyImageList: itemIdentifier.buddyList.map{ $0.face }, typeList: itemIdentifier.purpose)
         return cell
     }
@@ -68,16 +68,16 @@ final class ListViewController: UIViewController {
     }
     
     private func configureCollectionView() {
-        self.view.addSubview(self.listCollectionView)
-        self.listCollectionView.delegate = self
-        self.listCollectionView.backgroundColor = .clear
-        self.listCollectionView.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: ListCollectionViewCell.identifier)
-        self.listCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.listTableView)
+        self.listTableView.delegate = self
+        self.listTableView.backgroundColor = .clear
+        self.listTableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
+        self.listTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.listCollectionView.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: 20),
-            self.listCollectionView.leadingAnchor.constraint(equalTo: self.searchView.leadingAnchor),
-            self.listCollectionView.trailingAnchor.constraint(equalTo: self.searchView.trailingAnchor),
-            self.listCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            self.listTableView.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: 20),
+            self.listTableView.leadingAnchor.constraint(equalTo: self.searchView.leadingAnchor),
+            self.listTableView.trailingAnchor.constraint(equalTo: self.searchView.trailingAnchor),
+            self.listTableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
     }
     
@@ -118,8 +118,9 @@ extension ListViewController: UITextFieldDelegate {
     
 }
 
-extension ListViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension ListViewController: UITableViewDelegate {
     
+<<<<<<< HEAD
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.view.frame.width-40, height: 150)
     }
@@ -128,9 +129,16 @@ extension ListViewController: UICollectionViewDelegate, UICollectionViewDelegate
         guard let cell = collectionView.cellForItem(at: indexPath) as? ListCollectionViewCell else { return }
         cell.animateButtonTap(scale: 0.9)
         
+=======
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+>>>>>>> d6b3e74 ((#89) feat: 모임 목록, 달력 상세 화면 CollectionView를 TableView로 변경)
         let viewController = GatheringDetailViewController()
         viewController.configure(by: self.listViewModel[indexPath.item])
         self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return CGFloat.tableViewHeight
     }
     
 }

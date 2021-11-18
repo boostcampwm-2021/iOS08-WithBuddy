@@ -31,4 +31,7 @@ extension CGFloat {
     static let memoHeight = CGFloat(140)
     
     static let pictureAddButonSize = CGFloat(30)
+    
+    static let tableViewInset = CGFloat(10)
+    static let tableViewHeight = CGFloat(150)
 }

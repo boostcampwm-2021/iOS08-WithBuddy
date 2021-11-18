@@ -7,17 +7,17 @@
 
 import UIKit
 
-final class ListCollectionViewCell: UICollectionViewCell {
+final class ListTableViewCell: UITableViewCell {
     
-    static let identifier = "listCollectionViewCell"
+    static let identifier = "listTableViewCell"
     private let dateLabel = UILabel()
     private let buddyLabel = UILabel()
     private let purposeLabel = UILabel()
     private var buddyStackView = UIStackView()
     private var purposeStackView = UIStackView()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.configure()
     }
     

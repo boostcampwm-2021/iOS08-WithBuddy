@@ -10,7 +10,7 @@
 		8521BE3C27437BC4000F3C05 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8AC37273CD428005F8306 /* UIView+Extension.swift */; };
 		8521BE3D2743C492000F3C05 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABBD273A8D43005F8306 /* CalendarViewModel.swift */; };
 		854AA75E27337A7200663911 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA75D27337A7200663911 /* SearchView.swift */; };
-		854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA76327338C2F00663911 /* ListCollectionViewCell.swift */; };
+		854AA76427338C2F00663911 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA76327338C2F00663911 /* ListTableViewCell.swift */; };
 		854AA7662733A37200663911 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA7652733A37200663911 /* ListViewModel.swift */; };
 		85BC8E14274131F300570FC4 /* ChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85BC8E13274131F300570FC4 /* ChartViewModel.swift */; };
 		85D262E8273CD703000190B8 /* PurposeChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262E7273CD703000190B8 /* PurposeChartView.swift */; };
@@ -77,7 +77,7 @@
 
 /* Begin PBXFileReference section */
 		854AA75D27337A7200663911 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
-		854AA76327338C2F00663911 /* ListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCollectionViewCell.swift; sourceTree = "<group>"; };
+		854AA76327338C2F00663911 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		854AA7652733A37200663911 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		85BC8E13274131F300570FC4 /* ChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewModel.swift; sourceTree = "<group>"; };
 		85C236B427380D39001499E5 /* FaceColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceColor.swift; sourceTree = "<group>"; };
@@ -422,7 +422,7 @@
 			children = (
 				F7E8AC36273CD412005F8306 /* Extension */,
 				BBF7FF3F272FB7B700B71C97 /* TabBarViewController.swift */,
-				854AA76327338C2F00663911 /* ListCollectionViewCell.swift */,
+				854AA76327338C2F00663911 /* ListTableViewCell.swift */,
 				854AA75D27337A7200663911 /* SearchView.swift */,
 			);
 			path = Common;
@@ -661,7 +661,7 @@
 				F7E8ABB42738133B005F8306 /* CalendarDetailViewController.swift in Sources */,
 				BB2D25A3273A550B00E7BF35 /* BuddyUseCase.swift in Sources */,
 				85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */,
-				854AA76427338C2F00663911 /* ListCollectionViewCell.swift in Sources */,
+				854AA76427338C2F00663911 /* ListTableViewCell.swift in Sources */,
 				F7E8ABC5273BB814005F8306 /* GatheringDetailViewController.swift in Sources */,
 				8A07DF6A2743C20A008F6E58 /* GatheringEditViewController.swift in Sources */,
 				8A6320B72741673D006BB1C0 /* RegisterTitleLabel.swift in Sources */,

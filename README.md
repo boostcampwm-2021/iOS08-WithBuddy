@@ -1,6 +1,11 @@
 #  위드버디
 
-<div align="center"><img src="https://i.imgur.com/wbWfU5d.png" width=250><br/>💜 위드코로나엔 위드버디 💜 </div>
+<div align="center"><img src="https://i.imgur.com/2e7YUm2.png" width=100>
+    <img src="https://i.imgur.com/VaK4t6s.png" width=100>
+    <img src="https://i.imgur.com/YH1zvuk.png" width=100>
+    <img src="https://i.imgur.com/CeHxwEX.png" width=100>
+    <img src="https://i.imgur.com/HOdXEB0.png" width=100>
+    <img src="https://i.imgur.com/IPxujow.png" width=100> <br/> 💜 위드코로나엔 위드버디 💜 </div>
 
 <br/>
 
@@ -21,6 +26,23 @@
 
 ## 📱 Preview
 
+|런치스크린|일정화면|통계화면|
+|:-:|:-:|:-:|
+|<img src="https://i.imgur.com/xinOxfq.gif" width=270>|<img src="https://i.imgur.com/95TXoeI.gif" width=200>|<img src="https://i.imgur.com/jw1IzoN.gif" width=200>|
+||사용자가 등록한 모임에 대한 내용을 달력화면에서 한번에 확인할 수 있습니다.|사용자가 등록한 모임들에 대한 다양한 통계를 확인할 수 있습니다.|
+
+<!--
+|모임등록|버디추가|
+|:-:|:-:|
+|<img src="https://i.imgur.com/S6S7fzr.gif" width=200>|<img src="https://i.imgur.com/YuaKMHg.gif" width=200>|
+|사용자가 원하는 정보를 입력해 새로운 모임을 생성할 수 있습니다.|자유롭게 캐릭터를 커스텀하여 버디를 추가할 수 있습니다.|
+
+|목록화면|설정화면|
+|:-:|:-:|
+|<img src="https://i.imgur.com/FJ6sUR8.gif" width=200>|<img src="https://i.imgur.com/l8lDmQI.gif" width=200>|
+|사용자가 등록한 모임들을 리스트형태로 확인할 수 있습니다.|설정화면에서 다양한 설정을 변경할 수 있습니다|
+-->
+
 <br/>
 
 ## ✨ Feature
@@ -33,7 +55,7 @@
 ### 통계 기능
 
 - 시각화된 그래프를 통해 자신의 만남에 대한 다양한 통계를 확인할 수 있습니다.
-    - 가장 많이 만난 친구 순위
+    - 가장 많이 만난 친구 순위(버블차트)
     - 내가 모임을 가지는 목적 순위
     - 가장 최근에 만난 친구 / 만난지 가장 오래된 친구
 
@@ -88,6 +110,11 @@ Data
 
 ## 💪 기술적 도전
 
+- 
+
 <br/>
 
 ## 📲 설치방법
+
+- [배포링크](https://lunchscreen.github.io/withBuddy/)
+- 현재는 CodeSquad 그룹에 소속된 기기만 설치가 가능합니다.

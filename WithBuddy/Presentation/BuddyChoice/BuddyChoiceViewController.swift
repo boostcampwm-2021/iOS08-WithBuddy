@@ -125,9 +125,9 @@ class BuddyChoiceViewController: UIViewController {
     }
     
     @objc private func newBuddyButtonTouched(_ sender: UIButton) {
-        let buddyUsecase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
-        self.buddyChoiceViewModel.buddyDidAdded(buddyUsecase.makeRandomBuddy())
-        self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
+        let buddyCustomViewController = BuddyCustomViewController()
+        buddyCustomViewController.delegate = self
+        self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
     }
     
     @objc private func completeButtonTouched() {
@@ -186,6 +186,12 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
         })
     }
     
+}
+
+extension BuddyChoiceViewController: BuddyCustomDelegate {
+    func buddyCustomDidCompleted(_ buddy: Buddy) {
+        self.buddyChoiceViewModel.buddyDidAdded(buddy)
+    }
 }
 
 protocol BuddyChoiceDelegate: AnyObject {

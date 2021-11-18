@@ -155,7 +155,7 @@ extension CoreDataManager: CoreDataManagable {
             throw BuddyChoiceError.oneMoreGathering
         }
         
-        context.delete(buddyEntity)
+        self.context.delete(buddyEntity)
         
         do {
             try self.context.save()

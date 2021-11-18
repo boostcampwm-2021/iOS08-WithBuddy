@@ -106,6 +106,12 @@ final class ListViewController: UIViewController {
         self.listViewModel.deleteGathering(index: index)
     }
     
+    private func editGathering(gathering: Gathering) {
+        let viewController = GatheringEditViewController()
+        viewController.configure(by: gathering)
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
 }
 
 extension ListViewController: UITextFieldDelegate {
@@ -124,18 +130,7 @@ extension ListViewController: UITextFieldDelegate {
 
 extension ListViewController: UITableViewDelegate {
     
-<<<<<<< HEAD
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.view.frame.width-40, height: 150)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? ListCollectionViewCell else { return }
-        cell.animateButtonTap(scale: 0.9)
-        
-=======
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
->>>>>>> d6b3e74 ((#89) feat: 모임 목록, 달력 상세 화면 CollectionView를 TableView로 변경)
         let viewController = GatheringDetailViewController()
         viewController.configure(by: self.listViewModel[indexPath.item])
         self.navigationController?.pushViewController(viewController, animated: true)
@@ -150,6 +145,7 @@ extension ListViewController: UITableViewDelegate {
         deleteAction.image = UIImage(named: "FaceRed1")
 
         let editAction = UIContextualAction(style: .normal, title: "편집") { _, _, completion in
+            self.editGathering(gathering: self.listViewModel[indexPath.row])
             completion(true)
         }
         editAction.backgroundColor = UIColor(named: "GraphPurple2")

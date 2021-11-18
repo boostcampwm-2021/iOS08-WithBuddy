@@ -111,6 +111,9 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
         deleteAction.image = UIImage(named: "FaceRed1")
 
         let editAction = UIContextualAction(style: .normal, title: "편집") { _, _, completion in
+            self.dismiss(animated: true) {
+                self.delegate?.editGathering(self   .calendarDetailViewModel[indexPath.row])
+            }
             completion(true)
         }
         editAction.backgroundColor = UIColor(named: "GraphPurple2")
@@ -127,4 +130,5 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
 
 protocol GatheringListDelegate: AnyObject {
     func gatheringListTouched(_: Gathering)
+    func editGathering(_: Gathering)
 }

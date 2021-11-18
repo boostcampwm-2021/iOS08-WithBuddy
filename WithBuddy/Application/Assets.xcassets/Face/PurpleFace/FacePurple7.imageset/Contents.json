@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "purple7@1x.png",
+      "filename" : "FacePurple7@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "purple7@2x.png",
+      "filename" : "FacePurple7@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "purple7@3x.png",
+      "filename" : "FacePurple7@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

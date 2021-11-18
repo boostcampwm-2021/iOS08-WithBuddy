@@ -7,17 +7,17 @@
 
 import UIKit
 
-final class ListCollectionViewCell: UICollectionViewCell {
+final class ListTableViewCell: UITableViewCell {
     
-    static let identifier = "listCollectionViewCell"
+    static let identifier = "listTableViewCell"
     private let dateLabel = UILabel()
     private let buddyLabel = UILabel()
-    private let typeLabel = UILabel()
+    private let purposeLabel = UILabel()
     private var buddyStackView = UIStackView()
-    private var typeStackView = UIStackView()
+    private var purposeStackView = UIStackView()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.configure()
     }
     
@@ -29,7 +29,7 @@ final class ListCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.buddyStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        self.typeStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        self.purposeStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
     
     func update(date: Date, buddyImageList: [String], typeList: [String]) {
@@ -37,7 +37,7 @@ final class ListCollectionViewCell: UICollectionViewCell {
         dateFormatter.dateFormat = "yyyy년 MM월 dd일"
         self.dateLabel.text = dateFormatter.string(from: date)
         self.update(imageNames: buddyImageList, stackView: self.buddyStackView)
-        self.update(imageNames: typeList, stackView: self.typeStackView)
+        self.update(imageNames: typeList, stackView: self.purposeStackView)
     }
     
     private func update(imageNames: [String], stackView: UIStackView) {
@@ -58,9 +58,9 @@ final class ListCollectionViewCell: UICollectionViewCell {
         self.layer.cornerRadius = 10
         self.configureDateLabel()
         self.configureBuddyLabel()
-        self.configureTypeLabel()
+        self.configurePurposeLabel()
         self.configureBuddyStackView()
-        self.configureTypeStackView()
+        self.configurePurposeStackView()
     }
     
     private func configureDateLabel() {
@@ -86,14 +86,14 @@ final class ListCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    private func configureTypeLabel() {
-        self.addSubview(self.typeLabel)
-        self.typeLabel.text = "목적"
-        self.typeLabel.textColor = UIColor(named: "LabelPurple")
-        self.typeLabel.translatesAutoresizingMaskIntoConstraints = false
+    private func configurePurposeLabel() {
+        self.addSubview(self.purposeLabel)
+        self.purposeLabel.text = "목적"
+        self.purposeLabel.textColor = UIColor(named: "LabelPurple")
+        self.purposeLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.typeLabel.topAnchor.constraint(equalTo: self.buddyLabel.bottomAnchor, constant: 25),
-            self.typeLabel.leadingAnchor.constraint(equalTo: self.buddyLabel.leadingAnchor)
+            self.purposeLabel.topAnchor.constraint(equalTo: self.buddyLabel.bottomAnchor, constant: 25),
+            self.purposeLabel.leadingAnchor.constraint(equalTo: self.buddyLabel.leadingAnchor)
         ])
     }
     
@@ -106,12 +106,12 @@ final class ListCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    private func configureTypeStackView() {
-        self.addSubview(self.typeStackView)
-        self.typeStackView.translatesAutoresizingMaskIntoConstraints = false
+    private func configurePurposeStackView() {
+        self.addSubview(self.purposeStackView)
+        self.purposeStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.typeStackView.leadingAnchor.constraint(equalTo: self.typeLabel.trailingAnchor, constant: 10),
-            self.typeStackView.centerYAnchor.constraint(equalTo: self.typeLabel.centerYAnchor)
+            self.purposeStackView.leadingAnchor.constraint(equalTo: self.purposeLabel.trailingAnchor, constant: 10),
+            self.purposeStackView.centerYAnchor.constraint(equalTo: self.purposeLabel.centerYAnchor)
         ])
     }
     

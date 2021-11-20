@@ -570,6 +570,7 @@ class RegisterViewController: UIViewController {
     @objc private func tapEmptySpace(){
         self.view.endEditing(true)
     }
+    
 }
 
 extension RegisterViewController: UICollectionViewDelegate {

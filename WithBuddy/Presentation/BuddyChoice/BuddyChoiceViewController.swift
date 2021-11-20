@@ -154,6 +154,10 @@ class BuddyChoiceViewController: UIViewController {
         self.buddyDataSource.apply(snapshot, animatingDifferences: true)
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
 }
 
 extension BuddyChoiceViewController: UITextFieldDelegate {
@@ -175,8 +179,8 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? ImageTextCollectionViewCell else { return }
         cell.animateButtonTap(scale: 0.8)
-        
         self.buddyChoiceViewModel.buddyDidChecked(in: indexPath.item)
+        self.view.endEditing(true)
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {

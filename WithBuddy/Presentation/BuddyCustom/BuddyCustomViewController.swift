@@ -128,6 +128,7 @@ class BuddyCustomViewController: UIViewController {
     
     private func configureContentView() {
         self.scrollView.addSubview(self.contentView)
+        self.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapEmptySpace)))
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
@@ -193,7 +194,8 @@ class BuddyCustomViewController: UIViewController {
         self.contentView.addSubview(self.colorCollectionView)
         self.colorCollectionView.backgroundColor = .clear
         self.colorCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
-        self.colorCollectionView.delegate = self
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.colorCollectionViewDidTouched(_:)))
+        self.colorCollectionView.addGestureRecognizer(tap)
         
         let flowLayout = UICollectionViewFlowLayout()
         let width = (self.view.frame.width - (.outsideLeadingInset * 2))/6 - .innerPartInset
@@ -208,6 +210,13 @@ class BuddyCustomViewController: UIViewController {
             self.colorCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
             self.colorCollectionView.heightAnchor.constraint(equalToConstant: width)
         ])
+    }
+    
+    @objc func colorCollectionViewDidTouched(_ sender: UITapGestureRecognizer) {
+        if let indexPath = self.colorCollectionView.indexPathForItem(at: sender.location(in: self.colorCollectionView)) {
+            self.buddyCustomViewModel.colorDidChosen(in: indexPath.item)
+            self.view.endEditing(true)
+        }
     }
     
     private func configureFaceTitleLabel() {
@@ -225,7 +234,8 @@ class BuddyCustomViewController: UIViewController {
         self.contentView.addSubview(self.faceCollectionView)
         self.faceCollectionView.backgroundColor = .clear
         self.faceCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
-        self.faceCollectionView.delegate = self
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.faceCollectionViewDidTouched(_:)))
+        self.faceCollectionView.addGestureRecognizer(tap)
 
         let flowLayout = UICollectionViewFlowLayout()
         let width = (self.view.frame.width - (.outsideLeadingInset * 2))/5 - .innerPartInset
@@ -243,6 +253,13 @@ class BuddyCustomViewController: UIViewController {
         ])
     }
     
+    @objc func faceCollectionViewDidTouched(_ sender: UITapGestureRecognizer) {
+        if let indexPath = self.faceCollectionView.indexPathForItem(at: sender.location(in: self.faceCollectionView)) {
+            self.buddyCustomViewModel.faceDidChosen(in: indexPath.item)
+            self.view.endEditing(true)
+        }
+    }
+    
     private func alertError(_ error: BuddyCustomError) {
         let alert = UIAlertController(title: "추가 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
@@ -254,9 +271,19 @@ class BuddyCustomViewController: UIViewController {
         self.buddyCustomViewModel.didDoneTouched()
     }
     
+    @objc private func tapEmptySpace(){
+        self.nameTextField.resignFirstResponder()
+    }
+    
 }
 
 extension BuddyCustomViewController: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard let text = textField.text else { return true }
         if text.count > 10 {
@@ -268,16 +295,6 @@ extension BuddyCustomViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let text = textField.text else { return }
         self.buddyCustomViewModel.nameDidChaged(name: text)
-    }
-}
-
-extension BuddyCustomViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == self.colorCollectionView {
-            self.buddyCustomViewModel.colorDidChosen(in: indexPath.item)
-        } else {
-            self.buddyCustomViewModel.faceDidChosen(in: indexPath.item)
-        }
     }
 }
 

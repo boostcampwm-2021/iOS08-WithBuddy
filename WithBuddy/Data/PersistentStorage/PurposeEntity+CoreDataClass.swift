@@ -39,6 +39,7 @@ extension PurposeEntity {
 
 extension PurposeEntity {
     
+    @discardableResult
     convenience init(context: NSManagedObjectContext, purpose: PlaceType) {
         self.init(context: context)
         self.name = purpose.description

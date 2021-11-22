@@ -28,7 +28,15 @@ final class CoreDataManager {
     static let shared = CoreDataManager()
     let calendarUseCase = CalendarUseCase()
     
-    private init() {}
+    private init() {
+        self.context.perform { [weak self] in
+            guard let self = self,
+                  let purposeCount = try? self.context.count(for: PurposeEntity.fetchRequest()),
+                  purposeCount == 0 else { return }
+            PlaceType.allCases.forEach{ PurposeEntity(context: self.context, purpose: $0) }
+            try? self.context.save()
+        }
+    }
 
     private lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "WithBuddyModel")
@@ -60,6 +68,9 @@ final class CoreDataManager {
         return self.fetch(request: request)
     }
     
+    func printPurpose() {
+        self.fetch(request: PurposeEntity.fetchRequest()).forEach{ print($0.name, $0.gatheringList.count) }
+    }
 }
 
 extension CoreDataManager: CoreDataManagable {

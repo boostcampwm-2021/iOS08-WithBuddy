@@ -48,7 +48,7 @@ class SettingViewController: UIViewController {
     private func configureUserName() {
         self.view.addSubview(self.userNameTextField)
         self.userNameTextField.text = "나정나정"
-        self.userNameTextField.font = .systemFont(ofSize: 20)
+        self.userNameTextField.font = .systemFont(ofSize: .titleLabelSize)
         self.userNameTextField.isUserInteractionEnabled  = false
         self.userNameTextField.textAlignment = .center
         self.userNameTextField.translatesAutoresizingMaskIntoConstraints = false

@@ -64,7 +64,7 @@ class ImageTextCollectionViewCell: UICollectionViewCell {
     
     private func configureTextLabel() {
         self.addSubview(self.textLabel)
-        self.textLabel.font = .systemFont(ofSize: 12)
+        self.textLabel.font = .systemFont(ofSize: .chartLabelSize)
         self.textLabel.textAlignment = .center
         self.textLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

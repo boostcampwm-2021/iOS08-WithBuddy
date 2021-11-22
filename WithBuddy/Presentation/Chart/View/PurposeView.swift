@@ -47,7 +47,7 @@ final class PurposeView: UIView {
     
     private func configureLabel() {
         self.addSubview(self.label)
-        self.label.font = .systemFont(ofSize: 12)
+        self.label.font = .systemFont(ofSize: .chartLabelSize)
         self.label.textAlignment = .center
         self.label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

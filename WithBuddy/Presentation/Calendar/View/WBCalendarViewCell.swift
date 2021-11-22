@@ -15,7 +15,7 @@ class WBCalendarViewCell: UICollectionViewCell {
     private var dayOfCell: UILabel = {
         let label = UILabel()
         label.text = ""
-        label.font = .boldSystemFont(ofSize: 10)
+        label.font = .boldSystemFont(ofSize: .dayLabelSize)
         label.textColor = UIColor(named: "LabelPurple")
         return label
     }()

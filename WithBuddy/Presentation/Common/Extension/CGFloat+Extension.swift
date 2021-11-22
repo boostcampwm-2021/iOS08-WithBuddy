@@ -34,4 +34,9 @@ extension CGFloat {
     
     static let tableViewInset = CGFloat(10)
     static let tableViewHeight = CGFloat(150)
+    
+    static let labelSize = CGFloat(15)
+    static let titleLabelSize = CGFloat(19)
+    static let dayLabelSize = CGFloat(10)
+    static let chartLabelSize = CGFloat(12)
 }

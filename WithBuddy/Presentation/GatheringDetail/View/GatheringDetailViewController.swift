@@ -13,15 +13,15 @@ class GatheringDetailViewController: UIViewController {
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
     
-    private lazy var dateTitleLabel = RegisterTitleLabel()
+    private lazy var dateTitleLabel = PurpleTitleLabel()
     private lazy var dateBackgroundView = UIView()
     private lazy var datePicker = UIDatePicker()
   
-    private lazy var placeTitleLabel = RegisterTitleLabel()
+    private lazy var placeTitleLabel = PurpleTitleLabel()
     private lazy var placeBackgroundView = UIView()
     private lazy var placeTextField = UITextField()
     
-    private lazy var purposeTitleLabel = RegisterTitleLabel()
+    private lazy var purposeTitleLabel = PurpleTitleLabel()
     private lazy var purposeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     private lazy var purposeDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.purposeCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifier, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
@@ -29,7 +29,7 @@ class GatheringDetailViewController: UIViewController {
         return cell
     }
     
-    private lazy var buddyTitleLabel = RegisterTitleLabel()
+    private lazy var buddyTitleLabel = PurpleTitleLabel()
     private lazy var buddyCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifier, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
@@ -37,11 +37,11 @@ class GatheringDetailViewController: UIViewController {
         return cell
     }
     
-    private lazy var memoTitleLabel = RegisterTitleLabel()
+    private lazy var memoTitleLabel = PurpleTitleLabel()
     private lazy var memoBackgroundView = UIView()
     private lazy var memoTextView = UITextView()
     
-    private lazy var pictureTitleLabel = RegisterTitleLabel()
+    private lazy var pictureTitleLabel = PurpleTitleLabel()
     private lazy var pictureCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     private lazy var pictureDataSource = UICollectionViewDiffableDataSource<Int, URL>(collectionView: self.pictureCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: URL) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PictureCollectionViewCell.identifier, for: indexPath) as? PictureCollectionViewCell else { preconditionFailure() }
@@ -376,7 +376,7 @@ class GatheringDetailViewController: UIViewController {
     private func configureMemoTextView() {
         self.memoBackgroundView.addSubview(self.memoTextView)
         self.memoTextView.backgroundColor = .systemBackground
-        self.memoTextView.font =  UIFont.systemFont(ofSize: 15, weight: .medium)
+        self.memoTextView.font =  UIFont.systemFont(ofSize: .labelSize, weight: .medium)
         self.memoTextView.textContentType = .none
         self.memoTextView.autocapitalizationType = .none
         self.memoTextView.autocorrectionType = .no

@@ -41,7 +41,7 @@ class BuddyManageViewModel {
         guard let idx = self.storedBuddyList.firstIndex(where: {
             $0.id == buddy.id
         }) else { return }
-        storedBuddyList[idx] = buddy
+        self.storedBuddyList[idx] = buddy
         self.buddyUseCase.updateBuddy(buddy)
     }
     

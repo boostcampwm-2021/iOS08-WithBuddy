@@ -32,7 +32,7 @@ final class CoreDataManager {
         self.context.perform { [weak self] in
             guard let self = self,
                   let purposeCount = try? self.context.count(for: PurposeEntity.fetchRequest()),
-                  purposeCount == 0 else { return }
+                  purposeCount == Int.zero else { return }
             PlaceType.allCases.forEach{ PurposeEntity(context: self.context, purpose: $0) }
             try? self.context.save()
         }

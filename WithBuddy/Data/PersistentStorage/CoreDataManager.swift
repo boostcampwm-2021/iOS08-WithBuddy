@@ -68,9 +68,12 @@ final class CoreDataManager {
         return self.fetch(request: request)
     }
     
-    func printPurpose() {
-        self.fetch(request: PurposeEntity.fetchRequest()).forEach{ print($0.name, $0.gatheringList.count) }
+    private func fetchPurposeEntity(of purposeList: [String]) -> [PurposeEntity] {
+        let request = PurposeEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "name IN %@", purposeList)
+        return self.fetch(request: request)
     }
+    
 }
 
 extension CoreDataManager: CoreDataManagable {
@@ -128,6 +131,7 @@ extension CoreDataManager: CoreDataManagable {
     func insertGathering(_ gathering: Gathering) -> Bool {
         let gatheringEntity = GatheringEntity(context: self.context, gathering: gathering)
         gatheringEntity.addToBuddyList(NSSet(array: self.fetchBuddyEntity(of: gathering.buddyList)))
+        gatheringEntity.addToPurposeList(NSSet(array: self.fetchPurposeEntity(of: gathering.purpose)))
         
         do {
             try self.context.save()
@@ -187,6 +191,10 @@ extension CoreDataManager: CoreDataManagable {
         gatheringEntity.place = gathering.place
         gatheringEntity.memo = gathering.memo
         gatheringEntity.picture = gathering.picture
+        gatheringEntity.purposeList.forEach{ purposeEntity in
+            gatheringEntity.removeFromPurposeList(purposeEntity)
+        }
+        gatheringEntity.addToPurposeList(NSSet(array: self.fetchPurposeEntity(of: gathering.purpose)))
         gatheringEntity.buddyList.forEach{ buddyEntity in
             gatheringEntity.removeFromBuddyList(buddyEntity)
         }

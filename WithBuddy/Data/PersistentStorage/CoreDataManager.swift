@@ -174,7 +174,6 @@ extension CoreDataManager: CoreDataManagable {
         guard let gatheringEntity = self.fetch(request: request).first else { return }
         gatheringEntity.date = gathering.date
         gatheringEntity.place = gathering.place
-        gatheringEntity.purpose = gathering.purpose
         gatheringEntity.memo = gathering.memo
         gatheringEntity.picture = gathering.picture
         gatheringEntity.buddyList.forEach{ buddyEntity in

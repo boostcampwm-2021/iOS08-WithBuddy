@@ -45,4 +45,8 @@ extension PurposeEntity {
         self.name = purpose.description
     }
     
+    func toDomain() -> PlaceType? {
+        return PlaceType(rawValue: self.name)
+    }
+    
 }

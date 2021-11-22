@@ -7,30 +7,20 @@
 
 import Foundation
 
-enum PlaceType: CaseIterable, CustomStringConvertible {
-    
-    case study
-    case shopping
-    case sport
-    case healing
-    case hobby
-    case culture
-    case extracurricularActivities
-    case meal
-    case etc
+enum PlaceType: String, CaseIterable, CustomStringConvertible {
+     
+    case study = "Study"
+    case shopping = "Shopping"
+    case sport = "Sport"
+    case healing = "Healing"
+    case hobby = "Hobby"
+    case culture = "Culture"
+    case extracurricularActivities = "ExtraCurricularActivities"
+    case meal = "Meal"
+    case etc = "Etc"
     
     var description: String {
-        switch self {
-        case .study: return "Study"
-        case .shopping: return "Shopping"
-        case .sport: return "Sport"
-        case .healing: return "Healing"
-        case .hobby: return "Hobby"
-        case .culture: return "Culture"
-        case .extracurricularActivities: return "ExtraCurricularActivities"
-        case .meal: return "Meal"
-        case .etc: return "Etc"
-        }
+        return self.rawValue
     }
     
 }

@@ -105,6 +105,11 @@ class BuddyChoiceViewController: UIViewController {
         self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
         self.buddyCollectionView.delegate = self
         
+        let panGesture = UIPanGestureRecognizer()
+        panGesture.delegate = self
+        self.buddyCollectionView.addGestureRecognizer(panGesture)
+        self.buddyCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+        
         let buddyFlowLayout = UICollectionViewFlowLayout()
         buddyFlowLayout.scrollDirection = .vertical
         buddyFlowLayout.itemSize = CGSize(width: 60, height: 90)
@@ -154,6 +159,17 @@ class BuddyChoiceViewController: UIViewController {
         self.buddyDataSource.apply(snapshot, animatingDifferences: true)
     }
     
+    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            self.view.endEditing(true)
+        }
+        sender.cancelsTouchesInView = false
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
 }
 
 extension BuddyChoiceViewController: UITextFieldDelegate {
@@ -175,8 +191,8 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? ImageTextCollectionViewCell else { return }
         cell.animateButtonTap(scale: 0.8)
-        
         self.buddyChoiceViewModel.buddyDidChecked(in: indexPath.item)
+        self.view.endEditing(true)
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -206,6 +222,13 @@ extension BuddyChoiceViewController: BuddyCustomDelegate {
     func buddyCustomDidCompleted(_ buddy: Buddy) {
         self.buddyChoiceViewModel.buddyDidAdded(buddy)
     }
+}
+
+extension BuddyChoiceViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool{
+        self.view.endEditing(true)
+        return true
+   }
 }
 
 protocol BuddyChoiceDelegate: AnyObject {

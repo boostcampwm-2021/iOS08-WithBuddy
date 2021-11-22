@@ -90,6 +90,11 @@ class BuddyManageViewController: UIViewController {
         self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
         self.buddyCollectionView.delegate = self
         
+        let panGesture = UIPanGestureRecognizer()
+        panGesture.delegate = self
+        self.buddyCollectionView.addGestureRecognizer(panGesture)
+        self.buddyCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+        
         let buddyFlowLayout = UICollectionViewFlowLayout()
         buddyFlowLayout.scrollDirection = .vertical
         buddyFlowLayout.itemSize = CGSize(width: 60, height: 90)
@@ -128,6 +133,17 @@ class BuddyManageViewController: UIViewController {
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            self.view.endEditing(true)
+        }
+        sender.cancelsTouchesInView = false
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
 }
@@ -175,4 +191,11 @@ extension BuddyManageViewController: BuddyCustomDelegate {
     func buddyCustomDidCompleted(_ buddy: Buddy) {
         self.buddyManageViewModel.buddyDidAdded(buddy)
     }
+}
+
+extension BuddyManageViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool{
+        self.view.endEditing(true)
+        return true
+   }
 }

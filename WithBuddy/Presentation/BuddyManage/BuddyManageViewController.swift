@@ -137,7 +137,7 @@ class BuddyManageViewController: UIViewController {
     
     @objc func handleTap(_ sender: UITapGestureRecognizer) {
         if sender.state == .ended {
-            view.endEditing(true)
+            self.view.endEditing(true)
         }
         sender.cancelsTouchesInView = false
     }

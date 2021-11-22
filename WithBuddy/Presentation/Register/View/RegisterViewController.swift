@@ -353,7 +353,7 @@ class RegisterViewController: UIViewController {
         self.contentView.addSubview(self.buddyAddButton)
         let config = UIImage.SymbolConfiguration(
             pointSize: .buddyWidth, weight: .medium, scale: .default)
-        let image = UIImage(systemName: "plus.circle", withConfiguration: config)
+        let image = UIImage(named: "Plus", in: .main, with: config)
         self.buddyAddButton.setImage(image, for: .normal)
         self.buddyAddButton.tintColor = UIColor(named: "LabelPurple")
         self.buddyAddButton.addTarget(self, action: #selector(self.onBuddyAddButtonTouched(_:)), for: .touchUpInside)

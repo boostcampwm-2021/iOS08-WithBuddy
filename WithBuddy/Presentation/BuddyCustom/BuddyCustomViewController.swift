@@ -63,7 +63,7 @@ class BuddyCustomViewController: UIViewController {
                 
                 var faceSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
                 faceSnapshot.appendSections([0])
-                faceSnapshot.appendItems((1...9).map({
+                faceSnapshot.appendItems((Int.minFaceNum...Int.maxFaceNum).map({
                     CheckableInfo(description: "\(face.color)\($0)", check: $0 == face.number)
                 }))
                 self.faceDataSource.apply(faceSnapshot, animatingDifferences: true)
@@ -229,7 +229,7 @@ class BuddyCustomViewController: UIViewController {
 
         let flowLayout = UICollectionViewFlowLayout()
         let width = (self.view.frame.width - (.outsideLeadingInset * 2))/5 - .innerPartInset
-        let totalHeight = width*2 + 20
+        let totalHeight = width*3 + 20
         flowLayout.itemSize = CGSize(width: width, height: width)
         self.faceCollectionView.collectionViewLayout = flowLayout
         

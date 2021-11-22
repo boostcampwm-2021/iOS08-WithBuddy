@@ -34,6 +34,10 @@ class BuddyChoiceViewModel {
     
     private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
     
+    subscript(index: Int) -> Buddy {
+        return self.storedBuddyList[index]
+    }
+    
     func buddyDidADeleted(in idx: Int) {
         do {
             try self.buddyUseCase.deleteBuddy(storedBuddyList[idx])
@@ -76,6 +80,14 @@ class BuddyChoiceViewModel {
         } else {
             self.doneSignal.send(self.checkedBuddyList)
         }
+    }
+    
+    func buddyDidEdited(_ buddy: Buddy) {
+        guard let idx = self.storedBuddyList.firstIndex(where: {
+            $0.id == buddy.id
+        }) else { return }
+        storedBuddyList[idx] = buddy
+        self.buddyUseCase.updateBuddy(buddy)
     }
     
 }

@@ -14,6 +14,10 @@ class BuddyManageViewModel {
     private(set) var failSignal = PassthroughSubject<BuddyChoiceError, Never>()
     private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
     
+    subscript(index: Int) -> Buddy {
+        return self.storedBuddyList[index]
+    }
+    
     func buddyDidDeleted(in idx: Int) {
         do {
             try self.buddyUseCase.deleteBuddy(storedBuddyList[idx])
@@ -31,6 +35,14 @@ class BuddyManageViewModel {
     
     func buddyListDidLoaded() {
         self.storedBuddyList = self.buddyUseCase.fetchBuddy()
+    }
+    
+    func buddyDidEdited(_ buddy: Buddy) {
+        guard let idx = self.storedBuddyList.firstIndex(where: {
+            $0.id == buddy.id
+        }) else { return }
+        self.storedBuddyList[idx] = buddy
+        self.buddyUseCase.updateBuddy(buddy)
     }
     
 }

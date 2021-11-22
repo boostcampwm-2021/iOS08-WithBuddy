@@ -20,21 +20,34 @@ enum BuddyCustomError: LocalizedError {
 
 class BuddyCustomViewModel {
     private var id: UUID?
-    private var name: String = ""
-    private var faceColor: FaceColor = .purple
-    private var faceNumber: Int = 1
+    @Published private(set) var name: String = ""
     @Published private(set) var face: Face = Face(color: .purple, number: 1)
-    private(set) var doneSignal = PassthroughSubject<Buddy, Never>()
+    private(set) var addDoneSignal = PassthroughSubject<Buddy, Never>()
+    private(set) var editDoneSignal = PassthroughSubject<Buddy, Never>()
     private(set) var failSignal = PassthroughSubject<BuddyCustomError, Never>()
     
+    func buddyDidInserted(_ buddy: Buddy) {
+        self.id = buddy.id
+        self.name = buddy.name
+        
+        var buddyColor = buddy.face
+        buddyColor.removeLast()
+        for color in FaceColor.allCases where color.description == buddyColor {
+            self.face.color = color
+        }
+        
+        if let buddyFaceLastCharecter = buddy.face.last,
+           let buddyFaceNumber = Int(String(buddyFaceLastCharecter)) {
+            self.face.number = buddyFaceNumber
+        }
+    }
+    
     func colorDidChosen(in idx: Int) {
-        self.faceColor = FaceColor.allCases[idx]
-        self.face = Face(color: self.faceColor, number: self.faceNumber)
+        self.face.color = FaceColor.allCases[idx]
     }
     
     func faceDidChosen(in idx: Int) {
-        self.faceNumber = idx + 1
-        self.face = Face(color: self.faceColor, number: self.faceNumber)
+        self.face.number = idx + 1
     }
     
     func nameDidChaged(name: String) {
@@ -48,8 +61,10 @@ class BuddyCustomViewModel {
             var newBuddy = Buddy(id: UUID(), name: self.name, face: "\(self.face)")
             if let id = self.id {
                 newBuddy.id = id
+                self.editDoneSignal.send(newBuddy)
+            } else {
+                self.addDoneSignal.send(newBuddy)
             }
-            self.doneSignal.send(newBuddy)
         }
     }
 }

@@ -28,7 +28,15 @@ final class CoreDataManager {
     static let shared = CoreDataManager()
     let calendarUseCase = CalendarUseCase()
     
-    private init() {}
+    private init() {
+        self.context.perform { [weak self] in
+            guard let self = self,
+                  let purposeCount = try? self.context.count(for: PurposeEntity.fetchRequest()),
+                  purposeCount == Int.zero else { return }
+            PlaceType.allCases.forEach{ PurposeEntity(context: self.context, purpose: $0) }
+            try? self.context.save()
+        }
+    }
 
     private lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "WithBuddyModel")
@@ -57,6 +65,12 @@ final class CoreDataManager {
     private func fetchBuddyEntity(of buddyList: [Buddy]) -> [BuddyEntity] {
         let request = BuddyEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id IN %@", buddyList.map{ $0.id })
+        return self.fetch(request: request)
+    }
+    
+    private func fetchPurposeEntity(of purposeList: [String]) -> [PurposeEntity] {
+        let request = PurposeEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "name IN %@", purposeList)
         return self.fetch(request: request)
     }
     
@@ -117,6 +131,7 @@ extension CoreDataManager: CoreDataManagable {
     func insertGathering(_ gathering: Gathering) -> Bool {
         let gatheringEntity = GatheringEntity(context: self.context, gathering: gathering)
         gatheringEntity.addToBuddyList(NSSet(array: self.fetchBuddyEntity(of: gathering.buddyList)))
+        gatheringEntity.addToPurposeList(NSSet(array: self.fetchPurposeEntity(of: gathering.purpose)))
         
         do {
             try self.context.save()
@@ -174,9 +189,12 @@ extension CoreDataManager: CoreDataManagable {
         guard let gatheringEntity = self.fetch(request: request).first else { return }
         gatheringEntity.date = gathering.date
         gatheringEntity.place = gathering.place
-        gatheringEntity.purpose = gathering.purpose
         gatheringEntity.memo = gathering.memo
         gatheringEntity.picture = gathering.picture
+        gatheringEntity.purposeList.forEach{ purposeEntity in
+            gatheringEntity.removeFromPurposeList(purposeEntity)
+        }
+        gatheringEntity.addToPurposeList(NSSet(array: self.fetchPurposeEntity(of: gathering.purpose)))
         gatheringEntity.buddyList.forEach{ buddyEntity in
             gatheringEntity.removeFromBuddyList(buddyEntity)
         }

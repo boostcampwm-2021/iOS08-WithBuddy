@@ -14,11 +14,11 @@ public class GatheringEntity: NSManagedObject {
     
     @NSManaged public var id: UUID
     @NSManaged public var date: Date
-    @NSManaged public var purpose: [String]
     @NSManaged public var place: String?
     @NSManaged public var memo: String?
     @NSManaged public var picture: [URL]?
     @NSManaged public var buddyList: Set<BuddyEntity>
+    @NSManaged public var purposeList: Set<PurposeEntity>
     
 }
 
@@ -40,6 +40,18 @@ extension GatheringEntity {
     @objc(removeBuddyList:)
     @NSManaged public func removeFromBuddyList(_ values: NSSet)
     
+    @objc(addPurposeListObject:)
+    @NSManaged public func addToPurposeList(_ value: PurposeEntity)
+
+    @objc(removePurposeListObject:)
+    @NSManaged public func removeFromPurposeList(_ value: PurposeEntity)
+
+    @objc(addPurposeList:)
+    @NSManaged public func addToPurposeList(_ values: NSSet)
+
+    @objc(removePurposeList:)
+    @NSManaged public func removeFromPurposeList(_ values: NSSet)
+    
 }
 
 extension GatheringEntity {
@@ -49,7 +61,6 @@ extension GatheringEntity {
         self.id = gathering.id
         self.date = gathering.date
         self.place = gathering.place
-        self.purpose = gathering.purpose
         self.memo = gathering.memo
         self.picture = gathering.picture
     }
@@ -58,7 +69,7 @@ extension GatheringEntity {
         return Gathering(id: self.id,
                          date: self.date,
                          place: self.place,
-                         purpose: self.purpose,
+                         purpose: self.purposeList.map{ $0.name },
                          buddyList: self.buddyList.map{ $0.toDomain() }.sorted(),
                          memo: self.memo,
                          picture: self.picture)

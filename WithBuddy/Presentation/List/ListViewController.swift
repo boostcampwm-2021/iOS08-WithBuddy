@@ -72,6 +72,7 @@ final class ListViewController: UIViewController {
         self.listTableView.delegate = self
         self.listTableView.backgroundColor = .clear
         self.listTableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
+        self.listTableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
         self.listTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.listTableView.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: 20),
@@ -110,6 +111,17 @@ final class ListViewController: UIViewController {
         let viewController = GatheringEditViewController()
         viewController.configure(by: gathering)
         self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            view.endEditing(true)
+        }
+        sender.cancelsTouchesInView = false
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
 }

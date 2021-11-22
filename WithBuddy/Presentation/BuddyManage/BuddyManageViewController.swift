@@ -89,6 +89,7 @@ class BuddyManageViewController: UIViewController {
         self.buddyCollectionView.backgroundColor = .clear
         self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
         self.buddyCollectionView.delegate = self
+        self.buddyCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
         
         let buddyFlowLayout = UICollectionViewFlowLayout()
         buddyFlowLayout.scrollDirection = .vertical
@@ -128,6 +129,17 @@ class BuddyManageViewController: UIViewController {
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            view.endEditing(true)
+        }
+        sender.cancelsTouchesInView = false
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
 }

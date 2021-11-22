@@ -72,7 +72,12 @@ final class ListViewController: UIViewController {
         self.listTableView.delegate = self
         self.listTableView.backgroundColor = .clear
         self.listTableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
+        
+        let panGesture = UIPanGestureRecognizer()
+        panGesture.delegate = self
+        self.listTableView.addGestureRecognizer(panGesture)
         self.listTableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+        
         self.listTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.listTableView.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: 20),
@@ -174,4 +179,11 @@ extension ListViewController: UITableViewDelegate {
         return CGFloat.tableViewHeight
     }
     
+}
+
+extension ListViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool{
+        self.view.endEditing(true)
+        return true
+   }
 }

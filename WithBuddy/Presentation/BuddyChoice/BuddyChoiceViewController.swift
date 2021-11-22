@@ -105,6 +105,11 @@ class BuddyChoiceViewController: UIViewController {
         self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
         self.buddyCollectionView.delegate = self
         
+        let panGesture = UIPanGestureRecognizer()
+        panGesture.delegate = self
+        self.buddyCollectionView.addGestureRecognizer(panGesture)
+        self.buddyCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+        
         let buddyFlowLayout = UICollectionViewFlowLayout()
         buddyFlowLayout.scrollDirection = .vertical
         buddyFlowLayout.itemSize = CGSize(width: 60, height: 90)
@@ -152,6 +157,13 @@ class BuddyChoiceViewController: UIViewController {
             snapshot.appendItems(filtered)
         }
         self.buddyDataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+        if sender.state == .ended {
+            view.endEditing(true)
+        }
+        sender.cancelsTouchesInView = false
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -210,6 +222,13 @@ extension BuddyChoiceViewController: BuddyCustomDelegate {
     func buddyCustomDidCompleted(_ buddy: Buddy) {
         self.buddyChoiceViewModel.buddyDidAdded(buddy)
     }
+}
+
+extension BuddyChoiceViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool{
+        self.view.endEditing(true)
+        return true
+   }
 }
 
 protocol BuddyChoiceDelegate: AnyObject {

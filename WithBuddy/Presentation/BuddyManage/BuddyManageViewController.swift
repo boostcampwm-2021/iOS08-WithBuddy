@@ -89,6 +89,10 @@ class BuddyManageViewController: UIViewController {
         self.buddyCollectionView.backgroundColor = .clear
         self.buddyCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
         self.buddyCollectionView.delegate = self
+        
+        let panGesture = UIPanGestureRecognizer()
+        panGesture.delegate = self
+        self.buddyCollectionView.addGestureRecognizer(panGesture)
         self.buddyCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
         
         let buddyFlowLayout = UICollectionViewFlowLayout()
@@ -187,4 +191,11 @@ extension BuddyManageViewController: BuddyCustomDelegate {
     func buddyCustomDidCompleted(_ buddy: Buddy) {
         self.buddyManageViewModel.buddyDidAdded(buddy)
     }
+}
+
+extension BuddyManageViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool{
+        self.view.endEditing(true)
+        return true
+   }
 }

@@ -182,6 +182,7 @@
 			children = (
 				BBF7FF3F272FB7B700B71C97 /* TabBarViewController.swift */,
 				854AA76327338C2F00663911 /* ListTableViewCell.swift */,
+				85D262ED273CE6DD000190B8 /* WhiteView.swift */,
 				854AA75D27337A7200663911 /* SearchView.swift */,
 			);
 			path = View;
@@ -194,7 +195,6 @@
 				85D262E9273CD71C000190B8 /* BubbleChartView.swift */,
 				85D262E7273CD703000190B8 /* PurposeChartView.swift */,
 				85D262EB273CDEBE000190B8 /* LatestOldChartView.swift */,
-				85D262ED273CE6DD000190B8 /* WhiteView.swift */,
 				85D262F3273CF211000190B8 /* PurposeView.swift */,
 				85D262F5273CFEBF000190B8 /* LatestOldView.swift */,
 				85D262F7273D138E000190B8 /* DefaultView.swift */,

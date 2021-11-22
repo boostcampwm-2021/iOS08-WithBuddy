@@ -15,10 +15,10 @@ class RegisterViewController: UIViewController {
     private lazy var contentView = UIView()
     
     private lazy var dateTitleLabel = PurpleTitleLabel()
-    private lazy var dateBackgroundView = UIView()
+    private lazy var dateBackgroundView = WhiteView()
     private lazy var datePicker = UIDatePicker()
     private lazy var placeTitleLabel = PurpleTitleLabel()
-    private lazy var placeBackgroundView = UIView()
+    private lazy var placeBackgroundView = WhiteView()
     private lazy var placeTextField = UITextField()
     
     private lazy var purposeTitleLabel = PurpleTitleLabel()
@@ -39,7 +39,7 @@ class RegisterViewController: UIViewController {
     }
     
     private lazy var memoTitleLabel = PurpleTitleLabel()
-    private lazy var memoBackgroundView = UIView()
+    private lazy var memoBackgroundView = WhiteView()
     private lazy var memoTextView = UITextView()
     
     private lazy var pictureTitleLabel = PurpleTitleLabel()
@@ -198,9 +198,6 @@ class RegisterViewController: UIViewController {
     
     private func configureDateBackground() {
         self.contentView.addSubview(self.dateBackgroundView)
-        self.dateBackgroundView.backgroundColor = .white
-        self.dateBackgroundView.layer.cornerRadius = 10
-        
         self.dateBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.dateBackgroundView.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: .innerPartInset),
@@ -250,9 +247,6 @@ class RegisterViewController: UIViewController {
     
     private func configurePlaceBackground() {
         self.contentView.addSubview(self.placeBackgroundView)
-        self.placeBackgroundView.backgroundColor = .systemBackground
-        self.placeBackgroundView.layer.cornerRadius = 10
-        
         self.placeBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.placeBackgroundView.topAnchor.constraint(equalTo: self.placeTitleLabel.bottomAnchor, constant: .innerPartInset),
@@ -417,9 +411,6 @@ class RegisterViewController: UIViewController {
     
     private func configureMemoBackground() {
         self.contentView.addSubview(self.memoBackgroundView)
-        self.memoBackgroundView.backgroundColor = .systemBackground
-        self.memoBackgroundView.layer.cornerRadius = 10
-        
         self.memoBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.memoBackgroundView.topAnchor.constraint(equalTo: self.memoTitleLabel.bottomAnchor, constant: .innerPartInset),

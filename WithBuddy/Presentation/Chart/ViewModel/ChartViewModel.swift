@@ -10,7 +10,7 @@ import Foundation
 final class ChartViewModel {
     
     @Published private(set) var buddyRank: [(Buddy, Int)] = []
-    @Published private(set) var purposeRank: [String?] = []
+    @Published private(set) var purposeRank: [String] = []
     @Published private(set) var latestBuddy: Buddy?
     @Published private(set) var oldBuddy: Buddy?
     
@@ -89,7 +89,7 @@ final class ChartViewModel {
             self.purposeRank = Array(sortedPurposeList[...index])
             return
         }
-        self.purposeRank = [nil]
+        self.purposeRank = []
     }
     
     private func fetchLatestBuddy() {

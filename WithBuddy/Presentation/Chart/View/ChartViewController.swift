@@ -139,8 +139,11 @@ final class ChartViewController: UIViewController {
     }
     
     private func update(latestBuddy: Buddy?) {
-        guard let buddy = latestBuddy else { return }
-        self.latestOldChartView.update(latestName: buddy.name, face: buddy.face)
+        if let buddy = latestBuddy {
+            self.latestOldChartView.update(latestName: buddy.name, face: buddy.face)
+            return
+        }
+        self.latestOldChartView.showDefaultView()
     }
     
     private func update(oldBuddy: Buddy?) {

@@ -98,6 +98,7 @@ final class ChartViewModel {
             self.latestBuddy = gathering.buddyList.first
             return
         }
+        self.latestBuddy = nil
     }
     
     private func fetchOldBuddy() {
@@ -116,6 +117,7 @@ final class ChartViewModel {
         
         if self.oldBuddy == nil {
             self.oldBuddy = gatheringList.last?.buddyList.last
+            return
         }
     }
     

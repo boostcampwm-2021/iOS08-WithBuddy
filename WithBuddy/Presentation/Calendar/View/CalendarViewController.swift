@@ -170,4 +170,8 @@ extension CalendarViewController: GatheringListDelegate {
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
+    func deleteGathering() {
+        self.calendarViewModel.reloadFaces()
+    }
+    
 }

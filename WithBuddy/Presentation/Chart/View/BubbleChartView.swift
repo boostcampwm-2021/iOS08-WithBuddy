@@ -45,6 +45,7 @@ final class BubbleChartView: UIView {
         
         if first == nil {
             self.defaultView.isHidden = false
+            self.firstBubbleImageView.isHidden = true
             return
         }
         

@@ -87,7 +87,9 @@ final class ChartViewModel {
         let index = min(3, sortedPurposeList.count - 1)
         if Int.zero <= index {
             self.purposeRank = Array(sortedPurposeList[...index])
+            return
         }
+        self.purposeRank = []
     }
     
     private func fetchLatestBuddy() {
@@ -96,6 +98,7 @@ final class ChartViewModel {
             self.latestBuddy = gathering.buddyList.first
             return
         }
+        self.latestBuddy = nil
     }
     
     private func fetchOldBuddy() {
@@ -114,6 +117,7 @@ final class ChartViewModel {
         
         if self.oldBuddy == nil {
             self.oldBuddy = gatheringList.last?.buddyList.last
+            return
         }
     }
     

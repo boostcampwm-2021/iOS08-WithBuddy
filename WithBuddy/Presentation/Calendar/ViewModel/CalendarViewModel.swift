@@ -68,7 +68,7 @@ final class CalendarViewModel {
         self.didDaysReloadSignal.send()
     }
     
-    private func reloadFaces() {
+    func reloadFaces() {
         let firstDayIndex = self.calendarUseCase.findFirstDayIndex(of: self.calendarMonth)
         self.thisMonthGathrtingList = self.gatheringUseCase.fetchGathering(month: self.calendarMonth)
         self.totalFaces = Array(repeating: "", count: self.maxDayOfMonth)

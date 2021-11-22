@@ -32,7 +32,7 @@ final class PurposeChartView: UIView {
         self.nameLabel.text = name
     }
     
-    func update(list: [String]) {
+    func update(list: [String?]) {
         let first = list.indices ~= 0 ? list[0] : nil
         let second = list.indices ~= 1 ? list[1] : nil
         let third = list.indices ~= 2 ? list[2] : nil

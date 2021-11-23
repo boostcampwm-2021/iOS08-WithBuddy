@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import Combine
 
 protocol CoreDataManagable {
     
@@ -21,23 +22,30 @@ protocol CoreDataManagable {
     func fetchGaterhing(month: Date) -> [GatheringEntity]
     func updateGathering(_ gathering: Gathering)
     func deleteGathering(_ gatheringId: UUID)
+    func fetchPurpose() -> AnyPublisher<[PurposeEntity], Never>
+    
 }
 
 final class CoreDataManager {
-
+    
     static let shared = CoreDataManager()
     let calendarUseCase = CalendarUseCase()
     
     private init() {
         self.context.perform { [weak self] in
             guard let self = self,
-                  let purposeCount = try? self.context.count(for: PurposeEntity.fetchRequest()),
-                  purposeCount == Int.zero else { return }
-            PlaceType.allCases.forEach{ PurposeEntity(context: self.context, purpose: $0) }
+                  let purpose = try? self.context.fetch(PurposeEntity.fetchRequest()) else { return }
+            if purpose.count != PlaceType.allCases.count {
+                let purposeList = purpose.map{ $0.toDomain() }
+                for place in PlaceType.allCases where !purposeList.contains(place) {
+                    PurposeEntity(context: self.context, purpose: place)
+                }
+            }
+            
             try? self.context.save()
         }
     }
-
+    
     private lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "WithBuddyModel")
         container.loadPersistentStores { _, error in
@@ -47,7 +55,7 @@ final class CoreDataManager {
         }
         return container
     }()
-
+    
     private var context: NSManagedObjectContext {
         self.persistentContainer.viewContext
     }
@@ -166,8 +174,7 @@ extension CoreDataManager: CoreDataManagable {
         request.predicate = NSPredicate(format: "id == %@", buddy.id as CVarArg )
         
         guard let buddyEntity = self.fetch(request: request).first else { return false }
-        if let gatheringList = buddyEntity.gatheringList,
-           !gatheringList.isEmpty {
+        if !buddyEntity.gatheringList.isEmpty {
             throw BuddyChoiceError.oneMoreGathering
         }
         
@@ -219,6 +226,16 @@ extension CoreDataManager: CoreDataManagable {
         } catch {
             print(error.localizedDescription)
         }
+    }
+    
+    func fetchPurpose() -> AnyPublisher<[PurposeEntity], Never> {
+        let request = PurposeEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "gatheringList.@count > 0")
+        return Just(self.fetch(request: request))
+            .map{ $0.sorted(by: { lhs, rhs in
+                lhs.gatheringList.count > rhs.gatheringList.count
+            })}
+            .eraseToAnyPublisher()
     }
     
 }

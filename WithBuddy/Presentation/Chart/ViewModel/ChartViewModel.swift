@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 final class ChartViewModel {
     
@@ -16,23 +17,25 @@ final class ChartViewModel {
     
     private let gatheringUseCase: GatheringUseCase
     private let buddyUseCase: BuddyUseCase
+    private let purposeUseCase: PurposeUseCaseProtocol
     private var gatheringList: [Gathering] = []
     private var buddyList: [Buddy] = []
     
-    init() {
-        self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
-        self.buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
-        self.configure()
-    }
-    
-    private func configure() {
+    init(
+        gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared),
+        buddyUseCase: BuddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared),
+        purposeUseCase: PurposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared)
+    ) {
+        self.gatheringUseCase = gatheringUseCase
+        self.buddyUseCase = buddyUseCase
+        self.purposeUseCase = purposeUseCase
         self.fetch()
     }
     
     func fetch() {
         self.fetchGatheringAndBuddy()
-        self.fetchBuddyLank()
-        self.fetchPurposeLank()
+        self.fetchBuddyRank()
+        self.fetchPurposeRank()
         self.fetchLatestBuddy()
         self.fetchOldBuddy()
     }
@@ -42,7 +45,7 @@ final class ChartViewModel {
         self.buddyList = self.buddyUseCase.fetchBuddy()
     }
     
-    private func fetchBuddyLank() {
+    private func fetchBuddyRank() {
         var buddyMap: [Buddy: Int] = [:]
         self.buddyList.forEach { buddy in
             buddyMap[buddy] = 0
@@ -64,32 +67,9 @@ final class ChartViewModel {
         }
     }
     
-    private func fetchPurposeLank() {
-        var purposeMap = [String: Int]()
-        
-        self.gatheringList.forEach { gathering in
-            gathering.purpose.forEach { purpose in
-                if purpose != "Etc" {
-                    if purposeMap.keys.contains(purpose) {
-                        purposeMap[purpose]? += 1
-                    } else {
-                        purposeMap[purpose] = 1
-                    }
-                }
-            }
-        }
-        
-        let sortedPurposeList = purposeMap.sorted {
-            if $0.value == $1.value { return $0.key < $1.key }
-            return $0.value > $1.value
-        }.map{ $0.key }
-        
-        let index = min(3, sortedPurposeList.count - 1)
-        if Int.zero <= index {
-            self.purposeRank = Array(sortedPurposeList[...index])
-            return
-        }
-        self.purposeRank = []
+    private func fetchPurposeRank() {
+        self.purposeUseCase.fetchTopFourPurpose()
+        .assign(to: &self.$purposeRank)
     }
     
     private func fetchLatestBuddy() {

@@ -28,4 +28,6 @@ extension CGFloat {
     static let dayLabelSize = CGFloat(10)
     
     static let fallingBuddySize = CGFloat(120)
+    
+    static let buttonCornerRadius = CGFloat(5)
 }

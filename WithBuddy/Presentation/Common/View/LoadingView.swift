@@ -12,28 +12,10 @@ class LoadingView: UIView {
     private var titleLabel = UILabel()
     private var lazyBehavior = UIDynamicItemBehavior()
 
-    lazy var animator: UIDynamicAnimator = {
-        return UIDynamicAnimator(referenceView: self)
-    }()
-
-    lazy var gravity: UIGravityBehavior = {
-        let lazyGravity = UIGravityBehavior()
-        lazyGravity.magnitude = 1
-        return lazyGravity
-    }()
-
-    lazy var collider: UICollisionBehavior = {
-        let lazyCollider = UICollisionBehavior()
-        lazyCollider.translatesReferenceBoundsIntoBoundary = true
-        return lazyCollider
-    }()
-
-    lazy var dynamicItemBehavior: UIDynamicItemBehavior = {
-        lazyBehavior.elasticity = 0.7
-        lazyBehavior.allowsRotation = true
-        lazyBehavior.density = 1.5
-        return lazyBehavior
-    }()
+    lazy var animator = UIDynamicAnimator(referenceView: self)
+    lazy var gravity = UIGravityBehavior()
+    lazy var collider = UICollisionBehavior()
+    lazy var dynamicItemBehavior = UIDynamicItemBehavior()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,10 +28,19 @@ class LoadingView: UIView {
     }
 
     private func configure() {
+        self.configureDynamicItemBehavior()
         self.configureTitle()
         self.addFaces()
     }
 
+    private func configureDynamicItemBehavior() {
+        self.gravity.magnitude = 1
+        self.collider.translatesReferenceBoundsIntoBoundary = true
+        self.dynamicItemBehavior.elasticity = 0.7
+        self.dynamicItemBehavior.allowsRotation = true
+        self.dynamicItemBehavior.density = 1.5
+    }
+    
     private func configureTitle() {
         self.addSubview(self.titleLabel)
         self.titleLabel.text = "위드버디"

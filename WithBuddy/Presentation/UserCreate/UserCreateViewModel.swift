@@ -10,15 +10,18 @@ import Combine
 
 final class UserCreateViewModel {
     
-    @Published private(set) var user: Buddy?
+    @Published private(set) var buddy: Buddy?
     private(set) var editStartSignal = PassthroughSubject<Buddy?, Never>()
     
-    func userDidChanged(user: Buddy) {
-        self.user = user
+    private var userUseCase = UserUseCase()
+    
+    func userDidChanged(buddy: Buddy) {
+        self.buddy = buddy
+        self.userUseCase.createUser(buddy: buddy)
     }
     
     func editStart() {
-        self.editStartSignal.send(self.user)
+        self.editStartSignal.send(self.buddy)
     }
     
 }

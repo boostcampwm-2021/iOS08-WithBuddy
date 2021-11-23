@@ -39,7 +39,7 @@ final class UserCreateViewController: UIViewController {
     }
     
     private func bind() {
-        self.userCreateViewModel.$user
+        self.userCreateViewModel.$buddy
             .receive(on: DispatchQueue.main)
             .sink { buddy in
                 if let buddy = buddy  {
@@ -93,10 +93,6 @@ final class UserCreateViewController: UIViewController {
         self.stackView.addArrangedSubview(self.nameLabel)
         self.nameLabel.text = "아직 설정된 이름이 없어요"
         self.nameLabel.textAlignment = .center
-        
-        self.nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-        ])
     }
     
     private func configureBuddyImageView() {
@@ -135,10 +131,6 @@ final class UserCreateViewController: UIViewController {
         self.guideLabel.text = "내 이름과 캐릭터는 언제든지 변경할 수 있어요!"
         self.guideLabel.adjustsFontSizeToFitWidth = true
         self.guideLabel.textAlignment = .center
-        
-        self.guideLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-        ])
     }
     
     private func configureCompleteButton() {
@@ -147,6 +139,7 @@ final class UserCreateViewController: UIViewController {
         self.completeButton.layer.cornerRadius = 10
         self.completeButton.setTitle("내 캐릭터 생성 완료", for: .normal)
         self.completeButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
+        self.completeButton.addTarget(self, action: #selector(completeButtonTouched), for: .touchUpInside)
         
         self.completeButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -156,15 +149,19 @@ final class UserCreateViewController: UIViewController {
             self.completeButton.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
+    
+    @objc private func completeButtonTouched(_ sender: UIButton) {
+        self.navigationController?.pushViewController(TabBarViewController(), animated: true)
+    }
 
 }
 
 extension UserCreateViewController: BuddyCustomDelegate {
     func buddyEditDidCompleted(_ buddy: Buddy) {
-        self.userCreateViewModel.userDidChanged(user: buddy)
+        self.userCreateViewModel.userDidChanged(buddy: buddy)
     }
     
     func buddyAddDidCompleted(_ buddy: Buddy) {
-        self.userCreateViewModel.userDidChanged(user: buddy)
+        self.userCreateViewModel.userDidChanged(buddy: buddy)
     }
 }

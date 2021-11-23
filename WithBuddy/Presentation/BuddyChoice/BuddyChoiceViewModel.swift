@@ -64,7 +64,7 @@ class BuddyChoiceViewModel {
     func buddyListDidLoaded(by buddyList: [Buddy]) {
         let storedBuddyList = self.buddyUseCase.fetchBuddy()
         storedBuddyList.forEach( { buddy in
-            var checkedBuddy = buddy
+            let checkedBuddy = buddy
             checkedBuddy.check = true
             if buddyList.contains(checkedBuddy) || buddyList.contains(buddy) {
                 self.storedBuddyList.append(checkedBuddy)

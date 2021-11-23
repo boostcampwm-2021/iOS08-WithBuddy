@@ -9,17 +9,23 @@ import Foundation
 
 final class UserUseCase {
     
-    func createUser(name: String, face: String) {
-        // UserDafault에 정보생성
+    func createUser(buddy: Buddy) {
+        do {
+            let encodedData = try NSKeyedArchiver.archivedData(withRootObject: buddy, requiringSecureCoding: false)
+            UserDefaults.standard.set(encodedData, forKey: "buddy")
+        } catch {
+            return
+        }
     }
     
     func fetchUser() -> Buddy? {
-        // UserDefault로부터 정보 불러오기
-        return nil
-    }
-    
-    func changeUser(name: String, face: String) {
-        // User 정보 바꿔서 저장하기
+        do {
+            guard let encodedData = UserDefaults.standard.data(forKey: "buddy"),
+                  let buddy = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(encodedData) as? Buddy else { return nil }
+            return buddy
+        } catch {
+            return nil
+        }
     }
     
 }

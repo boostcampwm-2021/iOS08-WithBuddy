@@ -56,7 +56,7 @@ class BuddyCustomViewModel {
         if self.name.count < 2 {
             self.failSignal.send(BuddyCustomError.nameLength)
         } else {
-            var newBuddy = Buddy(id: UUID(), name: self.name, face: "\(self.face)")
+            let newBuddy = Buddy(id: UUID(), name: self.name, face: "\(self.face)")
             if let id = self.id {
                 newBuddy.id = id
                 self.editDoneSignal.send(newBuddy)

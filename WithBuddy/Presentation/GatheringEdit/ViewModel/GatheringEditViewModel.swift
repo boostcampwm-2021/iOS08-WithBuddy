@@ -92,4 +92,9 @@ class GatheringEditViewModel {
         self.addBuddySignal.send(self.buddyList)
     }
     
+    func didDeleteButtonTouched() {
+        guard let id = self.gatheringId else { return }
+        self.gatheringUseCase.deleteGathering(id)
+    }
+    
 }

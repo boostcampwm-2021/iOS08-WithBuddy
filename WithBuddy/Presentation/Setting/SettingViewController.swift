@@ -93,7 +93,7 @@ class SettingViewController: UIViewController {
         self.view.addSubview(self.removeAllGatheringButton)
         self.removeAllGatheringButton.setTitle("모임 목록 초기화", for: .normal)
         self.makeButtonLayer(button: self.removeAllGatheringButton, upperView: self.userNameTextField, constant: 100)
-        self.removeAllGatheringButton.addTarget(self, action: #selector(removeAlert), for: .touchUpInside)
+        self.removeAllGatheringButton.addTarget(self, action: #selector(self.removeAlert), for: .touchUpInside)
     }
     
     @objc private func removeAlert() {
@@ -109,14 +109,14 @@ class SettingViewController: UIViewController {
     private func configureManageBuddyButton() {
         self.view.addSubview(self.manageBuddyButton)
         self.manageBuddyButton.setTitle("버디 관리", for: .normal)
-        self.manageBuddyButton.addTarget(self, action: #selector(moveToBuddyManage), for: .touchUpInside)
+        self.manageBuddyButton.addTarget(self, action: #selector(self.moveToBuddyManage), for: .touchUpInside)
         self.makeButtonLayer(button: self.manageBuddyButton, upperView: self.removeAllGatheringButton, constant: 15)
     }
 
     private func configureDeveloperInfo() {
         self.view.addSubview(self.developerInfoButton)
         self.developerInfoButton.setTitle("개발자 정보", for: .normal)
-        self.developerInfoButton.addTarget(self, action: #selector(moveToDeveloperInfo), for: .touchUpInside)
+        self.developerInfoButton.addTarget(self, action: #selector(self.moveToDeveloperInfo), for: .touchUpInside)
         self.makeButtonLayer(button: self.developerInfoButton, upperView: self.manageBuddyButton, constant: 15)
     }
 

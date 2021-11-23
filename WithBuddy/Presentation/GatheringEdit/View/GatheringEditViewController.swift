@@ -51,6 +51,8 @@ class GatheringEditViewController: UIViewController {
         return cell
     }
     
+    private lazy var deleteButton = UIButton()
+    
     weak var delegate: GatheringEditDelegate?
     private var gatheringEditViewModel = GatheringEditViewModel()
     private var cancellables: Set<AnyCancellable> = []
@@ -193,6 +195,7 @@ class GatheringEditViewController: UIViewController {
         self.configureBuddyPart()
         self.configureMemoPart()
         self.configurePicturePart()
+        self.configureDeleteButton()
     }
     
     private func configureScrollView() {
@@ -256,7 +259,7 @@ class GatheringEditViewController: UIViewController {
         self.datePicker.preferredDatePickerStyle = .compact
         self.datePicker.locale = Locale(identifier: "ko-KR")
         self.datePicker.timeZone = .autoupdatingCurrent
-        self.datePicker.addTarget(self, action: #selector(didDateChanged(_:)), for: .valueChanged)
+        self.datePicker.addTarget(self, action: #selector(self.didDateChanged), for: .valueChanged)
         
         self.datePicker.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -526,8 +529,7 @@ class GatheringEditViewController: UIViewController {
             self.pictureCollectionView.topAnchor.constraint(equalTo: self.pictureTitleLabel.bottomAnchor, constant: .innerPartInset),
             self.pictureCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
             self.pictureCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
-            self.pictureCollectionView.heightAnchor.constraint(equalTo: self.pictureCollectionView.widthAnchor),
-            self.pictureCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+            self.pictureCollectionView.heightAnchor.constraint(equalTo: self.pictureCollectionView.widthAnchor)
         ])
         
         self.pictureCollectionView.register(PictureCollectionViewCell.self, forCellWithReuseIdentifier: PictureCollectionViewCell.identifier)
@@ -550,6 +552,24 @@ class GatheringEditViewController: UIViewController {
         picker.delegate = self
         picker.sourceType = .photoLibrary
         present(picker, animated: true, completion: nil)
+    }
+    
+    // MARK: - DeleteButtonPart
+    
+    private func configureDeleteButton() {
+        self.contentView.addSubview(self.deleteButton)
+        self.deleteButton.backgroundColor = UIColor(named: "GraphRed")
+        self.deleteButton.layer.cornerRadius = .buttonCornerRadius
+        self.deleteButton.setTitle("모임 삭제", for: .normal)
+        self.deleteButton.addTarget(self, action: #selector(self.deleteGathering), for: .touchUpInside)
+        self.deleteButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.deleteButton.topAnchor.constraint(equalTo: self.pictureCollectionView.bottomAnchor, constant: .plusInset),
+            self.deleteButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.deleteButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
+            self.deleteButton.heightAnchor.constraint(equalToConstant: .backgroudHeight),
+            self.deleteButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+        ])
     }
     
     // MARK: - CompletePart
@@ -575,9 +595,23 @@ class GatheringEditViewController: UIViewController {
         self.gatheringEditViewModel.didDoneTouched()
     }
     
+    @objc private func deleteGathering() {
+        self.deleteButton.animateButtonTap(scale: 0.9)
+        let alert = UIAlertController(title: "모임 삭제", message: "정말로 삭제하시겠습니까?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+        let deleteAction = UIAlertAction(title: "OK", style: .destructive) { _ in
+            self.gatheringEditViewModel.didDeleteButtonTouched()
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        self.present(alert, animated: true)
+    }
+    
     @objc private func tapEmptySpace(){
         self.view.endEditing(true)
     }
+    
 }
 
 extension GatheringEditViewController: UICollectionViewDelegate {

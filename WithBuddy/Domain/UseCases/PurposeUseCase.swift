@@ -12,7 +12,7 @@ protocol PurposeUseCaseProtocol {
     func fetchTopFourPurpose() -> AnyPublisher<[String], Never>
 }
 
-final class PurposeUseCase {
+final class PurposeUseCase: PurposeUseCaseProtocol {
     
     private let coreDataManager: CoreDataManagable
     

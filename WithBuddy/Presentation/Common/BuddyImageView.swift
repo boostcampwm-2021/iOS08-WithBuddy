@@ -5,7 +5,7 @@
 //  Created by 이나정 on 2021/11/23.
 //
 
-import Foundation
+import UIKit
 
 class BuddyView: UIImageView {
     

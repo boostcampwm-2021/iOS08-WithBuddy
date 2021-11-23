@@ -11,7 +11,7 @@ final class UserUseCase {
     
     func createUser(buddy: Buddy) {
         do {
-            let encodedData = try NSKeyedArchiver.archivedData(withRootObject: buddy, requiringSecureCoding: false)
+            let encodedData = try JSONEncoder().encode(buddy)
             UserDefaults.standard.set(encodedData, forKey: "buddy")
         } catch {
             return
@@ -20,8 +20,8 @@ final class UserUseCase {
     
     func fetchUser() -> Buddy? {
         do {
-            guard let encodedData = UserDefaults.standard.data(forKey: "buddy"),
-                  let buddy = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(encodedData) as? Buddy else { return nil }
+            guard let encodedData = UserDefaults.standard.data(forKey: "buddy") else { return nil }
+            let buddy = try JSONDecoder().decode(Buddy.self, from: encodedData)
             return buddy
         } catch {
             return nil

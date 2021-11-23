@@ -12,6 +12,7 @@ final class UserCreateViewModel {
     
     @Published private(set) var buddy: Buddy?
     private(set) var editStartSignal = PassthroughSubject<Buddy?, Never>()
+    private(set) var completeSignal = PassthroughSubject<Buddy?, Never>()
     
     private var userUseCase = UserUseCase()
     
@@ -22,6 +23,10 @@ final class UserCreateViewModel {
     
     func editStart() {
         self.editStartSignal.send(self.buddy)
+    }
+    
+    func createComplte() {
+        self.completeSignal.send(self.buddy)
     }
     
 }

@@ -45,6 +45,8 @@ final class UserCreateViewController: UIViewController {
                 if let buddy = buddy  {
                     self.nameLabel.text = buddy.name
                     self.buddyImageView.image = UIImage(named: "\(buddy.face)")
+                    self.completeButton.backgroundColor = UIColor(named: "GraphPurple")
+                    self.completeButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
                 }
             }
             .store(in: &self.cancellables)
@@ -58,6 +60,18 @@ final class UserCreateViewController: UIViewController {
                     buddyCustomViewController.configure(by: buddy)
                 }
                 self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
+            }
+            .store(in: &self.cancellables)
+        
+        self.userCreateViewModel.completeSignal
+            .receive(on: DispatchQueue.main)
+            .sink { buddy in
+                if buddy != nil {
+                    let tabBarViewController = UINavigationController(rootViewController: TabBarViewController())
+                    tabBarViewController.modalTransitionStyle = .crossDissolve
+                    tabBarViewController.modalPresentationStyle = .fullScreen
+                    self.navigationController?.present(tabBarViewController, animated: true)
+                }
             }
             .store(in: &self.cancellables)
     }
@@ -135,10 +149,9 @@ final class UserCreateViewController: UIViewController {
     
     private func configureCompleteButton() {
         self.view.addSubview(self.completeButton)
-        self.completeButton.backgroundColor = .white
+        self.completeButton.backgroundColor = .systemGray3
         self.completeButton.layer.cornerRadius = 10
         self.completeButton.setTitle("내 캐릭터 생성 완료", for: .normal)
-        self.completeButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
         self.completeButton.addTarget(self, action: #selector(completeButtonTouched), for: .touchUpInside)
         
         self.completeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -151,7 +164,15 @@ final class UserCreateViewController: UIViewController {
     }
     
     @objc private func completeButtonTouched(_ sender: UIButton) {
-        self.navigationController?.pushViewController(TabBarViewController(), animated: true)
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.completeButton.transform = CGAffineTransform(scaleX: CGFloat(0.9), y: CGFloat(0.9))
+        } completion: { [weak self] _ in
+            UIView.animate(withDuration: 0.2) {
+                self?.completeButton.transform = CGAffineTransform.identity
+            } completion: { [weak self] _ in
+                self?.userCreateViewModel.createComplte()
+            }
+        }
     }
 
 }

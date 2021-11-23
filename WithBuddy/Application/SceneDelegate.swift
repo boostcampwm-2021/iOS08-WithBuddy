@@ -15,7 +15,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         _ = CoreDataManager.shared
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = UINavigationController(rootViewController: TabBarViewController())
+        if UserUseCase().fetchUser() != nil {
+            let tabBarViewController = TabBarViewController()
+            window?.rootViewController = UINavigationController(rootViewController: tabBarViewController)
+            tabBarViewController.configureLoading()
+        } else {
+            let userCreateViewController = UserCreateViewController()
+            window?.rootViewController = UINavigationController(rootViewController: userCreateViewController)
+            userCreateViewController.configureLoading()
+        }
         window?.makeKeyAndVisible()
     }
     

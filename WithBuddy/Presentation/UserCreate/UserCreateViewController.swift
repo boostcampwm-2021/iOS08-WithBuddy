@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 final class UserCreateViewController: UIViewController {
     
@@ -17,9 +18,13 @@ final class UserCreateViewController: UIViewController {
     private lazy var guideLabel = UILabel()
     private lazy var completeButton = UIButton()
     
+    private var userCreateViewModel = UserCreateViewModel()
+    private var cancellables: Set<AnyCancellable> = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configure()
+        self.bind()
     }
     
     private func configure() {
@@ -31,6 +36,57 @@ final class UserCreateViewController: UIViewController {
         self.configureEditButton()
         self.configureGuideLabel()
         self.configureCompleteButton()
+    }
+
+    func configureLoading() {
+        let loadingView = LoadingView()
+        self.view.addSubview(loadingView)
+        loadingView.backgroundColor = UIColor(named: "GraphPurple2")
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            loadingView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+        ])
+    }
+    
+    private func bind() {
+        self.userCreateViewModel.$buddy
+            .receive(on: DispatchQueue.main)
+            .sink { buddy in
+                if let buddy = buddy  {
+                    self.nameLabel.text = buddy.name
+                    self.buddyImageView.image = UIImage(named: "\(buddy.face)")
+                    self.completeButton.backgroundColor = UIColor(named: "GraphPurple")
+                    self.completeButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
+                }
+            }
+            .store(in: &self.cancellables)
+        
+        self.userCreateViewModel.editStartSignal
+            .receive(on: DispatchQueue.main)
+            .sink { buddy in
+                let buddyCustomViewController = BuddyCustomViewController()
+                buddyCustomViewController.delegate = self
+                if let buddy = buddy {
+                    buddyCustomViewController.configure(by: buddy)
+                }
+                self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
+            }
+            .store(in: &self.cancellables)
+        
+        self.userCreateViewModel.completeSignal
+            .receive(on: DispatchQueue.main)
+            .sink { buddy in
+                if buddy != nil {
+                    let tabBarViewController = UINavigationController(rootViewController: TabBarViewController())
+                    tabBarViewController.modalTransitionStyle = .crossDissolve
+                    tabBarViewController.modalPresentationStyle = .fullScreen
+                    self.navigationController?.present(tabBarViewController, animated: true)
+                }
+            }
+            .store(in: &self.cancellables)
     }
     
     private func configureTitleLabel() {
@@ -64,10 +120,6 @@ final class UserCreateViewController: UIViewController {
         self.stackView.addArrangedSubview(self.nameLabel)
         self.nameLabel.text = "아직 설정된 이름이 없어요"
         self.nameLabel.textAlignment = .center
-        
-        self.nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-        ])
     }
     
     private func configureBuddyImageView() {
@@ -87,8 +139,8 @@ final class UserCreateViewController: UIViewController {
         self.editButton.layer.borderColor = UIColor(named: "LabelPurple")?.cgColor
         self.editButton.layer.cornerRadius = 10
         self.editButton.setTitle("캐릭터 수정하기", for: .normal)
-//        }
         self.editButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
+        self.editButton.addTarget(self, action: #selector(self.editButtonTouched), for: .touchUpInside)
         
         self.editButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -97,23 +149,23 @@ final class UserCreateViewController: UIViewController {
         ])
     }
     
+    @objc private func editButtonTouched(_ sender: UIButton) {
+        self.userCreateViewModel.editStart()
+    }
+    
     private func configureGuideLabel() {
         self.stackView.addArrangedSubview(self.guideLabel)
         self.guideLabel.text = "내 이름과 캐릭터는 언제든지 변경할 수 있어요!"
         self.guideLabel.adjustsFontSizeToFitWidth = true
         self.guideLabel.textAlignment = .center
-        
-        self.guideLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-        ])
     }
     
     private func configureCompleteButton() {
         self.view.addSubview(self.completeButton)
-        self.completeButton.backgroundColor = .white
+        self.completeButton.backgroundColor = .systemGray3
         self.completeButton.layer.cornerRadius = 10
         self.completeButton.setTitle("내 캐릭터 생성 완료", for: .normal)
-        self.completeButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
+        self.completeButton.addTarget(self, action: #selector(self.completeButtonTouched), for: .touchUpInside)
         
         self.completeButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -123,5 +175,27 @@ final class UserCreateViewController: UIViewController {
             self.completeButton.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
+    
+    @objc private func completeButtonTouched(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.completeButton.transform = CGAffineTransform(scaleX: CGFloat(0.9), y: CGFloat(0.9))
+        } completion: { [weak self] _ in
+            UIView.animate(withDuration: 0.2) {
+                self?.completeButton.transform = CGAffineTransform.identity
+            } completion: { [weak self] _ in
+                self?.userCreateViewModel.createComplte()
+            }
+        }
+    }
 
+}
+
+extension UserCreateViewController: BuddyCustomDelegate {
+    func buddyEditDidCompleted(_ buddy: Buddy) {
+        self.userCreateViewModel.userDidChanged(buddy: buddy)
+    }
+    
+    func buddyAddDidCompleted(_ buddy: Buddy) {
+        self.userCreateViewModel.userDidChanged(buddy: buddy)
+    }
 }

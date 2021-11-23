@@ -30,15 +30,13 @@ class BuddyCustomViewModel {
         self.id = buddy.id
         self.name = buddy.name
         
-        var buddyColor = buddy.face
-        buddyColor.removeLast()
-        for color in FaceColor.allCases where color.description == buddyColor {
+        let faceColor = buddy.face.filter({ $0.isLetter })
+        for color in FaceColor.allCases where color.description == faceColor {
             self.face.color = color
         }
         
-        if let buddyFaceLastCharecter = buddy.face.last,
-           let buddyFaceNumber = Int(String(buddyFaceLastCharecter)) {
-            self.face.number = buddyFaceNumber
+        if let faceNumber = Int(buddy.face.filter({ $0.isNumber })) {
+            self.face.number = faceNumber
         }
     }
     

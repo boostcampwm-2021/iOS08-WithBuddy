@@ -7,11 +7,13 @@
 
 import Foundation
 
-struct Buddy: Hashable {
+struct Buddy: Hashable, Codable {
+    
     var id: UUID
     var name: String
     var face: String
     var check: Bool?
+    
 }
 
 extension Buddy: Comparable {

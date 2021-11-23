@@ -188,7 +188,7 @@ extension BuddyManageViewController: BuddyCustomDelegate {
         self.buddyManageViewModel.buddyDidEdited(buddy)
     }
     
-    func buddyCustomDidCompleted(_ buddy: Buddy) {
+    func buddyAddDidCompleted(_ buddy: Buddy) {
         self.buddyManageViewModel.buddyDidAdded(buddy)
     }
 }

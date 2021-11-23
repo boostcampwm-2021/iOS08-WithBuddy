@@ -138,17 +138,11 @@ class SettingViewController: UIViewController {
     }
     
     @objc private func moveToBuddyManage(_ sender: UIButton) {
-        self.manageBuddyButton.animateButtonTap(scale: 0.9)
-        self.tabBarController?.dismiss(animated: true, completion: {
-            self.navigationController?.pushViewController(BuddyManageViewController(), animated: true)
-        })
+        self.navigationController?.pushViewController(BuddyManageViewController(), animated: true)
     }
     
     @objc private func moveToDeveloperInfo(_ sender: UIButton) {
-        self.developerInfoButton.animateButtonTap(scale: 0.9)
-        self.tabBarController?.dismiss(animated: true, completion: {
-            self.navigationController?.pushViewController(DeveloperInfoViewController(), animated: true)
-        })
+        self.navigationController?.pushViewController(DeveloperInfoViewController(), animated: true)
     }
     
 }

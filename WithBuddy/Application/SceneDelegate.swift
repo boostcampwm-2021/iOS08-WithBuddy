@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         _ = CoreDataManager.shared
         window = UIWindow(windowScene: windowScene)
-        if let _ = UserUseCase().fetchUser() {
+        if UserUseCase().fetchUser() != nil {
             let tabBarViewController = TabBarViewController()
             window?.rootViewController = UINavigationController(rootViewController: tabBarViewController)
             tabBarViewController.configureLoading()

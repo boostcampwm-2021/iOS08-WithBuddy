@@ -140,7 +140,7 @@ final class UserCreateViewController: UIViewController {
         self.editButton.layer.cornerRadius = 10
         self.editButton.setTitle("캐릭터 수정하기", for: .normal)
         self.editButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
-        self.editButton.addTarget(self, action: #selector(editButtonTouched), for: .touchUpInside)
+        self.editButton.addTarget(self, action: #selector(self.editButtonTouched), for: .touchUpInside)
         
         self.editButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -165,7 +165,7 @@ final class UserCreateViewController: UIViewController {
         self.completeButton.backgroundColor = .systemGray3
         self.completeButton.layer.cornerRadius = 10
         self.completeButton.setTitle("내 캐릭터 생성 완료", for: .normal)
-        self.completeButton.addTarget(self, action: #selector(completeButtonTouched), for: .touchUpInside)
+        self.completeButton.addTarget(self, action: #selector(self.completeButtonTouched), for: .touchUpInside)
         
         self.completeButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

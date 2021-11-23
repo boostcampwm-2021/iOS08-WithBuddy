@@ -80,9 +80,7 @@ class SettingViewController: UIViewController {
     
     @objc private func moveToBuddyCustom(_ sender: UIButton) {
         self.modifyButton.animateButtonTap(scale: 0.9)
-        self.tabBarController?.dismiss(animated: true, completion: {
-            self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
-        })
+        self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
     }
     
     private func configureButtons() {

@@ -82,7 +82,7 @@ class BuddyCustomViewController: UIViewController {
         self.buddyCustomViewModel.addDoneSignal
             .receive(on: DispatchQueue.main)
             .sink{ buddy in
-                self.delegate?.buddyCustomDidCompleted(buddy)
+                self.delegate?.buddyAddDidCompleted(buddy)
                 self.navigationController?.popViewController(animated: true)
             }
             .store(in: &self.cancellables)
@@ -299,6 +299,6 @@ extension BuddyCustomViewController: UITextFieldDelegate {
 }
 
 protocol BuddyCustomDelegate: AnyObject {
-    func buddyCustomDidCompleted(_: Buddy)
+    func buddyAddDidCompleted(_: Buddy)
     func buddyEditDidCompleted(_: Buddy)
 }

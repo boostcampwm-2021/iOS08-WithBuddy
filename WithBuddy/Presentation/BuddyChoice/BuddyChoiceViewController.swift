@@ -219,7 +219,7 @@ extension BuddyChoiceViewController: BuddyCustomDelegate {
         self.buddyChoiceViewModel.buddyDidEdited(buddy)
     }
     
-    func buddyCustomDidCompleted(_ buddy: Buddy) {
+    func buddyAddDidCompleted(_ buddy: Buddy) {
         self.buddyChoiceViewModel.buddyDidAdded(buddy)
     }
 }

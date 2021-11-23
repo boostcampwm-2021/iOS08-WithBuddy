@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 final class UserCreateViewController: UIViewController {
     
@@ -17,9 +18,13 @@ final class UserCreateViewController: UIViewController {
     private lazy var guideLabel = UILabel()
     private lazy var completeButton = UIButton()
     
+    private var userCreateViewModel = UserCreateViewModel()
+    private var cancellables: Set<AnyCancellable> = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configure()
+        self.bind()
     }
     
     private func configure() {
@@ -31,6 +36,30 @@ final class UserCreateViewController: UIViewController {
         self.configureEditButton()
         self.configureGuideLabel()
         self.configureCompleteButton()
+    }
+    
+    private func bind() {
+        self.userCreateViewModel.$user
+            .receive(on: DispatchQueue.main)
+            .sink { buddy in
+                if let buddy = buddy  {
+                    self.nameLabel.text = buddy.name
+                    self.buddyImageView.image = UIImage(named: "\(buddy.face)")
+                }
+            }
+            .store(in: &self.cancellables)
+        
+        self.userCreateViewModel.editStartSignal
+            .receive(on: DispatchQueue.main)
+            .sink { buddy in
+                let buddyCustomViewController = BuddyCustomViewController()
+                buddyCustomViewController.delegate = self
+                if let buddy = buddy {
+                    buddyCustomViewController.configure(by: buddy)
+                }
+                self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
+            }
+            .store(in: &self.cancellables)
     }
     
     private func configureTitleLabel() {
@@ -87,14 +116,18 @@ final class UserCreateViewController: UIViewController {
         self.editButton.layer.borderColor = UIColor(named: "LabelPurple")?.cgColor
         self.editButton.layer.cornerRadius = 10
         self.editButton.setTitle("캐릭터 수정하기", for: .normal)
-//        }
         self.editButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
+        self.editButton.addTarget(self, action: #selector(editButtonTouched), for: .touchUpInside)
         
         self.editButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.editButton.widthAnchor.constraint(equalToConstant: 150),
             self.editButton.heightAnchor.constraint(equalToConstant: 40)
         ])
+    }
+    
+    @objc private func editButtonTouched(_ sender: UIButton) {
+        self.userCreateViewModel.editStart()
     }
     
     private func configureGuideLabel() {
@@ -124,4 +157,14 @@ final class UserCreateViewController: UIViewController {
         ])
     }
 
+}
+
+extension UserCreateViewController: BuddyCustomDelegate {
+    func buddyEditDidCompleted(_ buddy: Buddy) {
+        self.userCreateViewModel.userDidChanged(user: buddy)
+    }
+    
+    func buddyAddDidCompleted(_ buddy: Buddy) {
+        self.userCreateViewModel.userDidChanged(user: buddy)
+    }
 }

@@ -18,7 +18,6 @@ final class UserCreateViewModel {
     
     func userDidChanged(buddy: Buddy) {
         self.buddy = buddy
-        self.userUseCase.createUser(buddy: buddy)
     }
     
     func editStart() {
@@ -27,6 +26,9 @@ final class UserCreateViewModel {
     
     func createComplte() {
         self.completeSignal.send(self.buddy)
+        if let buddy = self.buddy {
+            self.userUseCase.createUser(buddy: buddy)
+        }
     }
     
 }

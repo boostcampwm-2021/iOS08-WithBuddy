@@ -28,6 +28,8 @@
 		8A07DF692743C20A008F6E58 /* GatheringEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07DF662743C20A008F6E58 /* GatheringEditViewModel.swift */; };
 		8A07DF6A2743C20A008F6E58 /* GatheringEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07DF682743C20A008F6E58 /* GatheringEditViewController.swift */; };
 		8A07DF6D2743C21B008F6E58 /* GatheringDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07DF6C2743C21B008F6E58 /* GatheringDetailViewModel.swift */; };
+		8A397A2A274B8AAB0060443C /* UserCreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A397A29274B8AAB0060443C /* UserCreateViewController.swift */; };
+		8A397A2C274B8AE80060443C /* UserCreateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A397A2B274B8AE80060443C /* UserCreateViewModel.swift */; };
 		8A52C4F6273947E50025C562 /* defaultImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A52C4F5273947E50025C562 /* defaultImage.png */; };
 		8A53C22F273B9EB200BB0C20 /* BuddyCustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A53C22E273B9EB200BB0C20 /* BuddyCustomViewController.swift */; };
 		8A6320B527415A85006BB1C0 /* CGFloat+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6320B427415A85006BB1C0 /* CGFloat+Extension.swift */; };
@@ -98,6 +100,8 @@
 		8A07DF662743C20A008F6E58 /* GatheringEditViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GatheringEditViewModel.swift; sourceTree = "<group>"; };
 		8A07DF682743C20A008F6E58 /* GatheringEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GatheringEditViewController.swift; sourceTree = "<group>"; };
 		8A07DF6C2743C21B008F6E58 /* GatheringDetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GatheringDetailViewModel.swift; sourceTree = "<group>"; };
+		8A397A29274B8AAB0060443C /* UserCreateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCreateViewController.swift; sourceTree = "<group>"; };
+		8A397A2B274B8AE80060443C /* UserCreateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCreateViewModel.swift; sourceTree = "<group>"; };
 		8A52C4F5273947E50025C562 /* defaultImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultImage.png; sourceTree = "<group>"; };
 		8A53C22E273B9EB200BB0C20 /* BuddyCustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyCustomViewController.swift; sourceTree = "<group>"; };
 		8A6320B427415A85006BB1C0 /* CGFloat+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extension.swift"; sourceTree = "<group>"; };
@@ -245,6 +249,15 @@
 				8A07DF6C2743C21B008F6E58 /* GatheringDetailViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		8A397A28274B8A7C0060443C /* UserCreate */ = {
+			isa = PBXGroup;
+			children = (
+				8A397A29274B8AAB0060443C /* UserCreateViewController.swift */,
+				8A397A2B274B8AE80060443C /* UserCreateViewModel.swift */,
+			);
+			path = UserCreate;
 			sourceTree = "<group>";
 		};
 		8A53C22D273B9E5E00BB0C20 /* BuddyCustom */ = {
@@ -397,6 +410,7 @@
 			isa = PBXGroup;
 			children = (
 				BBF7FF41272FB95400B71C97 /* Common */,
+				8A397A28274B8A7C0060443C /* UserCreate */,
 				85FA1D91272FEAE500825C64 /* Calendar */,
 				F7E8ABC2273BB7A6005F8306 /* Calendardetail */,
 				BB2D255B2731315900E7BF35 /* Chart */,
@@ -651,6 +665,7 @@
 				85D262E8273CD703000190B8 /* PurposeChartView.swift in Sources */,
 				BBF7FF40272FB7B700B71C97 /* TabBarViewController.swift in Sources */,
 				BB2D254B2730D97000E7BF35 /* PlaceType.swift in Sources */,
+				8A397A2A274B8AAB0060443C /* UserCreateViewController.swift in Sources */,
 				BB2D255E2731317100E7BF35 /* SettingViewController.swift in Sources */,
 				8A73D67E273A6C4B001D5184 /* BuddyChoiceViewModel.swift in Sources */,
 				854AA75E27337A7200663911 /* SearchView.swift in Sources */,
@@ -680,6 +695,7 @@
 				8A73D679273A61EC001D5184 /* BuddyChoiceViewController.swift in Sources */,
 				854AA7662733A37200663911 /* ListViewModel.swift in Sources */,
 				85D262F0273CE740000190B8 /* NameLabel.swift in Sources */,
+				8A397A2C274B8AE80060443C /* UserCreateViewModel.swift in Sources */,
 				BB2D258F2739299A00E7BF35 /* CoreDataManager.swift in Sources */,
 				BB2D25A5273A58A100E7BF35 /* GatheringUseCase.swift in Sources */,
 			);

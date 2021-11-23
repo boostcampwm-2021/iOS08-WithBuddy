@@ -76,7 +76,7 @@ final class ListViewController: UIViewController {
         let panGesture = UIPanGestureRecognizer()
         panGesture.delegate = self
         self.listTableView.addGestureRecognizer(panGesture)
-        self.listTableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+        self.listTableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:))))
         
         self.listTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

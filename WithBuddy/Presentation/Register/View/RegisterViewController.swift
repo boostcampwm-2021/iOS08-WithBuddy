@@ -213,7 +213,7 @@ class RegisterViewController: UIViewController {
         self.datePicker.preferredDatePickerStyle = .compact
         self.datePicker.locale = Locale(identifier: "ko-KR")
         self.datePicker.timeZone = .autoupdatingCurrent
-        self.datePicker.addTarget(self, action: #selector(didDateChanged(_:)), for: .valueChanged)
+        self.datePicker.addTarget(self, action: #selector(self.didDateChanged(_:)), for: .valueChanged)
         
         self.datePicker.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

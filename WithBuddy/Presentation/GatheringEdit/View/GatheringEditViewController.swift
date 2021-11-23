@@ -259,7 +259,7 @@ class GatheringEditViewController: UIViewController {
         self.datePicker.preferredDatePickerStyle = .compact
         self.datePicker.locale = Locale(identifier: "ko-KR")
         self.datePicker.timeZone = .autoupdatingCurrent
-        self.datePicker.addTarget(self, action: #selector(didDateChanged(_:)), for: .valueChanged)
+        self.datePicker.addTarget(self, action: #selector(self.didDateChanged), for: .valueChanged)
         
         self.datePicker.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -561,7 +561,7 @@ class GatheringEditViewController: UIViewController {
         self.deleteButton.backgroundColor = UIColor(named: "GraphRed")
         self.deleteButton.layer.cornerRadius = .buttonCornerRadius
         self.deleteButton.setTitle("모임 삭제", for: .normal)
-        self.deleteButton.addTarget(self, action: #selector(deleteGathering), for: .touchUpInside)
+        self.deleteButton.addTarget(self, action: #selector(self.deleteGathering), for: .touchUpInside)
         self.deleteButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.deleteButton.topAnchor.constraint(equalTo: self.pictureCollectionView.bottomAnchor, constant: .plusInset),

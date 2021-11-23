@@ -9,6 +9,7 @@ import UIKit
 
 final class TabBarViewController: UITabBarController {
     
+    private var loadingView = LoadingView()
     private var registerButton = UIButton()
     private var prevIndex = 0
     
@@ -33,6 +34,19 @@ final class TabBarViewController: UITabBarController {
     private func configure() {
         self.configureTabBarItems()
         self.configureButton()
+        self.configureLoading()
+    }
+
+    private func configureLoading() {
+        self.view.addSubview(self.loadingView)
+        self.loadingView.backgroundColor = UIColor(named: "GraphPurple2")
+        self.loadingView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.loadingView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            self.loadingView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            self.loadingView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.loadingView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+        ])
     }
     
     private func configureTabBarItems() {

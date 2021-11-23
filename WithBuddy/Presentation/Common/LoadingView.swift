@@ -10,11 +10,10 @@ import UIKit
 class LoadingView: UIView {
 
     private var titleLabel = UILabel()
-    private var loadingView = UIView()
-    let lazyBehavior = UIDynamicItemBehavior()
+    private var lazyBehavior = UIDynamicItemBehavior()
 
     lazy var animator: UIDynamicAnimator = {
-        return UIDynamicAnimator(referenceView: self.loadingView)
+        return UIDynamicAnimator(referenceView: self)
     }()
 
     lazy var gravity: UIGravityBehavior = {
@@ -36,8 +35,8 @@ class LoadingView: UIView {
         return lazyBehavior
     }()
     
-    override init() {
-        super.init()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         self.configure()
     }
     
@@ -47,25 +46,12 @@ class LoadingView: UIView {
     }
 
     private func configure() {
-        self.configureBackground()
         self.configureTitle()
         self.addFaces()
     }
     
-    func configureBackground() {
-        self.addSubview(self.loadingView)
-        self.backgroundColor = UIColor(named: "GraphPurple2")
-        self.loadingView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.loadingView.topAnchor.constraint(equalTo: self.topAnchor),
-            self.loadingView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -100),
-            self.loadingView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            self.loadingView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-        ])
-    }
-
-    func configureTitle() {
-        self.loadingView.addSubview(self.titleLabel)
+    private func configureTitle() {
+        self.addSubview(self.titleLabel)
         self.titleLabel.text = "위드버디"
         self.animateBboing()
         self.titleLabel.font = UIFont(name: "Cafe24Ssurround", size: 60)
@@ -78,10 +64,10 @@ class LoadingView: UIView {
         ])
     }
     
-    func addFaces() {
+    private func addFaces() {
         let fallingBuddys = ["FaceBlue1", "FaceGreen2", "FaceRed3", "FacePink4", "FaceYellow5"]
-        let width = self.bounds.width
-        let fallingPosition = [CGPoint(x: width * 0.3, y: 20), CGPoint(x: width * 0.4, y: 15), CGPoint(x: width * 0.7, y: 20), CGPoint(x: width * 0.4, y: -10), CGPoint(x: width * 0.6, y: -10)]
+        let width = UIScreen.main.bounds.width
+        let fallingPosition = [CGPoint(x: width * 0.2, y: 30), CGPoint(x: width * 0.3, y: 10), CGPoint(x: width * 0.45, y: 20), CGPoint(x: width * 0.6, y: 20), CGPoint(x: width * 0.7, y: 40)]
         
         for idx in 0..<fallingBuddys.count {
             let squareSize = CGSize(width: .fallingBuddySize, height: .fallingBuddySize)
@@ -90,12 +76,12 @@ class LoadingView: UIView {
             let dropFace = BuddyView()
             dropFace.image = UIImage(named: fallingBuddys[idx])
             dropFace.frame = frame
-            self.loadingView.addSubview(dropFace)
+            self.addSubview(dropFace)
             self.configureAnimation(face: dropFace)
         }
    }
     
-    func configureAnimation(face: UIImageView) {
+    private func configureAnimation(face: UIImageView) {
         self.animator.addBehavior(self.gravity)
         self.animator.addBehavior(self.collider)
         self.animator.addBehavior(self.dynamicItemBehavior)
@@ -104,7 +90,7 @@ class LoadingView: UIView {
         self.dynamicItemBehavior.addItem(face)
     }
     
-    func animateBboing() {
+    private func animateBboing() {
         UIView.animate(withDuration: 0.7) { [weak self] in
             self?.titleLabel.transform = CGAffineTransform(scaleX: CGFloat(2), y: CGFloat(2))
         } completion: { [weak self] _ in
@@ -129,7 +115,11 @@ class LoadingView: UIView {
                                     UIView.animate(withDuration: 0.3) { [weak self] in
                                         self?.titleLabel.transform = CGAffineTransform.identity
                                     } completion: { [weak self] _ in
-                                        self?.removeFromSuperview()
+                                        UIView.animate(withDuration: 1, animations: {
+                                            self?.alpha = 0
+                                        }, completion: { _ in
+                                            self?.removeFromSuperview()
+                                        })
                                     }
                                 }
                             }
@@ -138,18 +128,6 @@ class LoadingView: UIView {
                 }
             }
         }
-    }
-    
-}
-
-class BuddyView: UIImageView {
-    override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
-        return .ellipse
-    }
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.layer.cornerRadius = bounds.height * 0.5
-        self.layer.masksToBounds = true
     }
     
 }

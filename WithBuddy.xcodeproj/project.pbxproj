@@ -61,6 +61,7 @@
 		BBF7FF47272FC78100B71C97 /* Cafe24Ssurround.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF46272FC78100B71C97 /* Cafe24Ssurround.ttf */; };
 		BBF7FF49272FC78C00B71C97 /* Cafe24SsurroundAir.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF48272FC78C00B71C97 /* Cafe24SsurroundAir.ttf */; };
 		BBF7FF4C272FD7F200B71C97 /* withBuddyLaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF4B272FD7F200B71C97 /* withBuddyLaunchScreen.png */; };
+		F78EE745274CDEB000948960 /* BuddyImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78EE744274CDEB000948960 /* BuddyImageView.swift */; };
 		F78F14962743A5C90034E740 /* BuddyManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78F14952743A5C90034E740 /* BuddyManageViewController.swift */; };
 		F78F14992743A6200034E740 /* DeveloperInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78F14982743A6200034E740 /* DeveloperInfoViewController.swift */; };
 		F78F149B2743C1CF0034E740 /* BuddyManageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78F149A2743C1CF0034E740 /* BuddyManageViewModel.swift */; };
@@ -142,6 +143,7 @@
 		BBF7FF46272FC78100B71C97 /* Cafe24Ssurround.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cafe24Ssurround.ttf; sourceTree = "<group>"; };
 		BBF7FF48272FC78C00B71C97 /* Cafe24SsurroundAir.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cafe24SsurroundAir.ttf; sourceTree = "<group>"; };
 		BBF7FF4B272FD7F200B71C97 /* withBuddyLaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = withBuddyLaunchScreen.png; sourceTree = "<group>"; };
+		F78EE744274CDEB000948960 /* BuddyImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyImageView.swift; sourceTree = "<group>"; };
 		F78F14952743A5C90034E740 /* BuddyManageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyManageViewController.swift; sourceTree = "<group>"; };
 		F78F14982743A6200034E740 /* DeveloperInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperInfoViewController.swift; sourceTree = "<group>"; };
 		F78F149A2743C1CF0034E740 /* BuddyManageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyManageViewModel.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 				854AA76327338C2F00663911 /* ListTableViewCell.swift */,
 				85D262ED273CE6DD000190B8 /* WhiteView.swift */,
 				854AA75D27337A7200663911 /* SearchView.swift */,
+				F78EE744274CDEB000948960 /* BuddyImageView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -713,12 +716,13 @@
 				F78F149B2743C1CF0034E740 /* BuddyManageViewModel.swift in Sources */,
 				8A73D679273A61EC001D5184 /* BuddyChoiceViewController.swift in Sources */,
 				854AA7662733A37200663911 /* ListViewModel.swift in Sources */,
-				85D262F0273CE740000190B8 /* NameLabel.swift in Sources */,
+				85D262F0273CE740000190B8 /* PurpleTitleLabel.swift in Sources */,
 				8A397A2C274B8AE80060443C /* UserCreateViewModel.swift in Sources */,
 				85D262F0273CE740000190B8 /* PurpleTitleLabel.swift in Sources */,
 				BB2D258F2739299A00E7BF35 /* CoreDataManager.swift in Sources */,
 				BB1936D3274B8F50007EF21A /* PurposeUseCase.swift in Sources */,
 				BB2D25A5273A58A100E7BF35 /* GatheringUseCase.swift in Sources */,
+				F78EE745274CDEB000948960 /* BuddyImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

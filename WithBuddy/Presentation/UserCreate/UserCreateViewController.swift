@@ -37,6 +37,19 @@ final class UserCreateViewController: UIViewController {
         self.configureGuideLabel()
         self.configureCompleteButton()
     }
+
+    func configureLoading() {
+        let loadingView = LoadingView()
+        self.view.addSubview(loadingView)
+        loadingView.backgroundColor = UIColor(named: "GraphPurple2")
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            loadingView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+        ])
+    }
     
     private func bind() {
         self.userCreateViewModel.$buddy

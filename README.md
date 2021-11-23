@@ -26,9 +26,9 @@
 
 ## 📱 Preview
 
-|런치스크린|일정화면|통계화면|
+|로딩화면|일정화면|통계화면|
 |:-:|:-:|:-:|
-|<img src="https://i.imgur.com/xinOxfq.gif" width=270>|<img src="https://i.imgur.com/95TXoeI.gif" width=200>|<img src="https://i.imgur.com/jw1IzoN.gif" width=200>|
+|<img src="https://user-images.githubusercontent.com/55748244/142988296-9d8cb2c0-6d72-4b5b-ac6a-7f7e3dab8a2f.gif" width=270>|<img src="https://i.imgur.com/95TXoeI.gif" width=200>|<img src="https://i.imgur.com/jw1IzoN.gif" width=200>|
 ||사용자가 등록한 모임에 대한 내용을 달력화면에서 한번에 확인할 수 있습니다.|사용자가 등록한 모임들에 대한 다양한 통계를 확인할 수 있습니다.|
 
 <!--

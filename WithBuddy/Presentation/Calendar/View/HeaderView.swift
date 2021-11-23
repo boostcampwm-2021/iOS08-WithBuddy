@@ -10,7 +10,7 @@ import UIKit
 class HeaderView: UIView {
     
     private let userFaceImageView = UIImageView()
-    private let userCommentLabel = UILabel()
+    private let userCommentLabel = PurpleLabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,8 +42,6 @@ class HeaderView: UIView {
     private func configureUserCommentLabel() {
         self.addSubview(userCommentLabel)
         self.userCommentLabel.numberOfLines = 0
-        self.userCommentLabel.textColor = UIColor(named: "LabelPurple")
-        self.userCommentLabel.font = .systemFont(ofSize: 15)
         self.userCommentLabel.text = "7일간 약속이 없어요ㅠㅠ\n버디와 새로운 약속을 만들어보아요!"
         self.userCommentLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

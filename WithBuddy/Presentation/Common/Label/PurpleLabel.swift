@@ -1,13 +1,13 @@
 //
-//  RegisterTitleLabel.swift
+//  PurpleLabel.swift
 //  WithBuddy
 //
-//  Created by Inwoo Park on 2021/11/15.
+//  Created by 박정아 on 2021/11/22.
 //
 
 import UIKit
 
-final class RegisterTitleLabel: UILabel {
+class PurpleLabel: UILabel {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,7 +20,7 @@ final class RegisterTitleLabel: UILabel {
     }
     
     private func configure() {
-        self.font = .systemFont(ofSize: 20)
+        self.font = .systemFont(ofSize: .labelSize)
         self.textColor = UIColor(named: "LabelPurple")
     }
 

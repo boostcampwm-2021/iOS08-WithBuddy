@@ -1,5 +1,5 @@
 //
-//  NameLabel.swift
+//  BlackTitleLabel.swift
 //  WithBuddy
 //
 //  Created by 박정아 on 2021/11/11.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NameLabel: UILabel {
+final class BlackTitleLabel: UILabel {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,8 +20,8 @@ final class NameLabel: UILabel {
     }
     
     private func configure() {
-        self.font = .boldSystemFont(ofSize: 18)
-        self.textColor = UIColor(named: "LabelPurple")
+        self.font = .systemFont(ofSize: .titleLabelSize)
+        self.textColor = .label
     }
 
 }

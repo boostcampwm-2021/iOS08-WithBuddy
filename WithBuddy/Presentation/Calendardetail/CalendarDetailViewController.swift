@@ -10,7 +10,7 @@ import Combine
 
 class CalendarDetailViewController: UIViewController {
     
-    private lazy var detailLabel = UILabel()
+    private lazy var detailLabel = PurpleTitleLabel()
     private lazy var detailTableView = UITableView()
     private var calendarDetailViewModel: CalendarDetailViewModel
     private var cancellables: Set<AnyCancellable> = []
@@ -55,9 +55,6 @@ class CalendarDetailViewController: UIViewController {
     
     private func configureDetailLabel() {
         self.view.addSubview(self.detailLabel)
-        self.detailLabel.font = .boldSystemFont(ofSize: 20)
-        self.detailLabel.textColor = UIColor(named: "LabelPurple")
-        
         self.detailLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.detailLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 15),

@@ -9,8 +9,8 @@ import UIKit
 
 final class LatestOldChartView: UIView {
     
-    private let nameLabel = NameLabel()
-    private let titleLabel = TitleLabel()
+    private let nameLabel = PurpleTitleLabel()
+    private let titleLabel = BlackTitleLabel()
     private let whiteView = WhiteView()
     private let stackView = UIStackView()
     private let latestView = LatestOldView()

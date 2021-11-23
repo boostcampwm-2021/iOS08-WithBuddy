@@ -17,7 +17,7 @@ class BuddyCustomViewController: UIViewController {
     private var lineView = UIView()
     private var buddyImageView = UIImageView()
     
-    private var colorTitleLabel = TitleLabel()
+    private var colorTitleLabel = BlackTitleLabel()
     private var colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     private lazy var colorDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.colorCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as? ImageCollectionViewCell else { preconditionFailure() }
@@ -25,7 +25,7 @@ class BuddyCustomViewController: UIViewController {
         return cell
     }
     
-    private var faceTitleLabel = TitleLabel()
+    private var faceTitleLabel = BlackTitleLabel()
     private var faceCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     private lazy var faceDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.faceCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as? ImageCollectionViewCell else { preconditionFailure() }
@@ -198,7 +198,7 @@ class BuddyCustomViewController: UIViewController {
         self.colorCollectionView.addGestureRecognizer(tap)
         
         let flowLayout = UICollectionViewFlowLayout()
-        let width = (self.view.frame.width - (.outsideLeadingInset * 2))/6 - .innerPartInset
+        let width = (self.view.frame.width - (.plusInset * 2))/6 - .innerPartInset
         flowLayout.itemSize = CGSize(width: width, height: width)
         flowLayout.scrollDirection = .horizontal
         self.colorCollectionView.collectionViewLayout = flowLayout
@@ -238,7 +238,7 @@ class BuddyCustomViewController: UIViewController {
         self.faceCollectionView.addGestureRecognizer(tap)
 
         let flowLayout = UICollectionViewFlowLayout()
-        let width = (self.view.frame.width - (.outsideLeadingInset * 2))/5 - .innerPartInset
+        let width = (self.view.frame.width - (.plusInset * 2))/5 - .innerPartInset
         let totalHeight = width*3 + 20
         flowLayout.itemSize = CGSize(width: width, height: width)
         self.faceCollectionView.collectionViewLayout = flowLayout

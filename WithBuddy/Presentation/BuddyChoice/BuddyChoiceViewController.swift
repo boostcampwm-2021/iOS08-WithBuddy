@@ -94,7 +94,7 @@ class BuddyChoiceViewController: UIViewController {
         NSLayoutConstraint.activate([
             self.addButton.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: 10),
             self.addButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.addButton.heightAnchor.constraint(equalToConstant: .buddyWidth),
+            self.addButton.heightAnchor.constraint(equalToConstant: .buddyAndPurposeWidth),
             self.addButton.widthAnchor.constraint(equalTo: self.addButton.heightAnchor)
         ])
     }

@@ -147,8 +147,12 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         )
         calendarDetailViewController.delegate = self
         
-        if let presentationController = calendarDetailViewController.presentationController as? UISheetPresentationController {
-            presentationController.detents = [.medium(), .large()]
+        if #available(iOS 15.0, *) {
+            if let presentationController = calendarDetailViewController.presentationController as? UISheetPresentationController {
+                presentationController.detents = [.medium(), .large()]
+            }
+        } else {
+            calendarDetailViewController.modalPresentationStyle = .formSheet
         }
         
         self.present(calendarDetailViewController, animated: true)

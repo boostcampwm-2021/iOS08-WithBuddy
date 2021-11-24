@@ -276,7 +276,6 @@ class GatheringEditViewController: UIViewController {
     private func configureDatePicker() {
         self.dateBackgroundView.addSubview(self.datePicker)
         self.datePicker.datePickerMode = .dateAndTime
-        self.datePicker.preferredDatePickerStyle = .compact
         self.datePicker.locale = Locale(identifier: "ko-KR")
         self.datePicker.timeZone = .autoupdatingCurrent
         self.datePicker.addTarget(self, action: #selector(self.didDateChanged), for: .valueChanged)

@@ -23,10 +23,19 @@ protocol CoreDataManagable {
     func updateGathering(_ gathering: Gathering)
     func deleteGathering(_ gatheringId: UUID)
     func fetchPurpose() -> AnyPublisher<[PurposeEntity], Never>
+    func deleteAllGathering() -> AnyPublisher<Void, CoreDataManager.CoreDataError>
     
 }
 
 final class CoreDataManager {
+    
+    enum CoreDataError: LocalizedError {
+        case deleteFail
+        
+        var errorDescription: String? {
+            return "삭제에 실패하셨습니다."
+        }
+    }
     
     static let shared = CoreDataManager()
     let calendarUseCase = CalendarUseCase()
@@ -236,6 +245,19 @@ extension CoreDataManager: CoreDataManagable {
                 lhs.gatheringList.count > rhs.gatheringList.count
             })}
             .eraseToAnyPublisher()
+    }
+    
+    func deleteAllGathering() -> AnyPublisher<Void, CoreDataError> {
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: GatheringEntity.fetchRequest())
+        
+        return Future { promise in
+            do {
+                try self.context.execute(deleteRequest)
+                promise(.success(()))
+            } catch {
+                promise(.failure(.deleteFail))
+            }
+        }.eraseToAnyPublisher()
     }
     
 }

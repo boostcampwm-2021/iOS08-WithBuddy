@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 final class GatheringUseCase {
     
@@ -41,6 +42,11 @@ final class GatheringUseCase {
     
     func deleteGathering(_ gatheringId: UUID) {
         self.coreDataManager.deleteGathering(gatheringId)
+    }
+    
+    func deleteAllGathering() -> AnyPublisher<Void, CoreDataManager.CoreDataError> {
+        return self.coreDataManager.deleteAllGathering()
+            .eraseToAnyPublisher()
     }
     
 }

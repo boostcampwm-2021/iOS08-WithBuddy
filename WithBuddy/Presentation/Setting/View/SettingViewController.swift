@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 import SafariServices
 
 class SettingViewController: UIViewController {
@@ -16,10 +17,24 @@ class SettingViewController: UIViewController {
     private let removeAllGatheringButton = UIButton()
     private let manageBuddyButton = UIButton()
     private let developerInfoButton = UIButton()
+    private let settingViewModel = SettingViewModel()
+    private var cancellable: Set<AnyCancellable> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configure()
+        self.bind()
+    }
+    
+    private func bind() {
+        self.settingViewModel.deleteSignal
+        .receive(on: DispatchQueue.main)
+            .sink { [weak self] message in
+                let alert = UIAlertController(title: message.0, message: message.1, preferredStyle: UIAlertController.Style.alert)
+                let okAction = UIAlertAction(title: "OK", style: .destructive)
+                alert.addAction(okAction)
+                self?.present(alert, animated: true, completion: nil)
+            }.store(in: &self.cancellable)
     }
     
     private func configure() {
@@ -101,7 +116,9 @@ class SettingViewController: UIViewController {
         self.removeAllGatheringButton.animateButtonTap(scale: 0.9)
         let alert = UIAlertController(title: nil, message: "모임 목록을 정말로 초기화하시겠습니까?", preferredStyle: UIAlertController.Style.alert)
         let cancelAction = UIAlertAction(title: "취소", style: .cancel)
-        let okAction = UIAlertAction(title: "OK", style: .destructive)
+        let okAction = UIAlertAction(title: "OK", style: .destructive) { _ in
+            self.settingViewModel.didGatheringResetTouched()
+        }
         alert.addAction(cancelAction)
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)

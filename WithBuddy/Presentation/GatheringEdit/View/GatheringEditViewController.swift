@@ -76,6 +76,7 @@ class GatheringEditViewController: UIViewController {
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
+        guard !placeTextField.isFirstResponder else { return }
         let memoButtomY = self.memoBackgroundView.frame.origin.y + self.memoBackgroundView.frame.height - self.scrollView.bounds.origin.y
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let offset = memoButtomY + keyboardSize.height - self.scrollView.bounds.height

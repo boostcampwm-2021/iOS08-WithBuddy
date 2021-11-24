@@ -68,17 +68,34 @@ final class TabBarViewController: UITabBarController {
     
     private func configureButton() {
         let circleDiameter = self.tabBar.layer.bounds.height * 1.5
-        var config = UIButton.Configuration.filled()
-        var attText = AttributedString("모임등록")
-        attText.font = UIFont.systemFont(ofSize: 10.0, weight: .medium)
-        config.attributedTitle = attText
-        config.imagePadding = 7
-        config.image = UIImage(systemName: "person.3.fill")
-        config.imagePlacement = .top
-        config.cornerStyle = .capsule
-        
-        self.registerButton = UIButton(configuration: config, primaryAction: nil)
+        if #available(iOS 15.0, *) {
+            var config = UIButton.Configuration.filled()
+            var attText = AttributedString("모임등록")
+            attText.font = UIFont.systemFont(ofSize: 10.0, weight: .medium)
+            config.attributedTitle = attText
+            config.imagePadding = 7
+            config.image = UIImage(systemName: "person.3.fill")
+            config.imagePlacement = .top
+            config.cornerStyle = .capsule
+            self.registerButton = UIButton(configuration: config, primaryAction: nil)
+        } else {
+            let button = UIButton()
+            button.backgroundColor = UIColor(named: "LabelPurple")
+            button.setTitle("모임등록", for: .normal)
+            button.setImage(UIImage(systemName: "person.3.fill"), for: .normal)
+            button.setPreferredSymbolConfiguration(.init(pointSize: 21, weight: .regular, scale: .default), forImageIn: .normal)
+            button.tintColor = .white
+            guard let image = button.imageView?.image,
+                  let titleLabel = button.titleLabel,
+                  let titleText = titleLabel.text else { return }
+            let titleSize = titleText.size(withAttributes: [NSAttributedString.Key.font: titleLabel.font as Any])
+
+            button.imageEdgeInsets = UIEdgeInsets(top: -(titleSize.height + 3), left: 0, bottom: 0, right: -image.size.width)
+            button.titleEdgeInsets = UIEdgeInsets(top: 3, left: -titleSize.width/2-11, bottom: -image.size.height, right: 0)
+            self.registerButton = button
+        }
         self.registerButton.frame = CGRect(x: 0, y: 0, width: circleDiameter, height: circleDiameter)
+        self.registerButton.layer.cornerRadius = 0.5 * self.registerButton.bounds.size.width
         self.registerButton.titleLabel?.font = .systemFont(ofSize: 10)
         self.registerButton.addTarget(self, action: #selector(registerAction), for: .touchUpInside)
         

@@ -41,7 +41,7 @@ class WBCalendarView: UIView {
     
     func reloadMonthLabel(month: String) {
         self.thisMonthLabel.text = month
-        self.thisMonthLabel.font = UIFont.monospacedSystemFont(ofSize: 20, weight: .medium)
+        self.thisMonthLabel.font = UIFont.monospacedSystemFont(ofSize: 16, weight: .medium)
     }
     
     private func configureThisMonth() {
@@ -76,7 +76,7 @@ class WBCalendarView: UIView {
         self.todayButton.backgroundColor = UIColor(named: "LabelPurple")
         self.todayButton.layer.cornerRadius = 5
         self.todayButton.tintColor = .white
-        self.todayButton.titleLabel?.font = .systemFont(ofSize: .labelSize)
+        self.todayButton.titleLabel?.font = .systemFont(ofSize: 12)
         self.todayButton.addTarget(self, action: #selector(self.thisMonth), for: .touchUpInside)
         self.todayButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

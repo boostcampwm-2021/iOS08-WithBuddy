@@ -55,7 +55,6 @@ final class ListTableViewCell: UITableViewCell {
     
     private func configure() {
         self.backgroundColor = .systemBackground
-        self.layer.cornerRadius = 10
         self.configureDateLabel()
         self.configureBuddyLabel()
         self.configurePurposeLabel()

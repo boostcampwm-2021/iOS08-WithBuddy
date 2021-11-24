@@ -69,7 +69,9 @@ final class ChartViewModel {
     
     private func fetchPurposeRank() {
         self.purposeUseCase.fetchTopFourPurpose()
-        .assign(to: &self.$purposeRank)
+            .sink(receiveValue: { rank in
+                self.purposeRank = rank
+            }).cancel()
     }
     
     private func fetchLatestBuddy() {

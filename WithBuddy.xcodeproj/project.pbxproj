@@ -62,6 +62,7 @@
 		BBF7FF47272FC78100B71C97 /* Cafe24Ssurround.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF46272FC78100B71C97 /* Cafe24Ssurround.ttf */; };
 		BBF7FF49272FC78C00B71C97 /* Cafe24SsurroundAir.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF48272FC78C00B71C97 /* Cafe24SsurroundAir.ttf */; };
 		BBF7FF4C272FD7F200B71C97 /* withBuddyLaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF4B272FD7F200B71C97 /* withBuddyLaunchScreen.png */; };
+		BBF8AFD5274E0831002479D4 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF8AFD4274E0831002479D4 /* SettingViewModel.swift */; };
 		F78EE745274CDEB000948960 /* BuddyImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78EE744274CDEB000948960 /* BuddyImageView.swift */; };
 		F78EE747274CDF0700948960 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78EE746274CDF0700948960 /* LoadingView.swift */; };
 		F78F14962743A5C90034E740 /* BuddyManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78F14952743A5C90034E740 /* BuddyManageViewController.swift */; };
@@ -145,6 +146,7 @@
 		BBF7FF46272FC78100B71C97 /* Cafe24Ssurround.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cafe24Ssurround.ttf; sourceTree = "<group>"; };
 		BBF7FF48272FC78C00B71C97 /* Cafe24SsurroundAir.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cafe24SsurroundAir.ttf; sourceTree = "<group>"; };
 		BBF7FF4B272FD7F200B71C97 /* withBuddyLaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = withBuddyLaunchScreen.png; sourceTree = "<group>"; };
+		BBF8AFD4274E0831002479D4 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		F78EE744274CDEB000948960 /* BuddyImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyImageView.swift; sourceTree = "<group>"; };
 		F78EE746274CDF0700948960 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		F78F14952743A5C90034E740 /* BuddyManageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyManageViewController.swift; sourceTree = "<group>"; };
@@ -371,7 +373,8 @@
 		BB2D255C2731315E00E7BF35 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
-				BB2D255D2731317100E7BF35 /* SettingViewController.swift */,
+				BBF8AFD1274E080F002479D4 /* View */,
+				BBF8AFD2274E0817002479D4 /* ViewModel */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -489,6 +492,22 @@
 				BBF7FF45272FC75F00B71C97 /* Fonts */,
 			);
 			path = Resource;
+			sourceTree = "<group>";
+		};
+		BBF8AFD1274E080F002479D4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BB2D255D2731317100E7BF35 /* SettingViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		BBF8AFD2274E0817002479D4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				BBF8AFD4274E0831002479D4 /* SettingViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		F78F14942743A5B00034E740 /* BuddyManage */ = {
@@ -675,6 +694,7 @@
 				BB1936CF274B7362007EF21A /* PurposeEntity+CoreDataClass.swift in Sources */,
 				F7E8ABBC273A6B17005F8306 /* CalendarDetailViewModel.swift in Sources */,
 				85D262EA273CD71C000190B8 /* BubbleChartView.swift in Sources */,
+				BBF8AFD5274E0831002479D4 /* SettingViewModel.swift in Sources */,
 				F7B69B8C27339EF9005D2F32 /* WBCalendarViewCell.swift in Sources */,
 				85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */,
 				BB2D25602731317E00E7BF35 /* ChartViewController.swift in Sources */,

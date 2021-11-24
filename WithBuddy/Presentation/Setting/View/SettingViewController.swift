@@ -16,6 +16,7 @@ class SettingViewController: UIViewController {
     private let removeAllGatheringButton = UIButton()
     private let manageBuddyButton = UIButton()
     private let developerInfoButton = UIButton()
+    private let settingViewModel = SettingViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,7 +102,9 @@ class SettingViewController: UIViewController {
         self.removeAllGatheringButton.animateButtonTap(scale: 0.9)
         let alert = UIAlertController(title: nil, message: "모임 목록을 정말로 초기화하시겠습니까?", preferredStyle: UIAlertController.Style.alert)
         let cancelAction = UIAlertAction(title: "취소", style: .cancel)
-        let okAction = UIAlertAction(title: "OK", style: .destructive)
+        let okAction = UIAlertAction(title: "OK", style: .destructive) { _ in
+            self.settingViewModel.didGatheringResetTouched()
+        }
         alert.addAction(cancelAction)
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)

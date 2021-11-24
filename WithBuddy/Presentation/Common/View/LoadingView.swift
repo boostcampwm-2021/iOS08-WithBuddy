@@ -44,12 +44,12 @@ class LoadingView: UIView {
     private func configureTitle() {
         self.addSubview(self.titleLabel)
         self.titleLabel.text = "위드버디"
-        self.animateBboing()
-        self.titleLabel.font = UIFont(name: "Cafe24Ssurround", size: 60)
+        self.appNameAnimation()
+        self.titleLabel.font = UIFont(name: "Cafe24Ssurround", size: UIScreen.main.bounds.width / 6)
         self.titleLabel.textColor = .white
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 250),
+            self.titleLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: UIScreen.main.bounds.height * 0.2),
             self.titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             self.titleLabel.widthAnchor.constraint(equalToConstant: self.titleLabel.intrinsicContentSize.width)
         ])
@@ -81,42 +81,38 @@ class LoadingView: UIView {
         self.dynamicItemBehavior.addItem(face)
     }
 
-    private func animateBboing() {
-        UIView.animate(withDuration: 0.7) { [weak self] in
-            self?.titleLabel.transform = CGAffineTransform(scaleX: CGFloat(2), y: CGFloat(2))
-        } completion: { [weak self] _ in
-            UIView.animate(withDuration: 0.5) { [weak self] in
-                self?.titleLabel.transform = CGAffineTransform.identity
+    private func appNameAnimation() {
+        self.viewExpand(duration: 0.7)
+    }
+    
+    private func viewExpand(duration: CGFloat) {
+        if duration < 0.5 {
+            self.titleTransitionAnimation(duration: duration)
+        } else {
+            UIView.animate(withDuration: duration) { [weak self] in
+                self?.titleLabel.transform = CGAffineTransform(scaleX: CGFloat(duration * 2.5), y: CGFloat(duration * 2.5))
             } completion: { [weak self] _ in
-                UIView.animate(withDuration: 0.5) { [weak self] in
-                    self?.titleLabel.transform = CGAffineTransform(scaleX: CGFloat(1.5), y: CGFloat(1.5))
-                } completion: { [weak self] _ in
-                    UIView.animate(withDuration: 0.4) { [weak self] in
-                        self?.titleLabel.transform = CGAffineTransform.identity
-                    } completion: { [weak self] _ in
-                        UIView.animate(withDuration: 0.4) { [weak self] in
-                            self?.titleLabel.transform = CGAffineTransform(scaleX: CGFloat(1.2), y: CGFloat(1.2))
-                        } completion: { [weak self] _ in
-                            UIView.animate(withDuration: 0.3) { [weak self] in
-                                self?.titleLabel.transform = CGAffineTransform.identity
-                            } completion: { [weak self] _ in
-                                UIView.animate(withDuration: 0.3) { [weak self] in
-                                    self?.titleLabel.transform = CGAffineTransform(scaleX: CGFloat(1.1), y: CGFloat(1.1))
-                                } completion: { [weak self] _ in
-                                    UIView.animate(withDuration: 0.3) { [weak self] in
-                                        self?.titleLabel.transform = CGAffineTransform.identity
-                                    } completion: { [weak self] _ in
-                                        UIView.animate(withDuration: 1, animations: {
-                                            self?.alpha = 0
-                                        }, completion: { _ in
-                                            self?.removeFromSuperview()
-                                        })
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                self?.viewIdentity(duration: duration - 0.1)
+            }
+        }
+    }
+    
+    private func viewIdentity(duration: CGFloat) {
+        UIView.animate(withDuration: duration) { [weak self] in
+            self?.titleLabel.transform = CGAffineTransform.identity
+        } completion: { [weak self] _ in
+            self?.viewExpand(duration: duration)
+        }
+    }
+    
+    private func titleTransitionAnimation(duration: CGFloat) {
+        UIView.animate(withDuration: duration * 2) { [weak self] in
+            self?.titleLabel.transform = CGAffineTransform(translationX: 0, y: -(UIScreen.main.bounds.height * 0.17))
+        } completion: { [weak self] _ in
+            UIView.animate(withDuration: duration) {
+                self?.alpha = 0
+            } completion: { [weak self] _ in
+                self?.removeFromSuperview()
             }
         }
     }

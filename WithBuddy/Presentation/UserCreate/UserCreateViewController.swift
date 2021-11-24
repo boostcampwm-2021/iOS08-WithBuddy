@@ -93,11 +93,11 @@ final class UserCreateViewController: UIViewController {
         self.view.addSubview(self.titleLabel)
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
         self.titleLabel.text = "위드버디"
-        self.titleLabel.font = UIFont(name: "Cafe24Ssurround", size: 40)
+        self.titleLabel.font = UIFont(name: "Cafe24Ssurround", size: UIScreen.main.bounds.width / 6)
         self.titleLabel.textColor = UIColor(named: "LabelPurple")
         
         NSLayoutConstraint.activate([
-            self.titleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 30),
+            self.titleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: UIScreen.main.bounds.height * 0.03),
             self.titleLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
         ])
     }

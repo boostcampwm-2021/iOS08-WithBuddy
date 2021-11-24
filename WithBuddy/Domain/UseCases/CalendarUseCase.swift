@@ -17,7 +17,7 @@ final class CalendarUseCase {
     
     func convertToString(month: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy년 M월"
+        dateFormatter.dateFormat = "yyyy년 MM월"
         return dateFormatter.string(from: month)
     }
     

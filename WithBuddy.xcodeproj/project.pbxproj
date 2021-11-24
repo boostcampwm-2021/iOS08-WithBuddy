@@ -65,7 +65,6 @@
 		F78EE745274CDEB000948960 /* BuddyImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78EE744274CDEB000948960 /* BuddyImageView.swift */; };
 		F78EE747274CDF0700948960 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78EE746274CDF0700948960 /* LoadingView.swift */; };
 		F78F14962743A5C90034E740 /* BuddyManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78F14952743A5C90034E740 /* BuddyManageViewController.swift */; };
-		F78F14992743A6200034E740 /* DeveloperInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78F14982743A6200034E740 /* DeveloperInfoViewController.swift */; };
 		F78F149B2743C1CF0034E740 /* BuddyManageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78F149A2743C1CF0034E740 /* BuddyManageViewModel.swift */; };
 		F7A7699727315AF800FF83EA /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7699627315AF800FF83EA /* HeaderView.swift */; };
 		F7A7699B2732588500FF83EA /* WBCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7699A2732588500FF83EA /* WBCalendarView.swift */; };
@@ -149,7 +148,6 @@
 		F78EE744274CDEB000948960 /* BuddyImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyImageView.swift; sourceTree = "<group>"; };
 		F78EE746274CDF0700948960 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		F78F14952743A5C90034E740 /* BuddyManageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyManageViewController.swift; sourceTree = "<group>"; };
-		F78F14982743A6200034E740 /* DeveloperInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperInfoViewController.swift; sourceTree = "<group>"; };
 		F78F149A2743C1CF0034E740 /* BuddyManageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyManageViewModel.swift; sourceTree = "<group>"; };
 		F7A7699627315AF800FF83EA /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		F7A7699A2732588500FF83EA /* WBCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WBCalendarView.swift; sourceTree = "<group>"; };
@@ -451,7 +449,6 @@
 				F78F14942743A5B00034E740 /* BuddyManage */,
 				85FA1D97272FEBBB00825C64 /* List */,
 				BB2D255C2731315E00E7BF35 /* Setting */,
-				F78F14972743A60F0034E740 /* DeveloperInfo */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -501,14 +498,6 @@
 				F78F149A2743C1CF0034E740 /* BuddyManageViewModel.swift */,
 			);
 			path = BuddyManage;
-			sourceTree = "<group>";
-		};
-		F78F14972743A60F0034E740 /* DeveloperInfo */ = {
-			isa = PBXGroup;
-			children = (
-				F78F14982743A6200034E740 /* DeveloperInfoViewController.swift */,
-			);
-			path = DeveloperInfo;
 			sourceTree = "<group>";
 		};
 		F7A7699F2732762900FF83EA /* View */ = {
@@ -686,7 +675,6 @@
 				BB1936CF274B7362007EF21A /* PurposeEntity+CoreDataClass.swift in Sources */,
 				F7E8ABBC273A6B17005F8306 /* CalendarDetailViewModel.swift in Sources */,
 				85D262EA273CD71C000190B8 /* BubbleChartView.swift in Sources */,
-				F78F14992743A6200034E740 /* DeveloperInfoViewController.swift in Sources */,
 				F7B69B8C27339EF9005D2F32 /* WBCalendarViewCell.swift in Sources */,
 				85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */,
 				BB2D25602731317E00E7BF35 /* ChartViewController.swift in Sources */,
@@ -717,7 +705,6 @@
 				F7E8ABC5273BB814005F8306 /* GatheringDetailViewController.swift in Sources */,
 				8A07DF6A2743C20A008F6E58 /* GatheringEditViewController.swift in Sources */,
 				8A8EA0C8274CAF4100F1BDFD /* UserUseCase.swift in Sources */,
-				8A6320B72741673D006BB1C0 /* RegisterTitleLabel.swift in Sources */,
 				BB2D25C2273B901600E7BF35 /* BuddyEntity+CoreDataClass.swift in Sources */,
 				85D262F2273CE7D6000190B8 /* BlackTitleLabel.swift in Sources */,
 				F78EE747274CDF0700948960 /* LoadingView.swift in Sources */,

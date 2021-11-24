@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class SettingViewController: UIViewController {
 
@@ -140,7 +141,9 @@ class SettingViewController: UIViewController {
     }
     
     @objc private func moveToDeveloperInfo(_ sender: UIButton) {
-        self.navigationController?.pushViewController(DeveloperInfoViewController(), animated: true)
+        guard let wikiURL = URL(string: "https://github.com/boostcampwm-2021/iOS08-WithBuddy/wiki") else { return }
+        let developSafariView: SFSafariViewController = SFSafariViewController(url: wikiURL)
+        self.present(developSafariView, animated: true, completion: nil)
     }
     
 }

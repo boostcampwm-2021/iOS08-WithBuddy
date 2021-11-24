@@ -41,6 +41,7 @@ class WBCalendarView: UIView {
     
     func reloadMonthLabel(month: String) {
         self.thisMonthLabel.text = month
+        self.thisMonthLabel.font = UIFont.monospacedSystemFont(ofSize: 20, weight: .medium)
     }
     
     private func configureThisMonth() {
@@ -63,9 +64,9 @@ class WBCalendarView: UIView {
         self.nextMonthButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.prevMonthButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor),
-            self.prevMonthButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 100),
+            self.prevMonthButton.trailingAnchor.constraint(equalTo: self.thisMonthLabel.leadingAnchor, constant: -5),
             self.nextMonthButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor),
-            self.nextMonthButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -100)
+            self.nextMonthButton.leadingAnchor.constraint(equalTo: self.thisMonthLabel.trailingAnchor, constant: 5)
         ])
     }
     

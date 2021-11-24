@@ -190,6 +190,8 @@
 				854AA75D27337A7200663911 /* SearchView.swift */,
 				F78EE744274CDEB000948960 /* BuddyImageView.swift */,
 				F78EE746274CDF0700948960 /* LoadingView.swift */,
+				BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */,
+				BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -378,8 +380,6 @@
 			isa = PBXGroup;
 			children = (
 				BB2D25AF273B582500E7BF35 /* RegisterViewController.swift */,
-				BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */,
-				BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

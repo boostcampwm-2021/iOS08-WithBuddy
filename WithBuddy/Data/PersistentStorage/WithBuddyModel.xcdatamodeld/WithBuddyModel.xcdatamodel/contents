@@ -12,16 +12,16 @@
         <attribute name="memo" optional="YES" attributeType="String"/>
         <attribute name="picture" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[URL]"/>
         <attribute name="place" optional="YES" attributeType="String"/>
-        <relationship name="buddyList" toMany="YES" deletionRule="Nullify" destinationEntity="BuddyEntity" inverseName="gatheringList" inverseEntity="BuddyEntity"/>
-        <relationship name="purposeList" toMany="YES" deletionRule="Nullify" destinationEntity="PurposeEntity" inverseName="gatheringList" inverseEntity="PurposeEntity"/>
+        <relationship name="buddyList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="BuddyEntity" inverseName="gatheringList" inverseEntity="BuddyEntity"/>
+        <relationship name="purposeList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PurposeEntity" inverseName="gatheringList" inverseEntity="PurposeEntity"/>
     </entity>
     <entity name="PurposeEntity" representedClassName=".PurposeEntity" syncable="YES">
         <attribute name="name" attributeType="String" valueTransformerName="NSSecureUnarchiveFromData" customClassName="PlaceType"/>
-        <relationship name="gatheringList" toMany="YES" deletionRule="Nullify" destinationEntity="GatheringEntity" inverseName="purposeList" inverseEntity="GatheringEntity"/>
+        <relationship name="gatheringList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GatheringEntity" inverseName="purposeList" inverseEntity="GatheringEntity"/>
     </entity>
     <elements>
-        <element name="BuddyEntity" positionX="-36" positionY="54" width="128" height="89"/>
-        <element name="GatheringEntity" positionX="-54" positionY="-9" width="128" height="134"/>
-        <element name="PurposeEntity" positionX="-36" positionY="72" width="128" height="59"/>
+        <element name="BuddyEntity" positionX="-243.0921020507812" positionY="-56.47283935546875" width="128" height="103"/>
+        <element name="GatheringEntity" positionX="-464.172119140625" positionY="-22.88272094726562" width="128" height="148"/>
+        <element name="PurposeEntity" positionX="-36" positionY="72" width="128" height="73"/>
     </elements>
 </model>

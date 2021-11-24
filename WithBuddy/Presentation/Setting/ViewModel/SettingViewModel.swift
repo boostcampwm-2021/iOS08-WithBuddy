@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 protocol SettingViewModelProtocol {
     
@@ -15,16 +16,28 @@ final class SettingViewModel {
     
     private let userUseCase: UserUseCase
     private let gatheringUseCase: GatheringUseCase
+    private(set) var deleteSignal = PassthroughSubject<(String, String?), Never>()
     
     init(
-        userUseCase: UserUseCase,
-        gatheringUseCase: GatheringUseCase
+        userUseCase: UserUseCase = UserUseCase(),
+        gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
     ) {
         self.userUseCase = userUseCase
         self.gatheringUseCase = gatheringUseCase
     }
     
     func didGatheringResetTouched() {
+        self.gatheringUseCase.deleteAllGathering()
+            .sink { error in
+                switch error {
+                case .failure(let error):
+                    self.deleteSignal.send(("삭제 실패", error.errorDescription))
+                case .finished:
+                    return
+                }
+            } receiveValue: { _ in
+                self.deleteSignal.send(("삭제 성공", "모임 삭제가 완료되었습니다."))
+            }.cancel()
     }
     
 }

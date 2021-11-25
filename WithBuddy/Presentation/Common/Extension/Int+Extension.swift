@@ -11,5 +11,7 @@ extension Int {
     
     static let minFaceNum = 1
     static let maxFaceNum = 15
+    static let noGatheringStatus = 1
+    static let fullGatheringStatus = 0
     
 }

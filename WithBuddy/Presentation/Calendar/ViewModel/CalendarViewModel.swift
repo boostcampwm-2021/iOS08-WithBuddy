@@ -42,6 +42,49 @@ final class CalendarViewModel {
         self.reloadFaces()
     }
     
+    func headerComment() -> String {
+        let gatheringList = self.gatheringUseCase.gatheringStatus(date: currentDate)
+        var gatheringExist = [0, 0, 0, 0, 0, 0, 0]
+        var day = Date()
+        for idx in 0..<7 {
+            gatheringList.forEach {
+                if self.calendarUseCase.isSameDay(date1: $0.date, date2: day) {
+                    gatheringExist[idx] = 1
+                }
+            }
+            day = self.calendarUseCase.nextDay(baseDate: day)
+        }
+        return selectHeaderComment(gatheringExist: gatheringExist)
+    }
+    
+    private func selectHeaderComment(gatheringExist: [Int]) -> String {
+        if gatheringExist[0] == 1 {
+            return HeaderComments.gatheringToday.rawValue
+        }
+        for idx in (2...7).reversed() {
+            if self.checkGathering(during: idx, gatheringExist: gatheringExist, status: .noGatheringStatus) {
+                return "\(idx) \(HeaderComments.noGathering.rawValue)"
+            }
+        }
+        for idx in (2...7).reversed() {
+            if self.checkGathering(during: idx, gatheringExist: gatheringExist, status: .fullGatheringStatus) {
+                return "\(idx) \(HeaderComments.fullGathering.rawValue)"
+            }
+        }
+        return HeaderComments.everyDay.rawValue
+    }
+    
+    private func checkGathering(during days: Int, gatheringExist: [Int], status: Int) -> Bool {
+        var checkRange = (0...days-1)
+        if status == .fullGatheringStatus {
+            checkRange = (1...days)
+        }
+        for idx in checkRange where gatheringExist[idx] == status {
+            return false
+        }
+        return true
+    }
+    
     func didMonthButtonTouched(number: Int) {
         guard let month = number == 0 ? Date() : self.calendarUseCase.changeMonth(self.calendarMonth, by: number) else { return }
         self.calendarMonth = month
@@ -88,7 +131,6 @@ final class CalendarViewModel {
                 self.totalFaces[firstDayIndex + day - 1] = face
             }
         }
-        
         self.didDaysReloadSignal.send()
     }
     

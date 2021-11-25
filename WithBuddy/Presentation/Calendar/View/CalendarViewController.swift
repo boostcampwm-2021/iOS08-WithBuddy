@@ -23,6 +23,11 @@ class CalendarViewController: UIViewController {
         self.configure()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.headerView.reloadHeaderComment(text: self.calendarViewModel.headerComment())
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.calendarViewModel.viewDidAppear()

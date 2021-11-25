@@ -56,8 +56,8 @@ struct SmallWidget: View {
     
     var body: some View {
         ZStack {
-            Color("BackgroundPurple")
-            Image("WidgetPurple")
+            Color(.backgroundPurple)
+            Image(.widgetPurple)
                 .resizable()
                 .frame(width: .widgetBigBuddySize, height: .widgetBigBuddySize, alignment: .center)
         }
@@ -69,15 +69,15 @@ struct MediumWidget: View {
     
     var body: some View {
         ZStack {
-            Color("BackgroundPurple")
+            Color(.backgroundPurple)
             HStack {
-                Image("WidgetPurple")
+                Image(.widgetPurple)
                     .resizable()
                     .frame(width: .widgetSmallBuddySize, height: .widgetSmallBuddySize, alignment: .center)
-                Image("WidgetRed")
+                Image(.widgetRed)
                     .resizable()
                     .frame(width: .widgetSmallBuddySize, height: .widgetSmallBuddySize, alignment: .center)
-                Image("WidgetYellow")
+                Image(.widgetYellow)
                     .resizable()
                     .frame(width: .widgetSmallBuddySize, height: .widgetSmallBuddySize, alignment: .center)
             }
@@ -90,21 +90,21 @@ struct LargeWidget: View {
     
     var body: some View {
         ZStack {
-            Color("BackgroundPurple")
+            Color(.backgroundPurple)
             VStack {
                 HStack {
-                    Image("WidgetPurple")
+                    Image(.widgetPurple)
                         .resizable()
                         .frame(width: .widgetBigBuddySize, height: .widgetBigBuddySize, alignment: .center)
-                    Image("WidgetRed")
+                    Image(.widgetRed)
                         .resizable()
                         .frame(width: .widgetBigBuddySize, height: .widgetBigBuddySize, alignment: .center)
                 }
                 HStack {
-                    Image("WidgetYellow")
+                    Image(.widgetYellow)
                         .resizable()
                         .frame(width: .widgetBigBuddySize, height: .widgetBigBuddySize, alignment: .center)
-                    Image("WidgetPink")
+                    Image(.widgetPink)
                         .resizable()
                         .frame(width: .widgetBigBuddySize, height: .widgetBigBuddySize, alignment: .center)
                 }
@@ -115,14 +115,14 @@ struct LargeWidget: View {
 
 @main
 struct WithBuddyWidget: Widget {
-    let kind: String = "WithBuddyWidget"
+    let kind: String = .widgetDisplayName
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             WithBuddyWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName(String.widgetDisplayName)
+        .description(String.widgetDescription)
     }
 }
 

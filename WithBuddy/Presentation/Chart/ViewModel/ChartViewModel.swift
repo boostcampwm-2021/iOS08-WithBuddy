@@ -33,7 +33,6 @@ final class ChartViewModel {
         self.buddyUseCase = buddyUseCase
         self.purposeUseCase = purposeUseCase
         self.userUseCase = userUseCase
-        self.fetch()
     }
     
     func fetch() {

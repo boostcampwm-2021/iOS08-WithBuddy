@@ -17,6 +17,7 @@ final class UserCreateViewController: UIViewController {
     private lazy var editButton = UIButton()
     private lazy var guideLabel = UILabel()
     private lazy var completeButton = UIButton()
+    private let loadingView = LoadingView()
     
     private var userCreateViewModel = UserCreateViewModel()
     private var cancellables: Set<AnyCancellable> = []
@@ -25,6 +26,11 @@ final class UserCreateViewController: UIViewController {
         super.viewDidLoad()
         self.configure()
         self.bind()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.loadingView.addFaces()
     }
     
     private func configure() {
@@ -39,15 +45,14 @@ final class UserCreateViewController: UIViewController {
     }
 
     func configureLoading() {
-        let loadingView = LoadingView()
-        self.view.addSubview(loadingView)
-        loadingView.backgroundColor = UIColor(named: "GraphPurple2")
-        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.loadingView)
+        self.loadingView.backgroundColor = UIColor(named: "GraphPurple2")
+        self.loadingView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            loadingView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            loadingView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            loadingView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            loadingView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+            self.loadingView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            self.loadingView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            self.loadingView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.loadingView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
     }
     

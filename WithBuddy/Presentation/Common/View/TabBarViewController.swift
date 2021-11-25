@@ -11,12 +11,12 @@ final class TabBarViewController: UITabBarController {
     
     private var registerButton = UIButton()
     private var prevIndex = 0
+    private let loadingView = LoadingView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(named: "BackgroundPurple")
         self.tabBar.backgroundColor = .systemBackground
-        
         self.configure()
     }
     
@@ -25,6 +25,10 @@ final class TabBarViewController: UITabBarController {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.loadingView.addFaces()
+    }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
@@ -36,15 +40,14 @@ final class TabBarViewController: UITabBarController {
     }
 
     func configureLoading() {
-        let loadingView = LoadingView()
-        self.view.addSubview(loadingView)
-        loadingView.backgroundColor = UIColor(named: "GraphPurple2")
-        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.loadingView)
+        self.loadingView.backgroundColor = UIColor(named: "GraphPurple2")
+        self.loadingView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            loadingView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            loadingView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            loadingView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            loadingView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+            self.loadingView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            self.loadingView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            self.loadingView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            self.loadingView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
     }
     

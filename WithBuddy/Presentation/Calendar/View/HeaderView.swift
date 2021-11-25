@@ -22,6 +22,10 @@ class HeaderView: UIView {
         self.configureHeaderContent()
     }
     
+    func update(face: String) {
+        self.userFaceImageView.image = UIImage(named: face)
+    }
+    
     private func configureHeaderContent() {
         self.configureUserFaceImageView()
         self.configureUserCommentLabel()

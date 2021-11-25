@@ -13,10 +13,12 @@ final class CalendarViewModel {
     let maxDayOfMonth = 42
     private let calendarUseCase: CalendarUseCase
     private let gatheringUseCase: GatheringUseCase
+    private let userUseCase: UserUseCase
     private var calendarMonth: Date
     private var currentDate: Date
     private var thisMonthGathrtingList = [Gathering]()
     
+    @Published private(set) var myFace: String?
     private(set) var isSameMonth: Int?
     private(set) var totalDays = [Int]()
     private(set) var totalFaces = [String]()
@@ -27,11 +29,13 @@ final class CalendarViewModel {
     init() {
         self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
         self.calendarUseCase = CalendarUseCase()
+        self.userUseCase = UserUseCase()
         self.currentDate = Date()
         self.calendarMonth = self.calendarUseCase.firstTimeOfDay(baseDate: Date())
     }
     
     func viewDidAppear() {
+        self.fetchBuddyFace()
         self.currentDate = Date()
         self.sendMonthSubject()
         self.reloadDays()
@@ -48,6 +52,11 @@ final class CalendarViewModel {
     
     func findDate(index: Int) -> Date {
         self.calendarUseCase.makeDay(month: self.calendarMonth, day: self.totalDays[index])
+    }
+    
+    private func fetchBuddyFace() {
+        guard let buddy = self.userUseCase.fetchUser() else { return }
+        self.myFace = buddy.face
     }
     
     private func sendMonthSubject() {

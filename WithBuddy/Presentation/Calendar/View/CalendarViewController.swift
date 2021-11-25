@@ -60,6 +60,13 @@ class CalendarViewController: UIViewController {
             .sink{ number in
                 self.calendarViewModel.didMonthButtonTouched(number: number)
             }.store(in: &self.cancellables)
+        
+        self.calendarViewModel.$myFace
+            .receive(on: DispatchQueue.main)
+            .sink{ face in
+                guard let face = face else { return }
+                self.headerView.update(face: face)
+            }.store(in: &self.cancellables)
     }
     
     private func configureScrollView() {

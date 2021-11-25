@@ -241,6 +241,7 @@
 				854AA75D27337A7200663911 /* SearchView.swift */,
 				F78EE744274CDEB000948960 /* BuddyImageView.swift */,
 				F78EE746274CDF0700948960 /* LoadingView.swift */,
+				8AD669202744F12300158E1A /* ImageCollectionViewCell.swift */,
 				BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */,
 				BB2D25A6273B582500E7BF35 /* PictureCollectionViewCell.swift */,
 			);
@@ -312,10 +313,98 @@
 		85FA1D97272FEBBB00825C64 /* List */ = {
 			isa = PBXGroup;
 			children = (
-				85FA1D98272FEBE000825C64 /* ListViewController.swift */,
-				854AA7652733A37200663911 /* ListViewModel.swift */,
+				8A066506274F6EE7006706C4 /* View */,
+				8A066507274F6EEE006706C4 /* ViewModel */,
 			);
 			path = List;
+			sourceTree = "<group>";
+		};
+		8A066506274F6EE7006706C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				85FA1D98272FEBE000825C64 /* ListViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8A066507274F6EEE006706C4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				854AA7652733A37200663911 /* ListViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		8A066508274F6EFB006706C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F78F14952743A5C90034E740 /* BuddyManageViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8A066509274F6F01006706C4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F78F149A2743C1CF0034E740 /* BuddyManageViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		8A06650A274F6FD5006706C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8A53C22E273B9EB200BB0C20 /* BuddyCustomViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8A06650B274F6FDD006706C4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8AD6691E2744D94B00158E1A /* BuddyCustomViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		8A06650C274F6FF1006706C4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8A73D67D273A6C4B001D5184 /* BuddyChoiceViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		8A06650D274F6FF6006706C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8A73D678273A61EC001D5184 /* BuddyChoiceViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8A06650E274F700B006706C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F7E8ABB32738133B005F8306 /* CalendarDetailViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8A06650F274F7017006706C4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8A397A2B274B8AE80060443C /* UserCreateViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		8A066510274F701F006706C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8A397A29274B8AAB0060443C /* UserCreateViewController.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		8A07DF642743C20A008F6E58 /* GatheringEdit */ = {
@@ -354,8 +443,8 @@
 		8A397A28274B8A7C0060443C /* UserCreate */ = {
 			isa = PBXGroup;
 			children = (
-				8A397A29274B8AAB0060443C /* UserCreateViewController.swift */,
-				8A397A2B274B8AE80060443C /* UserCreateViewModel.swift */,
+				8A066510274F701F006706C4 /* View */,
+				8A06650F274F7017006706C4 /* ViewModel */,
 			);
 			path = UserCreate;
 			sourceTree = "<group>";
@@ -363,9 +452,8 @@
 		8A53C22D273B9E5E00BB0C20 /* BuddyCustom */ = {
 			isa = PBXGroup;
 			children = (
-				8A53C22E273B9EB200BB0C20 /* BuddyCustomViewController.swift */,
-				8AD6691E2744D94B00158E1A /* BuddyCustomViewModel.swift */,
-				8AD669202744F12300158E1A /* ImageCollectionViewCell.swift */,
+				8A06650A274F6FD5006706C4 /* View */,
+				8A06650B274F6FDD006706C4 /* ViewModel */,
 			);
 			path = BuddyCustom;
 			sourceTree = "<group>";
@@ -373,8 +461,8 @@
 		8A73D677273A61C5001D5184 /* BuddyChoice */ = {
 			isa = PBXGroup;
 			children = (
-				8A73D678273A61EC001D5184 /* BuddyChoiceViewController.swift */,
-				8A73D67D273A6C4B001D5184 /* BuddyChoiceViewModel.swift */,
+				8A06650D274F6FF6006706C4 /* View */,
+				8A06650C274F6FF1006706C4 /* ViewModel */,
 			);
 			path = BuddyChoice;
 			sourceTree = "<group>";
@@ -584,8 +672,8 @@
 		F78F14942743A5B00034E740 /* BuddyManage */ = {
 			isa = PBXGroup;
 			children = (
-				F78F14952743A5C90034E740 /* BuddyManageViewController.swift */,
-				F78F149A2743C1CF0034E740 /* BuddyManageViewModel.swift */,
+				8A066508274F6EFB006706C4 /* View */,
+				8A066509274F6F01006706C4 /* ViewModel */,
 			);
 			path = BuddyManage;
 			sourceTree = "<group>";
@@ -622,7 +710,7 @@
 		F7E8ABC2273BB7A6005F8306 /* Calendardetail */ = {
 			isa = PBXGroup;
 			children = (
-				F7E8ABB32738133B005F8306 /* CalendarDetailViewController.swift */,
+				8A06650E274F700B006706C4 /* View */,
 				BB0EF0DF2743BD4B003B4B6F /* ViewModel */,
 			);
 			path = Calendardetail;

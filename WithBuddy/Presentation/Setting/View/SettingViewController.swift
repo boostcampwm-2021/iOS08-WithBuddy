@@ -60,7 +60,7 @@ class SettingViewController: UIViewController {
     
     private func configureUserImage() {
         self.view.addSubview(self.userImageView)
-        self.userImageView.image = UIImage(named: "FacePurple3")
+        self.userImageView.image = .defaultFaceImage
         self.userImageView.sizeToFit()
         self.userImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

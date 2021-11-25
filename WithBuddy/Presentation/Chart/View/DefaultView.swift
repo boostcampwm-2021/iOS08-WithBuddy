@@ -29,7 +29,7 @@ final class DefaultView: UIView {
     
     private func configureImageView() {
         self.addSubview(self.imageView)
-        self.imageView.image = UIImage(named: "FacePurple1")
+        self.imageView.image = .purpleFaceImage
         self.imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 20),

@@ -106,7 +106,7 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
             completion(true)
         }
         deleteAction.backgroundColor = UIColor(named: "GraphRed")
-        deleteAction.image = UIImage(named: "FaceRed1")
+        deleteAction.image = .deleteImage
 
         let editAction = UIContextualAction(style: .normal, title: "편집") { _, _, completion in
             self.dismiss(animated: true) {
@@ -115,7 +115,7 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
             completion(true)
         }
         editAction.backgroundColor = UIColor(named: "GraphPurple2")
-        editAction.image = UIImage(named: "FacePurple1")
+        editAction.image = .editImage
 
         return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }

@@ -129,7 +129,7 @@ final class UserCreateViewController: UIViewController {
     
     private func configureBuddyImageView() {
         self.stackView.addArrangedSubview(self.buddyImageView)
-        self.buddyImageView.image = UIImage(named: "DefaultFace")
+        self.buddyImageView.image = .defaultFaceImage
         self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.buddyImageView.leadingAnchor.constraint(equalTo: self.stackView.leadingAnchor, constant: 50),

@@ -10,6 +10,7 @@ import Combine
 
 final class ChartViewModel {
     
+    @Published private(set) var name: String?
     @Published private(set) var buddyRank: [(Buddy, Int)] = []
     @Published private(set) var purposeRank: [String] = []
     @Published private(set) var latestBuddy: Buddy?
@@ -18,26 +19,35 @@ final class ChartViewModel {
     private let gatheringUseCase: GatheringUseCase
     private let buddyUseCase: BuddyUseCase
     private let purposeUseCase: PurposeUseCaseProtocol
+    private let userUseCase: UserUseCase
     private var gatheringList: [Gathering] = []
     private var buddyList: [Buddy] = []
     
     init(
         gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared),
         buddyUseCase: BuddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared),
-        purposeUseCase: PurposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared)
+        purposeUseCase: PurposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared),
+        userUseCase: UserUseCase = UserUseCase()
     ) {
         self.gatheringUseCase = gatheringUseCase
         self.buddyUseCase = buddyUseCase
         self.purposeUseCase = purposeUseCase
+        self.userUseCase = userUseCase
         self.fetch()
     }
     
     func fetch() {
+        self.fetchName()
         self.fetchGatheringAndBuddy()
         self.fetchBuddyRank()
         self.fetchPurposeRank()
         self.fetchLatestBuddy()
         self.fetchOldBuddy()
+    }
+    
+    private func fetchName() {
+        guard let buddy = self.userUseCase.fetchUser() else { return }
+        self.name = buddy.name
     }
     
     private func fetchGatheringAndBuddy() {

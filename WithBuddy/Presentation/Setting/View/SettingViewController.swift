@@ -12,7 +12,7 @@ import SafariServices
 class SettingViewController: UIViewController {
 
     private let userImageView = UIImageView()
-    private let userNameTextField = UITextField()
+    private let userNameLabel = UILabel()
     private let modifyButton = UIButton()
     private let removeAllGatheringButton = UIButton()
     private let manageBuddyButton = UIButton()
@@ -35,6 +35,15 @@ class SettingViewController: UIViewController {
                 alert.addAction(okAction)
                 self?.present(alert, animated: true, completion: nil)
             }.store(in: &self.cancellable)
+        
+        self.settingViewModel.$myBuddy
+            .receive(on: DispatchQueue.main)
+            .sink { buddy in
+                guard let buddy  = buddy else { return }
+                self.userImageView.image = UIImage(named: "\(buddy.face)")
+                self.userNameLabel.text = buddy.name
+            }
+            .store(in: &self.cancellable)
     }
     
     private func configure() {
@@ -46,6 +55,7 @@ class SettingViewController: UIViewController {
         self.configureUserImage()
         self.configureUserName()
         self.configureModifyButton()
+        self.settingViewModel.fetchMyBuddy()
     }
     
     private func configureUserImage() {
@@ -62,17 +72,14 @@ class SettingViewController: UIViewController {
     }
     
     private func configureUserName() {
-        self.view.addSubview(self.userNameTextField)
-        self.userNameTextField.text = "나정나정"
-        self.userNameTextField.font = .systemFont(ofSize: .titleLabelSize)
-        self.userNameTextField.isUserInteractionEnabled  = false
-        self.userNameTextField.textAlignment = .center
-        self.userNameTextField.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.userNameLabel)
+        self.userNameLabel.text = "UserName"
+        self.userNameLabel.font = .systemFont(ofSize: .titleLabelSize)
+        self.userNameLabel.textAlignment = .center
+        self.userNameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.userNameTextField.bottomAnchor.constraint(equalTo: self.userImageView.centerYAnchor, constant: -10),
-            self.userNameTextField.leadingAnchor.constraint(equalTo: self.userImageView.trailingAnchor, constant: 20),
-            self.userNameTextField.widthAnchor.constraint(equalToConstant: self.userNameTextField.intrinsicContentSize.width),
-            self.userNameTextField.heightAnchor.constraint(equalToConstant: self.userNameTextField.intrinsicContentSize.height)
+            self.userNameLabel.bottomAnchor.constraint(equalTo: self.userImageView.centerYAnchor, constant: -10),
+            self.userNameLabel.leadingAnchor.constraint(equalTo: self.userImageView.trailingAnchor, constant: 20)
         ])
     }
     
@@ -88,7 +95,7 @@ class SettingViewController: UIViewController {
         self.modifyButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.modifyButton.topAnchor.constraint(equalTo: self.userImageView.centerYAnchor, constant: 5),
-            self.modifyButton.leadingAnchor.constraint(equalTo: self.userNameTextField.leadingAnchor),
+            self.modifyButton.leadingAnchor.constraint(equalTo: self.userNameLabel.leadingAnchor),
             self.modifyButton.widthAnchor.constraint(equalToConstant: self.modifyButton.intrinsicContentSize.width + 20),
             self.modifyButton.heightAnchor.constraint(equalToConstant: self.modifyButton.intrinsicContentSize.height)
         ])
@@ -96,7 +103,11 @@ class SettingViewController: UIViewController {
     
     @objc private func moveToBuddyCustom(_ sender: UIButton) {
         self.modifyButton.animateButtonTap(scale: 0.9)
-        self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
+        guard let myBuddy = self.settingViewModel.myBuddy else { return }
+        let buddyCustomViewController = BuddyCustomViewController()
+        buddyCustomViewController.delegate = self
+        buddyCustomViewController.configure(by: myBuddy)
+        self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
     }
     
     private func configureButtons() {
@@ -108,7 +119,7 @@ class SettingViewController: UIViewController {
     private func configureRemoveAllGatheringButton() {
         self.view.addSubview(self.removeAllGatheringButton)
         self.removeAllGatheringButton.setTitle("모임 목록 초기화", for: .normal)
-        self.makeButtonLayer(button: self.removeAllGatheringButton, upperView: self.userNameTextField, constant: 100)
+        self.makeButtonLayer(button: self.removeAllGatheringButton, upperView: self.userNameLabel, constant: 100)
         self.removeAllGatheringButton.addTarget(self, action: #selector(self.removeAlert), for: .touchUpInside)
     }
     
@@ -163,4 +174,16 @@ class SettingViewController: UIViewController {
         self.present(developSafariView, animated: true, completion: nil)
     }
     
+}
+
+extension SettingViewController: BuddyCustomDelegate {
+    func buddyAddDidCompleted(_ buddy: Buddy) {
+        self.settingViewModel.didMyBuddyChanged(buddy: buddy)
+        self.settingViewModel.fetchMyBuddy()
+    }
+    
+    func buddyEditDidCompleted(_ buddy: Buddy) {
+        self.settingViewModel.didMyBuddyChanged(buddy: buddy)
+        self.settingViewModel.fetchMyBuddy()
+    }
 }

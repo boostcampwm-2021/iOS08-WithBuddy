@@ -43,6 +43,16 @@ final class ChartViewController: UIViewController {
     }
     
     private func bind() {
+        self.viewModel.$name
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] name in
+                guard let name = name else { return }
+                self?.bubbleChartView.update(name: name)
+                self?.purposeChartView.update(name: name)
+                self?.latestOldChartView.update(name: name)
+            })
+            .store(in: &self.cancellables)
+                    
         self.viewModel.$buddyRank
             .sink { [weak self] list in
                 self?.update(buddyList: list)

@@ -53,52 +53,52 @@ class BuddyCustomViewController: UIViewController {
     private func bind() {
         self.buddyCustomViewModel.$face
             .receive(on: DispatchQueue.main)
-            .sink { face in
+            .sink { [weak self] face in
                 var colorSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
                 colorSnapshot.appendSections([0])
                 colorSnapshot.appendItems(FaceColor.allCases.map({
                     CheckableInfo(description: $0.description, check: $0 == face.color)
                 }))
-                self.colorDataSource.apply(colorSnapshot, animatingDifferences: true)
+                self?.colorDataSource.apply(colorSnapshot, animatingDifferences: true)
                 
                 var faceSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
                 faceSnapshot.appendSections([0])
                 faceSnapshot.appendItems((Int.minFaceNum...Int.maxFaceNum).map({
                     CheckableInfo(description: "\(face.color)\($0)", check: $0 == face.number)
                 }))
-                self.faceDataSource.apply(faceSnapshot, animatingDifferences: true)
+                self?.faceDataSource.apply(faceSnapshot, animatingDifferences: true)
                 
-                self.buddyImageView.image = UIImage(named: "\(face)")
+                self?.buddyImageView.image = UIImage(named: "\(face)")
             }
             .store(in: &self.cancellables)
         
         self.buddyCustomViewModel.$name
             .receive(on: DispatchQueue.main)
-            .sink{ text in
-                self.nameTextField.text = text
+            .sink{ [weak self] text in
+                self?.nameTextField.text = text
             }
             .store(in: &self.cancellables)
         
         self.buddyCustomViewModel.addDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ buddy in
-                self.delegate?.buddyAddDidCompleted(buddy)
-                self.navigationController?.popViewController(animated: true)
+            .sink{ [weak self] buddy in
+                self?.delegate?.buddyAddDidCompleted(buddy)
+                self?.navigationController?.popViewController(animated: true)
             }
             .store(in: &self.cancellables)
         
         self.buddyCustomViewModel.editDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ buddy in
-                self.delegate?.buddyEditDidCompleted(buddy)
-                self.navigationController?.popViewController(animated: true)
+            .sink{ [weak self] buddy in
+                self?.delegate?.buddyEditDidCompleted(buddy)
+                self?.navigationController?.popViewController(animated: true)
             }
             .store(in: &self.cancellables)
         
         self.buddyCustomViewModel.failSignal
             .receive(on: DispatchQueue.main)
-            .sink{ result in
-                self.alertError(result)
+            .sink{ [weak self] result in
+                self?.alertError(result)
             }
             .store(in: &self.cancellables)
     }

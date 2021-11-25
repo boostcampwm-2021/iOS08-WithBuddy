@@ -48,6 +48,7 @@ final class ListViewController: UIViewController {
     
     private func bind() {
         self.listViewModel.$gatheringList
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] getheringList in
                 self?.reloadGathering(list: getheringList)
             }

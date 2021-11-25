@@ -278,10 +278,11 @@ class GatheringDetailViewController: UIViewController {
         self.contentView.addSubview(self.purposeCollectionView)
         self.purposeCollectionView.backgroundColor = .clear
         self.purposeCollectionView.showsHorizontalScrollIndicator = false
-        self.purposeCollectionView.isUserInteractionEnabled = false
+        self.purposeCollectionView.isUserInteractionEnabled = true
         self.purposeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
 
         let purposeFlowLayout = UICollectionViewFlowLayout()
+        purposeFlowLayout.scrollDirection = .horizontal
         let purposeWidth = (self.view.frame.width - (.plusInset * 2))/5 - .innerPartInset
         purposeFlowLayout.itemSize = CGSize(width: purposeWidth, height: .buddyAndPurposeHeight)
         self.purposeCollectionView.collectionViewLayout = purposeFlowLayout

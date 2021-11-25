@@ -15,7 +15,7 @@ public class BuddyEntity: NSManagedObject {
     @NSManaged public var id: UUID
     @NSManaged public var name: String
     @NSManaged public var face: String
-    @NSManaged public var gatheringList: Set<GatheringEntity>?
+    @NSManaged public var gatheringList: Set<GatheringEntity>
     
 }
 

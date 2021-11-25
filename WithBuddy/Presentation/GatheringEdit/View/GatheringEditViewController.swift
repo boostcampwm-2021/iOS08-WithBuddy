@@ -13,23 +13,23 @@ class GatheringEditViewController: UIViewController {
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
     
-    private lazy var dateTitleLabel = RegisterTitleLabel()
-    private lazy var dateBackgroundView = UIView()
+    private lazy var dateTitleLabel = PurpleTitleLabel()
+    private lazy var dateBackgroundView = WhiteView()
     private lazy var datePicker = UIDatePicker()
   
-    private lazy var placeTitleLabel = RegisterTitleLabel()
-    private lazy var placeBackgroundView = UIView()
+    private lazy var placeTitleLabel = PurpleTitleLabel()
+    private lazy var placeBackgroundView = WhiteView()
     private lazy var placeTextField = UITextField()
     
-    private lazy var purposeTitleLabel = RegisterTitleLabel()
+    private lazy var purposeTitleLabel = PurpleTitleLabel()
     private lazy var purposeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     private lazy var purposeDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.purposeCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifier, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
-        cell.update(image: UIImage(named: "\(itemIdentifier.description)"), text: "\(itemIdentifier.description)", check: itemIdentifier.check)
+        cell.update(image: UIImage(named: "\(itemIdentifier.engDescription)"), text: "\(itemIdentifier.korDescription)", check: itemIdentifier.check)
         return cell
     }
     
-    private lazy var buddyTitleLabel = RegisterTitleLabel()
+    private lazy var buddyTitleLabel = PurpleTitleLabel()
     private lazy var buddyAddButton = UIButton()
     private lazy var buddyCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     private lazy var buddyDataSource = UICollectionViewDiffableDataSource<Int, Buddy>(collectionView: self.buddyCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Buddy) -> UICollectionViewCell? in
@@ -38,11 +38,11 @@ class GatheringEditViewController: UIViewController {
         return cell
     }
     
-    private lazy var memoTitleLabel = RegisterTitleLabel()
-    private lazy var memoBackgroundView = UIView()
+    private lazy var memoTitleLabel = PurpleTitleLabel()
+    private lazy var memoBackgroundView = WhiteView()
     private lazy var memoTextView = UITextView()
     
-    private lazy var pictureTitleLabel = RegisterTitleLabel()
+    private lazy var pictureTitleLabel = PurpleTitleLabel()
     private lazy var pictureAddButton = UIButton()
     private lazy var pictureCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     private lazy var pictureDataSource = UICollectionViewDiffableDataSource<Int, URL>(collectionView: self.pictureCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: URL) -> UICollectionViewCell? in
@@ -50,6 +50,8 @@ class GatheringEditViewController: UIViewController {
         cell.configure(url: itemIdentifier)
         return cell
     }
+    
+    private lazy var deleteButton = UIButton()
     
     weak var delegate: GatheringEditDelegate?
     private var gatheringEditViewModel = GatheringEditViewModel()
@@ -61,6 +63,27 @@ class GatheringEditViewController: UIViewController {
         self.configure()
         self.gatheringEditViewModel.didDatePicked(Date())
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addGathering))
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard !placeTextField.isFirstResponder else { return }
+        let memoButtomY = self.memoBackgroundView.frame.origin.y + self.memoBackgroundView.frame.height - self.scrollView.bounds.origin.y
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let offset = memoButtomY + keyboardSize.height - self.scrollView.bounds.height
+            if offset > 0 {
+                self.scrollView.bounds.origin.y += offset
+            }
+        }
     }
     
     private func bind() {
@@ -77,7 +100,7 @@ class GatheringEditViewController: UIViewController {
         self.datePicker.date = gathering.date
         self.gatheringEditViewModel.didDatePicked(gathering.date)
         self.gatheringEditViewModel.didPlaceChanged(gathering.place ?? "")
-        for (idx, place) in PlaceType.allCases.enumerated() {
+        for (idx, place) in PurposeCategory.allCases.enumerated() {
             if gathering.purpose.contains(place.description) {
                 self.gatheringEditViewModel.didPurposeTouched(idx)
             }
@@ -193,6 +216,7 @@ class GatheringEditViewController: UIViewController {
         self.configureBuddyPart()
         self.configureMemoPart()
         self.configurePicturePart()
+        self.configureDeleteButton()
     }
     
     private func configureScrollView() {
@@ -234,21 +258,18 @@ class GatheringEditViewController: UIViewController {
         self.dateTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.dateTitleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: .innerPartInset),
-            self.dateTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.dateTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset)
+            self.dateTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.dateTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])
     }
     
     private func configureDateBackground() {
         self.contentView.addSubview(self.dateBackgroundView)
-        self.dateBackgroundView.backgroundColor = .white
-        self.dateBackgroundView.layer.cornerRadius = 10
-        
         self.dateBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.dateBackgroundView.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: .innerPartInset),
-            self.dateBackgroundView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.dateBackgroundView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
+            self.dateBackgroundView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.dateBackgroundView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
             self.dateBackgroundView.heightAnchor.constraint(equalToConstant: .backgroudHeight)
         ])
     }
@@ -256,14 +277,13 @@ class GatheringEditViewController: UIViewController {
     private func configureDatePicker() {
         self.dateBackgroundView.addSubview(self.datePicker)
         self.datePicker.datePickerMode = .dateAndTime
-        self.datePicker.preferredDatePickerStyle = .compact
         self.datePicker.locale = Locale(identifier: "ko-KR")
         self.datePicker.timeZone = .autoupdatingCurrent
-        self.datePicker.addTarget(self, action: #selector(didDateChanged(_:)), for: .valueChanged)
+        self.datePicker.addTarget(self, action: #selector(self.didDateChanged), for: .valueChanged)
         
         self.datePicker.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.datePicker.leadingAnchor.constraint(equalTo: self.dateBackgroundView.leadingAnchor, constant: .backgroudInnerLeadingInset),
+            self.datePicker.leadingAnchor.constraint(equalTo: self.dateBackgroundView.leadingAnchor, constant: .plusInset),
             self.datePicker.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
         ])
     }
@@ -285,22 +305,19 @@ class GatheringEditViewController: UIViewController {
         
         self.placeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.placeTitleLabel.topAnchor.constraint(equalTo: self.dateBackgroundView.bottomAnchor, constant: .outsidePartInset),
-            self.placeTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.placeTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset)
+            self.placeTitleLabel.topAnchor.constraint(equalTo: self.dateBackgroundView.bottomAnchor, constant: .plusInset),
+            self.placeTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.placeTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])
     }
     
     private func configurePlaceBackground() {
         self.contentView.addSubview(self.placeBackgroundView)
-        self.placeBackgroundView.backgroundColor = .systemBackground
-        self.placeBackgroundView.layer.cornerRadius = 10
-        
         self.placeBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.placeBackgroundView.topAnchor.constraint(equalTo: self.placeTitleLabel.bottomAnchor, constant: .innerPartInset),
-            self.placeBackgroundView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.placeBackgroundView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
+            self.placeBackgroundView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.placeBackgroundView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
             self.placeBackgroundView.heightAnchor.constraint(equalToConstant: .backgroudHeight)
         ])
     }
@@ -312,8 +329,8 @@ class GatheringEditViewController: UIViewController {
         self.placeTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.placeTextField.topAnchor.constraint(equalTo: self.placeBackgroundView.topAnchor),
-            self.placeTextField.leadingAnchor.constraint(equalTo: self.placeBackgroundView.leadingAnchor, constant: .backgroudInnerLeadingInset),
-            self.placeTextField.trailingAnchor.constraint(equalTo: self.placeBackgroundView.trailingAnchor, constant: .backgroudInnerTrailingInset),
+            self.placeTextField.leadingAnchor.constraint(equalTo: self.placeBackgroundView.leadingAnchor, constant: .plusInset),
+            self.placeTextField.trailingAnchor.constraint(equalTo: self.placeBackgroundView.trailingAnchor, constant: .minusInset),
             self.placeTextField.bottomAnchor.constraint(equalTo: self.placeBackgroundView.bottomAnchor)
         ])
     }
@@ -331,9 +348,9 @@ class GatheringEditViewController: UIViewController {
         
         self.purposeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.purposeTitleLabel.topAnchor.constraint(equalTo: self.placeBackgroundView.bottomAnchor, constant: .outsidePartInset),
-            self.purposeTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.purposeTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset)
+            self.purposeTitleLabel.topAnchor.constraint(equalTo: self.placeBackgroundView.bottomAnchor, constant: .plusInset),
+            self.purposeTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.purposeTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])
     }
     
@@ -347,15 +364,15 @@ class GatheringEditViewController: UIViewController {
         self.purposeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
 
         let purposeFlowLayout = UICollectionViewFlowLayout()
-        let purposeWidth = (self.view.frame.width - (.outsideLeadingInset * 2))/5 - .innerPartInset
-        purposeFlowLayout.itemSize = CGSize(width: purposeWidth, height: .purposeHeight)
+        let purposeWidth = (self.view.frame.width - (.plusInset * 2))/5 - .innerPartInset
+        purposeFlowLayout.itemSize = CGSize(width: purposeWidth, height: .buddyAndPurposeHeight)
         self.purposeCollectionView.collectionViewLayout = purposeFlowLayout
 
         self.purposeCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.purposeCollectionView.topAnchor.constraint(equalTo: self.purposeTitleLabel.bottomAnchor, constant: .innerPartInset),
-            self.purposeCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.purposeCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
+            self.purposeCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.purposeCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
             self.purposeCollectionView.heightAnchor.constraint(equalToConstant: .purposeWholeHeight)
         ])
     }
@@ -383,16 +400,16 @@ class GatheringEditViewController: UIViewController {
         
         self.buddyTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.buddyTitleLabel.topAnchor.constraint(equalTo: self.purposeCollectionView.bottomAnchor, constant: .outsidePartInset),
-            self.buddyTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.buddyTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset)
+            self.buddyTitleLabel.topAnchor.constraint(equalTo: self.purposeCollectionView.bottomAnchor, constant: .plusInset),
+            self.buddyTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.buddyTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])
     }
     
     private func configureBuddyAddButton() {
         self.contentView.addSubview(self.buddyAddButton)
         let config = UIImage.SymbolConfiguration(
-            pointSize: .buddyWidth, weight: .medium, scale: .default)
+            pointSize: .buddyAndPurposeWidth, weight: .medium, scale: .default)
         let image = UIImage(systemName: "plus.circle", withConfiguration: config)
         self.buddyAddButton.setImage(image, for: .normal)
         self.buddyAddButton.addTarget(self, action: #selector(self.onBuddyAddButtonTouched(_:)), for: .touchUpInside)
@@ -400,8 +417,8 @@ class GatheringEditViewController: UIViewController {
         self.buddyAddButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.buddyAddButton.topAnchor.constraint(equalTo: self.buddyTitleLabel.bottomAnchor, constant: .innerPartInset),
-            self.buddyAddButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.buddyAddButton.widthAnchor.constraint(equalToConstant: .buddyWidth),
+            self.buddyAddButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.buddyAddButton.widthAnchor.constraint(equalToConstant: .buddyAndPurposeWidth),
             self.buddyAddButton.heightAnchor.constraint(equalTo: self.buddyAddButton.widthAnchor)
         ])
     }
@@ -416,16 +433,16 @@ class GatheringEditViewController: UIViewController {
         
         let layout = UICollectionViewFlowLayout.init()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: .buddyWidth, height: .buddyHeight)
+        layout.itemSize = CGSize(width: .buddyAndPurposeWidth, height: .buddyAndPurposeHeight)
         
         self.buddyCollectionView.collectionViewLayout = layout
         
         self.buddyCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.buddyCollectionView.topAnchor.constraint(equalTo: self.buddyAddButton.topAnchor),
-            self.buddyCollectionView.leadingAnchor.constraint(equalTo: self.buddyAddButton.trailingAnchor, constant: .buddyButtonInset),
-            self.buddyCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideLeadingInset),
-            self.buddyCollectionView.heightAnchor.constraint(equalToConstant: .buddyHeight)
+            self.buddyCollectionView.leadingAnchor.constraint(equalTo: self.buddyAddButton.trailingAnchor, constant: .innerPartInset),
+            self.buddyCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .plusInset),
+            self.buddyCollectionView.heightAnchor.constraint(equalToConstant: .buddyAndPurposeHeight)
         ])
     }
     
@@ -448,22 +465,19 @@ class GatheringEditViewController: UIViewController {
         
         self.memoTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.memoTitleLabel.topAnchor.constraint(equalTo: self.buddyCollectionView.bottomAnchor, constant: .outsidePartInset),
-            self.memoTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.memoTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset)
+            self.memoTitleLabel.topAnchor.constraint(equalTo: self.buddyCollectionView.bottomAnchor, constant: .plusInset),
+            self.memoTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.memoTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])
     }
     
     private func configureMemoBackground() {
         self.contentView.addSubview(self.memoBackgroundView)
-        self.memoBackgroundView.backgroundColor = .systemBackground
-        self.memoBackgroundView.layer.cornerRadius = 10
-        
         self.memoBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.memoBackgroundView.topAnchor.constraint(equalTo: self.memoTitleLabel.bottomAnchor, constant: .innerPartInset),
-            self.memoBackgroundView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.memoBackgroundView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
+            self.memoBackgroundView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.memoBackgroundView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
             self.memoBackgroundView.heightAnchor.constraint(equalToConstant: .memoHeight)
         ])
     }
@@ -471,7 +485,7 @@ class GatheringEditViewController: UIViewController {
     private func configureMemoTextView() {
         self.memoBackgroundView.addSubview(self.memoTextView)
         self.memoTextView.backgroundColor = .systemBackground
-        self.memoTextView.font =  UIFont.systemFont(ofSize: 15, weight: .medium)
+        self.memoTextView.font =  UIFont.systemFont(ofSize: .labelSize, weight: .medium)
         self.memoTextView.textContentType = .none
         self.memoTextView.autocapitalizationType = .none
         self.memoTextView.autocorrectionType = .no
@@ -479,10 +493,10 @@ class GatheringEditViewController: UIViewController {
         
         self.memoTextView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.memoTextView.topAnchor.constraint(equalTo: self.memoBackgroundView.topAnchor, constant: .backgroudInnerTopInset),
-            self.memoTextView.leadingAnchor.constraint(equalTo: self.memoBackgroundView.leadingAnchor, constant: .backgroudInnerLeadingInset),
-            self.memoTextView.trailingAnchor.constraint(equalTo: self.memoBackgroundView.trailingAnchor, constant: .backgroudInnerTrailingInset),
-            self.memoTextView.bottomAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor, constant: .backgroudInnerBottomInset)
+            self.memoTextView.topAnchor.constraint(equalTo: self.memoBackgroundView.topAnchor, constant: .plusInset),
+            self.memoTextView.leadingAnchor.constraint(equalTo: self.memoBackgroundView.leadingAnchor, constant: .plusInset),
+            self.memoTextView.trailingAnchor.constraint(equalTo: self.memoBackgroundView.trailingAnchor, constant: .minusInset),
+            self.memoTextView.bottomAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor, constant: .minusInset)
         ])
     }
     
@@ -500,9 +514,9 @@ class GatheringEditViewController: UIViewController {
         
         self.pictureTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.pictureTitleLabel.topAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor, constant: .outsidePartInset),
-            self.pictureTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.pictureTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset)
+            self.pictureTitleLabel.topAnchor.constraint(equalTo: self.memoBackgroundView.bottomAnchor, constant: .plusInset),
+            self.pictureTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.pictureTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])
     }
     
@@ -517,7 +531,7 @@ class GatheringEditViewController: UIViewController {
         self.pictureAddButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.pictureAddButton.centerYAnchor.constraint(equalTo: self.pictureTitleLabel.centerYAnchor),
-            self.pictureAddButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
+            self.pictureAddButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
             self.pictureAddButton.widthAnchor.constraint(equalToConstant: .pictureAddButonSize),
             self.pictureAddButton.heightAnchor.constraint(equalTo: self.pictureAddButton.widthAnchor)
         ])
@@ -533,10 +547,9 @@ class GatheringEditViewController: UIViewController {
         self.pictureCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.pictureCollectionView.topAnchor.constraint(equalTo: self.pictureTitleLabel.bottomAnchor, constant: .innerPartInset),
-            self.pictureCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .outsideLeadingInset),
-            self.pictureCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .outsideTrailingInset),
-            self.pictureCollectionView.heightAnchor.constraint(equalTo: self.pictureCollectionView.widthAnchor),
-            self.pictureCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+            self.pictureCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.pictureCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
+            self.pictureCollectionView.heightAnchor.constraint(equalTo: self.pictureCollectionView.widthAnchor)
         ])
         
         self.pictureCollectionView.register(PictureCollectionViewCell.self, forCellWithReuseIdentifier: PictureCollectionViewCell.identifier)
@@ -559,6 +572,24 @@ class GatheringEditViewController: UIViewController {
         picker.delegate = self
         picker.sourceType = .photoLibrary
         present(picker, animated: true, completion: nil)
+    }
+    
+    // MARK: - DeleteButtonPart
+    
+    private func configureDeleteButton() {
+        self.contentView.addSubview(self.deleteButton)
+        self.deleteButton.backgroundColor = UIColor(named: "GraphRed")
+        self.deleteButton.layer.cornerRadius = .buttonCornerRadius
+        self.deleteButton.setTitle("모임 삭제", for: .normal)
+        self.deleteButton.addTarget(self, action: #selector(self.deleteGathering), for: .touchUpInside)
+        self.deleteButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.deleteButton.topAnchor.constraint(equalTo: self.pictureCollectionView.bottomAnchor, constant: .plusInset),
+            self.deleteButton.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.deleteButton.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
+            self.deleteButton.heightAnchor.constraint(equalToConstant: .backgroudHeight),
+            self.deleteButton.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+        ])
     }
     
     // MARK: - CompletePart
@@ -584,9 +615,23 @@ class GatheringEditViewController: UIViewController {
         self.gatheringEditViewModel.didDoneTouched()
     }
     
+    @objc private func deleteGathering() {
+        self.deleteButton.animateButtonTap(scale: 0.9)
+        let alert = UIAlertController(title: "모임 삭제", message: "정말로 삭제하시겠습니까?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+        let deleteAction = UIAlertAction(title: "OK", style: .destructive) { _ in
+            self.gatheringEditViewModel.didDeleteButtonTouched()
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        self.present(alert, animated: true)
+    }
+    
     @objc private func tapEmptySpace(){
         self.view.endEditing(true)
     }
+    
 }
 
 extension GatheringEditViewController: UICollectionViewDelegate {

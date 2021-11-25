@@ -23,6 +23,11 @@ class CalendarViewController: UIViewController {
         self.configure()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.headerView.reloadHeaderComment(text: self.calendarViewModel.headerComment())
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.calendarViewModel.viewDidAppear()
@@ -39,26 +44,33 @@ class CalendarViewController: UIViewController {
     private func bind() {
         self.calendarViewModel.monthSubject
             .receive(on: DispatchQueue.main)
-            .sink{ month in
-                self.calendarView.reloadMonthLabel(month: month)
+            .sink{ [weak self] month in
+                self?.calendarView.reloadMonthLabel(month: month)
             }.store(in: &self.cancellables)
         
         self.calendarViewModel.didDaysReloadSignal
             .receive(on: DispatchQueue.main)
-            .sink{ _ in
-                self.calendarView.collectionView.reloadData()
+            .sink{ [weak self] _ in
+                self?.calendarView.collectionView.reloadData()
             }.store(in: &self.cancellables)
         
         self.calendarViewModel.didGatheringReloadSignal
             .receive(on: DispatchQueue.main)
-            .sink{ _ in
-                self.calendarView.collectionView.reloadData()
+            .sink{ [weak self] _ in
+                self?.calendarView.collectionView.reloadData()
             }.store(in: &self.cancellables)
         
         self.calendarView.monthButtonSignal
             .receive(on: DispatchQueue.main)
-            .sink{ number in
-                self.calendarViewModel.didMonthButtonTouched(number: number)
+            .sink{ [weak self] number in
+                self?.calendarViewModel.didMonthButtonTouched(number: number)
+            }.store(in: &self.cancellables)
+        
+        self.calendarViewModel.$myFace
+            .receive(on: DispatchQueue.main)
+            .sink{ [weak self] face in
+                guard let face = face else { return }
+                self?.headerView.update(face: face)
             }.store(in: &self.cancellables)
     }
     
@@ -147,8 +159,12 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         )
         calendarDetailViewController.delegate = self
         
-        if let presentationController = calendarDetailViewController.presentationController as? UISheetPresentationController {
-            presentationController.detents = [.medium(), .large()]
+        if #available(iOS 15.0, *) {
+            if let presentationController = calendarDetailViewController.presentationController as? UISheetPresentationController {
+                presentationController.detents = [.medium(), .large()]
+            }
+        } else {
+            calendarDetailViewController.modalPresentationStyle = .formSheet
         }
         
         self.present(calendarDetailViewController, animated: true)
@@ -168,6 +184,10 @@ extension CalendarViewController: GatheringListDelegate {
         let viewController = GatheringEditViewController()
         viewController.configure(by: gathering)
         self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func deleteGathering() {
+        self.calendarViewModel.reloadFaces()
     }
     
 }

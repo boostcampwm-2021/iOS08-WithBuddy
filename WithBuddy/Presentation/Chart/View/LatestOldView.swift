@@ -57,7 +57,7 @@ class LatestOldView: UIView {
     
     private func configureFirstLabel() {
         self.addSubview(self.firstLabel)
-        self.firstLabel.font = .systemFont(ofSize: 12)
+        self.firstLabel.font = .systemFont(ofSize: .chartLabelSize)
         self.firstLabel.textAlignment = .center
         self.firstLabel.text = ""
         self.firstLabel.textColor = .systemGray
@@ -85,8 +85,8 @@ class LatestOldView: UIView {
         self.stackView.addArrangedSubview(self.secondLabel)
         self.nameLabel.text = "위드버디"
         self.secondLabel.text = "님이에요!"
-        self.nameLabel.font = .boldSystemFont(ofSize: 12)
-        self.secondLabel.font = .systemFont(ofSize: 12)
+        self.nameLabel.font = .boldSystemFont(ofSize: .chartLabelSize)
+        self.secondLabel.font = .systemFont(ofSize: .chartLabelSize)
         self.secondLabel.textColor = .systemGray
     }
 

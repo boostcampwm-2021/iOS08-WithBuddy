@@ -17,7 +17,7 @@ final class CalendarUseCase {
     
     func convertToString(month: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy년 M월"
+        dateFormatter.dateFormat = "yyyy년 MM월"
         return dateFormatter.string(from: month)
     }
     
@@ -49,6 +49,10 @@ final class CalendarUseCase {
         return self.calendar.date(byAdding: DateComponents(month: 1), to: baseDate) ?? Date()
     }
     
+    func next8Days(baseDate: Date) -> Date {
+        return self.calendar.date(byAdding: DateComponents(day: 8), to: baseDate) ?? Date()
+    }
+    
     func numOfDaysInMonth(baseDate: Date) -> Int {
         guard let range = self.calendar.range(of: .day, in: .month, for: baseDate) else { return 0 }
         return range.count
@@ -77,6 +81,10 @@ final class CalendarUseCase {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd"
         return Int(dateFormatter.string(from: baseDate)) ?? 0
+    }
+    
+    func isSameDay(date1: Date, date2: Date) -> Bool {
+        return self.firstTimeOfDay(baseDate: date1) == self.firstTimeOfDay(baseDate: date2)
     }
     
 }

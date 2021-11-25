@@ -29,15 +29,20 @@ class RegisterViewModel {
         return self.purposeList.filter( { $0.check })
     }
     private(set) var addBuddySignal = PassthroughSubject<[Buddy], Never>()
-    private(set) var registerDoneSignal = PassthroughSubject<Void, Never>()
+    private(set) var registerDoneSignal = PassthroughSubject<Gathering, Never>()
     private(set) var registerFailSignal = PassthroughSubject<RegisterError, Never>()
     
-    @Published private(set) var purposeList: [CheckableInfo] = PlaceType.allCases.map({ CheckableInfo(description: "\($0)", check: false) })
+    @Published private(set) var purposeList: [CheckableInfo] = []
     @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var pictures: [URL] = []
     
     private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
     private var gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
+    private var purposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared)
+    
+    init() {
+        self.configure()
+    }
     
     func didDatePicked(_ date: Date) {
         self.date = date
@@ -88,13 +93,26 @@ class RegisterViewModel {
             guard let date = date else {
                 return
             }
-            self.gatheringUseCase.insertGathering(Gathering(id: UUID(), date: date, place: self.place, purpose: self.checkedPurposeList.map{ $0.description }, buddyList: self.buddyList, memo: self.memo, picture: self.pictures))
-            self.registerDoneSignal.send()
+            let gathering = Gathering(
+                id: UUID(),
+                date: date,
+                place: self.place,
+                purpose: self.checkedPurposeList.map{ $0.engDescription },
+                buddyList: self.buddyList,
+                memo: self.memo,
+                picture: self.pictures
+            )
+            self.gatheringUseCase.insertGathering(gathering)
+            self.registerDoneSignal.send(gathering)
         }
     }
     
     func didAddBuddyTouched() {
         self.addBuddySignal.send(self.buddyList)
+    }
+    
+    private func configure() {
+        self.purposeList = PurposeCategory.allCases.map({ CheckableInfo(engDescription: "\($0)", korDescription: self.purposeUseCase.engToKor(eng: "\($0)"), check: false) })
     }
     
 }

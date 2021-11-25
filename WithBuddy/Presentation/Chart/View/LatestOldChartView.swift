@@ -9,8 +9,8 @@ import UIKit
 
 final class LatestOldChartView: UIView {
     
-    private let nameLabel = NameLabel()
-    private let titleLabel = TitleLabel()
+    private let nameLabel = PurpleTitleLabel()
+    private let titleLabel = BlackTitleLabel()
     private let whiteView = WhiteView()
     private let stackView = UIStackView()
     private let latestView = LatestOldView()
@@ -41,11 +41,14 @@ final class LatestOldChartView: UIView {
         self.oldView.update(name: oldName, face: face)
     }
     
+    func showDefaultView() {
+        self.defaultView.isHidden = false
+        self.stackView.isHidden = true
+    }
+    
     private func showStackView() {
-        if self.stackView.isHidden {
-            self.defaultView.isHidden.toggle()
-            self.stackView.isHidden.toggle()
-        }
+        self.defaultView.isHidden = true
+        self.stackView.isHidden = false
     }
     
     private func configure() {

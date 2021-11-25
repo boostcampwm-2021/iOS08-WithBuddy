@@ -6,35 +6,47 @@
 //
 
 import Foundation
+import Combine
 
 final class ChartViewModel {
     
+    @Published private(set) var name: String?
     @Published private(set) var buddyRank: [(Buddy, Int)] = []
-    @Published private(set) var purposeRank: [String] = []
+    @Published private(set) var purposeRank: [(String, String)] = []
     @Published private(set) var latestBuddy: Buddy?
     @Published private(set) var oldBuddy: Buddy?
     
     private let gatheringUseCase: GatheringUseCase
     private let buddyUseCase: BuddyUseCase
+    private let purposeUseCase: PurposeUseCaseProtocol
+    private let userUseCase: UserUseCase
     private var gatheringList: [Gathering] = []
     private var buddyList: [Buddy] = []
     
-    init() {
-        self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
-        self.buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
-        self.configure()
-    }
-    
-    private func configure() {
-        self.fetch()
+    init(
+        gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared),
+        buddyUseCase: BuddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared),
+        purposeUseCase: PurposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared),
+        userUseCase: UserUseCase = UserUseCase()
+    ) {
+        self.gatheringUseCase = gatheringUseCase
+        self.buddyUseCase = buddyUseCase
+        self.purposeUseCase = purposeUseCase
+        self.userUseCase = userUseCase
     }
     
     func fetch() {
+        self.fetchName()
         self.fetchGatheringAndBuddy()
-        self.fetchBuddyLank()
-        self.fetchPurposeLank()
+        self.fetchBuddyRank()
+        self.fetchPurposeRank()
         self.fetchLatestBuddy()
         self.fetchOldBuddy()
+    }
+    
+    private func fetchName() {
+        guard let buddy = self.userUseCase.fetchUser() else { return }
+        self.name = buddy.name
     }
     
     private func fetchGatheringAndBuddy() {
@@ -42,7 +54,7 @@ final class ChartViewModel {
         self.buddyList = self.buddyUseCase.fetchBuddy()
     }
     
-    private func fetchBuddyLank() {
+    private func fetchBuddyRank() {
         var buddyMap: [Buddy: Int] = [:]
         self.buddyList.forEach { buddy in
             buddyMap[buddy] = 0
@@ -64,30 +76,11 @@ final class ChartViewModel {
         }
     }
     
-    private func fetchPurposeLank() {
-        var purposeMap = [String: Int]()
-        
-        self.gatheringList.forEach { gathering in
-            gathering.purpose.forEach { purpose in
-                if purpose != "Etc" {
-                    if purposeMap.keys.contains(purpose) {
-                        purposeMap[purpose]? += 1
-                    } else {
-                        purposeMap[purpose] = 1
-                    }
-                }
-            }
-        }
-        
-        let sortedPurposeList = purposeMap.sorted {
-            if $0.value == $1.value { return $0.key < $1.key }
-            return $0.value > $1.value
-        }.map{ $0.key }
-        
-        let index = min(3, sortedPurposeList.count - 1)
-        if Int.zero <= index {
-            self.purposeRank = Array(sortedPurposeList[...index])
-        }
+    private func fetchPurposeRank() {
+        self.purposeUseCase.fetchTopFourPurpose()
+            .sink(receiveValue: { rank in
+                self.purposeRank = rank.map{ ($0, self.purposeUseCase.engToKor(eng: $0)) }
+            }).cancel()
     }
     
     private func fetchLatestBuddy() {
@@ -96,6 +89,7 @@ final class ChartViewModel {
             self.latestBuddy = gathering.buddyList.first
             return
         }
+        self.latestBuddy = nil
     }
     
     private func fetchOldBuddy() {
@@ -114,6 +108,7 @@ final class ChartViewModel {
         
         if self.oldBuddy == nil {
             self.oldBuddy = gatheringList.last?.buddyList.last
+            return
         }
     }
     

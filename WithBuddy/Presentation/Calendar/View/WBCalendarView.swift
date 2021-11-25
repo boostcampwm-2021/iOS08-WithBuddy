@@ -11,7 +11,7 @@ import Combine
 class WBCalendarView: UIView {
     
     private let calendarManager = CalendarUseCase()
-    private lazy var thisMonthLabel = UILabel()
+    private lazy var thisMonthLabel = PurpleTitleLabel()
     private lazy var prevMonthButton = UIButton()
     private lazy var nextMonthButton = UIButton()
     private lazy var todayButton = UIButton()
@@ -41,12 +41,11 @@ class WBCalendarView: UIView {
     
     func reloadMonthLabel(month: String) {
         self.thisMonthLabel.text = month
+        self.thisMonthLabel.font = UIFont.monospacedSystemFont(ofSize: 16, weight: .medium)
     }
     
     private func configureThisMonth() {
         self.addSubview(thisMonthLabel)
-        self.thisMonthLabel.textColor = UIColor(named: "LabelPurple")
-        self.thisMonthLabel.font = .boldSystemFont(ofSize: 17)
         self.thisMonthLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.thisMonthLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 35),
@@ -65,9 +64,9 @@ class WBCalendarView: UIView {
         self.nextMonthButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.prevMonthButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor),
-            self.prevMonthButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 100),
+            self.prevMonthButton.trailingAnchor.constraint(equalTo: self.thisMonthLabel.leadingAnchor, constant: -5),
             self.nextMonthButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor),
-            self.nextMonthButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -100)
+            self.nextMonthButton.leadingAnchor.constraint(equalTo: self.thisMonthLabel.trailingAnchor, constant: 5)
         ])
     }
     
@@ -77,7 +76,7 @@ class WBCalendarView: UIView {
         self.todayButton.backgroundColor = UIColor(named: "LabelPurple")
         self.todayButton.layer.cornerRadius = 5
         self.todayButton.tintColor = .white
-        self.todayButton.titleLabel?.font = .systemFont(ofSize: 13)
+        self.todayButton.titleLabel?.font = .systemFont(ofSize: 12)
         self.todayButton.addTarget(self, action: #selector(self.thisMonth), for: .touchUpInside)
         self.todayButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

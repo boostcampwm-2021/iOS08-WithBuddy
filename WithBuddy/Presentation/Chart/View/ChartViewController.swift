@@ -39,29 +39,42 @@ final class ChartViewController: UIViewController {
         self.configureBubbleChartView()
         self.configurePurposeChartView()
         self.configureLatestOldChartView()
-        self.update(name: "정아")
     }
     
     private func bind() {
+        self.viewModel.$name
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] name in
+                guard let name = name else { return }
+                self?.bubbleChartView.update(name: name)
+                self?.purposeChartView.update(name: name)
+                self?.latestOldChartView.update(name: name)
+            })
+            .store(in: &self.cancellables)
+                    
         self.viewModel.$buddyRank
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] list in
                 self?.update(buddyList: list)
             }
             .store(in: &self.cancellables)
         
         self.viewModel.$purposeRank
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] list in
                 self?.update(purposeList: list)
             }
             .store(in: &self.cancellables)
         
         self.viewModel.$latestBuddy
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] buddy in
                 self?.update(latestBuddy: buddy)
             }
             .store(in: &self.cancellables)
         
         self.viewModel.$oldBuddy
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] buddy in
                 self?.update(oldBuddy: buddy)
             }
@@ -133,14 +146,17 @@ final class ChartViewController: UIViewController {
         self.bubbleChartView.update(list: list)
     }
     
-    private func update(purposeList: [String]?) {
+    private func update(purposeList: [(String, String)]?) {
         guard let list = purposeList else { return }
         self.purposeChartView.update(list: list)
     }
     
     private func update(latestBuddy: Buddy?) {
-        guard let buddy = latestBuddy else { return }
-        self.latestOldChartView.update(latestName: buddy.name, face: buddy.face)
+        if let buddy = latestBuddy {
+            self.latestOldChartView.update(latestName: buddy.name, face: buddy.face)
+            return
+        }
+        self.latestOldChartView.showDefaultView()
     }
     
     private func update(oldBuddy: Buddy?) {

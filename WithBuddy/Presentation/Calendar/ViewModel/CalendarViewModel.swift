@@ -13,10 +13,12 @@ final class CalendarViewModel {
     let maxDayOfMonth = 42
     private let calendarUseCase: CalendarUseCase
     private let gatheringUseCase: GatheringUseCase
+    private let userUseCase: UserUseCase
     private var calendarMonth: Date
     private var currentDate: Date
     private var thisMonthGathrtingList = [Gathering]()
     
+    @Published private(set) var myFace: String?
     private(set) var isSameMonth: Int?
     private(set) var totalDays = [Int]()
     private(set) var totalFaces = [String]()
@@ -27,15 +29,60 @@ final class CalendarViewModel {
     init() {
         self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
         self.calendarUseCase = CalendarUseCase()
+        self.userUseCase = UserUseCase()
         self.currentDate = Date()
         self.calendarMonth = self.calendarUseCase.firstTimeOfDay(baseDate: Date())
     }
     
     func viewDidAppear() {
+        self.fetchBuddyFace()
         self.currentDate = Date()
         self.sendMonthSubject()
         self.reloadDays()
         self.reloadFaces()
+    }
+    
+    func headerComment() -> String {
+        let gatheringList = self.gatheringUseCase.gatheringStatus(date: currentDate)
+        var gatheringExist = [0, 0, 0, 0, 0, 0, 0]
+        var day = Date()
+        for idx in 0..<7 {
+            gatheringList.forEach {
+                if self.calendarUseCase.isSameDay(date1: $0.date, date2: day) {
+                    gatheringExist[idx] = 1
+                }
+            }
+            day = self.calendarUseCase.nextDay(baseDate: day)
+        }
+        return selectHeaderComment(gatheringExist: gatheringExist)
+    }
+    
+    private func selectHeaderComment(gatheringExist: [Int]) -> String {
+        if gatheringExist[0] == 1 {
+            return HeaderComments.gatheringToday.rawValue
+        }
+        for idx in (2...7).reversed() {
+            if self.checkGathering(during: idx, gatheringExist: gatheringExist, status: .noGatheringStatus) {
+                return "\(idx) \(HeaderComments.noGathering.rawValue)"
+            }
+        }
+        for idx in (2...7).reversed() {
+            if self.checkGathering(during: idx, gatheringExist: gatheringExist, status: .fullGatheringStatus) {
+                return "\(idx) \(HeaderComments.fullGathering.rawValue)"
+            }
+        }
+        return HeaderComments.everyDay.rawValue
+    }
+    
+    private func checkGathering(during days: Int, gatheringExist: [Int], status: Int) -> Bool {
+        var checkRange = (0...days-1)
+        if status == .fullGatheringStatus {
+            checkRange = (1...days)
+        }
+        for idx in checkRange where gatheringExist[idx] == status {
+            return false
+        }
+        return true
     }
     
     func didMonthButtonTouched(number: Int) {
@@ -48,6 +95,11 @@ final class CalendarViewModel {
     
     func findDate(index: Int) -> Date {
         self.calendarUseCase.makeDay(month: self.calendarMonth, day: self.totalDays[index])
+    }
+    
+    private func fetchBuddyFace() {
+        guard let buddy = self.userUseCase.fetchUser() else { return }
+        self.myFace = buddy.face
     }
     
     private func sendMonthSubject() {
@@ -68,7 +120,7 @@ final class CalendarViewModel {
         self.didDaysReloadSignal.send()
     }
     
-    private func reloadFaces() {
+    func reloadFaces() {
         let firstDayIndex = self.calendarUseCase.findFirstDayIndex(of: self.calendarMonth)
         self.thisMonthGathrtingList = self.gatheringUseCase.fetchGathering(month: self.calendarMonth)
         self.totalFaces = Array(repeating: "", count: self.maxDayOfMonth)
@@ -79,7 +131,6 @@ final class CalendarViewModel {
                 self.totalFaces[firstDayIndex + day - 1] = face
             }
         }
-        
         self.didDaysReloadSignal.send()
     }
     

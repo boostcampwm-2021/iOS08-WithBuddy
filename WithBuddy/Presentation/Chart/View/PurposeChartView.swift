@@ -9,8 +9,8 @@ import UIKit
 
 final class PurposeChartView: UIView {
     
-    private let nameLabel = NameLabel()
-    private let titleLabel = TitleLabel()
+    private let nameLabel = PurpleTitleLabel()
+    private let titleLabel = BlackTitleLabel()
     private let whiteView = WhiteView()
     private let stackView = UIStackView()
     private let firstPurposeView = PurposeView()
@@ -32,7 +32,7 @@ final class PurposeChartView: UIView {
         self.nameLabel.text = name
     }
     
-    func update(list: [String]) {
+    func update(list: [(String, String)]) {
         let first = list.indices ~= 0 ? list[0] : nil
         let second = list.indices ~= 1 ? list[1] : nil
         let third = list.indices ~= 2 ? list[2] : nil
@@ -43,15 +43,15 @@ final class PurposeChartView: UIView {
             return
         }
         
-        self.update(name: first, view: firstPurposeView)
-        self.update(name: second, view: secondPurposeView)
-        self.update(name: third, view: thirdPurposeView)
-        self.update(name: fourth, view: fourthPurposeView)
+        self.update(rank: 1, purpose: first, view: firstPurposeView)
+        self.update(rank: 2, purpose: second, view: secondPurposeView)
+        self.update(rank: 3, purpose: third, view: thirdPurposeView)
+        self.update(rank: 4, purpose: fourth, view: fourthPurposeView)
     }
     
-    private func update(name: String?, view: PurposeView) {
-        if let name = name {
-            view.update(image: name, purpose: name)
+    private func update(rank: Int, purpose: (String, String)?, view: PurposeView) {
+        if let purpose = purpose {
+            view.update(rank: rank, image: purpose.0, purpose: purpose.1)
             view.isHidden = false
             return
         }
@@ -78,7 +78,7 @@ final class PurposeChartView: UIView {
     
     private func configureTitleLabel() {
         self.addSubview(self.titleLabel)
-        self.titleLabel.text = "님의 만남 목적"
+        self.titleLabel.text = .purposeChartTitle
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.titleLabel.leadingAnchor.constraint(equalTo: self.nameLabel.trailingAnchor),
@@ -91,16 +91,16 @@ final class PurposeChartView: UIView {
         self.whiteView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.whiteView.leadingAnchor.constraint(equalTo: self.nameLabel.leadingAnchor),
-            self.whiteView.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: 10),
+            self.whiteView.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: .innerPartInset),
             self.whiteView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            self.whiteView.heightAnchor.constraint(equalToConstant: 100),
+            self.whiteView.heightAnchor.constraint(equalToConstant: .purposeWhiteViewHeight),
             self.whiteView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
     
     private func configureStackView() {
         self.whiteView.addSubview(self.stackView)
-        self.stackView.spacing = 10
+        self.stackView.spacing = .innerPartInset
         self.stackView.alignment = .center
         self.stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -122,10 +122,10 @@ final class PurposeChartView: UIView {
         self.secondPurposeView.isHidden = false
         self.thirdPurposeView.isHidden = false
         self.fourthPurposeView.isHidden = false
-        self.firstPurposeView.update(image: "DefaultHobby", purpose: "취미")
-        self.secondPurposeView.update(image: "DefaultStudy", purpose: "공부")
-        self.thirdPurposeView.update(image: "DefaultMeal", purpose: "식사")
-        self.fourthPurposeView.update(image: "DefaultSport", purpose: "운동")
+        self.firstPurposeView.update(rank: 1, image: .defaultHobby, purpose: .hobby)
+        self.secondPurposeView.update(rank: 2, image: .defaultStudy, purpose: .study)
+        self.thirdPurposeView.update(rank: 3, image: .defaultMeal, purpose: .meal)
+        self.fourthPurposeView.update(rank: 4, image: .defaultSport, purpose: .sport)
     }
 
 }

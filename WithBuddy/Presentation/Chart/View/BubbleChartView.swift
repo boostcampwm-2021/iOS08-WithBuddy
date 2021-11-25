@@ -9,8 +9,8 @@ import UIKit
 
 final class BubbleChartView: UIView {
     
-    private let nameLabel = NameLabel()
-    private let titleLabel = TitleLabel()
+    private let nameLabel = PurpleTitleLabel()
+    private let titleLabel = BlackTitleLabel()
     private let whiteView = WhiteView()
     private let firstBubbleImageView = UIImageView()
     private let secondBubbleImageView = UIImageView()
@@ -45,6 +45,7 @@ final class BubbleChartView: UIView {
         
         if first == nil {
             self.defaultView.isHidden = false
+            self.firstBubbleImageView.isHidden = true
             return
         }
         

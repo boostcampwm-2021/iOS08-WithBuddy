@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 final class GatheringUseCase {
     
@@ -20,15 +21,15 @@ final class GatheringUseCase {
     }
     
     func fetchGathering(including name: String) -> [Gathering] {
-        return coreDataManager.fetchGathering(including: name).map{ $0.toDomain() }
+        return self.coreDataManager.fetchGathering(including: name).map{ $0.toDomain() }
     }
     
     func fetchGathering(including date: Date) -> [Gathering] {
-        return coreDataManager.fetchGathering(including: date).map{ $0.toDomain() }
+        return self.coreDataManager.fetchGathering(including: date).map{ $0.toDomain() }
     }
     
     func fetchGathering(month: Date) -> [Gathering] {
-        return coreDataManager.fetchGaterhing(month: month).map{ $0.toDomain() }
+        return self.coreDataManager.fetchGaterhing(month: month).map{ $0.toDomain() }
     }
     
     func insertGathering(_ gathering: Gathering) {
@@ -41,6 +42,15 @@ final class GatheringUseCase {
     
     func deleteGathering(_ gatheringId: UUID) {
         self.coreDataManager.deleteGathering(gatheringId)
+    }
+    
+    func deleteAllGathering() -> AnyPublisher<Void, CoreDataManager.CoreDataError> {
+        return self.coreDataManager.deleteAllGathering()
+            .eraseToAnyPublisher()
+    }
+    
+    func gatheringStatus(date: Date) -> [Gathering] {
+        return self.coreDataManager.fetchGaterhing(oneWeekFrom: date).map{ $0.toDomain() }
     }
     
 }

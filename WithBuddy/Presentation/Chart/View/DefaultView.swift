@@ -10,7 +10,7 @@ import UIKit
 final class DefaultView: UIView {
     
     private let imageView = UIImageView()
-    private let label = UILabel()
+    private let label = PurpleLabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,7 +43,6 @@ final class DefaultView: UIView {
         self.addSubview(self.label)
         self.label.text = "기록이 없어요"
         self.label.textAlignment = .center
-        self.label.textColor = UIColor(named: "LabelPurple")
         self.label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.label.leadingAnchor.constraint(equalTo: self.leadingAnchor),

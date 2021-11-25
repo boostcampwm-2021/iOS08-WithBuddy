@@ -32,7 +32,7 @@ class RegisterViewModel {
     private(set) var registerDoneSignal = PassthroughSubject<Void, Never>()
     private(set) var registerFailSignal = PassthroughSubject<RegisterError, Never>()
     
-    @Published private(set) var purposeList: [CheckableInfo] = PlaceType.allCases.map({ CheckableInfo(description: "\($0)", check: false) })
+    @Published private(set) var purposeList: [CheckableInfo] = PurposeCategory.allCases.map({ CheckableInfo(description: "\($0)", check: false) })
     @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var pictures: [URL] = []
     

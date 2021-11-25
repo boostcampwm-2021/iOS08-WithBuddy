@@ -99,7 +99,7 @@ class GatheringDetailViewController: UIViewController {
 
                 var purposeSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
                 purposeSnapshot.appendSections([0])
-                let purposeList = PlaceType.allCases.map({ placeType -> CheckableInfo? in
+                let purposeList = PurposeCategory.allCases.map({ placeType -> CheckableInfo? in
                     if gathering.purpose.contains(placeType.description) { return CheckableInfo(description: "\(placeType)", check: true) }
                     return nil
                 }).compactMap({ $0 })

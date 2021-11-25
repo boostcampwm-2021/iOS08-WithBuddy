@@ -12,7 +12,7 @@ struct Gathering: Hashable {
     var id: UUID
     var date: Date
     var place: String?
-    var purpose: [PurposeCategory]
+    var purpose: [String]
     var buddyList: [Buddy]
     var memo: String?
     var picture: [URL]?

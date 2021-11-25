@@ -21,7 +21,7 @@ class GatheringEditViewModel {
     
     @Published private(set) var place: String?
     @Published private(set) var dateString: String?
-    @Published private(set) var purposeList: [CheckableInfo] = PlaceType.allCases.map({ CheckableInfo(description: "\($0)", check: false) })
+    @Published private(set) var purposeList: [CheckableInfo] = PurposeCategory.allCases.map({ CheckableInfo(description: "\($0)", check: false) })
     @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var memo: String?
     @Published private(set) var pictures: [URL] = []

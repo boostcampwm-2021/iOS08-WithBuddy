@@ -84,9 +84,9 @@ final class CoreDataManager {
         return self.fetch(request: request)
     }
     
-    private func fetchPurposeEntity(of purposeList: [PurposeCategory]) -> [PurposeEntity] {
+    private func fetchPurposeEntity(of purposeList: [String]) -> [PurposeEntity] {
         let request = PurposeEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "name IN %@", purposeList.map{ "\($0)" })
+        request.predicate = NSPredicate(format: "name IN %@", purposeList)
         return self.fetch(request: request)
     }
     

@@ -46,7 +46,7 @@ final class SettingViewModel {
         self.userUseCase.createUser(buddy: buddy)
     }
     
-    func didMyBuddyCreated() {
+    func fetchMyBuddy() {
         self.myBuddy = self.userUseCase.fetchUser()
     }
     

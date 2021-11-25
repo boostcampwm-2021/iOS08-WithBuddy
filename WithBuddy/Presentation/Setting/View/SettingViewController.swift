@@ -55,7 +55,7 @@ class SettingViewController: UIViewController {
         self.configureUserImage()
         self.configureUserName()
         self.configureModifyButton()
-        self.settingViewModel.didMyBuddyCreated()
+        self.settingViewModel.fetchMyBuddy()
     }
     
     private func configureUserImage() {

@@ -14,12 +14,14 @@
 		854AA76427338C2F00663911 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA76327338C2F00663911 /* ListTableViewCell.swift */; };
 		854AA7662733A37200663911 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA7652733A37200663911 /* ListViewModel.swift */; };
 		8560CCBA274B8E0F0076F500 /* PurpleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8560CCB9274B8E0F0076F500 /* PurpleLabel.swift */; };
+		8562473F274F512A0041E927 /* CGFloat+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6320B427415A85006BB1C0 /* CGFloat+Extension.swift */; };
+		85624740274F540C0041E927 /* PurpleTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262EF273CE740000190B8 /* PurpleTitleLabel.swift */; };
+		85624741274F54E00041E927 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF2E272FB51400B71C97 /* Assets.xcassets */; };
 		85BC8E14274131F300570FC4 /* ChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85BC8E13274131F300570FC4 /* ChartViewModel.swift */; };
 		85D262E8273CD703000190B8 /* PurposeChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262E7273CD703000190B8 /* PurposeChartView.swift */; };
 		85D262EA273CD71C000190B8 /* BubbleChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262E9273CD71C000190B8 /* BubbleChartView.swift */; };
 		85D262EC273CDEBE000190B8 /* LatestOldChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262EB273CDEBE000190B8 /* LatestOldChartView.swift */; };
 		85D262EE273CE6DD000190B8 /* WhiteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262ED273CE6DD000190B8 /* WhiteView.swift */; };
-		85D262F0273CE740000190B8 /* PurpleTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262EF273CE740000190B8 /* PurpleTitleLabel.swift */; };
 		85D262F2273CE7D6000190B8 /* BlackTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262F1273CE7D6000190B8 /* BlackTitleLabel.swift */; };
 		85D262F4273CF211000190B8 /* PurposeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262F3273CF211000190B8 /* PurposeView.swift */; };
 		85D262F6273CFEBF000190B8 /* LatestOldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262F5273CFEBF000190B8 /* LatestOldView.swift */; };
@@ -723,6 +725,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85624741274F54E00041E927 /* Assets.xcassets in Resources */,
 				85D9D867274E056C00BB299F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -768,6 +771,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8562473F274F512A0041E927 /* CGFloat+Extension.swift in Sources */,
 				85D9D865274E056900BB299F /* WithBuddyWidget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -776,6 +780,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85624740274F540C0041E927 /* PurpleTitleLabel.swift in Sources */,
 				8AF3152727461A8800BDDF85 /* CheckableInfo.swift in Sources */,
 				8521BE3D2743C492000F3C05 /* CalendarViewModel.swift in Sources */,
 				F78F14962743A5C90034E740 /* BuddyManageViewController.swift in Sources */,
@@ -837,9 +842,7 @@
 				F78F149B2743C1CF0034E740 /* BuddyManageViewModel.swift in Sources */,
 				8A73D679273A61EC001D5184 /* BuddyChoiceViewController.swift in Sources */,
 				854AA7662733A37200663911 /* ListViewModel.swift in Sources */,
-				85D262F0273CE740000190B8 /* PurpleTitleLabel.swift in Sources */,
 				8A397A2C274B8AE80060443C /* UserCreateViewModel.swift in Sources */,
-				85D262F0273CE740000190B8 /* PurpleTitleLabel.swift in Sources */,
 				BB2D258F2739299A00E7BF35 /* CoreDataManager.swift in Sources */,
 				BB1936D3274B8F50007EF21A /* PurposeUseCase.swift in Sources */,
 				BB2D25A5273A58A100E7BF35 /* GatheringUseCase.swift in Sources */,

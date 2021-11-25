@@ -21,7 +21,6 @@ struct Provider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         var entries: [SimpleEntry] = []
 
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
         for hourOffset in 0 ..< 5 {
             let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
@@ -40,9 +39,77 @@ struct SimpleEntry: TimelineEntry {
 
 struct WithBuddyWidgetEntryView : View {
     var entry: Provider.Entry
+    @Environment(\.widgetFamily) var family
 
     var body: some View {
-        Text(entry.date, style: .time)
+        switch family {
+        case .systemSmall: SmallWidget(entry: entry)
+        case .systemMedium: MediumWidget(entry: entry)
+        case .systemLarge: LargeWidget(entry: entry)
+        default: LargeWidget(entry: entry)
+        }
+    }
+}
+
+struct SmallWidget: View {
+    var entry: Provider.Entry
+    
+    var body: some View {
+        ZStack {
+            Color("BackgroundPurple")
+            Image("WidgetPurple")
+                .resizable()
+                .frame(width: .widgetBigBuddySize, height: .widgetBigBuddySize, alignment: .center)
+        }
+    }
+}
+
+struct MediumWidget: View {
+    var entry: Provider.Entry
+    
+    var body: some View {
+        ZStack {
+            Color("BackgroundPurple")
+            HStack {
+                Image("WidgetPurple")
+                    .resizable()
+                    .frame(width: .widgetSmallBuddySize, height: .widgetSmallBuddySize, alignment: .center)
+                Image("WidgetRed")
+                    .resizable()
+                    .frame(width: .widgetSmallBuddySize, height: .widgetSmallBuddySize, alignment: .center)
+                Image("WidgetYellow")
+                    .resizable()
+                    .frame(width: .widgetSmallBuddySize, height: .widgetSmallBuddySize, alignment: .center)
+            }
+        }
+    }
+}
+
+struct LargeWidget: View {
+    var entry: Provider.Entry
+    
+    var body: some View {
+        ZStack {
+            Color("BackgroundPurple")
+            VStack {
+                HStack {
+                    Image("WidgetPurple")
+                        .resizable()
+                        .frame(width: .widgetBigBuddySize, height: .widgetBigBuddySize, alignment: .center)
+                    Image("WidgetRed")
+                        .resizable()
+                        .frame(width: .widgetBigBuddySize, height: .widgetBigBuddySize, alignment: .center)
+                }
+                HStack {
+                    Image("WidgetYellow")
+                        .resizable()
+                        .frame(width: .widgetBigBuddySize, height: .widgetBigBuddySize, alignment: .center)
+                    Image("WidgetPink")
+                        .resizable()
+                        .frame(width: .widgetBigBuddySize, height: .widgetBigBuddySize, alignment: .center)
+                }
+            }
+        }
     }
 }
 

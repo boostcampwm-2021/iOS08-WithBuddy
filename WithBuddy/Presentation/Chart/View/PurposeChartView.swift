@@ -32,7 +32,7 @@ final class PurposeChartView: UIView {
         self.nameLabel.text = name
     }
     
-    func update(list: [String?]) {
+    func update(list: [(String, String)]) {
         let first = list.indices ~= 0 ? list[0] : nil
         let second = list.indices ~= 1 ? list[1] : nil
         let third = list.indices ~= 2 ? list[2] : nil
@@ -43,15 +43,15 @@ final class PurposeChartView: UIView {
             return
         }
         
-        self.update(rank: 1, name: first, view: firstPurposeView)
-        self.update(rank: 2, name: second, view: secondPurposeView)
-        self.update(rank: 3, name: third, view: thirdPurposeView)
-        self.update(rank: 4, name: fourth, view: fourthPurposeView)
+        self.update(rank: 1, purpose: first, view: firstPurposeView)
+        self.update(rank: 2, purpose: second, view: secondPurposeView)
+        self.update(rank: 3, purpose: third, view: thirdPurposeView)
+        self.update(rank: 4, purpose: fourth, view: fourthPurposeView)
     }
     
-    private func update(rank: Int, name: String?, view: PurposeView) {
-        if let name = name {
-            view.update(rank: rank, image: name, purpose: name)
+    private func update(rank: Int, purpose: (String, String)?, view: PurposeView) {
+        if let purpose = purpose {
+            view.update(rank: rank, image: purpose.0, purpose: purpose.1)
             view.isHidden = false
             return
         }

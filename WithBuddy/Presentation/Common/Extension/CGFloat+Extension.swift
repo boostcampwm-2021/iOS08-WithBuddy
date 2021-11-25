@@ -31,4 +31,8 @@ extension CGFloat {
     static let widgetSmallBuddySize = CGFloat(100)
     
     static let buttonCornerRadius = CGFloat(5)
+    
+    static let purposeSpacing = CGFloat(4)
+    static let purposeImageSize = CGFloat(65)
+    static let purposeWhiteViewHeight = CGFloat(100)
 }

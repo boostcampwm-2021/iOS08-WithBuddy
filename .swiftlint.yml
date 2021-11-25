@@ -7,6 +7,7 @@ disabled_rules:
 excluded:
   - WithBuddy/Application/AppDelegate.swift
   - WithBuddy/Application/SceneDelegate.swift
+  - WithBuddyWidget/
 
 opt_in_rules: # disable된것 중 enable 하고 싶은 것
     - force_unwrapping

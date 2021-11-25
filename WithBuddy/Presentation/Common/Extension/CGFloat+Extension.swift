@@ -26,8 +26,9 @@ extension CGFloat {
     static let labelSize = CGFloat(15)
     static let chartLabelSize = CGFloat(12)
     static let dayLabelSize = CGFloat(10)
-    
     static let fallingBuddySize = CGFloat(120)
+    static let widgetBigBuddySize = CGFloat(140)
+    static let widgetSmallBuddySize = CGFloat(100)
     
     static let buttonCornerRadius = CGFloat(5)
 }

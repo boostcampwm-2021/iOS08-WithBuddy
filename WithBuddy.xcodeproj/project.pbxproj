@@ -14,16 +14,25 @@
 		854AA76427338C2F00663911 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA76327338C2F00663911 /* ListTableViewCell.swift */; };
 		854AA7662733A37200663911 /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA7652733A37200663911 /* ListViewModel.swift */; };
 		8560CCBA274B8E0F0076F500 /* PurpleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8560CCB9274B8E0F0076F500 /* PurpleLabel.swift */; };
+		8562473F274F512A0041E927 /* CGFloat+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6320B427415A85006BB1C0 /* CGFloat+Extension.swift */; };
+		85624740274F540C0041E927 /* PurpleTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262EF273CE740000190B8 /* PurpleTitleLabel.swift */; };
+		85624741274F54E00041E927 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF2E272FB51400B71C97 /* Assets.xcassets */; };
+		85624745274F5DC70041E927 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85624744274F5DC70041E927 /* String+Extension.swift */; };
+		85624746274F5DCA0041E927 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85624744274F5DC70041E927 /* String+Extension.swift */; };
 		85BC8E14274131F300570FC4 /* ChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85BC8E13274131F300570FC4 /* ChartViewModel.swift */; };
 		85D262E8273CD703000190B8 /* PurposeChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262E7273CD703000190B8 /* PurposeChartView.swift */; };
 		85D262EA273CD71C000190B8 /* BubbleChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262E9273CD71C000190B8 /* BubbleChartView.swift */; };
 		85D262EC273CDEBE000190B8 /* LatestOldChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262EB273CDEBE000190B8 /* LatestOldChartView.swift */; };
 		85D262EE273CE6DD000190B8 /* WhiteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262ED273CE6DD000190B8 /* WhiteView.swift */; };
-		85D262F0273CE740000190B8 /* PurpleTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262EF273CE740000190B8 /* PurpleTitleLabel.swift */; };
 		85D262F2273CE7D6000190B8 /* BlackTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262F1273CE7D6000190B8 /* BlackTitleLabel.swift */; };
 		85D262F4273CF211000190B8 /* PurposeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262F3273CF211000190B8 /* PurposeView.swift */; };
 		85D262F6273CFEBF000190B8 /* LatestOldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262F5273CFEBF000190B8 /* LatestOldView.swift */; };
 		85D262F8273D138E000190B8 /* DefaultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D262F7273D138E000190B8 /* DefaultView.swift */; };
+		85D9D860274E056900BB299F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D9D85F274E056900BB299F /* WidgetKit.framework */; };
+		85D9D862274E056900BB299F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D9D861274E056900BB299F /* SwiftUI.framework */; };
+		85D9D865274E056900BB299F /* WithBuddyWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D9D864274E056900BB299F /* WithBuddyWidget.swift */; };
+		85D9D867274E056C00BB299F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 85D9D866274E056C00BB299F /* Assets.xcassets */; };
+		85D9D86B274E056C00BB299F /* WithBuddyWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 85D9D85D274E056900BB299F /* WithBuddyWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */; };
 		85FA1D99272FEBE000825C64 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85FA1D98272FEBE000825C64 /* ListViewController.swift */; };
 		8A07DF692743C20A008F6E58 /* GatheringEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A07DF662743C20A008F6E58 /* GatheringEditViewModel.swift */; };
@@ -83,12 +92,37 @@
 		F7E8AC3E273CD4E6005F8306 /* ImageTextCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2D2553273112EE00E7BF35 /* ImageTextCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		85D9D869274E056C00BB299F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BBF7FF1A272FB51000B71C97 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 85D9D85C274E056900BB299F;
+			remoteInfo = WithBuddyWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		85D9D86C274E056C00BB299F /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				85D9D86B274E056C00BB299F /* WithBuddyWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		8549E0AE274A390300C2F9AD /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		854AA75D27337A7200663911 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		854AA76327338C2F00663911 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		854AA7652733A37200663911 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
 		8560CCB9274B8E0F0076F500 /* PurpleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurpleLabel.swift; sourceTree = "<group>"; };
+		85624744274F5DC70041E927 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		85BC8E13274131F300570FC4 /* ChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewModel.swift; sourceTree = "<group>"; };
 		85C236B427380D39001499E5 /* FaceColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceColor.swift; sourceTree = "<group>"; };
 		85D262E7273CD703000190B8 /* PurposeChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurposeChartView.swift; sourceTree = "<group>"; };
@@ -100,6 +134,12 @@
 		85D262F3273CF211000190B8 /* PurposeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurposeView.swift; sourceTree = "<group>"; };
 		85D262F5273CFEBF000190B8 /* LatestOldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatestOldView.swift; sourceTree = "<group>"; };
 		85D262F7273D138E000190B8 /* DefaultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultView.swift; sourceTree = "<group>"; };
+		85D9D85D274E056900BB299F /* WithBuddyWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WithBuddyWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		85D9D85F274E056900BB299F /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		85D9D861274E056900BB299F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		85D9D864274E056900BB299F /* WithBuddyWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithBuddyWidget.swift; sourceTree = "<group>"; };
+		85D9D866274E056C00BB299F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		85D9D868274E056C00BB299F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		85FA1D92272FEB6A00825C64 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		85FA1D98272FEBE000825C64 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		8A07DF662743C20A008F6E58 /* GatheringEditViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GatheringEditViewModel.swift; sourceTree = "<group>"; };
@@ -163,6 +203,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		85D9D85A274E056900BB299F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85D9D862274E056900BB299F /* SwiftUI.framework in Frameworks */,
+				85D9D860274E056900BB299F /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BBF7FF1F272FB51000B71C97 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -230,6 +279,25 @@
 				8A8EA0C7274CAF4100F1BDFD /* UserUseCase.swift */,
 			);
 			path = UseCases;
+			sourceTree = "<group>";
+		};
+		85D9D85E274E056900BB299F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				85D9D85F274E056900BB299F /* WidgetKit.framework */,
+				85D9D861274E056900BB299F /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		85D9D863274E056900BB299F /* WithBuddyWidget */ = {
+			isa = PBXGroup;
+			children = (
+				85D9D864274E056900BB299F /* WithBuddyWidget.swift */,
+				85D9D866274E056C00BB299F /* Assets.xcassets */,
+				85D9D868274E056C00BB299F /* Info.plist */,
+			);
+			path = WithBuddyWidget;
 			sourceTree = "<group>";
 		};
 		85FA1D91272FEAE500825C64 /* Calendar */ = {
@@ -400,6 +468,8 @@
 			children = (
 				BBF7FF43272FC1B000B71C97 /* .swiftlint.yml */,
 				BBF7FF24272FB51000B71C97 /* WithBuddy */,
+				85D9D863274E056900BB299F /* WithBuddyWidget */,
+				85D9D85E274E056900BB299F /* Frameworks */,
 				BBF7FF23272FB51000B71C97 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -408,6 +478,7 @@
 			isa = PBXGroup;
 			children = (
 				BBF7FF22272FB51000B71C97 /* WithBuddy.app */,
+				85D9D85D274E056900BB299F /* WithBuddyWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -571,6 +642,7 @@
 				F7E8AC37273CD428005F8306 /* UIView+Extension.swift */,
 				8A6320B427415A85006BB1C0 /* CGFloat+Extension.swift */,
 				8549E0AE274A390300C2F9AD /* Int+Extension.swift */,
+				85624744274F5DC70041E927 /* String+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -578,6 +650,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		85D9D85C274E056900BB299F /* WithBuddyWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 85D9D86F274E056C00BB299F /* Build configuration list for PBXNativeTarget "WithBuddyWidgetExtension" */;
+			buildPhases = (
+				85D9D859274E056900BB299F /* Sources */,
+				85D9D85A274E056900BB299F /* Frameworks */,
+				85D9D85B274E056900BB299F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WithBuddyWidgetExtension;
+			productName = WithBuddyWidgetExtension;
+			productReference = 85D9D85D274E056900BB299F /* WithBuddyWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		BBF7FF21272FB51000B71C97 /* WithBuddy */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BBF7FF36272FB51400B71C97 /* Build configuration list for PBXNativeTarget "WithBuddy" */;
@@ -586,10 +675,12 @@
 				BBF7FF1F272FB51000B71C97 /* Frameworks */,
 				BBF7FF20272FB51000B71C97 /* Resources */,
 				BBF7FF42272FBD0500B71C97 /* ShellScript */,
+				85D9D86C274E056C00BB299F /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				85D9D86A274E056C00BB299F /* PBXTargetDependency */,
 			);
 			name = WithBuddy;
 			productName = WithBuddy;
@@ -603,9 +694,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1300;
+				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1300;
 				TargetAttributes = {
+					85D9D85C274E056900BB299F = {
+						CreatedOnToolsVersion = 13.1;
+					};
 					BBF7FF21272FB51000B71C97 = {
 						CreatedOnToolsVersion = 13.0;
 					};
@@ -625,11 +719,21 @@
 			projectRoot = "";
 			targets = (
 				BBF7FF21272FB51000B71C97 /* WithBuddy */,
+				85D9D85C274E056900BB299F /* WithBuddyWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		85D9D85B274E056900BB299F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85624741274F54E00041E927 /* Assets.xcassets in Resources */,
+				85D9D867274E056C00BB299F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BBF7FF20272FB51000B71C97 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -667,10 +771,21 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		85D9D859274E056900BB299F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8562473F274F512A0041E927 /* CGFloat+Extension.swift in Sources */,
+				85624746274F5DCA0041E927 /* String+Extension.swift in Sources */,
+				85D9D865274E056900BB299F /* WithBuddyWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BBF7FF1E272FB51000B71C97 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85624740274F540C0041E927 /* PurpleTitleLabel.swift in Sources */,
 				8AF3152727461A8800BDDF85 /* CheckableInfo.swift in Sources */,
 				8521BE3D2743C492000F3C05 /* CalendarViewModel.swift in Sources */,
 				F78F14962743A5C90034E740 /* BuddyManageViewController.swift in Sources */,
@@ -678,6 +793,7 @@
 				85D262F4273CF211000190B8 /* PurposeView.swift in Sources */,
 				85D262EE273CE6DD000190B8 /* WhiteView.swift in Sources */,
 				F7E8AC3E273CD4E6005F8306 /* ImageTextCollectionViewCell.swift in Sources */,
+				85624745274F5DC70041E927 /* String+Extension.swift in Sources */,
 				F7E8AC3C273CD4E2005F8306 /* AppDelegate.swift in Sources */,
 				8AF3152927461EA600BDDF85 /* Face.swift in Sources */,
 				F7E8AC3D273CD4E2005F8306 /* SceneDelegate.swift in Sources */,
@@ -732,9 +848,7 @@
 				F78F149B2743C1CF0034E740 /* BuddyManageViewModel.swift in Sources */,
 				8A73D679273A61EC001D5184 /* BuddyChoiceViewController.swift in Sources */,
 				854AA7662733A37200663911 /* ListViewModel.swift in Sources */,
-				85D262F0273CE740000190B8 /* PurpleTitleLabel.swift in Sources */,
 				8A397A2C274B8AE80060443C /* UserCreateViewModel.swift in Sources */,
-				85D262F0273CE740000190B8 /* PurpleTitleLabel.swift in Sources */,
 				BB2D258F2739299A00E7BF35 /* CoreDataManager.swift in Sources */,
 				BB1936D3274B8F50007EF21A /* PurposeUseCase.swift in Sources */,
 				BB2D25A5273A58A100E7BF35 /* GatheringUseCase.swift in Sources */,
@@ -743,6 +857,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		85D9D86A274E056C00BB299F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 85D9D85C274E056900BB299F /* WithBuddyWidgetExtension */;
+			targetProxy = 85D9D869274E056C00BB299F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		BBF7FF30272FB51400B71C97 /* LaunchScreen.storyboard */ = {
@@ -756,6 +878,60 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		85D9D86D274E056C00BB299F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WithBuddyWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WithBuddyWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lunchScreen.WithBuddy.WithBuddyWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		85D9D86E274E056C00BB299F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = B3PWYBKFUK;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WithBuddyWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WithBuddyWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lunchScreen.WithBuddy.WithBuddyWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		BBF7FF34272FB51400B71C97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -875,6 +1051,7 @@
 		BBF7FF37272FB51400B71C97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -905,6 +1082,7 @@
 		BBF7FF38272FB51400B71C97 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -935,6 +1113,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		85D9D86F274E056C00BB299F /* Build configuration list for PBXNativeTarget "WithBuddyWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85D9D86D274E056C00BB299F /* Debug */,
+				85D9D86E274E056C00BB299F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BBF7FF1D272FB51000B71C97 /* Build configuration list for PBXProject "WithBuddy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

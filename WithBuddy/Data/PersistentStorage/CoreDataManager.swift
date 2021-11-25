@@ -44,14 +44,13 @@ final class CoreDataManager {
         self.context.perform { [weak self] in
             guard let self = self,
                   let purpose = try? self.context.fetch(PurposeEntity.fetchRequest()) else { return }
-            if purpose.count != PlaceType.allCases.count {
+            if purpose.count != PurposeCategory.allCases.count {
                 let purposeList = purpose.map{ $0.toDomain() }
-                for place in PlaceType.allCases where !purposeList.contains(place) {
+                for place in PurposeCategory.allCases where !purposeList.contains(place) {
                     PurposeEntity(context: self.context, purpose: place)
                 }
+                try? self.context.save()
             }
-            
-            try? self.context.save()
         }
     }
     
@@ -85,9 +84,9 @@ final class CoreDataManager {
         return self.fetch(request: request)
     }
     
-    private func fetchPurposeEntity(of purposeList: [String]) -> [PurposeEntity] {
+    private func fetchPurposeEntity(of purposeList: [PurposeCategory]) -> [PurposeEntity] {
         let request = PurposeEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "name IN %@", purposeList)
+        request.predicate = NSPredicate(format: "name IN %@", purposeList.map{ "\($0)" })
         return self.fetch(request: request)
     }
     

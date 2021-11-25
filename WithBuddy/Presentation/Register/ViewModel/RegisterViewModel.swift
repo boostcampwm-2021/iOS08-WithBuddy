@@ -29,7 +29,7 @@ class RegisterViewModel {
         return self.purposeList.filter( { $0.check })
     }
     private(set) var addBuddySignal = PassthroughSubject<[Buddy], Never>()
-    private(set) var registerDoneSignal = PassthroughSubject<Void, Never>()
+    private(set) var registerDoneSignal = PassthroughSubject<Gathering, Never>()
     private(set) var registerFailSignal = PassthroughSubject<RegisterError, Never>()
     
     @Published private(set) var purposeList: [CheckableInfo] = PurposeCategory.allCases.map({ CheckableInfo(description: "\($0)", check: false) })
@@ -88,8 +88,17 @@ class RegisterViewModel {
             guard let date = date else {
                 return
             }
-            self.gatheringUseCase.insertGathering(Gathering(id: UUID(), date: date, place: self.place, purpose: self.checkedPurposeList.map{ $0.description }, buddyList: self.buddyList, memo: self.memo, picture: self.pictures))
-            self.registerDoneSignal.send()
+            let gathering = Gathering(
+                id: UUID(),
+                date: date,
+                place: self.place,
+                purpose: self.checkedPurposeList.map{ $0.description },
+                buddyList: self.buddyList,
+                memo: self.memo,
+                picture: self.pictures
+            )
+            self.gatheringUseCase.insertGathering(gathering)
+            self.registerDoneSignal.send(gathering)
         }
     }
     

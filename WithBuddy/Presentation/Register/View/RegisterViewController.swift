@@ -8,6 +8,7 @@
 import UIKit
 import Combine
 import Photos
+import UserNotifications
 
 class RegisterViewController: UIViewController {
     
@@ -137,8 +138,9 @@ class RegisterViewController: UIViewController {
     private func signalBind() {
         self.registerViewModel.registerDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] in
+            .sink{ [weak self] gathering in
                 self?.alertSuccess()
+                self?.registerNotification(gathering: gathering)
             }
             .store(in: &self.cancellables)
         
@@ -158,6 +160,24 @@ class RegisterViewController: UIViewController {
                 self?.navigationController?.pushViewController(buddyChoiceViewController, animated: true)
             }
             .store(in: &self.cancellables)
+    }
+    
+    private func registerNotification(gathering: Gathering) {
+        guard let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: gathering.date) else { return }
+        let content = UNMutableNotificationContent()
+        content.title = "위드버디"
+        let firstBuddyName = gathering.buddyList.first?.name ?? ""
+        let buddyCountString = gathering.buddyList.count == 1 ? "" : "외 \(gathering.buddyList.count-1)명"
+        content.body = "전날 \(firstBuddyName)님 \(buddyCountString)과의 만남은 어떠셨나요?"
+        
+        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDay)
+        let trigger = UNCalendarNotificationTrigger(
+            dateMatching: dateComponents,
+            repeats: false
+        )
+        
+        let request = UNNotificationRequest(identifier: gathering.id.uuidString, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
     
     private func configure() {
@@ -576,7 +596,9 @@ class RegisterViewController: UIViewController {
     }
     
     @objc private func addGathering() {
-        self.registerViewModel.didDoneTouched()
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in
+            self.registerViewModel.didDoneTouched()
+        }
     }
     
     @objc private func tapEmptySpace(){

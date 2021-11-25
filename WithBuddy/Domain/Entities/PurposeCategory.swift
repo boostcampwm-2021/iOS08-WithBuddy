@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Category: String, CaseIterable {
+enum PurposeCategory: String, CaseIterable {
      
     case study = "Study"
     case shopping = "Shopping"
@@ -21,7 +21,7 @@ enum Category: String, CaseIterable {
     
 }
 
-extension Category: CustomStringConvertible {
+extension PurposeCategory: CustomStringConvertible {
     
     var description: String {
         return self.rawValue
@@ -29,9 +29,9 @@ extension Category: CustomStringConvertible {
     
 }
 
-extension Category: Comparable {
+extension PurposeCategory: Comparable {
     
-    static func < (lhs: Category, rhs: Category) -> Bool {
+    static func < (lhs: PurposeCategory, rhs: PurposeCategory) -> Bool {
         return lhs.order < rhs.order
     }
     

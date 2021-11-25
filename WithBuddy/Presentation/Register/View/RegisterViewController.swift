@@ -168,7 +168,7 @@ class RegisterViewController: UIViewController {
         content.title = "위드버디"
         let firstBuddyName = gathering.buddyList.first?.name ?? ""
         let buddyCountString = gathering.buddyList.count == 1 ? "" : "외 \(gathering.buddyList.count-1)명"
-        content.body = "전날 \(firstBuddyName)님 \(buddyCountString)과의 만남은 어떠셨나요?"
+        content.body = "어제 \(firstBuddyName)님 \(buddyCountString)과의 만남은 어떠셨나요?"
         
         let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDay)
         let trigger = UNCalendarNotificationTrigger(

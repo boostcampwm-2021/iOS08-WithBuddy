@@ -31,8 +31,8 @@ final class UserCreateViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.loadingView.addFaces()
-        
     }
+    
     private func configure() {
         self.view.backgroundColor = UIColor(named: "BackgroundPurple")
         self.configureTitleLabel()

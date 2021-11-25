@@ -73,16 +73,13 @@ class SettingViewController: UIViewController {
     
     private func configureUserName() {
         self.view.addSubview(self.userNameLabel)
-        self.userNameLabel.text = "나정나정"
+        self.userNameLabel.text = "UserName"
         self.userNameLabel.font = .systemFont(ofSize: .titleLabelSize)
-        self.userNameLabel.isUserInteractionEnabled  = false
         self.userNameLabel.textAlignment = .center
         self.userNameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.userNameLabel.bottomAnchor.constraint(equalTo: self.userImageView.centerYAnchor, constant: -10),
-            self.userNameLabel.leadingAnchor.constraint(equalTo: self.userImageView.trailingAnchor, constant: 20),
-            self.userNameLabel.widthAnchor.constraint(equalToConstant: self.userNameLabel.intrinsicContentSize.width),
-            self.userNameLabel.heightAnchor.constraint(equalToConstant: self.userNameLabel.intrinsicContentSize.height)
+            self.userNameLabel.leadingAnchor.constraint(equalTo: self.userImageView.trailingAnchor, constant: 20)
         ])
     }
     
@@ -106,7 +103,11 @@ class SettingViewController: UIViewController {
     
     @objc private func moveToBuddyCustom(_ sender: UIButton) {
         self.modifyButton.animateButtonTap(scale: 0.9)
-        self.navigationController?.pushViewController(BuddyCustomViewController(), animated: true)
+        guard let myBuddy = self.settingViewModel.myBuddy else { return }
+        let buddyCustomViewController = BuddyCustomViewController()
+        buddyCustomViewController.delegate = self
+        buddyCustomViewController.configure(by: myBuddy)
+        self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
     }
     
     private func configureButtons() {
@@ -173,4 +174,16 @@ class SettingViewController: UIViewController {
         self.present(developSafariView, animated: true, completion: nil)
     }
     
+}
+
+extension SettingViewController: BuddyCustomDelegate {
+    func buddyAddDidCompleted(_ buddy: Buddy) {
+        self.settingViewModel.didMyBuddyChanged(buddy: buddy)
+        self.settingViewModel.fetchMyBuddy()
+    }
+    
+    func buddyEditDidCompleted(_ buddy: Buddy) {
+        self.settingViewModel.didMyBuddyChanged(buddy: buddy)
+        self.settingViewModel.fetchMyBuddy()
+    }
 }

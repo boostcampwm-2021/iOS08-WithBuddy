@@ -35,7 +35,6 @@ extension PurposeCategory: Comparable {
         return lhs.order < rhs.order
     }
     
-    
     private var order: Int {
         switch self {
         case .study: return 0
@@ -49,7 +48,5 @@ extension PurposeCategory: Comparable {
         case .etc: return 8
         }
     }
-    
-    
     
 }

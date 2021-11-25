@@ -257,11 +257,11 @@ extension CoreDataManager: CoreDataManagable {
     }
     
     func deleteAllGathering() -> AnyPublisher<Void, CoreDataError> {
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: GatheringEntity.fetchRequest())
-        
         return Future { promise in
             do {
-                try self.context.execute(deleteRequest)
+                let list = self.fetch(request: GatheringEntity.fetchRequest())
+                list.forEach{ self.context.delete($0) }
+                try self.context.save()
                 promise(.success(()))
             } catch {
                 promise(.failure(.deleteFail))

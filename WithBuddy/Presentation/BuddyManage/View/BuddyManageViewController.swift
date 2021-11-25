@@ -42,8 +42,8 @@ class BuddyManageViewController: UIViewController {
         
         self.buddyManageViewModel.failSignal
             .receive(on: DispatchQueue.main)
-            .sink { result in
-                self.alertError(result)
+            .sink { [weak self] result in
+                self?.alertError(result)
             }
             .store(in: &self.cancellables)
     }

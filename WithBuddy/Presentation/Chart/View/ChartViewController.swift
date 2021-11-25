@@ -54,24 +54,28 @@ final class ChartViewController: UIViewController {
             .store(in: &self.cancellables)
                     
         self.viewModel.$buddyRank
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] list in
                 self?.update(buddyList: list)
             }
             .store(in: &self.cancellables)
         
         self.viewModel.$purposeRank
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] list in
                 self?.update(purposeList: list)
             }
             .store(in: &self.cancellables)
         
         self.viewModel.$latestBuddy
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] buddy in
                 self?.update(latestBuddy: buddy)
             }
             .store(in: &self.cancellables)
         
         self.viewModel.$oldBuddy
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] buddy in
                 self?.update(oldBuddy: buddy)
             }

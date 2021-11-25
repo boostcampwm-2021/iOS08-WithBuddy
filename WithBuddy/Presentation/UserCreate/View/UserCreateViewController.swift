@@ -54,36 +54,36 @@ final class UserCreateViewController: UIViewController {
     private func bind() {
         self.userCreateViewModel.$buddy
             .receive(on: DispatchQueue.main)
-            .sink { buddy in
+            .sink { [weak self] buddy in
                 if let buddy = buddy  {
-                    self.nameLabel.text = buddy.name
-                    self.buddyImageView.image = UIImage(named: "\(buddy.face)")
-                    self.completeButton.backgroundColor = UIColor(named: "GraphPurple")
-                    self.completeButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
+                    self?.nameLabel.text = buddy.name
+                    self?.buddyImageView.image = UIImage(named: "\(buddy.face)")
+                    self?.completeButton.backgroundColor = UIColor(named: "GraphPurple")
+                    self?.completeButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
                 }
             }
             .store(in: &self.cancellables)
         
         self.userCreateViewModel.editStartSignal
             .receive(on: DispatchQueue.main)
-            .sink { buddy in
+            .sink { [weak self] buddy in
                 let buddyCustomViewController = BuddyCustomViewController()
                 buddyCustomViewController.delegate = self
                 if let buddy = buddy {
                     buddyCustomViewController.configure(by: buddy)
                 }
-                self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
+                self?.navigationController?.pushViewController(buddyCustomViewController, animated: true)
             }
             .store(in: &self.cancellables)
         
         self.userCreateViewModel.completeSignal
             .receive(on: DispatchQueue.main)
-            .sink { buddy in
+            .sink { [weak self] buddy in
                 if buddy != nil {
                     let tabBarViewController = UINavigationController(rootViewController: TabBarViewController())
                     tabBarViewController.modalTransitionStyle = .crossDissolve
                     tabBarViewController.modalPresentationStyle = .fullScreen
-                    self.navigationController?.present(tabBarViewController, animated: true)
+                    self?.navigationController?.present(tabBarViewController, animated: true)
                 }
             }
             .store(in: &self.cancellables)

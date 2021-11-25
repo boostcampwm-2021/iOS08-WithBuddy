@@ -37,14 +37,14 @@ class CalendarDetailViewController: UIViewController {
     private func bind() {
         self.calendarDetailViewModel.$dayLabel
         .receive(on: DispatchQueue.main)
-        .sink{ label in
-            self.detailLabel.text = label + " 모임"
+        .sink{ [weak self] label in
+            self?.detailLabel.text = label + " 모임"
         }.store(in: &self.cancellables)
         
         self.calendarDetailViewModel.$gatheringList
         .receive(on: DispatchQueue.main)
-        .sink{ _ in
-            self.detailTableView.reloadData()
+        .sink{ [weak self] _ in
+            self?.detailTableView.reloadData()
         }.store(in: &self.cancellables)
     }
     

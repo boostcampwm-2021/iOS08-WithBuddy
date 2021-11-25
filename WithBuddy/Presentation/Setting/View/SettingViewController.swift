@@ -10,7 +10,7 @@ import Combine
 import SafariServices
 
 class SettingViewController: UIViewController {
-
+    
     private let userImageView = UIImageView()
     private let userNameLabel = UILabel()
     private let modifyButton = UIButton()
@@ -28,7 +28,7 @@ class SettingViewController: UIViewController {
     
     private func bind() {
         self.settingViewModel.deleteSignal
-        .receive(on: DispatchQueue.main)
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] message in
                 let alert = UIAlertController(title: message.0, message: message.1, preferredStyle: UIAlertController.Style.alert)
                 let okAction = UIAlertAction(title: "OK", style: .destructive)
@@ -38,10 +38,10 @@ class SettingViewController: UIViewController {
         
         self.settingViewModel.$myBuddy
             .receive(on: DispatchQueue.main)
-            .sink { buddy in
+            .sink { [weak self] buddy in
                 guard let buddy  = buddy else { return }
-                self.userImageView.image = UIImage(named: "\(buddy.face)")
-                self.userNameLabel.text = buddy.name
+                self?.userImageView.image = UIImage(named: "\(buddy.face)")
+                self?.userNameLabel.text = buddy.name
             }
             .store(in: &self.cancellable)
     }
@@ -134,21 +134,21 @@ class SettingViewController: UIViewController {
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
     }
-
+    
     private func configureManageBuddyButton() {
         self.view.addSubview(self.manageBuddyButton)
         self.manageBuddyButton.setTitle("버디 관리", for: .normal)
         self.manageBuddyButton.addTarget(self, action: #selector(self.moveToBuddyManage), for: .touchUpInside)
         self.makeButtonLayer(button: self.manageBuddyButton, upperView: self.removeAllGatheringButton, constant: 15)
     }
-
+    
     private func configureDeveloperInfo() {
         self.view.addSubview(self.developerInfoButton)
         self.developerInfoButton.setTitle("개발자 정보", for: .normal)
         self.developerInfoButton.addTarget(self, action: #selector(self.moveToDeveloperInfo), for: .touchUpInside)
         self.makeButtonLayer(button: self.developerInfoButton, upperView: self.manageBuddyButton, constant: 15)
     }
-
+    
     private func makeButtonLayer(button: UIButton, upperView: UIView, constant: CGFloat) {
         button.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
         button.contentHorizontalAlignment = .left

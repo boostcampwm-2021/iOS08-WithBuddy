@@ -39,33 +39,33 @@ class CalendarViewController: UIViewController {
     private func bind() {
         self.calendarViewModel.monthSubject
             .receive(on: DispatchQueue.main)
-            .sink{ month in
-                self.calendarView.reloadMonthLabel(month: month)
+            .sink{ [weak self] month in
+                self?.calendarView.reloadMonthLabel(month: month)
             }.store(in: &self.cancellables)
         
         self.calendarViewModel.didDaysReloadSignal
             .receive(on: DispatchQueue.main)
-            .sink{ _ in
-                self.calendarView.collectionView.reloadData()
+            .sink{ [weak self] _ in
+                self?.calendarView.collectionView.reloadData()
             }.store(in: &self.cancellables)
         
         self.calendarViewModel.didGatheringReloadSignal
             .receive(on: DispatchQueue.main)
-            .sink{ _ in
-                self.calendarView.collectionView.reloadData()
+            .sink{ [weak self] _ in
+                self?.calendarView.collectionView.reloadData()
             }.store(in: &self.cancellables)
         
         self.calendarView.monthButtonSignal
             .receive(on: DispatchQueue.main)
-            .sink{ number in
-                self.calendarViewModel.didMonthButtonTouched(number: number)
+            .sink{ [weak self] number in
+                self?.calendarViewModel.didMonthButtonTouched(number: number)
             }.store(in: &self.cancellables)
         
         self.calendarViewModel.$myFace
             .receive(on: DispatchQueue.main)
-            .sink{ face in
+            .sink{ [weak self] face in
                 guard let face = face else { return }
-                self.headerView.update(face: face)
+                self?.headerView.update(face: face)
             }.store(in: &self.cancellables)
     }
     

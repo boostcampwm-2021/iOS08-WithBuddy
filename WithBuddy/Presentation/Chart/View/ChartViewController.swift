@@ -39,7 +39,6 @@ final class ChartViewController: UIViewController {
         self.configureBubbleChartView()
         self.configurePurposeChartView()
         self.configureLatestOldChartView()
-        self.update(name: "정아")
     }
     
     private func bind() {

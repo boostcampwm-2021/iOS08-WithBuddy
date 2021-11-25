@@ -30,13 +30,12 @@ class LoadingView: UIView {
     private func configure() {
         self.configureDynamicItemBehavior()
         self.configureTitle()
-        self.addFaces()
     }
 
     private func configureDynamicItemBehavior() {
         self.gravity.magnitude = 1
         self.collider.translatesReferenceBoundsIntoBoundary = true
-        self.dynamicItemBehavior.elasticity = 0.7
+        self.dynamicItemBehavior.elasticity = 0.65
         self.dynamicItemBehavior.allowsRotation = true
         self.dynamicItemBehavior.density = 1.5
     }
@@ -55,10 +54,15 @@ class LoadingView: UIView {
         ])
     }
 
-    private func addFaces() {
-        let fallingBuddys = ["FaceBlue1", "FaceGreen2", "FaceRed3", "FacePink4", "FaceYellow5"]
-        let width = UIScreen.main.bounds.width
-        let fallingPosition = [CGPoint(x: width * 0.2, y: 30), CGPoint(x: width * 0.3, y: 10), CGPoint(x: width * 0.45, y: 20), CGPoint(x: width * 0.6, y: 20), CGPoint(x: width * 0.7, y: 40)]
+    func addFaces() {
+        let fallingBuddys = ["BlueDrop", "GreenDrop", "RedDrop", "PinkDrop", "YellowDrop"]
+        let width = self.frame.width
+        let height = self.frame.height
+        let fallingPosition = [CGPoint(x: width * 0.02, y: height * 0.06),
+                               CGPoint(x: width * 0.2, y: height * 0.2),
+                               CGPoint(x: width * 0.3, y: height * 0.005),
+                               CGPoint(x: width * 0.6, y: height * 0.01),
+                               CGPoint(x: width * 0.7, y: height * 0.1)]
 
         for idx in 0..<fallingBuddys.count {
             let squareSize = CGSize(width: .fallingBuddySize, height: .fallingBuddySize)

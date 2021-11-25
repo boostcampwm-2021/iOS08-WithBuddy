@@ -147,7 +147,7 @@ final class ChartViewController: UIViewController {
         self.bubbleChartView.update(list: list)
     }
     
-    private func update(purposeList: [String]?) {
+    private func update(purposeList: [(String, String)]?) {
         guard let list = purposeList else { return }
         self.purposeChartView.update(list: list)
     }

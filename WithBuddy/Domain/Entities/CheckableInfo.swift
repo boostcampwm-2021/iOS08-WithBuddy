@@ -8,6 +8,7 @@
 import Foundation
 
 struct CheckableInfo: Hashable {
-    var description: String
+    var engDescription: String
+    var korDescription: String
     var check: Bool
 }

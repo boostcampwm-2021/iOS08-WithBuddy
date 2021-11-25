@@ -12,7 +12,7 @@ final class ChartViewModel {
     
     @Published private(set) var name: String?
     @Published private(set) var buddyRank: [(Buddy, Int)] = []
-    @Published private(set) var purposeRank: [String] = []
+    @Published private(set) var purposeRank: [(String, String)] = []
     @Published private(set) var latestBuddy: Buddy?
     @Published private(set) var oldBuddy: Buddy?
     
@@ -80,7 +80,7 @@ final class ChartViewModel {
     private func fetchPurposeRank() {
         self.purposeUseCase.fetchTopFourPurpose()
             .sink(receiveValue: { rank in
-                self.purposeRank = rank
+                self.purposeRank = rank.map{ ($0, self.purposeUseCase.engToKor(eng: $0)) }
             }).cancel()
     }
     

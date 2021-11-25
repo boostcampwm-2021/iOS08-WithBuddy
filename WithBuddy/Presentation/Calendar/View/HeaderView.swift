@@ -26,6 +26,10 @@ class HeaderView: UIView {
         self.userFaceImageView.image = UIImage(named: face)
     }
     
+    func reloadHeaderComment(text: String) {
+        self.userCommentLabel.text = text
+    }
+    
     private func configureHeaderContent() {
         self.configureUserFaceImageView()
         self.configureUserCommentLabel()
@@ -36,7 +40,7 @@ class HeaderView: UIView {
         self.userFaceImageView.image = UIImage(named: BuddyUseCase(coreDataManager: CoreDataManager.shared).makeRandomBuddy().face)
         self.userFaceImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.userFaceImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),
+            self.userFaceImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             self.userFaceImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             self.userFaceImageView.widthAnchor.constraint(equalToConstant: 70),
             self.userFaceImageView.heightAnchor.constraint(equalToConstant: 70)
@@ -44,13 +48,12 @@ class HeaderView: UIView {
     }
     
     private func configureUserCommentLabel() {
-        guard let userInfo = UserUseCase().fetchUser() else { return }
         self.addSubview(userCommentLabel)
         self.userCommentLabel.numberOfLines = 0
-        self.userCommentLabel.text = "\(userInfo.name)님! 안녕하세요!\n친구와의 만남을 기록하고 편하게 관리해보아요!"
+        self.userCommentLabel.font = .systemFont(ofSize: 14)
         self.userCommentLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.userCommentLabel.leadingAnchor.constraint(equalTo: self.userFaceImageView.trailingAnchor, constant: 10),
+            self.userCommentLabel.leadingAnchor.constraint(equalTo: self.userFaceImageView.trailingAnchor, constant: 5),
             self.userCommentLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             self.userCommentLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
             self.userCommentLabel.heightAnchor.constraint(equalToConstant: 60)

@@ -32,12 +32,17 @@ class RegisterViewModel {
     private(set) var registerDoneSignal = PassthroughSubject<Gathering, Never>()
     private(set) var registerFailSignal = PassthroughSubject<RegisterError, Never>()
     
-    @Published private(set) var purposeList: [CheckableInfo] = PurposeCategory.allCases.map({ CheckableInfo(description: "\($0)", check: false) })
+    @Published private(set) var purposeList: [CheckableInfo] = []
     @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var pictures: [URL] = []
     
     private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
     private var gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
+    private var purposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared)
+    
+    init() {
+        self.configure()
+    }
     
     func didDatePicked(_ date: Date) {
         self.date = date
@@ -92,7 +97,7 @@ class RegisterViewModel {
                 id: UUID(),
                 date: date,
                 place: self.place,
-                purpose: self.checkedPurposeList.map{ $0.description },
+                purpose: self.checkedPurposeList.map{ $0.engDescription },
                 buddyList: self.buddyList,
                 memo: self.memo,
                 picture: self.pictures
@@ -104,6 +109,10 @@ class RegisterViewModel {
     
     func didAddBuddyTouched() {
         self.addBuddySignal.send(self.buddyList)
+    }
+    
+    private func configure() {
+        self.purposeList = PurposeCategory.allCases.map({ CheckableInfo(engDescription: "\($0)", korDescription: self.purposeUseCase.engToKor(eng: "\($0)"), check: false) })
     }
     
 }

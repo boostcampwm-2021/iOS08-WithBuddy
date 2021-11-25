@@ -21,7 +21,7 @@ class BuddyCustomViewController: UIViewController {
     private var colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     private lazy var colorDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.colorCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as? ImageCollectionViewCell else { preconditionFailure() }
-        cell.update(image: UIImage(named: itemIdentifier.description), check: itemIdentifier.check)
+        cell.update(image: UIImage(named: itemIdentifier.engDescription), check: itemIdentifier.check)
         return cell
     }
     
@@ -29,7 +29,7 @@ class BuddyCustomViewController: UIViewController {
     private var faceCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     private lazy var faceDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.faceCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as? ImageCollectionViewCell else { preconditionFailure() }
-        cell.update(image: UIImage(named: itemIdentifier.description), check: itemIdentifier.check)
+        cell.update(image: UIImage(named: itemIdentifier.engDescription), check: itemIdentifier.check)
         return cell
     }
     
@@ -57,14 +57,14 @@ class BuddyCustomViewController: UIViewController {
                 var colorSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
                 colorSnapshot.appendSections([0])
                 colorSnapshot.appendItems(FaceColor.allCases.map({
-                    CheckableInfo(description: $0.description, check: $0 == face.color)
+                    CheckableInfo(engDescription: $0.description, korDescription: $0.description, check: $0 == face.color)
                 }))
                 self?.colorDataSource.apply(colorSnapshot, animatingDifferences: true)
                 
                 var faceSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
                 faceSnapshot.appendSections([0])
                 faceSnapshot.appendItems((Int.minFaceNum...Int.maxFaceNum).map({
-                    CheckableInfo(description: "\(face.color)\($0)", check: $0 == face.number)
+                    CheckableInfo(engDescription: "\(face.color)\($0)", korDescription: "\(face.color)\($0)", check: $0 == face.number)
                 }))
                 self?.faceDataSource.apply(faceSnapshot, animatingDifferences: true)
                 

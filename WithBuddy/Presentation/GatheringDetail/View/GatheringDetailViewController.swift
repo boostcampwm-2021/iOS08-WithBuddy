@@ -25,7 +25,7 @@ class GatheringDetailViewController: UIViewController {
     private lazy var purposeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
     private lazy var purposeDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.purposeCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageTextCollectionViewCell.identifier, for: indexPath) as? ImageTextCollectionViewCell else { preconditionFailure() }
-        cell.update(image: UIImage(named: "\(itemIdentifier.description)"), text: "\(itemIdentifier.description)", check: itemIdentifier.check)
+        cell.update(image: UIImage(named: "\(itemIdentifier.engDescription)"), text: "\(itemIdentifier.korDescription)", check: itemIdentifier.check)
         return cell
     }
     
@@ -100,7 +100,11 @@ class GatheringDetailViewController: UIViewController {
                 var purposeSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
                 purposeSnapshot.appendSections([0])
                 let purposeList = PurposeCategory.allCases.map({ placeType -> CheckableInfo? in
-                    if gathering.purpose.contains(placeType.description) { return CheckableInfo(description: "\(placeType)", check: true) }
+                    var korDescription = "\(placeType)"
+                    if let kor = self?.gatheringDetailViewModel.engToKor(eng: "\(placeType)") {
+                        korDescription = kor
+                    }
+                    if gathering.purpose.contains(placeType.description) { return CheckableInfo(engDescription: "\(placeType)", korDescription: korDescription, check: true) }
                     return nil
                 }).compactMap({ $0 })
                 purposeSnapshot.appendItems(purposeList)

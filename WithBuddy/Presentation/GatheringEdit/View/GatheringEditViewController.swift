@@ -100,7 +100,7 @@ class GatheringEditViewController: UIViewController {
         self.datePicker.date = gathering.date
         self.gatheringEditViewModel.didDatePicked(gathering.date)
         self.gatheringEditViewModel.didPlaceChanged(gathering.place ?? "")
-        for (idx, place) in PlaceType.allCases.enumerated() {
+        for (idx, place) in PurposeCategory.allCases.enumerated() {
             if gathering.purpose.contains(place.description) {
                 self.gatheringEditViewModel.didPurposeTouched(idx)
             }

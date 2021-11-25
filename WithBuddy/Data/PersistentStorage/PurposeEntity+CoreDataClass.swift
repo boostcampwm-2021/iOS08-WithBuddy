@@ -40,13 +40,13 @@ extension PurposeEntity {
 extension PurposeEntity {
     
     @discardableResult
-    convenience init(context: NSManagedObjectContext, purpose: PlaceType) {
+    convenience init(context: NSManagedObjectContext, purpose: PurposeCategory) {
         self.init(context: context)
-        self.name = purpose.description
+        self.name = "\(purpose)"
     }
     
-    func toDomain() -> PlaceType? {
-        return PlaceType(rawValue: self.name)
+    func toDomain() -> PurposeCategory {
+        return PurposeCategory(rawValue: self.name) ?? PurposeCategory.etc
     }
     
 }

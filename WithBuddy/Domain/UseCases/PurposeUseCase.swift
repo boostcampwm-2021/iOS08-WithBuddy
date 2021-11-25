@@ -27,7 +27,7 @@ final class PurposeUseCase: PurposeUseCaseProtocol {
     }
     
     private func convertPurposeEntity(_ purposeEntity: [PurposeEntity]) -> [String] {
-        return Array(purposeEntity.map{ $0.name }.filter{ $0 != PlaceType.etc.description }.prefix(4))
+        return Array(purposeEntity.map{ $0.name }.filter{ $0 != PurposeCategory.etc.description }.prefix(4))
     }
     
 }

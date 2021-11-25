@@ -69,7 +69,7 @@ extension GatheringEntity {
         return Gathering(id: self.id,
                          date: self.date,
                          place: self.place,
-                         purpose: self.purposeList.map{ $0.name },
+                         purpose: self.purposeList.map{ $0.toDomain() }.sorted().map{ "\($0)" },
                          buddyList: self.buddyList.map{ $0.toDomain() }.sorted(),
                          memo: self.memo,
                          picture: self.picture)

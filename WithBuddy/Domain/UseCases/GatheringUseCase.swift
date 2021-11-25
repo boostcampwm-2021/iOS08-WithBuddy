@@ -49,4 +49,8 @@ final class GatheringUseCase {
             .eraseToAnyPublisher()
     }
     
+    func gatheringStatus() -> HeaderComments {
+        return .gatheringToday
+    }
+    
 }

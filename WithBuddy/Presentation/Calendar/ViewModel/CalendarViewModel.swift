@@ -42,6 +42,11 @@ final class CalendarViewModel {
         self.reloadFaces()
     }
     
+    func headerComment() -> String {
+        let gatheringStatus = self.gatheringUseCase.gatheringStatus()
+        return gatheringStatus.rawValue
+    }
+    
     func didMonthButtonTouched(number: Int) {
         guard let month = number == 0 ? Date() : self.calendarUseCase.changeMonth(self.calendarMonth, by: number) else { return }
         self.calendarMonth = month

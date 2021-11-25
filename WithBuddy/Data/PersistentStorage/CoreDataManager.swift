@@ -20,6 +20,7 @@ protocol CoreDataManagable {
     func fetchGathering(including name: String) -> [GatheringEntity]
     func fetchGathering(including day: Date) -> [GatheringEntity]
     func fetchGaterhing(month: Date) -> [GatheringEntity]
+    func fetchGaterhing(oneWeekFrom date: Date) -> [GatheringEntity]
     func updateGathering(_ gathering: Gathering)
     func deleteGathering(_ gatheringId: UUID)
     func fetchPurpose() -> AnyPublisher<[PurposeEntity], Never>
@@ -127,6 +128,15 @@ extension CoreDataManager: CoreDataManagable {
         
         let request = GatheringEntity.fetchRequest()
         request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startDateOfMonth as NSDate, startDateOfNextMonth as NSDate)
+        return self.fetch(request: request)
+    }
+    
+    func fetchGaterhing(oneWeekFrom date: Date) -> [GatheringEntity] {
+        let startTimeOfDay = self.calendarUseCase.firstTimeOfDay(baseDate: date)
+        let startTimeOfNext8Day = self.calendarUseCase.next8Days(baseDate: startTimeOfDay)
+        
+        let request = GatheringEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startTimeOfDay as NSDate, startTimeOfNext8Day as NSDate)
         return self.fetch(request: request)
     }
     

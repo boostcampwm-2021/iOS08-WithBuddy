@@ -75,6 +75,7 @@
 		BBF8AFD5274E0831002479D4 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF8AFD4274E0831002479D4 /* SettingViewModel.swift */; };
 		F78EE745274CDEB000948960 /* BuddyImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78EE744274CDEB000948960 /* BuddyImageView.swift */; };
 		F78EE747274CDF0700948960 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78EE746274CDF0700948960 /* LoadingView.swift */; };
+		F78EE749274F516F00948960 /* headerComments.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78EE748274F516F00948960 /* headerComments.swift */; };
 		F78F14962743A5C90034E740 /* BuddyManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78F14952743A5C90034E740 /* BuddyManageViewController.swift */; };
 		F78F149B2743C1CF0034E740 /* BuddyManageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78F149A2743C1CF0034E740 /* BuddyManageViewModel.swift */; };
 		F7A7699727315AF800FF83EA /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7699627315AF800FF83EA /* HeaderView.swift */; };
@@ -191,6 +192,7 @@
 		BBF8AFD4274E0831002479D4 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		F78EE744274CDEB000948960 /* BuddyImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyImageView.swift; sourceTree = "<group>"; };
 		F78EE746274CDF0700948960 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		F78EE748274F516F00948960 /* headerComments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = headerComments.swift; sourceTree = "<group>"; };
 		F78F14952743A5C90034E740 /* BuddyManageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyManageViewController.swift; sourceTree = "<group>"; };
 		F78F149A2743C1CF0034E740 /* BuddyManageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyManageViewModel.swift; sourceTree = "<group>"; };
 		F7A7699627315AF800FF83EA /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
@@ -495,6 +497,7 @@
 				BB2D25482730D97000E7BF35 /* PurposeCategory.swift */,
 				8AF3152827461EA600BDDF85 /* Face.swift */,
 				85C236B427380D39001499E5 /* FaceColor.swift */,
+				F78EE748274F516F00948960 /* headerComments.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -905,6 +908,7 @@
 				BBF8AFD5274E0831002479D4 /* SettingViewModel.swift in Sources */,
 				F7B69B8C27339EF9005D2F32 /* WBCalendarViewCell.swift in Sources */,
 				85FA1D93272FEB6A00825C64 /* CalendarViewController.swift in Sources */,
+				F78EE749274F516F00948960 /* headerComments.swift in Sources */,
 				BB2D25602731317E00E7BF35 /* ChartViewController.swift in Sources */,
 				F7A7699727315AF800FF83EA /* HeaderView.swift in Sources */,
 				85D262E8273CD703000190B8 /* PurposeChartView.swift in Sources */,

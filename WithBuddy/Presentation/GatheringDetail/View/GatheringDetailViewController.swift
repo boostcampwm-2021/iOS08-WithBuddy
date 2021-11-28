@@ -375,7 +375,8 @@ class GatheringDetailViewController: UIViewController {
         self.memoTextView.textContentType = .none
         self.memoTextView.autocapitalizationType = .none
         self.memoTextView.autocorrectionType = .no
-        self.memoTextView.isUserInteractionEnabled = false
+        self.memoTextView.isEditable = false
+        self.memoTextView.isUserInteractionEnabled = true
         
         self.memoTextView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

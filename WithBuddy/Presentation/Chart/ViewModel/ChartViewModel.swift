@@ -19,8 +19,6 @@ final class ChartViewModel {
     private let buddyUseCase: BuddyUseCase
     private let purposeUseCase: PurposeUseCaseProtocol
     private let userUseCase: UserUseCase
-    private var gatheringList: [Gathering] = []
-    private var buddyList: [Buddy] = []
     private var cancellable: Set<AnyCancellable> = []
     
     init(
@@ -36,15 +34,9 @@ final class ChartViewModel {
     }
     
     func fetch() {
-        self.fetchGatheringAndBuddy()
         self.fetchBuddyRank()
         self.fetchPurposeRank()
         self.fetchLatestAndOldBuddy()
-    }
-    
-    private func fetchGatheringAndBuddy() {
-        self.gatheringList = self.gatheringUseCase.fetchGathering()
-        self.buddyList = self.buddyUseCase.fetchBuddy()
     }
     
     private func fetchBuddyRank() {

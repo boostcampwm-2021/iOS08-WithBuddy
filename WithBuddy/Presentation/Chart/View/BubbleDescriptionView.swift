@@ -11,7 +11,7 @@ final class BubbleDescriptionView: UILabel {
     
     private let whiteView = WhiteView()
     private let stackView = UIStackView()
-    private let nameLabel = UILabel()
+    private let nameLabel = BlackTitleLabel()
     private(set) var editButton = UIButton()
 
     override init(frame: CGRect) {

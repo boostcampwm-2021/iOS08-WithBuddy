@@ -11,7 +11,7 @@ final class BuddyUseCase {
     
     private let coreDataManager: CoreDataManagable
     
-    init(coreDataManager: CoreDataManagable) {
+    init(coreDataManager: CoreDataManagable = CoreDataManager.shared) {
         self.coreDataManager = coreDataManager
     }
     
@@ -21,6 +21,10 @@ final class BuddyUseCase {
     
     func fetchBuddy(name: String) -> [Buddy] {
         return self.coreDataManager.fetchBuddy(name: name).map{ $0.toDomain() }
+    }
+    
+    func fetchBuddy(before date: Date) -> [Buddy] {
+        return self.coreDataManager.fetchBuddy(before: date).map{ $0.toDomain() }
     }
     
     func insertBuddy(_ buddy: Buddy) {

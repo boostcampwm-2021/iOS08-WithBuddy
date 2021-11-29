@@ -25,6 +25,7 @@ protocol CoreDataManagable {
     func deleteGathering(_ gatheringId: UUID)
     func fetchPurpose() -> AnyPublisher<[PurposeEntity], Never>
     func deleteAllGathering() -> AnyPublisher<Void, CoreDataManager.CoreDataError>
+    func fetchBuddy(before date: Date) -> [BuddyEntity]
     
 }
 
@@ -267,6 +268,13 @@ extension CoreDataManager: CoreDataManagable {
                 promise(.failure(.deleteFail))
             }
         }.eraseToAnyPublisher()
+    }
+    
+    func fetchBuddy(before date: Date) -> [BuddyEntity] {
+        let request = BuddyEntity.fetchRequest()
+        return self.fetch(request: request)
+            .filter { $0.findRecentlyDate(before: date) != nil }
+            .sorted { $0.findRecentlyDate(before: date) ?? Date() > $1.findRecentlyDate(before: date) ?? Date() }
     }
     
 }

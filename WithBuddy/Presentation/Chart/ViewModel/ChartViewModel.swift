@@ -38,8 +38,7 @@ final class ChartViewModel {
         self.fetchGatheringAndBuddy()
         self.fetchBuddyRank()
         self.fetchPurposeRank()
-        self.fetchLatestBuddy()
-        self.fetchOldBuddy()
+        self.fetchLatestAndOldBuddy()
     }
     
     private func fetchGatheringAndBuddy() {
@@ -76,33 +75,10 @@ final class ChartViewModel {
             }).cancel()
     }
     
-    private func fetchLatestBuddy() {
-        let currentDate = Date()
-        for gathering in self.gatheringList where gathering.date < currentDate {
-            self.latestBuddy = gathering.buddyList.first
-            return
-        }
-        self.latestBuddy = nil
-    }
-    
-    private func fetchOldBuddy() {
-        var buddyList = Set(self.buddyList)
-        
-        gatheringList.forEach { gathering in
-            gathering.buddyList.forEach { buddy in
-                buddyList.remove(buddy)
-                if buddyList.count == 1 {
-                    self.oldBuddy = buddyList.first
-                    return
-                }
-            }
-            if buddyList.count == 1 { return }
-        }
-        
-        if self.oldBuddy == nil {
-            self.oldBuddy = gatheringList.last?.buddyList.last
-            return
-        }
+    private func fetchLatestAndOldBuddy() {
+        let list = self.buddyUseCase.fetchBuddy(before: Date())
+        self.oldBuddy = list.last
+        self.latestBuddy = list.first
     }
     
 }

@@ -55,6 +55,14 @@ extension BuddyEntity {
                      face: self.face)
     }
     
+    func findRecentlyDate(before date: Date) -> Date? {
+        for gatheringEntity in self.gatheringList.sorted(by: >) where gatheringEntity.date <= date {
+            return gatheringEntity.date
+        }
+        
+        return nil
+    }
+    
 }
 
 extension BuddyEntity: Comparable {

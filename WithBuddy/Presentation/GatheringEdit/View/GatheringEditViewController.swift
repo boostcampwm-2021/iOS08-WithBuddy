@@ -61,7 +61,6 @@ class GatheringEditViewController: UIViewController {
         super.viewDidLoad()
         self.bind()
         self.configure()
-        self.gatheringEditViewModel.didDatePicked(Date())
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addGathering))
     }
     

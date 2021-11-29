@@ -93,54 +93,62 @@ class GatheringDetailViewController: UIViewController {
         self.gatheringDetailViewModel.$gathering
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] gathering in
-                guard let gathering = gathering else { return }
-                self?.datePicker.date = gathering.date
-                self?.placeTextField.text = gathering.place
-
-                var purposeSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
-                purposeSnapshot.appendSections([0])
-                let purposeList = PurposeCategory.allCases.map({ placeType -> CheckableInfo? in
-                    var korDescription = "\(placeType)"
-                    if let kor = self?.gatheringDetailViewModel.engToKor(eng: "\(placeType)") {
-                        korDescription = kor
-                    }
-                    if gathering.purpose.contains(placeType.description) { return CheckableInfo(engDescription: "\(placeType)", korDescription: korDescription, check: true) }
-                    return nil
-                }).compactMap({ $0 })
-                purposeSnapshot.appendItems(purposeList)
-                self?.purposeDataSource.apply(purposeSnapshot, animatingDifferences: true)
-                
-                var buddySnapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
-                if gathering.buddyList.isEmpty {
-                    buddySnapshot.appendSections([0])
-                    buddySnapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "DefaultFace")])
-                } else {
-                    buddySnapshot.appendSections([0])
-                    buddySnapshot.appendItems(gathering.buddyList)
+                if let gathering = gathering {
+                    self?.configure(by: gathering)
                 }
-                self?.buddyDataSource.apply(buddySnapshot, animatingDifferences: true)
-                self?.memoTextView.text = gathering.memo
-            
-                guard let pictures = gathering.picture else { return }
-                var pictureSnapshot = NSDiffableDataSourceSnapshot<Int, URL>()
-                if pictures.isEmpty {
-                    guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else {
-                        return
-                    }
-                    let fileUrl = URL(fileURLWithPath: filePath)
-                    pictureSnapshot.appendSections([0])
-                    pictureSnapshot.appendItems([fileUrl])
-                } else {
-                    pictureSnapshot.appendSections([0])
-                    pictureSnapshot.appendItems(pictures)
-                }
-                self?.pictureDataSource.apply(pictureSnapshot, animatingDifferences: true)
             })
             .store(in: &self.cancellables)
     }
     
-    func configure(by gathering: Gathering) {
+    func update(by gathering: Gathering) {
         self.gatheringDetailViewModel.didGatheringChanged(to: gathering)
+    }
+    
+    func configure(by gathering: Gathering) {
+        self.datePicker.date = gathering.date
+        if let place = gathering.place, !place.isEmpty {
+            self.placeTextField.text = place
+        } else {
+            self.placeTextField.text = "입력된 장소가 없습니다"
+            self.placeTextField.textColor = UIColor(named: "LabelPurple")
+        }
+        var purposeSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
+        purposeSnapshot.appendSections([0])
+        let purposeList = PurposeCategory.allCases.map({ placeType -> CheckableInfo? in
+            var korDescription = "\(placeType)"
+            korDescription = self.gatheringDetailViewModel.engToKor(eng: "\(placeType)")
+            if gathering.purpose.contains(placeType.description) { return CheckableInfo(engDescription: "\(placeType)", korDescription: korDescription, check: true) }
+            return nil
+        }).compactMap({ $0 })
+        purposeSnapshot.appendItems(purposeList)
+        self.purposeDataSource.apply(purposeSnapshot, animatingDifferences: true)
+        var buddySnapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
+        if gathering.buddyList.isEmpty {
+            buddySnapshot.appendSections([0])
+            buddySnapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "DefaultFace")])
+        } else {
+            buddySnapshot.appendSections([0])
+            buddySnapshot.appendItems(gathering.buddyList)
+        }
+        self.buddyDataSource.apply(buddySnapshot, animatingDifferences: true)
+        if let memo = gathering.memo, !memo.isEmpty {
+            self.memoTextView.text = memo
+        } else {
+            self.memoTextView.text = "입력된 메모가 없습니다"
+            self.memoTextView.textColor = UIColor(named: "LabelPurple")
+        }
+        guard let pictures = gathering.picture else { return }
+        var pictureSnapshot = NSDiffableDataSourceSnapshot<Int, URL>()
+        if pictures.isEmpty {
+            guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else { return }
+            let fileUrl = URL(fileURLWithPath: filePath)
+            pictureSnapshot.appendSections([0])
+            pictureSnapshot.appendItems([fileUrl])
+        } else {
+            pictureSnapshot.appendSections([0])
+            pictureSnapshot.appendItems(pictures)
+        }
+        self.pictureDataSource.apply(pictureSnapshot, animatingDifferences: true)
     }
     
     private func configureScrollView() {
@@ -375,7 +383,8 @@ class GatheringDetailViewController: UIViewController {
         self.memoTextView.textContentType = .none
         self.memoTextView.autocapitalizationType = .none
         self.memoTextView.autocorrectionType = .no
-        self.memoTextView.isUserInteractionEnabled = false
+        self.memoTextView.isEditable = false
+        self.memoTextView.isUserInteractionEnabled = true
         
         self.memoTextView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

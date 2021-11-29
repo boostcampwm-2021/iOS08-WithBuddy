@@ -151,7 +151,7 @@ extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let viewController = GatheringDetailViewController()
-        viewController.configure(by: self.listViewModel[indexPath.item])
+        viewController.update(by: self.listViewModel[indexPath.item])
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     

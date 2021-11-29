@@ -11,6 +11,7 @@ class WBCalendarViewCell: UICollectionViewCell {
     
     static let identifier = "WBCalendarViewCell"
     private var buddyImageView = UIImageView()
+    private var extraGatheringLabel = UILabel()
     
     private var dayOfCell: UILabel = {
         let label = UILabel()
@@ -34,16 +35,18 @@ class WBCalendarViewCell: UICollectionViewCell {
         super.prepareForReuse()
         self.backgroundColor = .systemBackground
         self.buddyImageView.image = nil
+        self.extraGatheringLabel.text = ""
     }
     
     private func configure() {
         self.configureCell()
         self.configuredayOfMonth()
         self.configureBuddyImageView()
+        self.configureExtraGatheringLabel()
     }
     
     private func configuredayOfMonth() {
-        self.addSubview(dayOfCell)
+        self.addSubview(self.dayOfCell)
         self.dayOfCell.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.dayOfCell.centerXAnchor.constraint(equalTo: self.centerXAnchor),
@@ -57,7 +60,7 @@ class WBCalendarViewCell: UICollectionViewCell {
     }
     
     private func configureBuddyImageView() {
-        self.addSubview(buddyImageView)
+        self.addSubview(self.buddyImageView)
         self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.buddyImageView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8),
@@ -65,6 +68,17 @@ class WBCalendarViewCell: UICollectionViewCell {
             self.buddyImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             self.buddyImageView.topAnchor.constraint(equalTo: self.dayOfCell.bottomAnchor, constant: 1),
             self.buddyImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -3)
+        ])
+    }
+    
+    private func configureExtraGatheringLabel() {
+        self.addSubview(self.extraGatheringLabel)
+        self.extraGatheringLabel.text = ""
+        self.extraGatheringLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.extraGatheringLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            self.extraGatheringLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            self.extraGatheringLabel.widthAnchor.constraint(equalToConstant: 15)
         ])
     }
     
@@ -78,6 +92,12 @@ class WBCalendarViewCell: UICollectionViewCell {
     func highlightCell() {
         self.backgroundColor = .backgroundPurple
         self.layer.cornerRadius = 10
+    }
+    
+    func update(extraNum: Int) {
+        self.extraGatheringLabel.text = "+\(extraNum)"
+        self.extraGatheringLabel.font = .monospacedSystemFont(ofSize: 10, weight: .bold)
+        self.extraGatheringLabel.textColor = .labelPurple
     }
     
 }

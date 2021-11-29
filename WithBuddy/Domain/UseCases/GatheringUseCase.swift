@@ -46,7 +46,6 @@ final class GatheringUseCase {
     
     func deleteAllGathering() -> AnyPublisher<Void, CoreDataManager.CoreDataError> {
         return self.coreDataManager.deleteAllGathering()
-            .eraseToAnyPublisher()
     }
     
     func gatheringStatus(date: Date) -> [Gathering] {

@@ -63,7 +63,7 @@ class GatheringEditViewController: UIViewController {
         self.configure()
         self.gatheringEditViewModel.didDatePicked(Date())
         self.title = "모임 편집"
-        self.navigationItem.backButtonTitle = "back"
+        self.navigationItem.backButtonTitle = "Back"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.labelPurple as Any]
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addGathering))
     }

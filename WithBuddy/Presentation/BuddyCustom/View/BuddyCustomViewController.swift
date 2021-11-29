@@ -44,7 +44,13 @@ class BuddyCustomViewController: UIViewController {
         
         self.configure()
         self.bind()
+        self.navigationController?.navigationBar.topItem?.title = "Back"
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.labelPurple as Any]
     }
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        self.navigationController?.navigationBar.topItem?.title = "Back"
+//    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -165,7 +171,7 @@ class BuddyCustomViewController: UIViewController {
     private func configureNameTextField() {
         self.contentView.addSubview(self.nameTextField)
         if let color = UIColor.labelPurple {
-            self.nameTextField.attributedPlaceholder = NSAttributedString(string: "버디이름을 입력해주세요.", attributes: [NSAttributedString.Key.foregroundColor: color])
+            self.nameTextField.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요.", attributes: [NSAttributedString.Key.foregroundColor: color])
         }
         self.nameTextField.delegate = self
         self.nameTextField.textAlignment = .center

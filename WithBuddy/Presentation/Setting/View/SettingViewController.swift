@@ -107,6 +107,7 @@ class SettingViewController: UIViewController {
         let buddyCustomViewController = BuddyCustomViewController()
         buddyCustomViewController.delegate = self
         buddyCustomViewController.configure(by: myBuddy)
+        buddyCustomViewController.title = "프로필 수정"
         self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
     }
     

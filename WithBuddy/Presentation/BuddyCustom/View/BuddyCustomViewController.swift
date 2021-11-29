@@ -307,20 +307,6 @@ extension BuddyCustomViewController: UITextFieldDelegate {
         return true
     }
     
-//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        guard let text = textField.text else { return false }
-//        if let char = string.cString(using: String.Encoding.utf8) {
-//            let isBackSpace = strcmp(char, "\\b")
-//            if isBackSpace == -92 {
-//                return true
-//            }
-//        }
-//        if text.count >= 10 && range.length == 0 && range.location < 10 {
-//            return false
-//        }
-//        return true
-//    }
-    
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let text = textField.text else { return }
         self.buddyCustomViewModel.nameDidChaged(name: text)

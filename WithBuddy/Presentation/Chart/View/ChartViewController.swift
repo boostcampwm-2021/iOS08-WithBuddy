@@ -27,6 +27,7 @@ final class ChartViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.viewModel.fetch()
+        self.bubbleChartView.hiddenDescriptionView()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -41,6 +42,7 @@ final class ChartViewController: UIViewController {
         self.configureLatestOldChartView()
         self.configureBubbleGesture()
         self.configureDescriptionViewGesture()
+        self.configureEditButtonGesture()
     }
     
     private func bind() {
@@ -147,6 +149,12 @@ final class ChartViewController: UIViewController {
         self.bubbleChartView.bubbleDescriptionView.addGestureRecognizer(tapGesture)
     }
     
+    private func configureEditButtonGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.editButtonTapAction))
+        self.bubbleChartView.bubbleDescriptionView.editButton.isUserInteractionEnabled = true
+        self.bubbleChartView.bubbleDescriptionView.editButton.addGestureRecognizer(tapGesture)
+    }
+    
     private func update(buddyList: [(Buddy, Int)]?) {
         guard let list = buddyList else { return }
         self.bubbleChartView.update(list: list)
@@ -178,5 +186,27 @@ final class ChartViewController: UIViewController {
     @objc private func descriptionViewTapAction(_ sender: UITapGestureRecognizer) {
         self.bubbleChartView.hiddenDescriptionView()
     }
+    
+    @objc private func editButtonTapAction(_ sender: UITapGestureRecognizer) {
+        guard let buddy = self.viewModel.selectedBuddy else { return }
+        let buddyCustomViewController = BuddyCustomViewController()
+        buddyCustomViewController.delegate = self
+        buddyCustomViewController.title = "버디 편집"
+        buddyCustomViewController.configure(by: buddy)
+        self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
+    }
 
+}
+
+extension ChartViewController: BuddyCustomDelegate {
+    
+    func buddyEditDidCompleted(_ buddy: Buddy) {
+        self.bubbleChartView.hiddenDescriptionView()
+        self.viewModel.didBuddyEdited(buddy)
+    }
+    
+    func buddyAddDidCompleted(_ buddy: Buddy) {
+        
+    }
+    
 }

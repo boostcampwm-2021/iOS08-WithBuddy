@@ -27,8 +27,11 @@ class BuddyManageViewController: UIViewController {
         super.viewDidLoad()
         self.configure()
         self.bind()
-        self.title = "버디 관리"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.labelPurple as Any]
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.title = "버디 관리"
     }
     
     private func bind() {
@@ -114,6 +117,7 @@ class BuddyManageViewController: UIViewController {
     @objc private func newBuddyButtonTouched(_ sender: UIButton) {
         let buddyCustomViewController = BuddyCustomViewController()
         buddyCustomViewController.delegate = self
+        buddyCustomViewController.title = "버디 생성"
         self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
     }
     
@@ -172,6 +176,7 @@ extension BuddyManageViewController: UICollectionViewDelegate {
                                 image: UIImage(systemName: "pencil.circle")) { _ in
                 let buddyCustomViewController = BuddyCustomViewController()
                 buddyCustomViewController.delegate = self
+                buddyCustomViewController.title = "버디 편집"
                 buddyCustomViewController.configure(by: self.buddyManageViewModel[indexPath.item])
                 self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
             }

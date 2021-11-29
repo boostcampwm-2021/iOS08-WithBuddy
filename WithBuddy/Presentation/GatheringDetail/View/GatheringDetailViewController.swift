@@ -89,7 +89,7 @@ class GatheringDetailViewController: UIViewController {
                 let gatheringEditViewController = GatheringEditViewController()
                 gatheringEditViewController.configure(by: gathering)
                 gatheringEditViewController.delegate = self
-                self?.navigationController?.navigationBar.topItem?.title = "back"
+                self?.navigationController?.navigationBar.topItem?.title = "Back"
                 self?.navigationController?.pushViewController(gatheringEditViewController, animated: true)
             })
             .store(in: &cancellables)

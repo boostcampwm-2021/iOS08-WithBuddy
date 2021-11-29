@@ -32,7 +32,14 @@ extension CGFloat {
     
     static let buttonCornerRadius = CGFloat(5)
     
+    static let chartBubbleMaxLength = CGFloat(130)
+    static let chartDefaultViewLength = CGFloat(200)
+    static let chartDefaultViewHeight = CGFloat(150)
+    static let bubbleChartHeight = CGFloat(250)
+    static let purposeChartHeight = CGFloat(100)
+    static let latestOldChartHeight = CGFloat(200)
+    static let latestOldSpacing = CGFloat(30)
     static let purposeSpacing = CGFloat(4)
     static let purposeImageSize = CGFloat(65)
-    static let purposeWhiteViewHeight = CGFloat(100)
+    
 }

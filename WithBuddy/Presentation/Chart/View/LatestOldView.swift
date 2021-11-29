@@ -7,11 +7,10 @@
 
 import UIKit
 
-class LatestOldView: UIView {
+final class LatestOldView: UIView {
 
     private let imageView = UIImageView()
     private let firstLabel = UILabel()
-    private let stackView = UIStackView()
     private let nameLabel = UILabel()
     private let secondLabel = UILabel()
 
@@ -30,28 +29,27 @@ class LatestOldView: UIView {
     }
     
     func update(name: String, face: String) {
-        let maxLenght = 10
-        self.nameLabel.text = String(name.prefix(maxLenght))
+        self.nameLabel.text = String(name)
         self.imageView.image = UIImage(named: face)
     }
     
     private func configure() {
         self.configureImageView()
         self.configureFirstLabel()
-        self.configureStackView()
-        self.configureStackLabel()
+        self.configureNameLabel()
+        self.configureSecondLabel()
     }
     
     private func configureImageView() {
         self.addSubview(self.imageView)
-        self.imageView.image = UIImage(systemName: "photo")
+        self.imageView.image = .defaultFaceImage
         self.imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             self.imageView.topAnchor.constraint(equalTo: self.topAnchor),
             self.imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            self.imageView.widthAnchor.constraint(equalToConstant: 130),
-            self.imageView.heightAnchor.constraint(equalToConstant: 130)
+            self.imageView.widthAnchor.constraint(equalToConstant: .chartBubbleMaxLength),
+            self.imageView.heightAnchor.constraint(equalToConstant: .chartBubbleMaxLength)
         ])
     }
     
@@ -59,7 +57,6 @@ class LatestOldView: UIView {
         self.addSubview(self.firstLabel)
         self.firstLabel.font = .systemFont(ofSize: .chartLabelSize)
         self.firstLabel.textAlignment = .center
-        self.firstLabel.text = ""
         self.firstLabel.textColor = .systemGray
         self.firstLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -69,25 +66,27 @@ class LatestOldView: UIView {
         ])
     }
     
-    private func configureStackView() {
-        self.addSubview(self.stackView)
-        self.stackView.alignment = .center
-        self.stackView.translatesAutoresizingMaskIntoConstraints = false
+    private func configureNameLabel() {
+        self.addSubview(self.nameLabel)
+        self.nameLabel.font = .boldSystemFont(ofSize: .chartLabelSize)
+        self.nameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.stackView.topAnchor.constraint(equalTo: self.firstLabel.bottomAnchor),
-            self.stackView.centerXAnchor.constraint(equalTo: self.firstLabel.centerXAnchor),
-            self.stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            self.nameLabel.topAnchor.constraint(equalTo: self.firstLabel.bottomAnchor),
+            self.nameLabel.centerXAnchor.constraint(equalTo: self.firstLabel.centerXAnchor)
         ])
     }
     
-    private func configureStackLabel() {
-        self.stackView.addArrangedSubview(self.nameLabel)
-        self.stackView.addArrangedSubview(self.secondLabel)
-        self.nameLabel.text = "위드버디"
-        self.secondLabel.text = "님이에요!"
-        self.nameLabel.font = .boldSystemFont(ofSize: .chartLabelSize)
+    private func configureSecondLabel() {
+        self.addSubview(self.secondLabel)
+        self.secondLabel.text = .latestOldDescription
         self.secondLabel.font = .systemFont(ofSize: .chartLabelSize)
         self.secondLabel.textColor = .systemGray
+        self.secondLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.secondLabel.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor),
+            self.secondLabel.centerXAnchor.constraint(equalTo: self.nameLabel.centerXAnchor),
+            self.secondLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
     }
 
 }

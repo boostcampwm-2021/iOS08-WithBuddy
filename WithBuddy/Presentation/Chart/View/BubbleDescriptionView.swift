@@ -60,6 +60,10 @@ final class BubbleDescriptionView: UILabel {
         self.stackView.addArrangedSubview(self.nameLabel)
         self.stackView.addArrangedSubview(self.editButton)
         self.editButton.setImage(.editButtonImage, for: .normal)
+        NSLayoutConstraint.activate([
+            self.editButton.widthAnchor.constraint(equalToConstant: .backgroudHeight),
+            self.editButton.heightAnchor.constraint(equalToConstant: .backgroudHeight)
+        ])
     }
 
 }

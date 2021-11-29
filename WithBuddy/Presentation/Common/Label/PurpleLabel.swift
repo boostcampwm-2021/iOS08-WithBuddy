@@ -21,7 +21,7 @@ class PurpleLabel: UILabel {
     
     private func configure() {
         self.font = .systemFont(ofSize: .labelSize)
-        self.textColor = UIColor(named: "LabelPurple")
+        self.textColor = .labelPurple
     }
 
 }

@@ -26,7 +26,7 @@ class ImageTextCollectionViewCell: UICollectionViewCell {
         guard let image = image else {
             return
         }
-        self.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.backgroundColor = .backgroundPurple
         self.image.image = image
         self.textLabel.text = text
         if let check = check,
@@ -41,7 +41,7 @@ class ImageTextCollectionViewCell: UICollectionViewCell {
         guard let image = image else {
             return
         }
-        self.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.backgroundColor = .backgroundPurple
         self.image.image = image
         self.textLabel.text = text
     }

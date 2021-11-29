@@ -73,7 +73,7 @@ class WBCalendarView: UIView {
     private func configureTodayButton() {
         self.addSubview(self.todayButton)
         self.todayButton.setTitle("Today", for: .normal)
-        self.todayButton.backgroundColor = UIColor(named: "LabelPurple")
+        self.todayButton.backgroundColor = .labelPurple
         self.todayButton.layer.cornerRadius = 5
         self.todayButton.tintColor = .white
         self.todayButton.titleLabel?.font = .systemFont(ofSize: 12)
@@ -129,7 +129,7 @@ class WBCalendarView: UIView {
     private func makeWeekLabel(text: String) -> UILabel {
         let label = UILabel()
         label.text = text
-        label.textColor = UIColor(named: "LabelPurple")
+        label.textColor = .labelPurple
         label.textAlignment = .center
         return label
     }

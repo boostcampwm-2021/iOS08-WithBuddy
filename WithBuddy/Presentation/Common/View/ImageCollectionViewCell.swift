@@ -23,7 +23,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
     }
     
     func update(image: UIImage?, check: Bool) {
-        self.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.backgroundColor = .backgroundPurple
         self.image.image = image
         if check {
             self.image.alpha = 1.0

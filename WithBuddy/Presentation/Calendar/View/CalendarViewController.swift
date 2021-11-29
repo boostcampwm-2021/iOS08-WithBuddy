@@ -138,8 +138,11 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifier, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
         let day = self.calendarViewModel.totalDays.indices ~= indexPath.item ? self.calendarViewModel.totalDays[indexPath.item] : 0
         let face = self.calendarViewModel.totalFaces.indices ~= indexPath.item ? self.calendarViewModel.totalFaces[indexPath.item] : ""
+        let gatheringNum = self.calendarViewModel.totalGathering.indices ~= indexPath.item ? self.calendarViewModel.totalGathering[indexPath.item] : 0
         cell.update(day: day, face: face)
-        
+        if gatheringNum > 1 {
+            cell.update(extraNum: gatheringNum - 1)
+        }
         if let index = self.calendarViewModel.isSameMonth, index == indexPath.item {
             cell.highlightCell()
         }

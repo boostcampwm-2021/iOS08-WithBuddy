@@ -22,6 +22,7 @@ final class CalendarViewModel {
     private(set) var isSameMonth: Int?
     private(set) var totalDays = [Int]()
     private(set) var totalFaces = [String]()
+    private(set) var totalGathering = [Int]()
     private(set) var monthSubject = PassthroughSubject<String, Never>()
     private(set) var didDaysReloadSignal = PassthroughSubject<Void, Never>()
     private(set) var didGatheringReloadSignal = PassthroughSubject<Void, Never>()
@@ -40,6 +41,7 @@ final class CalendarViewModel {
         self.sendMonthSubject()
         self.reloadDays()
         self.reloadFaces()
+        self.reloadTotalGathering()
     }
     
     func headerComment() -> String {
@@ -132,6 +134,19 @@ final class CalendarViewModel {
             }
         }
         self.didDaysReloadSignal.send()
+    }
+    
+    func reloadTotalGathering() {
+        self.totalGathering.removeAll()
+        for _ in 0..<42 {
+            self.totalGathering.append(0)
+        }
+        
+        let firstDayIndex = self.calendarUseCase.findFirstDayIndex(of: self.calendarMonth)
+        self.thisMonthGathrtingList.forEach {
+            let day = self.calendarUseCase.day(baseDate: $0.date)
+            self.totalGathering[firstDayIndex + day - 1] += 1
+        }
     }
     
 }

@@ -72,7 +72,6 @@
 		BBF7FF44272FC1B000B71C97 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF43272FC1B000B71C97 /* .swiftlint.yml */; };
 		BBF7FF47272FC78100B71C97 /* Cafe24Ssurround.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF46272FC78100B71C97 /* Cafe24Ssurround.ttf */; };
 		BBF7FF49272FC78C00B71C97 /* Cafe24SsurroundAir.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF48272FC78C00B71C97 /* Cafe24SsurroundAir.ttf */; };
-		BBF7FF4C272FD7F200B71C97 /* withBuddyLaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF4B272FD7F200B71C97 /* withBuddyLaunchScreen.png */; };
 		BBF8AFD5274E0831002479D4 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF8AFD4274E0831002479D4 /* SettingViewModel.swift */; };
 		F78EE745274CDEB000948960 /* BuddyImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78EE744274CDEB000948960 /* BuddyImageView.swift */; };
 		F78EE747274CDF0700948960 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78EE746274CDF0700948960 /* LoadingView.swift */; };
@@ -190,7 +189,6 @@
 		BBF7FF43272FC1B000B71C97 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		BBF7FF46272FC78100B71C97 /* Cafe24Ssurround.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cafe24Ssurround.ttf; sourceTree = "<group>"; };
 		BBF7FF48272FC78C00B71C97 /* Cafe24SsurroundAir.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cafe24SsurroundAir.ttf; sourceTree = "<group>"; };
-		BBF7FF4B272FD7F200B71C97 /* withBuddyLaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = withBuddyLaunchScreen.png; sourceTree = "<group>"; };
 		BBF8AFD4274E0831002479D4 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		F78EE744274CDEB000948960 /* BuddyImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyImageView.swift; sourceTree = "<group>"; };
 		F78EE746274CDF0700948960 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -654,7 +652,6 @@
 			isa = PBXGroup;
 			children = (
 				8A52C4F5273947E50025C562 /* defaultImage.png */,
-				BBF7FF4B272FD7F200B71C97 /* withBuddyLaunchScreen.png */,
 				BBF7FF45272FC75F00B71C97 /* Fonts */,
 			);
 			path = Resource;
@@ -839,7 +836,6 @@
 				BBF7FF47272FC78100B71C97 /* Cafe24Ssurround.ttf in Resources */,
 				BBF7FF49272FC78C00B71C97 /* Cafe24SsurroundAir.ttf in Resources */,
 				BBF7FF32272FB51400B71C97 /* LaunchScreen.storyboard in Resources */,
-				BBF7FF4C272FD7F200B71C97 /* withBuddyLaunchScreen.png in Resources */,
 				8A52C4F6273947E50025C562 /* defaultImage.png in Resources */,
 				BBF7FF2F272FB51400B71C97 /* Assets.xcassets in Resources */,
 			);

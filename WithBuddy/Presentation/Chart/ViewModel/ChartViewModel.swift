@@ -19,8 +19,7 @@ final class ChartViewModel {
     private let buddyUseCase: BuddyUseCase
     private let purposeUseCase: PurposeUseCaseProtocol
     private let userUseCase: UserUseCase
-    private var gatheringList: [Gathering] = []
-    private var buddyList: [Buddy] = []
+    private var cancellable: Set<AnyCancellable> = []
     
     init(
         gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared),
@@ -35,74 +34,26 @@ final class ChartViewModel {
     }
     
     func fetch() {
-        self.fetchGatheringAndBuddy()
         self.fetchBuddyRank()
         self.fetchPurposeRank()
-        self.fetchLatestBuddy()
-        self.fetchOldBuddy()
-    }
-    
-    private func fetchGatheringAndBuddy() {
-        self.gatheringList = self.gatheringUseCase.fetchGathering()
-        self.buddyList = self.buddyUseCase.fetchBuddy()
+        self.fetchLatestAndOldBuddy()
     }
     
     private func fetchBuddyRank() {
-        var buddyMap: [Buddy: Int] = [:]
-        self.buddyList.forEach { buddy in
-            buddyMap[buddy] = 0
-        }
-        
-        self.gatheringList.forEach { gathering in
-            gathering.buddyList.forEach { buddy in
-                buddyMap[buddy]? += 1
-            }
-        }
-        
-        let sortedBuddyList = buddyMap.sorted{
-            if $0.value == $1.value { return $0.key.name < $1.key.name }
-            return $0.value > $1.value
-        }
-        let index = min(5, sortedBuddyList.count - 1)
-        if Int.zero <= index {
-            self.buddyRank = Array(sortedBuddyList[...index].filter{ $0.value != Int.zero }.map{ ($0.key, $0.value) })
-        }
+        self.buddyRank = Array(self.buddyUseCase.fetchBuddyRank(before: Date()).prefix(5))
     }
     
     private func fetchPurposeRank() {
-        self.purposeUseCase.fetchTopFourPurpose()
+        self.purposeUseCase.fetchTopFourPurpose(before: Date())
             .sink(receiveValue: { rank in
                 self.purposeRank = rank.map{ ($0, self.purposeUseCase.engToKor(eng: $0)) }
-            }).cancel()
+            }).store(in: &self.cancellable)
     }
     
-    private func fetchLatestBuddy() {
-        let currentDate = Date()
-        for gathering in self.gatheringList where gathering.date < currentDate {
-            self.latestBuddy = gathering.buddyList.first
-            return
-        }
-        self.latestBuddy = nil
-    }
-    
-    private func fetchOldBuddy() {
-        var buddyList = Set(self.buddyList)
-        
-        gatheringList.forEach { gathering in
-            gathering.buddyList.forEach { buddy in
-                buddyList.remove(buddy)
-                if buddyList.count == 1 {
-                    self.oldBuddy = buddyList.first
-                    return
-                }
-            }
-            if buddyList.count == 1 { return }
-        }
-        
-        if self.oldBuddy == nil {
-            self.oldBuddy = gatheringList.last?.buddyList.last
-            return
-        }
+    private func fetchLatestAndOldBuddy() {
+        let list = self.buddyUseCase.fetchBuddy(before: Date())
+        self.oldBuddy = list.last
+        self.latestBuddy = list.first
     }
     
 }

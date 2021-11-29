@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol PurposeUseCaseProtocol {
-    func fetchTopFourPurpose() -> AnyPublisher<[String], Never>
+    func fetchTopFourPurpose(before date: Date) -> AnyPublisher<[String], Never>
     func engToKor(eng: String) -> String
 }
 
@@ -21,14 +21,18 @@ final class PurposeUseCase: PurposeUseCaseProtocol {
         self.coreDataManager = coreDataManager
     }
     
-    func fetchTopFourPurpose() -> AnyPublisher<[String], Never> {
+    func fetchTopFourPurpose(before date: Date) -> AnyPublisher<[String], Never> {
         self.coreDataManager.fetchPurpose()
-            .map{ self.convertPurposeEntity($0) }
+            .map{ purposeEntity in
+                Array(purposeEntity
+                        .map{ ($0.name, $0.gatheringList.filter{ gathering in gathering.date <= date }.count)}
+                        .filter{ $0.0 != "\(PurposeCategory.etc)" && $0.1 != Int.zero }
+                        .sorted{ $0.1 > $1.1 }
+                        .map{ $0.0 }
+                        .prefix(4)
+                )
+            }
             .eraseToAnyPublisher()
-    }
-    
-    private func convertPurposeEntity(_ purposeEntity: [PurposeEntity]) -> [String] {
-        return Array(purposeEntity.map{ $0.name }.filter{ $0 != PurposeCategory.etc.description }.prefix(4))
     }
     
     func engToKor(eng: String) -> String {

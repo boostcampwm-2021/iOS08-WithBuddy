@@ -19,6 +19,7 @@ final class SettingViewModel {
     private let userUseCase: UserUseCase
     private let gatheringUseCase: GatheringUseCase
     private(set) var deleteSignal = PassthroughSubject<(String, String?), Never>()
+    private var cancellable: Set<AnyCancellable> = []
     
     init(
         userUseCase: UserUseCase = UserUseCase(),
@@ -39,7 +40,7 @@ final class SettingViewModel {
                 }
             } receiveValue: { _ in
                 self.deleteSignal.send(("삭제 성공", "모임 삭제가 완료되었습니다."))
-            }.cancel()
+            }.store(in: &self.cancellable)
     }
     
     func didMyBuddyChanged(buddy: Buddy) {

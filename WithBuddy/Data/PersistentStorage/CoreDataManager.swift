@@ -250,9 +250,6 @@ extension CoreDataManager: CoreDataManagable {
         let request = PurposeEntity.fetchRequest()
         request.predicate = NSPredicate(format: "gatheringList.@count > 0")
         return Just(self.fetch(request: request))
-            .map{ $0.sorted(by: { lhs, rhs in
-                lhs.gatheringList.count > rhs.gatheringList.count
-            })}
             .eraseToAnyPublisher()
     }
     

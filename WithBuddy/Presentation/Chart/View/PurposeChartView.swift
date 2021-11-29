@@ -9,8 +9,7 @@ import UIKit
 
 final class PurposeChartView: UIView {
     
-    private let nameLabel = PurpleTitleLabel()
-    private let titleLabel = BlackTitleLabel()
+    private let titleLabel = PurpleTitleLabel()
     private let whiteView = WhiteView()
     private let stackView = UIStackView()
     private let firstPurposeView = PurposeView()
@@ -26,10 +25,6 @@ final class PurposeChartView: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.configure()
-    }
-    
-    func update(name: String) {
-        self.nameLabel.text = name
     }
     
     func update(list: [(String, String)]) {
@@ -59,21 +54,11 @@ final class PurposeChartView: UIView {
     }
     
     private func configure() {
-        self.configureNameLabel()
-        self.configureWhiteView()
         self.configureTitleLabel()
+        self.configureWhiteView()
         self.configureStackView()
         self.configurePurposeView()
         self.configureDefaultPurpose()
-    }
-    
-    private func configureNameLabel() {
-        self.addSubview(self.nameLabel)
-        self.nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            self.nameLabel.topAnchor.constraint(equalTo: self.topAnchor)
-        ])
     }
     
     private func configureTitleLabel() {
@@ -81,8 +66,8 @@ final class PurposeChartView: UIView {
         self.titleLabel.text = .purposeChartTitle
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.titleLabel.leadingAnchor.constraint(equalTo: self.nameLabel.trailingAnchor),
-            self.titleLabel.centerYAnchor.constraint(equalTo: self.nameLabel.centerYAnchor)
+            self.titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            self.titleLabel.topAnchor.constraint(equalTo: self.topAnchor)
         ])
     }
     
@@ -90,10 +75,10 @@ final class PurposeChartView: UIView {
         self.addSubview(self.whiteView)
         self.whiteView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.whiteView.leadingAnchor.constraint(equalTo: self.nameLabel.leadingAnchor),
-            self.whiteView.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: .innerPartInset),
+            self.whiteView.leadingAnchor.constraint(equalTo: self.titleLabel.leadingAnchor),
+            self.whiteView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: .innerPartInset),
             self.whiteView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            self.whiteView.heightAnchor.constraint(equalToConstant: .purposeWhiteViewHeight),
+            self.whiteView.heightAnchor.constraint(equalToConstant: .purposeChartHeight),
             self.whiteView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }

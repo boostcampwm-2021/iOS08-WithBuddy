@@ -16,7 +16,11 @@ extension String {
     
     // MARK: Chart
     
-    static let purposeChartTitle = "님의 만남 목적"
+    static let bubbleChartTitle = "많이 만난 버디"
+    static let purposeChartTitle = "만남 목적"
+    static let latestOldChartTitle = "가장 최근/오래전에 만난 버디"
+    static let latestDescription = "가장 최근에 만난 버디는"
+    static let oldDescription = "만난지 가장 오래된 버디는"
     static let defaultHobby = "DefaultHobby"
     static let defaultStudy = "DefaultStudy"
     static let defaultMeal = "DefaultMeal"

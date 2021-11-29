@@ -10,7 +10,6 @@ import Combine
 
 final class ChartViewModel {
     
-    @Published private(set) var name: String?
     @Published private(set) var buddyRank: [(Buddy, Int)] = []
     @Published private(set) var purposeRank: [(String, String)] = []
     @Published private(set) var latestBuddy: Buddy?
@@ -36,17 +35,11 @@ final class ChartViewModel {
     }
     
     func fetch() {
-        self.fetchName()
         self.fetchGatheringAndBuddy()
         self.fetchBuddyRank()
         self.fetchPurposeRank()
         self.fetchLatestBuddy()
         self.fetchOldBuddy()
-    }
-    
-    private func fetchName() {
-        guard let buddy = self.userUseCase.fetchUser() else { return }
-        self.name = buddy.name
     }
     
     private func fetchGatheringAndBuddy() {

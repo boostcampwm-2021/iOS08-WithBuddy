@@ -42,16 +42,6 @@ final class ChartViewController: UIViewController {
     }
     
     private func bind() {
-        self.viewModel.$name
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] name in
-                guard let name = name else { return }
-                self?.bubbleChartView.update(name: name)
-                self?.purposeChartView.update(name: name)
-                self?.latestOldChartView.update(name: name)
-            })
-            .store(in: &self.cancellables)
-                    
         self.viewModel.$buddyRank
             .receive(on: DispatchQueue.main)
             .sink { [weak self] list in
@@ -108,9 +98,9 @@ final class ChartViewController: UIViewController {
         self.contentView.addSubview(self.bubbleChartView)
         self.bubbleChartView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.bubbleChartView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
-            self.bubbleChartView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 20),
-            self.bubbleChartView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20)
+            self.bubbleChartView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.bubbleChartView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: .plusInset),
+            self.bubbleChartView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])
     }
     
@@ -119,7 +109,7 @@ final class ChartViewController: UIViewController {
         self.purposeChartView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.purposeChartView.leadingAnchor.constraint(equalTo: self.bubbleChartView.leadingAnchor),
-            self.purposeChartView.topAnchor.constraint(equalTo: self.bubbleChartView.bottomAnchor, constant: 20),
+            self.purposeChartView.topAnchor.constraint(equalTo: self.bubbleChartView.bottomAnchor, constant: .plusInset),
             self.purposeChartView.trailingAnchor.constraint(equalTo: self.bubbleChartView.trailingAnchor)
         ])
     }
@@ -129,16 +119,10 @@ final class ChartViewController: UIViewController {
         self.latestOldChartView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.latestOldChartView.leadingAnchor.constraint(equalTo: self.bubbleChartView.leadingAnchor),
-            self.latestOldChartView.topAnchor.constraint(equalTo: self.purposeChartView.bottomAnchor, constant: 20),
+            self.latestOldChartView.topAnchor.constraint(equalTo: self.purposeChartView.bottomAnchor, constant: .plusInset),
             self.latestOldChartView.trailingAnchor.constraint(equalTo: self.bubbleChartView.trailingAnchor),
             self.latestOldChartView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
         ])
-    }
-    
-    private func update(name: String) {
-        self.bubbleChartView.update(name: name)
-        self.purposeChartView.update(name: name)
-        self.latestOldChartView.update(name: name)
     }
     
     private func update(buddyList: [(Buddy, Int)]?) {

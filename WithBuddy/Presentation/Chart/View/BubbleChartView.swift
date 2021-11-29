@@ -11,11 +11,12 @@ final class BubbleChartView: UIView {
     
     private let titleLabel = PurpleTitleLabel()
     private let whiteView = WhiteView()
-    private let firstBubbleImageView = UIImageView()
-    private let secondBubbleImageView = UIImageView()
-    private let thirdBubbleImageView = UIImageView()
-    private let fourthBubbleImageView = UIImageView()
-    private let fifthBubbleImageView = UIImageView()
+    private(set) var firstBubbleImageView = UIImageView()
+    private(set) var secondBubbleImageView = UIImageView()
+    private(set) var thirdBubbleImageView = UIImageView()
+    private(set) var fourthBubbleImageView = UIImageView()
+    private(set) var fifthBubbleImageView = UIImageView()
+    private(set) var bubbleDescriptionView = BubbleDescriptionView()
     private let defaultView = DefaultView()
     
     private let maxLength = CGFloat.chartBubbleMaxLength
@@ -55,11 +56,19 @@ final class BubbleChartView: UIView {
     }
     
     func resetBubbles() {
-        self.firstBubbleImageView.frame.size = CGSize.zero
         self.secondBubbleImageView.frame.size = CGSize.zero
         self.thirdBubbleImageView.frame.size = CGSize.zero
         self.fourthBubbleImageView.frame.size = CGSize.zero
         self.fifthBubbleImageView.frame.size = CGSize.zero
+    }
+    
+    func showDescriptionView(name: String) {
+        self.bubbleDescriptionView.isHidden = false
+        self.bubbleDescriptionView.update(name: name)
+    }
+    
+    func hiddenDescriptionView() {
+        self.bubbleDescriptionView.isHidden = true
     }
     
     private func update(imageView: UIImageView, face: String?, count: Int?, xValue: CGFloat, yValue: CGFloat) {
@@ -97,6 +106,7 @@ final class BubbleChartView: UIView {
         self.configureChart()
         self.configureFirstBubble()
         self.configureBubbles()
+        self.configureBubbleDescriptionView()
         self.configureDefaultView()
     }
     
@@ -153,6 +163,28 @@ final class BubbleChartView: UIView {
     private func configureBubble(imageView: UIImageView) {
         imageView.isHidden = true
         imageView.frame.size = CGSize.zero
+        imageView.tag = { () -> Int in
+            switch imageView {
+            case firstBubbleImageView: return 0
+            case secondBubbleImageView: return 1
+            case thirdBubbleImageView: return 2
+            case fourthBubbleImageView: return 3
+            case fifthBubbleImageView: return 4
+            default: return 5
+            }
+        }()
+    }
+    
+    private func configureBubbleDescriptionView() {
+        self.whiteView.addSubview(self.bubbleDescriptionView)
+        self.bubbleDescriptionView.isHidden = true
+        self.bubbleDescriptionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.bubbleDescriptionView.leadingAnchor.constraint(equalTo: self.whiteView.leadingAnchor),
+            self.bubbleDescriptionView.topAnchor.constraint(equalTo: self.whiteView.topAnchor),
+            self.bubbleDescriptionView.trailingAnchor.constraint(equalTo: self.whiteView.trailingAnchor),
+            self.bubbleDescriptionView.bottomAnchor.constraint(equalTo: self.whiteView.bottomAnchor)
+        ])
     }
     
     private func configureDefaultView() {

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8521BE3C27437BC4000F3C05 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8AC37273CD428005F8306 /* UIView+Extension.swift */; };
 		8521BE3D2743C492000F3C05 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E8ABBD273A8D43005F8306 /* CalendarViewModel.swift */; };
+		85456A2E2754C697006AFFF2 /* BubbleDescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85456A2D2754C696006AFFF2 /* BubbleDescriptionView.swift */; };
 		8549E0AF274A390300C2F9AD /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8549E0AE274A390300C2F9AD /* Int+Extension.swift */; };
 		854AA75E27337A7200663911 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA75D27337A7200663911 /* SearchView.swift */; };
 		854AA76427338C2F00663911 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854AA76327338C2F00663911 /* ListTableViewCell.swift */; };
@@ -119,6 +120,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		85456A2D2754C696006AFFF2 /* BubbleDescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleDescriptionView.swift; sourceTree = "<group>"; };
 		8549E0AE274A390300C2F9AD /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		854AA75D27337A7200663911 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		854AA76327338C2F00663911 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 				85D262EB273CDEBE000190B8 /* LatestOldChartView.swift */,
 				85D262F3273CF211000190B8 /* PurposeView.swift */,
 				85D262F5273CFEBF000190B8 /* LatestOldView.swift */,
+				85456A2D2754C696006AFFF2 /* BubbleDescriptionView.swift */,
 				85D262F7273D138E000190B8 /* DefaultView.swift */,
 			);
 			path = View;
@@ -887,6 +890,7 @@
 				85D262EE273CE6DD000190B8 /* WhiteView.swift in Sources */,
 				F7E8AC3E273CD4E6005F8306 /* ImageTextCollectionViewCell.swift in Sources */,
 				85624745274F5DC70041E927 /* String+Extension.swift in Sources */,
+				85456A2E2754C697006AFFF2 /* BubbleDescriptionView.swift in Sources */,
 				85624748274F6B3B0041E927 /* UIImage+Extension.swift in Sources */,
 				F7E8AC3C273CD4E2005F8306 /* AppDelegate.swift in Sources */,
 				8AF3152927461EA600BDDF85 /* Face.swift in Sources */,

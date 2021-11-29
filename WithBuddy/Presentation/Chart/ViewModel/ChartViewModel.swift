@@ -21,6 +21,8 @@ final class ChartViewModel {
     private let userUseCase: UserUseCase
     private var cancellable: Set<AnyCancellable> = []
     
+    private(set) var selectedBuddy: Buddy?
+    
     init(
         gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared),
         buddyUseCase: BuddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared),
@@ -33,10 +35,21 @@ final class ChartViewModel {
         self.userUseCase = userUseCase
     }
     
+    subscript(index: Int) -> Buddy {
+        let buddy = self.buddyRank[index].0
+        self.selectedBuddy = buddy
+        return buddy
+        
+    }
+    
     func fetch() {
         self.fetchBuddyRank()
         self.fetchPurposeRank()
         self.fetchLatestAndOldBuddy()
+    }
+    
+    func didBuddyEdited(_ buddy: Buddy) {
+        self.buddyUseCase.updateBuddy(buddy)
     }
     
     private func fetchBuddyRank() {

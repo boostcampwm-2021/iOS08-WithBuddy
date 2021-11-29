@@ -13,5 +13,6 @@ extension UIImage {
     static let purpleFaceImage = UIImage(named: "FacePurple1")
     static let deleteImage = UIImage(named: "FaceRed1")
     static let editImage = UIImage(named: "FacePurple1")
+    static let editButtonImage = UIImage(systemName: "pencil.circle")
     
 }

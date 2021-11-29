@@ -87,7 +87,7 @@ final class ListTableViewCell: UITableViewCell {
     
     private func configurePurposeLabel() {
         self.addSubview(self.purposeLabel)
-        self.purposeLabel.text = "카테고리"
+        self.purposeLabel.text = "목적"
         self.purposeLabel.textColor = .labelPurple
         self.purposeLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

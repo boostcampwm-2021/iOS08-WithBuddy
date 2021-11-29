@@ -16,6 +16,7 @@ final class BubbleChartView: UIView {
     private let thirdBubbleImageView = UIImageView()
     private let fourthBubbleImageView = UIImageView()
     private let fifthBubbleImageView = UIImageView()
+    private let bubbleDescriptionView = BubbleDescriptionView()
     private let defaultView = DefaultView()
     
     private let maxLength = CGFloat.chartBubbleMaxLength
@@ -97,6 +98,7 @@ final class BubbleChartView: UIView {
         self.configureChart()
         self.configureFirstBubble()
         self.configureBubbles()
+        self.configureBubbleDescriptionView()
         self.configureDefaultView()
     }
     
@@ -153,6 +155,18 @@ final class BubbleChartView: UIView {
     private func configureBubble(imageView: UIImageView) {
         imageView.isHidden = true
         imageView.frame.size = CGSize.zero
+    }
+    
+    private func configureBubbleDescriptionView() {
+        self.whiteView.addSubview(self.bubbleDescriptionView)
+        self.bubbleDescriptionView.isHidden = true
+        self.bubbleDescriptionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.bubbleDescriptionView.leadingAnchor.constraint(equalTo: self.whiteView.leadingAnchor),
+            self.bubbleDescriptionView.topAnchor.constraint(equalTo: self.whiteView.topAnchor),
+            self.bubbleDescriptionView.trailingAnchor.constraint(equalTo: self.whiteView.trailingAnchor),
+            self.bubbleDescriptionView.bottomAnchor.constraint(equalTo: self.whiteView.bottomAnchor)
+        ])
     }
     
     private func configureDefaultView() {

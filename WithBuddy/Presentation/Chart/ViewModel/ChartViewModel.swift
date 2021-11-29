@@ -49,8 +49,6 @@ final class ChartViewModel {
     }
     
     func didBuddyEdited(_ buddy: Buddy) {
-        guard let index = self.buddyRank.firstIndex(where: { $0.0.id == buddy.id }) else { return }
-        buddyRank[index].0 = buddy
         self.buddyUseCase.updateBuddy(buddy)
     }
     

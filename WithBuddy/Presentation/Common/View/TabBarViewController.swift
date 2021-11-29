@@ -113,7 +113,8 @@ final class TabBarViewController: UITabBarController {
     }
     
     @objc private func registerAction(_ sender: UIButton) {
-        self.navigationController?.pushViewController(RegisterViewController(), animated: true)
+        let registerViewController = RegisterViewController()
+        self.navigationController?.pushViewController(registerViewController, animated: true)
     }
     
 }

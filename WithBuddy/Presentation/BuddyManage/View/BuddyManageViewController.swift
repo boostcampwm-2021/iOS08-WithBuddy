@@ -27,6 +27,8 @@ class BuddyManageViewController: UIViewController {
         super.viewDidLoad()
         self.configure()
         self.bind()
+        self.title = "버디 관리"
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.labelPurple as Any]
     }
     
     private func bind() {

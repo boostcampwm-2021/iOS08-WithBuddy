@@ -59,6 +59,11 @@ class GatheringDetailViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .done, target: self, action: #selector(self.editGathering))
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        self.title = "모임 상세화면"
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.labelPurple as Any]
+    }
+    
     private func configure() {
         self.view.backgroundColor = .backgroundPurple
         
@@ -84,6 +89,7 @@ class GatheringDetailViewController: UIViewController {
                 let gatheringEditViewController = GatheringEditViewController()
                 gatheringEditViewController.configure(by: gathering)
                 gatheringEditViewController.delegate = self
+                self?.navigationController?.navigationBar.topItem?.title = "back"
                 self?.navigationController?.pushViewController(gatheringEditViewController, animated: true)
             })
             .store(in: &cancellables)

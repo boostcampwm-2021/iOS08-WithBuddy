@@ -16,7 +16,6 @@ class RegisterViewController: UIViewController {
     private lazy var contentView = UIView()
     
     private lazy var dateTitleLabel = PurpleTitleLabel()
-    private lazy var dateBackgroundView = WhiteView()
     private lazy var datePicker = UIDatePicker()
     private lazy var placeTitleLabel = PurpleTitleLabel()
     private lazy var placeBackgroundView = WhiteView()
@@ -224,7 +223,6 @@ class RegisterViewController: UIViewController {
     
     private func configureDatePart() {
         self.configureDateTitle()
-        self.configureDateBackground()
         self.configureDatePicker()
     }
     
@@ -240,19 +238,8 @@ class RegisterViewController: UIViewController {
         ])
     }
     
-    private func configureDateBackground() {
-        self.contentView.addSubview(self.dateBackgroundView)
-        self.dateBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.dateBackgroundView.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: .innerPartInset),
-            self.dateBackgroundView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
-            self.dateBackgroundView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
-            self.dateBackgroundView.heightAnchor.constraint(equalToConstant: .backgroudHeight)
-        ])
-    }
-    
     private func configureDatePicker() {
-        self.dateBackgroundView.addSubview(self.datePicker)
+        self.view.addSubview(self.datePicker)
         self.datePicker.datePickerMode = .dateAndTime
         self.datePicker.locale = Locale(identifier: "ko-KR")
         self.datePicker.timeZone = .autoupdatingCurrent
@@ -260,8 +247,8 @@ class RegisterViewController: UIViewController {
         
         self.datePicker.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.datePicker.leadingAnchor.constraint(equalTo: self.dateBackgroundView.leadingAnchor, constant: .plusInset),
-            self.datePicker.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
+            self.datePicker.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: .innerPartInset),
+            self.datePicker.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset)
         ])
     }
     @objc private func didDateChanged(_ sender: UIDatePicker) {
@@ -282,7 +269,7 @@ class RegisterViewController: UIViewController {
         
         self.placeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.placeTitleLabel.topAnchor.constraint(equalTo: self.dateBackgroundView.bottomAnchor, constant: .plusInset),
+            self.placeTitleLabel.topAnchor.constraint(equalTo: self.datePicker.bottomAnchor, constant: .plusInset),
             self.placeTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
             self.placeTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])

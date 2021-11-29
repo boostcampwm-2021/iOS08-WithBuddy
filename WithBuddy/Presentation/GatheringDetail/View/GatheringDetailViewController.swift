@@ -15,7 +15,7 @@ class GatheringDetailViewController: UIViewController {
     
     private lazy var dateTitleLabel = PurpleTitleLabel()
     private lazy var dateBackgroundView = WhiteView()
-    private lazy var datePicker = UIDatePicker()
+    private lazy var datePicker = UILabel()
   
     private lazy var placeTitleLabel = PurpleTitleLabel()
     private lazy var placeBackgroundView = WhiteView()
@@ -111,13 +111,31 @@ class GatheringDetailViewController: UIViewController {
     }
     
     func configure(by gathering: Gathering) {
-        self.datePicker.date = gathering.date
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ko-KR")
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        let dateText = dateFormatter.string(from: gathering.date)
+        self.datePicker.text = dateText
         if let place = gathering.place, !place.isEmpty {
             self.placeTextField.text = place
+            self.placeTextField.textColor = .black
         } else {
             self.placeTextField.text = "입력된 장소가 없습니다"
             self.placeTextField.textColor = UIColor(named: "LabelPurple")
         }
+        if let memo = gathering.memo, !memo.isEmpty {
+            self.memoTextView.text = memo
+            self.memoTextView.textColor = .black
+        } else {
+            self.memoTextView.text = "입력된 메모가 없습니다"
+            self.memoTextView.textColor = UIColor(named: "LabelPurple")
+        }
+        
+        self.configureDataSource(by: gathering)
+    }
+    
+    private func configureDataSource(by gathering: Gathering) {
         var purposeSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
         purposeSnapshot.appendSections([0])
         let purposeList = PurposeCategory.allCases.map({ placeType -> CheckableInfo? in
@@ -137,12 +155,6 @@ class GatheringDetailViewController: UIViewController {
             buddySnapshot.appendItems(gathering.buddyList)
         }
         self.buddyDataSource.apply(buddySnapshot, animatingDifferences: true)
-        if let memo = gathering.memo, !memo.isEmpty {
-            self.memoTextView.text = memo
-        } else {
-            self.memoTextView.text = "입력된 메모가 없습니다"
-            self.memoTextView.textColor = UIColor(named: "LabelPurple")
-        }
         guard let pictures = gathering.picture else { return }
         var pictureSnapshot = NSDiffableDataSourceSnapshot<Int, URL>()
         if pictures.isEmpty {
@@ -213,9 +225,6 @@ class GatheringDetailViewController: UIViewController {
     
     private func configureDatePicker() {
         self.dateBackgroundView.addSubview(self.datePicker)
-        self.datePicker.datePickerMode = .dateAndTime
-        self.datePicker.locale = Locale(identifier: "ko-KR")
-        self.datePicker.timeZone = .autoupdatingCurrent
         self.datePicker.isUserInteractionEnabled = false
         
         self.datePicker.translatesAutoresizingMaskIntoConstraints = false

@@ -42,6 +42,6 @@ extension CGFloat {
     static let purposeSpacing = CGFloat(4)
     static let purposeImageSize = CGFloat(65)
     
-    static let bubbleDescriptionViewAlpha = CGFloat(0.5)
+    static let bubbleDescriptionViewAlpha = CGFloat(0.7)
     
 }

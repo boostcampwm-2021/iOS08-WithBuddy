@@ -39,6 +39,8 @@ final class ChartViewController: UIViewController {
         self.configureBubbleChartView()
         self.configurePurposeChartView()
         self.configureLatestOldChartView()
+        self.configureBubbleGesture()
+        self.configureDescriptionViewGesture()
     }
     
     private func bind() {
@@ -125,6 +127,26 @@ final class ChartViewController: UIViewController {
         ])
     }
     
+    private func configureBubbleGesture() {
+        self.configureBubbleGesture(imageView: self.bubbleChartView.firstBubbleImageView)
+        self.configureBubbleGesture(imageView: self.bubbleChartView.secondBubbleImageView)
+        self.configureBubbleGesture(imageView: self.bubbleChartView.thirdBubbleImageView)
+        self.configureBubbleGesture(imageView: self.bubbleChartView.fourthBubbleImageView)
+        self.configureBubbleGesture(imageView: self.bubbleChartView.fifthBubbleImageView)
+    }
+    
+    private func configureBubbleGesture(imageView: UIView) {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.bubbleTapAction))
+        imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(tapGesture)
+    }
+                                    
+    private func configureDescriptionViewGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.descriptionViewTapAction))
+        self.bubbleChartView.bubbleDescriptionView.isUserInteractionEnabled = true
+        self.bubbleChartView.bubbleDescriptionView.addGestureRecognizer(tapGesture)
+    }
+    
     private func update(buddyList: [(Buddy, Int)]?) {
         guard let list = buddyList else { return }
         self.bubbleChartView.update(list: list)
@@ -146,6 +168,15 @@ final class ChartViewController: UIViewController {
     private func update(oldBuddy: Buddy?) {
         guard let buddy = oldBuddy else { return }
         self.latestOldChartView.update(oldName: buddy.name, face: buddy.face)
+    }
+    
+    @objc private func bubbleTapAction(_ sender: UITapGestureRecognizer) {
+        guard let tag = sender.view?.tag else { return }
+        self.bubbleChartView.showDescriptionView(name: self.viewModel[tag].name)
+    }
+    
+    @objc private func descriptionViewTapAction(_ sender: UITapGestureRecognizer) {
+        self.bubbleChartView.hiddenDescriptionView()
     }
 
 }

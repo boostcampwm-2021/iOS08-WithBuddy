@@ -33,6 +33,10 @@ final class ChartViewModel {
         self.userUseCase = userUseCase
     }
     
+    subscript(index: Int) -> Buddy {
+        return self.buddyRank[index].0
+    }
+    
     func fetch() {
         self.fetchBuddyRank()
         self.fetchPurposeRank()

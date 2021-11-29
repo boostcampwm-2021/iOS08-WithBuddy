@@ -9,8 +9,9 @@ import UIKit
 
 final class BubbleDescriptionView: UILabel {
     
+    private let whiteView = WhiteView()
     private let stackView = UIStackView()
-    private let nameLabel = PurpleLabel()
+    private let nameLabel = UILabel()
     private let editButton = UIButton()
 
     override init(frame: CGRect) {
@@ -28,14 +29,26 @@ final class BubbleDescriptionView: UILabel {
     }
     
     private func configure() {
-        self.backgroundColor = .systemBackground
-        self.alpha = .bubbleDescriptionViewAlpha
+        self.configureWhiteView()
         self.configureStackView()
         self.configureStackItems()
     }
     
+    private func configureWhiteView() {
+        self.addSubview(self.whiteView)
+        self.whiteView.backgroundColor = .systemBackground
+        self.whiteView.alpha = .bubbleDescriptionViewAlpha
+        self.whiteView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.whiteView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            self.whiteView.topAnchor.constraint(equalTo: self.topAnchor),
+            self.whiteView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            self.whiteView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+    }
+    
     private func configureStackView() {
-        self.addSubview(self.stackView)
+        self.whiteView.addSubview(self.stackView)
         self.stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),

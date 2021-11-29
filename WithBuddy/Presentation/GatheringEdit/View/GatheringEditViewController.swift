@@ -605,7 +605,7 @@ class GatheringEditViewController: UIViewController {
     }
     
     private func alertError(_ error: RegisterError) {
-        let alert = UIAlertController(title: "등록 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: "편집 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)

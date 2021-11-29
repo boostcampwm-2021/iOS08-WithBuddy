@@ -75,22 +75,28 @@ class GatheringEditViewModel {
     }
     
     func didDoneTouched() {
-        guard let gatheringId = gatheringId,
-              let date = date else {
-                  return
-              }
-        let gathering = Gathering(
-            id: gatheringId,
-            date: date,
-            place: self.place,
-            purpose: self.checkedPurposeList.map{ $0.engDescription },
-            buddyList: self.buddyList,
-            memo: self.memo,
-            picture: self.pictures
-        )
-        
-        self.gatheringUseCase.updateGathering(gathering)
-        self.editDoneSignal.send(gathering)
+        if self.buddyList.isEmpty {
+            self.editFailSignal.send(RegisterError.noBuddy)
+        } else if self.checkedPurposeList.isEmpty {
+            self.editFailSignal.send(RegisterError.noType)
+        } else {
+            guard let gatheringId = gatheringId,
+                  let date = date else {
+                      return
+                  }
+            let gathering = Gathering(
+                id: gatheringId,
+                date: date,
+                place: self.place,
+                purpose: self.checkedPurposeList.map{ $0.engDescription },
+                buddyList: self.buddyList,
+                memo: self.memo,
+                picture: self.pictures
+            )
+            
+            self.gatheringUseCase.updateGathering(gathering)
+            self.editDoneSignal.send(gathering)
+        }
     }
     
     func didAddBuddyTouched() {

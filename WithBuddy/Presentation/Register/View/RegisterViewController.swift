@@ -538,18 +538,6 @@ class RegisterViewController: UIViewController {
         self.pictureCollectionView.collectionViewLayout = layout
     }
     
-    private func requestAuthorization() {
-        PHPhotoLibrary.requestAuthorization { state in
-            DispatchQueue.main.async {
-                if state == .authorized {
-                    self.presentImagePicker()
-                } else {
-                    self.dismiss(animated: true, completion: nil)
-                }
-            }
-        }
-    }
-    
     private func presentImagePicker() {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -557,11 +545,29 @@ class RegisterViewController: UIViewController {
         self.present(picker, animated: true, completion: nil)
     }
     
+    private func requestAuthorization() {
+        PHPhotoLibrary.requestAuthorization { state in
+            DispatchQueue.main.async {
+                if state == .authorized {
+                    self.presentImagePicker()
+                }
+            }
+        }
+    }
+    
+    private func alertAuthorization() {
+        let alert = UIAlertController(title: "갤러리 접근권한이 없습니다", message: "설정 > WithBuddy > 사진에서 접근권한을 허용해주세요", preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     @objc private func onPictureButtonTouched(_ sender: UIButton) {
         self.pictureAddButton.animateButtonTap(scale: 0.8)
         switch PHPhotoLibrary.authorizationStatus() {
         case .authorized: self.presentImagePicker()
         case .notDetermined: self.requestAuthorization()
+        case .denied: self.alertAuthorization()
         default: break
         }
     }

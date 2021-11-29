@@ -19,8 +19,8 @@ protocol CoreDataManagable {
     func fetchBuddy(name: String) -> [BuddyEntity]
     func fetchGathering(including name: String) -> [GatheringEntity]
     func fetchGathering(including day: Date) -> [GatheringEntity]
-    func fetchGaterhing(month: Date) -> [GatheringEntity]
-    func fetchGaterhing(oneWeekFrom date: Date) -> [GatheringEntity]
+    func fetchGathering(month: Date) -> [GatheringEntity]
+    func fetchGathering(oneWeekFrom date: Date) -> [GatheringEntity]
     func updateGathering(_ gathering: Gathering)
     func deleteGathering(_ gatheringId: UUID)
     func fetchPurpose() -> AnyPublisher<[PurposeEntity], Never>
@@ -96,7 +96,7 @@ final class CoreDataManager {
 extension CoreDataManager: CoreDataManagable {
     
     func fetchAllBuddy() -> [BuddyEntity] {
-        return self.fetch(request: BuddyEntity.fetchRequest()).sorted()
+        return self.fetch(request: BuddyEntity.fetchRequest()).sorted(by: >)
     }
     
     func fetchAllGathering() -> [GatheringEntity] {
@@ -119,25 +119,25 @@ extension CoreDataManager: CoreDataManagable {
         
         let request = GatheringEntity.fetchRequest()
         request.predicate = NSPredicate(format: "date >= %@ AND date < %@", midnightOfDay as NSDate, midnightOfNextDay as NSDate)
-        return self.fetch(request: request)
+        return self.fetch(request: request).sorted(by: >)
     }
     
-    func fetchGaterhing(month: Date) -> [GatheringEntity] {
+    func fetchGathering(month: Date) -> [GatheringEntity] {
         let startDateOfMonth = self.calendarUseCase.firstDateOfMonth(baseDate: month)
         let startDateOfNextMonth = self.calendarUseCase.nextMonth(baseDate: startDateOfMonth)
         
         let request = GatheringEntity.fetchRequest()
         request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startDateOfMonth as NSDate, startDateOfNextMonth as NSDate)
-        return self.fetch(request: request)
+        return self.fetch(request: request).sorted(by: >)
     }
     
-    func fetchGaterhing(oneWeekFrom date: Date) -> [GatheringEntity] {
+    func fetchGathering(oneWeekFrom date: Date) -> [GatheringEntity] {
         let startTimeOfDay = self.calendarUseCase.firstTimeOfDay(baseDate: date)
         let startTimeOfNext8Day = self.calendarUseCase.next8Days(baseDate: startTimeOfDay)
         
         let request = GatheringEntity.fetchRequest()
         request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startTimeOfDay as NSDate, startTimeOfNext8Day as NSDate)
-        return self.fetch(request: request)
+        return self.fetch(request: request).sorted(by: >)
     }
     
     @discardableResult

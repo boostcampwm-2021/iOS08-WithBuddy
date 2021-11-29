@@ -127,7 +127,7 @@ final class CalendarViewModel {
         self.thisMonthGathrtingList = self.gatheringUseCase.fetchGathering(month: self.calendarMonth)
         self.totalFaces = Array(repeating: "", count: self.maxDayOfMonth)
         
-        self.thisMonthGathrtingList.forEach {
+        self.thisMonthGathrtingList.reversed().forEach {
             let day = self.calendarUseCase.day(baseDate: $0.date)
             if let face = $0.buddyList.sorted().first?.face {
                 self.totalFaces[firstDayIndex + day - 1] = face

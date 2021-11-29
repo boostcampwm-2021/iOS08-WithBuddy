@@ -37,7 +37,7 @@ extension CGFloat {
     static let chartDefaultViewHeight = CGFloat(150)
     static let bubbleChartHeight = CGFloat(250)
     static let purposeChartHeight = CGFloat(100)
-    static let latestOldChartHeight = CGFloat(180)
+    static let latestOldChartHeight = CGFloat(200)
     static let latestOldSpacing = CGFloat(30)
     static let purposeSpacing = CGFloat(4)
     static let purposeImageSize = CGFloat(65)

@@ -150,9 +150,9 @@ extension ListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let viewController = GatheringDetailViewController()
-        viewController.update(by: self.listViewModel[indexPath.item])
-        self.navigationController?.pushViewController(viewController, animated: true)
+        let gatheringDetailViewController = GatheringDetailViewController()
+        gatheringDetailViewController.update(by: self.listViewModel[indexPath.item])
+        self.navigationController?.pushViewController(gatheringDetailViewController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {

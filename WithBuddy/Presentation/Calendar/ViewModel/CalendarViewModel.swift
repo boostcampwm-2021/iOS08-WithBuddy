@@ -93,6 +93,7 @@ final class CalendarViewModel {
         self.sendMonthSubject()
         self.reloadDays()
         self.reloadFaces()
+        self.reloadTotalGathering()
     }
     
     func findDate(index: Int) -> Date {

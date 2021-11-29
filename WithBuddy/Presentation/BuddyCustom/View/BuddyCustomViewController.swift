@@ -46,6 +46,29 @@ class BuddyCustomViewController: UIViewController {
         self.bind()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: nil)
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: UITextField.textDidChangeNotification, object: nil)
+    }
+
+    @objc private func textDidChange(_ notification: Notification) {
+        if let textField = notification.object as? UITextField {
+            guard let text = textField.text else { return }
+            
+            if text.count > 10 {
+                let index = text.index(text.startIndex, offsetBy: 10)
+                let newString = String(text[..<index])
+                textField.text = newString
+                textField.resignFirstResponder()
+            }
+        }
+    }
+    
     func configure(by buddy: Buddy) {
         self.buddyCustomViewModel.buddyDidInserted(buddy)
     }
@@ -236,7 +259,7 @@ class BuddyCustomViewController: UIViewController {
         self.faceCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.faceCollectionViewDidTouched(_:)))
         self.faceCollectionView.addGestureRecognizer(tap)
-
+        
         let flowLayout = UICollectionViewFlowLayout()
         let width = (self.view.frame.width - (.plusInset * 2))/5 - .innerPartInset
         let totalHeight = width*3 + 20
@@ -278,24 +301,31 @@ class BuddyCustomViewController: UIViewController {
 }
 
 extension BuddyCustomViewController: UITextFieldDelegate {
-
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        guard let text = textField.text else { return true }
-        if text.count > 10 {
-            textField.deleteBackward()
-        }
-        return true
-    }
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        guard let text = textField.text else { return false }
+//        if let char = string.cString(using: String.Encoding.utf8) {
+//            let isBackSpace = strcmp(char, "\\b")
+//            if isBackSpace == -92 {
+//                return true
+//            }
+//        }
+//        if text.count >= 10 && range.length == 0 && range.location < 10 {
+//            return false
+//        }
+//        return true
+//    }
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let text = textField.text else { return }
         self.buddyCustomViewModel.nameDidChaged(name: text)
     }
+    
 }
 
 protocol BuddyCustomDelegate: AnyObject {

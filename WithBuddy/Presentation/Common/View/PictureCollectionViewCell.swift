@@ -30,7 +30,7 @@ class PictureCollectionViewCell: UICollectionViewCell {
     
     private func configure() {
         self.addSubview(self.photoImage)
-        self.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.backgroundColor = .backgroundPurple
         self.photoImage.contentMode = .scaleAspectFit
         self.photoImage.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

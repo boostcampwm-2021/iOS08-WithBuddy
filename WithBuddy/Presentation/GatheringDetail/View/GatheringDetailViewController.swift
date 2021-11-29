@@ -60,7 +60,7 @@ class GatheringDetailViewController: UIViewController {
     }
 
     private func configure() {
-        self.view.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.view.backgroundColor = .backgroundPurple
         
         self.configureScrollView()
         self.configureContentView()

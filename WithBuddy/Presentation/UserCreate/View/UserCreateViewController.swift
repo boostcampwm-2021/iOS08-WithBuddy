@@ -34,7 +34,7 @@ final class UserCreateViewController: UIViewController {
     }
     
     private func configure() {
-        self.view.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.view.backgroundColor = .backgroundPurple
         self.configureTitleLabel()
         self.configureStackView()
         self.configureNameLabel()
@@ -46,7 +46,7 @@ final class UserCreateViewController: UIViewController {
 
     func configureLoading() {
         self.view.addSubview(self.loadingView)
-        self.loadingView.backgroundColor = UIColor(named: "GraphPurple2")
+        self.loadingView.backgroundColor = .graphPurple2
         self.loadingView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.loadingView.topAnchor.constraint(equalTo: self.view.topAnchor),
@@ -63,8 +63,8 @@ final class UserCreateViewController: UIViewController {
                 if let buddy = buddy  {
                     self?.nameLabel.text = buddy.name
                     self?.buddyImageView.image = UIImage(named: "\(buddy.face)")
-                    self?.completeButton.backgroundColor = UIColor(named: "GraphPurple")
-                    self?.completeButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
+                    self?.completeButton.backgroundColor = .graphPurple
+                    self?.completeButton.setTitleColor(.labelPurple, for: .normal)
                 }
             }
             .store(in: &self.cancellables)
@@ -99,7 +99,7 @@ final class UserCreateViewController: UIViewController {
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
         self.titleLabel.text = "위드버디"
         self.titleLabel.font = UIFont(name: "Cafe24Ssurround", size: UIScreen.main.bounds.width / 6)
-        self.titleLabel.textColor = UIColor(named: "LabelPurple")
+        self.titleLabel.textColor = .labelPurple
         
         NSLayoutConstraint.activate([
             self.titleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: UIScreen.main.bounds.height * 0.03),
@@ -129,7 +129,7 @@ final class UserCreateViewController: UIViewController {
     
     private func configureBuddyImageView() {
         self.stackView.addArrangedSubview(self.buddyImageView)
-        self.buddyImageView.image = UIImage(named: "DefaultFace")
+        self.buddyImageView.image = .defaultFaceImage
         self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.buddyImageView.leadingAnchor.constraint(equalTo: self.stackView.leadingAnchor, constant: 50),
@@ -141,10 +141,10 @@ final class UserCreateViewController: UIViewController {
     private func configureEditButton() {
         self.stackView.addArrangedSubview(self.editButton)
         self.editButton.layer.borderWidth = 1
-        self.editButton.layer.borderColor = UIColor(named: "LabelPurple")?.cgColor
+        self.editButton.layer.borderColor = UIColor.labelPurple?.cgColor
         self.editButton.layer.cornerRadius = 10
         self.editButton.setTitle("캐릭터 수정하기", for: .normal)
-        self.editButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
+        self.editButton.setTitleColor(.labelPurple, for: .normal)
         self.editButton.addTarget(self, action: #selector(self.editButtonTouched), for: .touchUpInside)
         
         self.editButton.translatesAutoresizingMaskIntoConstraints = false

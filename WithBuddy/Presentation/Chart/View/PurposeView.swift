@@ -39,7 +39,7 @@ final class PurposeView: UIView {
     
     private func configureImageView() {
         self.addSubview(self.imageView)
-        self.imageView.image = .defaultFace
+        self.imageView.image = .defaultFaceImage
         self.imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),

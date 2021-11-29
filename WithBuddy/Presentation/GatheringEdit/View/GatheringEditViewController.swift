@@ -205,7 +205,7 @@ class GatheringEditViewController: UIViewController {
     }
     
     private func configure() {
-        self.view.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.view.backgroundColor = .backgroundPurple
         
         self.configureScrollView()
         self.configureContentView()
@@ -577,7 +577,7 @@ class GatheringEditViewController: UIViewController {
     
     private func configureDeleteButton() {
         self.contentView.addSubview(self.deleteButton)
-        self.deleteButton.backgroundColor = UIColor(named: "GraphRed")
+        self.deleteButton.backgroundColor = .graphRed
         self.deleteButton.layer.cornerRadius = .buttonCornerRadius
         self.deleteButton.setTitle("모임 삭제", for: .normal)
         self.deleteButton.addTarget(self, action: #selector(self.deleteGathering), for: .touchUpInside)
@@ -682,7 +682,7 @@ extension GatheringEditViewController: UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor(named: "LabelPurple") {
+        if textView.textColor == .labelPurple {
             textView.text = nil
             textView.textColor = UIColor.black
         }
@@ -691,7 +691,7 @@ extension GatheringEditViewController: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = "모임에 대한 메모를 적어주세요."
-            textView.textColor = UIColor(named: "LabelPurple")
+            textView.textColor = .labelPurple
         }
     }
     

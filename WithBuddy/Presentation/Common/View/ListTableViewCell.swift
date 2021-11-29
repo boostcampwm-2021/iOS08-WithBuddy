@@ -65,7 +65,7 @@ final class ListTableViewCell: UITableViewCell {
     private func configureDateLabel() {
         self.addSubview(self.dateLabel)
         self.dateLabel.text = "2021.11.04"
-        self.dateLabel.textColor = UIColor(named: "LabelPurple")
+        self.dateLabel.textColor = .labelPurple
         self.dateLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.dateLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 15),
@@ -77,7 +77,7 @@ final class ListTableViewCell: UITableViewCell {
     private func configureBuddyLabel() {
         self.addSubview(self.buddyLabel)
         self.buddyLabel.text = "버디"
-        self.buddyLabel.textColor = UIColor(named: "LabelPurple")
+        self.buddyLabel.textColor = .labelPurple
         self.buddyLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.buddyLabel.topAnchor.constraint(equalTo: self.dateLabel.bottomAnchor, constant: 25),
@@ -88,7 +88,7 @@ final class ListTableViewCell: UITableViewCell {
     private func configurePurposeLabel() {
         self.addSubview(self.purposeLabel)
         self.purposeLabel.text = "카테고리"
-        self.purposeLabel.textColor = UIColor(named: "LabelPurple")
+        self.purposeLabel.textColor = .labelPurple
         self.purposeLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.purposeLabel.topAnchor.constraint(equalTo: self.buddyLabel.bottomAnchor, constant: 25),

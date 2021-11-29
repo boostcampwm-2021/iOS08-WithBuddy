@@ -39,7 +39,7 @@ class BuddyCustomViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.view.backgroundColor = .backgroundPurple
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.completeCustom))
         
         self.configure()
@@ -141,7 +141,7 @@ class BuddyCustomViewController: UIViewController {
     
     private func configureNameTextField() {
         self.contentView.addSubview(self.nameTextField)
-        if let color = UIColor(named: "LabelPurple") {
+        if let color = UIColor.labelPurple {
             self.nameTextField.attributedPlaceholder = NSAttributedString(string: "버디이름을 입력해주세요.", attributes: [NSAttributedString.Key.foregroundColor: color])
         }
         self.nameTextField.delegate = self
@@ -156,7 +156,7 @@ class BuddyCustomViewController: UIViewController {
     
     private func configureLineView() {
         self.contentView.addSubview(self.lineView)
-        self.lineView.backgroundColor = UIColor(named: "LabelPurple")
+        self.lineView.backgroundColor = .labelPurple
         
         self.lineView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

@@ -9,6 +9,9 @@ import UIKit
 
 extension UIImage {
     
-    static let defaultFace = UIImage(named: "DefaultFace")
+    static let defaultFaceImage = UIImage(named: "DefaultFace")
+    static let purpleFaceImage = UIImage(named: "FacePurple1")
+    static let deleteImage = UIImage(named: "FaceRed1")
+    static let editImage = UIImage(named: "FacePurple1")
     
 }

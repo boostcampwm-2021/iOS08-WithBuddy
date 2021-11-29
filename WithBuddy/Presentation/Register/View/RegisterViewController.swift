@@ -181,7 +181,7 @@ class RegisterViewController: UIViewController {
     }
     
     private func configure() {
-        self.view.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.view.backgroundColor = .backgroundPurple
         
         self.configureScrollView()
         self.configureContentView()
@@ -299,7 +299,7 @@ class RegisterViewController: UIViewController {
     
     private func configurePlaceTextField() {
         self.placeBackgroundView.addSubview(self.placeTextField)
-        if let color = UIColor(named: "LabelPurple") {
+        if let color = UIColor.labelPurple {
             self.placeTextField.attributedPlaceholder = NSAttributedString(string: "모임 장소를 적어주세요", attributes: [NSAttributedString.Key.foregroundColor: color])
         }
         self.placeTextField.delegate = self
@@ -390,7 +390,7 @@ class RegisterViewController: UIViewController {
             pointSize: .buddyAndPurposeWidth, weight: .medium, scale: .default)
         let image = UIImage(named: "Plus", in: .main, with: config)
         self.buddyAddButton.setImage(image, for: .normal)
-        self.buddyAddButton.tintColor = UIColor(named: "LabelPurple")
+        self.buddyAddButton.tintColor = .labelPurple
         self.buddyAddButton.addTarget(self, action: #selector(self.onBuddyAddButtonTouched(_:)), for: .touchUpInside)
         
         self.buddyAddButton.translatesAutoresizingMaskIntoConstraints = false
@@ -470,7 +470,7 @@ class RegisterViewController: UIViewController {
         self.memoTextView.autocorrectionType = .no
         self.memoTextView.delegate = self
         self.memoTextView.text = "모임에 대한 메모를 적어주세요."
-        self.memoTextView.textColor = UIColor(named: "LabelPurple")
+        self.memoTextView.textColor = .labelPurple
         
         self.memoTextView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -507,7 +507,7 @@ class RegisterViewController: UIViewController {
             pointSize: 30, weight: .medium, scale: .default)
         let image = UIImage(systemName: "plus.square", withConfiguration: config)
         self.pictureAddButton.setImage(image, for: .normal)
-        self.pictureAddButton.tintColor = UIColor(named: "LablePurple")
+        self.pictureAddButton.tintColor = .labelPurple
         self.pictureAddButton.addTarget(self, action: #selector(self.onPictureButtonTouched(_:)), for: .touchUpInside)
         
         self.pictureAddButton.translatesAutoresizingMaskIntoConstraints = false
@@ -656,7 +656,7 @@ extension RegisterViewController: UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor(named: "LabelPurple") {
+        if textView.textColor == .labelPurple {
             textView.text = nil
             textView.textColor = UIColor.black
         }
@@ -665,7 +665,7 @@ extension RegisterViewController: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = "모임에 대한 메모를 적어주세요."
-            textView.textColor = UIColor(named: "LabelPurple")
+            textView.textColor = .labelPurple
         }
     }
     

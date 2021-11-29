@@ -16,7 +16,7 @@ class WBCalendarViewCell: UICollectionViewCell {
         let label = UILabel()
         label.text = ""
         label.font = .boldSystemFont(ofSize: .dayLabelSize)
-        label.textColor = UIColor(named: "LabelPurple")
+        label.textColor = .labelPurple
         return label
     }()
     
@@ -76,7 +76,7 @@ class WBCalendarViewCell: UICollectionViewCell {
     }
     
     func highlightCell() {
-        self.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.backgroundColor = .backgroundPurple
         self.layer.cornerRadius = 10
     }
     

@@ -15,7 +15,7 @@ final class TabBarViewController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.view.backgroundColor = .backgroundPurple
         self.tabBar.backgroundColor = .systemBackground
         self.configure()
     }
@@ -41,7 +41,7 @@ final class TabBarViewController: UITabBarController {
 
     func configureLoading() {
         self.view.addSubview(self.loadingView)
-        self.loadingView.backgroundColor = UIColor(named: "GraphPurple2")
+        self.loadingView.backgroundColor = .graphPurple2
         self.loadingView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.loadingView.topAnchor.constraint(equalTo: self.view.topAnchor),
@@ -83,7 +83,7 @@ final class TabBarViewController: UITabBarController {
             self.registerButton = UIButton(configuration: config, primaryAction: nil)
         } else {
             let button = UIButton()
-            button.backgroundColor = UIColor(named: "LabelPurple")
+            button.backgroundColor = .labelPurple
             button.setTitle("모임등록", for: .normal)
             button.setImage(UIImage(systemName: "person.3.fill"), for: .normal)
             button.setPreferredSymbolConfiguration(.init(pointSize: 21, weight: .regular, scale: .default), forImageIn: .normal)

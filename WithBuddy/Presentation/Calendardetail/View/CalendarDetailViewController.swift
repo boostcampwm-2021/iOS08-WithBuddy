@@ -29,7 +29,7 @@ class CalendarDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.view.backgroundColor = .backgroundPurple
         self.bind()
         self.configure()
     }
@@ -64,7 +64,7 @@ class CalendarDetailViewController: UIViewController {
     
     private func configureTableView() {
         self.view.addSubview(detailTableView)
-        self.detailTableView.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.detailTableView.backgroundColor = .backgroundPurple
         self.detailTableView.delegate = self
         self.detailTableView.dataSource = self
         self.detailTableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
@@ -105,8 +105,8 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
             tableView.deleteRows(at: [indexPath], with: .automatic)
             completion(true)
         }
-        deleteAction.backgroundColor = UIColor(named: "GraphRed")
-        deleteAction.image = UIImage(named: "FaceRed1")
+        deleteAction.backgroundColor = .graphRed
+        deleteAction.image = .deleteImage
 
         let editAction = UIContextualAction(style: .normal, title: "편집") { _, _, completion in
             self.dismiss(animated: true) {
@@ -114,8 +114,8 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
             }
             completion(true)
         }
-        editAction.backgroundColor = UIColor(named: "GraphPurple2")
-        editAction.image = UIImage(named: "FacePurple1")
+        editAction.backgroundColor = .graphPurple2
+        editAction.image = .editImage
 
         return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }

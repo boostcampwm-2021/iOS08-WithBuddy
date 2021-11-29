@@ -60,7 +60,7 @@ class SettingViewController: UIViewController {
     
     private func configureUserImage() {
         self.view.addSubview(self.userImageView)
-        self.userImageView.image = UIImage(named: "FacePurple3")
+        self.userImageView.image = .defaultFaceImage
         self.userImageView.sizeToFit()
         self.userImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -86,10 +86,10 @@ class SettingViewController: UIViewController {
     private func configureModifyButton() {
         self.view.addSubview(self.modifyButton)
         self.modifyButton.setTitle("프로필 수정", for: .normal)
-        self.modifyButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
+        self.modifyButton.setTitleColor(.labelPurple, for: .normal)
         self.modifyButton.layer.borderWidth = 1
         self.modifyButton.layer.cornerRadius = 5
-        self.modifyButton.layer.borderColor = UIColor(named: "LabelPurple")?.cgColor
+        self.modifyButton.layer.borderColor = UIColor.labelPurple?.cgColor
         self.modifyButton.sizeToFit()
         self.modifyButton.addTarget(self, action: #selector(self.moveToBuddyCustom), for: .touchUpInside)
         self.modifyButton.translatesAutoresizingMaskIntoConstraints = false
@@ -150,7 +150,7 @@ class SettingViewController: UIViewController {
     }
     
     private func makeButtonLayer(button: UIButton, upperView: UIView, constant: CGFloat) {
-        button.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
+        button.setTitleColor(.labelPurple, for: .normal)
         button.contentHorizontalAlignment = .left
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         button.backgroundColor = .systemBackground

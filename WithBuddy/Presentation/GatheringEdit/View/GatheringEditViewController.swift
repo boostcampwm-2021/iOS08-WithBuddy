@@ -52,7 +52,6 @@ class GatheringEditViewController: UIViewController {
     
     private lazy var deleteButton = UIButton()
     
-    weak var delegate: GatheringEditDelegate?
     private var gatheringEditViewModel = GatheringEditViewModel()
     private var cancellables: Set<AnyCancellable> = []
     
@@ -209,21 +208,26 @@ class GatheringEditViewController: UIViewController {
     }
     
     private func registerNotification(gathering: Gathering) {
-        guard let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: gathering.date) else { return }
+        guard let nextDay = Calendar.current.date(byAdding: .minute, value: 1, to: gathering.date) else { return }
         let content = UNMutableNotificationContent()
         content.title = "위드버디"
         let firstBuddyName = gathering.buddyList.first?.name ?? ""
         let buddyCountString = gathering.buddyList.count == 1 ? "" : "외 \(gathering.buddyList.count-1)명"
         content.body = "어제 \(firstBuddyName)님 \(buddyCountString)과의 만남은 어떠셨나요?"
-        
         let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDay)
         let trigger = UNCalendarNotificationTrigger(
             dateMatching: dateComponents,
             repeats: false
         )
-        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [gathering.id.uuidString])
+        self.deleteNotification(id: gathering.id)
+        
         let request = UNNotificationRequest(identifier: gathering.id.uuidString, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+    }
+    
+    private func deleteNotification(id: UUID) {
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [id.uuidString])
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id.uuidString])
     }
     
     private func configure() {
@@ -607,7 +611,6 @@ class GatheringEditViewController: UIViewController {
     private func alertSuccess(gathering: Gathering) {
         let alert = UIAlertController(title: "편집 완료", message: "모임 편집이 완료되었습니다!", preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in
-            self.delegate?.didGatheringEdited(to: gathering)
             self.navigationController?.popViewController(animated: true)
         })
         alert.addAction(action)
@@ -626,11 +629,13 @@ class GatheringEditViewController: UIViewController {
     }
     
     @objc private func deleteGathering() {
+        guard let id = self.gatheringEditViewModel.gatheringId else { return }
         self.deleteButton.animateButtonTap(scale: 0.9)
         let alert = UIAlertController(title: "모임 삭제", message: "정말로 삭제하시겠습니까?", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "취소", style: .cancel)
         let deleteAction = UIAlertAction(title: "OK", style: .destructive) { _ in
             self.gatheringEditViewModel.didDeleteButtonTouched()
+            self.deleteNotification(id: id)
             self.navigationController?.popToRootViewController(animated: true)
         }
         alert.addAction(cancelAction)
@@ -731,8 +736,4 @@ extension GatheringEditViewController: BuddyChoiceDelegate {
     func buddySelectingDidCompleted(_ buddyList: [Buddy]) {
         self.gatheringEditViewModel.didBuddyUpdated(buddyList)
     }
-}
-
-protocol GatheringEditDelegate: AnyObject {
-    func didGatheringEdited(to gathering: Gathering)
 }

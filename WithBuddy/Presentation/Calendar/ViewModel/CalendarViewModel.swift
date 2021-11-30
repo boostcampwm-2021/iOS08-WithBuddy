@@ -10,12 +10,8 @@ import Combine
 
 final class CalendarViewModel {
     
-<<<<<<< HEAD
     @Published private(set) var myFace: String?
     @Published private(set) var headerComment: String?
-=======
-    let minContinuousDay = 2
->>>>>>> f74bd6a ((#269) style: magic number 수정)
     
     private let calendarUseCase: CalendarUseCase
     private let gatheringUseCase: GatheringUseCase
@@ -69,15 +65,16 @@ final class CalendarViewModel {
     }
     
     private func selectHeaderComment(gatheringExist: [Int]) -> String {
+        let minContinuousDay = 2
         if gatheringExist[Int.zero] == 1 {
             return HeaderComments.gatheringToday.rawValue
         }
-        for idx in (self.minContinuousDay...Int.numOfWeek).reversed() {
+        for idx in (minContinuousDay...Int.numOfWeek).reversed() {
             if self.checkGathering(during: idx, gatheringExist: gatheringExist, status: .noGatheringStatus) {
                 return "\(idx) \(HeaderComments.noGathering.rawValue)"
             }
         }
-        for idx in (self.minContinuousDay...Int.numOfWeek).reversed() {
+        for idx in (minContinuousDay...Int.numOfWeek).reversed() {
             if self.checkGathering(during: idx, gatheringExist: gatheringExist, status: .fullGatheringStatus) {
                 return "\(idx) \(HeaderComments.fullGathering.rawValue)"
             }

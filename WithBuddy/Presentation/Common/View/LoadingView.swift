@@ -88,16 +88,10 @@ final class LoadingView: UIView {
         self.expandView(duration: 0.7)
     }
     
-<<<<<<< HEAD
     private func expandView(duration: CGFloat) {
-        if duration < 0.5 {
-            self.animateTitleTransition(duration: duration)
-=======
-    private func viewExpand(duration: CGFloat) {
         let minAnimationDuration = 0.5
         if duration < minAnimationDuration {
-            self.titleTransitionAnimation(duration: duration)
->>>>>>> f74bd6a ((#269) style: magic number 수정)
+            self.animateTitleTransition(duration: duration)
         } else {
             UIView.animate(withDuration: duration) { [weak self] in
                 self?.titleLabel.transform = CGAffineTransform(scaleX: CGFloat(duration * 2.5), y: CGFloat(duration * 2.5))

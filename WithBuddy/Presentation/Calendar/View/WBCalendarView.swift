@@ -76,13 +76,8 @@ final class WBCalendarView: UIView {
         self.todayButton.backgroundColor = .labelPurple
         self.todayButton.layer.cornerRadius = .smallButtonCornerRadius
         self.todayButton.tintColor = .white
-<<<<<<< HEAD
         self.todayButton.titleLabel?.font = .systemFont(ofSize: 12)
         self.todayButton.addTarget(self, action: #selector(self.didThisMonthTouched), for: .touchUpInside)
-=======
-        self.todayButton.titleLabel?.font = .systemFont(ofSize: .todayButtonFontSize)
-        self.todayButton.addTarget(self, action: #selector(self.thisMonth), for: .touchUpInside)
->>>>>>> f74bd6a ((#269) style: magic number 수정)
         self.todayButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.todayButton.widthAnchor.constraint(equalToConstant: .todayButtonMargin * 2 +  (self.todayButton.titleLabel?.intrinsicContentSize.width ?? CGFloat.zero)),

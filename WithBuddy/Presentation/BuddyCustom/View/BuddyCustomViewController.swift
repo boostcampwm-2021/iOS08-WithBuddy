@@ -56,12 +56,8 @@ final class BuddyCustomViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UITextField.textDidChangeNotification, object: nil)
     }
 
-<<<<<<< HEAD
     @objc private func didTextChanged(_ notification: Notification) {
-=======
-    @objc private func textDidChange(_ notification: Notification) {
         let maxNameLen = 10
->>>>>>> f74bd6a ((#269) style: magic number 수정)
         if let textField = notification.object as? UITextField {
             guard let text = textField.text else { return }
         

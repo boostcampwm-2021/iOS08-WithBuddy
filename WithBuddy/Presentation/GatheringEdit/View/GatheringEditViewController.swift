@@ -458,13 +458,8 @@ final class GatheringEditViewController: UIViewController {
         ])
     }
     
-<<<<<<< HEAD
     @objc private func didBuddyAddButtonTouched(_ sender: UIButton) {
-        self.buddyAddButton.animateButtonTap(scale: 0.8)
-=======
-    @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
         self.buddyAddButton.animateButtonTap()
->>>>>>> f74bd6a ((#269) style: magic number 수정)
         self.gatheringEditViewModel.didAddBuddyTouched()
     }
     
@@ -583,13 +578,8 @@ final class GatheringEditViewController: UIViewController {
         self.pictureCollectionView.collectionViewLayout = layout
     }
     
-<<<<<<< HEAD
     @objc private func didPictureButtonTouched(_ sender: UIButton) {
-        self.pictureAddButton.animateButtonTap(scale: 0.8)
-=======
-    @objc private func onPictureButtonTouched(_ sender: UIButton) {
         self.pictureAddButton.animateButtonTap()
->>>>>>> f74bd6a ((#269) style: magic number 수정)
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .photoLibrary
@@ -616,13 +606,8 @@ final class GatheringEditViewController: UIViewController {
     
     // MARK: - CompletePart
     
-<<<<<<< HEAD
     @objc private func didCancelButtonTouched() {
-        let alert = UIAlertController(title: "기록한 내용은 저장되지 않습니다. 그래도 나가시겠습니까?", message: "", preferredStyle: UIAlertController.Style.alert)
-=======
-    @objc private func alertCancel() {
         let alert = UIAlertController(title: "기록한 내용은 저장되지 않습니다. 그래도 나가시겠습니까?", message: String(), preferredStyle: UIAlertController.Style.alert)
->>>>>>> f74bd6a ((#269) style: magic number 수정)
         let noAction = UIAlertAction(title: "취소", style: .cancel)
         let okAction = UIAlertAction(title: "OK", style: .destructive, handler: { _ in
             self.navigationController?.popViewController(animated: true)

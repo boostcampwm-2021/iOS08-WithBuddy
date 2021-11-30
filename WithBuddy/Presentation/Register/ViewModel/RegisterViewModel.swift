@@ -74,7 +74,7 @@ final class RegisterViewModel {
     }
     
     func didPicturePicked(_ picture: URL) {
-        guard let url = pictureUseCase.savePicture(sourceUrl: picture) else { return }
+        guard let url = pictureUseCase.savePicture(sourceURL: picture) else { return }
         self.pictures.insert(url, at: Int.zero)
     }
     

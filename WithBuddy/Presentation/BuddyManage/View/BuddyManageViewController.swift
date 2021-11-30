@@ -27,11 +27,16 @@ final class BuddyManageViewController: UIViewController {
         super.viewDidLoad()
         self.configure()
         self.bind()
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.labelPurple as Any]
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.title = "버디 관리"
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.title = nil
     }
     
     private func bind() {

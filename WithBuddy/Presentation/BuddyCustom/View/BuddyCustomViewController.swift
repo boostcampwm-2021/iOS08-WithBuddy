@@ -44,8 +44,6 @@ final class BuddyCustomViewController: UIViewController {
         
         self.configure()
         self.bind()
-        self.navigationController?.navigationBar.topItem?.title = "Back"
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.labelPurple as Any]
     }
     
     override func viewDidAppear(_ animated: Bool) {

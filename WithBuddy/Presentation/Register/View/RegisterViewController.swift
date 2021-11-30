@@ -59,7 +59,6 @@ final class RegisterViewController: UIViewController {
         self.configure()
         self.registerViewModel.didDatePicked(Date())
         self.title = "모임 등록"
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.labelPurple as Any]
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .done, target: self, action: #selector(self.alertCancel))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addGathering))
     }

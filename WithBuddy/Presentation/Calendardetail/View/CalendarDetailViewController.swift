@@ -32,6 +32,7 @@ final class CalendarDetailViewController: UIViewController {
         self.view.backgroundColor = .backgroundPurple
         self.bind()
         self.configure()
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.labelPurple as Any]
     }
     
     private func bind() {

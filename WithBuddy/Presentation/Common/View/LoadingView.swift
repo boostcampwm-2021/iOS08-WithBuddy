@@ -26,6 +26,7 @@ final class LoadingView: UIView {
     }
 
     private func configure() {
+        _ = CoreDataManager.shared
         self.configureDynamicItemBehavior()
         self.configureTitle()
     }

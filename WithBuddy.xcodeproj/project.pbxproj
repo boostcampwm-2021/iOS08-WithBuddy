@@ -49,6 +49,7 @@
 		8A73D679273A61EC001D5184 /* BuddyChoiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D678273A61EC001D5184 /* BuddyChoiceViewController.swift */; };
 		8A73D67E273A6C4B001D5184 /* BuddyChoiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A73D67D273A6C4B001D5184 /* BuddyChoiceViewModel.swift */; };
 		8A8EA0C8274CAF4100F1BDFD /* UserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8EA0C7274CAF4100F1BDFD /* UserUseCase.swift */; };
+		8A97318E2756273E00B18D0B /* PictureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A97318D2756273E00B18D0B /* PictureUseCase.swift */; };
 		8AD6691F2744D94B00158E1A /* BuddyCustomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD6691E2744D94B00158E1A /* BuddyCustomViewModel.swift */; };
 		8AD669212744F12300158E1A /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD669202744F12300158E1A /* ImageCollectionViewCell.swift */; };
 		8AF3152727461A8800BDDF85 /* CheckableInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3152627461A8800BDDF85 /* CheckableInfo.swift */; };
@@ -159,6 +160,7 @@
 		8A73D678273A61EC001D5184 /* BuddyChoiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyChoiceViewController.swift; sourceTree = "<group>"; };
 		8A73D67D273A6C4B001D5184 /* BuddyChoiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyChoiceViewModel.swift; sourceTree = "<group>"; };
 		8A8EA0C7274CAF4100F1BDFD /* UserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUseCase.swift; sourceTree = "<group>"; };
+		8A97318D2756273E00B18D0B /* PictureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureUseCase.swift; sourceTree = "<group>"; };
 		8AD6691E2744D94B00158E1A /* BuddyCustomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuddyCustomViewModel.swift; sourceTree = "<group>"; };
 		8AD669202744F12300158E1A /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		8AF3152627461A8800BDDF85 /* CheckableInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckableInfo.swift; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 				F7B69B89273398C4005D2F32 /* CalendarUseCase.swift */,
 				BB1936D2274B8F50007EF21A /* PurposeUseCase.swift */,
 				8A8EA0C7274CAF4100F1BDFD /* UserUseCase.swift */,
+				8A97318D2756273E00B18D0B /* PictureUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -939,6 +942,7 @@
 				854AA76427338C2F00663911 /* ListTableViewCell.swift in Sources */,
 				F7E8ABC5273BB814005F8306 /* GatheringDetailViewController.swift in Sources */,
 				8A07DF6A2743C20A008F6E58 /* GatheringEditViewController.swift in Sources */,
+				8A97318E2756273E00B18D0B /* PictureUseCase.swift in Sources */,
 				8A8EA0C8274CAF4100F1BDFD /* UserUseCase.swift in Sources */,
 				BB2D25C2273B901600E7BF35 /* BuddyEntity+CoreDataClass.swift in Sources */,
 				85D262F2273CE7D6000190B8 /* BlackTitleLabel.swift in Sources */,

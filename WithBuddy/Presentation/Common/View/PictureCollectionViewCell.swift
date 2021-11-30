@@ -22,9 +22,7 @@ final class PictureCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(url: URL) {
-        guard let data = try? Data(contentsOf: url) else {
-            return
-        }
+        guard let data = try? Data(contentsOf: url) else { return }
         photoImage.image = UIImage(data: data)
     }
     

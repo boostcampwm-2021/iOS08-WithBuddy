@@ -41,6 +41,7 @@ final class RegisterViewModel {
     private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
     private var gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
     private var purposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared)
+    private var pictureUseCase = PictureUseCase()
     
     init() {
         self.purposeList = PurposeCategory.allCases.map({
@@ -73,7 +74,8 @@ final class RegisterViewModel {
     }
     
     func didPicturePicked(_ picture: URL) {
-        self.pictures.insert(picture, at: Int.zero)
+        guard let url = pictureUseCase.savePicture(sourceURL: picture) else { return }
+        self.pictures.insert(url, at: Int.zero)
     }
     
     func didPictureDeleteTouched(in idx: Int) {

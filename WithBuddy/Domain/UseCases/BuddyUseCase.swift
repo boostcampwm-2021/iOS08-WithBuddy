@@ -41,13 +41,6 @@ final class BuddyUseCase {
         self.coreDataManager.insertBuddy(buddy)
     }
     
-    func makeRandomBuddy() -> Buddy {
-        let id = UUID()
-        return Buddy(id: id,
-                     name: id.uuidString,
-                     face: self.makeRandomFace())
-    }
-    
     func updateBuddy(_ buddy: Buddy) {
         self.coreDataManager.updateBuddy(buddy)
     }
@@ -58,15 +51,6 @@ final class BuddyUseCase {
         } catch {
             throw error
         }
-    }
-    
-    private func makeRandomFace() -> String {
-        let maxNumOfFace = 9
-        let colorList = [FaceColor.blue, FaceColor.green, FaceColor.pink, FaceColor.purple, FaceColor.red, FaceColor.yellow]
-        guard let color = colorList.randomElement() else { return "FacePurple" }
-        guard let randomNumber = (1...maxNumOfFace).randomElement() else { return "FacePurple1" }
-        
-        return "\(color)\(randomNumber)"
     }
     
 }

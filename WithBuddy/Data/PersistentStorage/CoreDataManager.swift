@@ -96,7 +96,7 @@ final class CoreDataManager {
 extension CoreDataManager: CoreDataManagable {
     
     func fetchAllBuddy() -> [BuddyEntity] {
-        return self.fetch(request: BuddyEntity.fetchRequest()).sorted(by: >)
+        return self.fetch(request: BuddyEntity.fetchRequest()).sorted()
     }
     
     func fetchAllGathering() -> [GatheringEntity] {

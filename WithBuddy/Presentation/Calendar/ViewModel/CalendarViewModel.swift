@@ -117,7 +117,7 @@ final class CalendarViewModel {
             self.totalDays[index+firstDayIndex] = index + 1
         }
         
-        self.isSameMonth = self.calendarUseCase.month(baseDate: self.calendarMonth) == self.calendarUseCase.month(baseDate: self.currentDate) ? firstDayIndex + self.calendarUseCase.day(baseDate: self.currentDate) - 1 : nil
+        self.isSameMonth = self.calendarUseCase.isSameDay(date1: self.calendarMonth, date2: self.currentDate) ? firstDayIndex + self.calendarUseCase.day(baseDate: self.currentDate) - 1 : nil
         
         self.didDaysReloadSignal.send()
     }

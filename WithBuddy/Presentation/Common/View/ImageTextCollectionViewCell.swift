@@ -7,13 +7,7 @@
 
 import UIKit
 
-<<<<<<< HEAD
 final class ImageTextCollectionViewCell: UICollectionViewCell {
-    
-    static let identifier = "ImageTextCollectionViewCell"
-=======
-class ImageTextCollectionViewCell: UICollectionViewCell {
->>>>>>> ab81c0b ((#245) style: 코드스타일 맞추기)
     
     static let identifier = "ImageTextCollectionViewCell"
     private var image = UIImageView()

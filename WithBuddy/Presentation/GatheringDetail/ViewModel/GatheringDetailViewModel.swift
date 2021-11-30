@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class GatheringDetailViewModel {
+final class GatheringDetailViewModel {
     
     @Published private(set) var gathering: Gathering?
     private(set) var goEditSignal = PassthroughSubject<Gathering, Never>()

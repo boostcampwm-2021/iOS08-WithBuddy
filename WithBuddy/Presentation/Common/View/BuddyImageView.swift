@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BuddyView: UIImageView {
+final class BuddyView: UIImageView {
 
     override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
         return .ellipse

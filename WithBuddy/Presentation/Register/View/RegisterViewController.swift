@@ -10,7 +10,7 @@ import Combine
 import Photos
 import UserNotifications
 
-class RegisterViewController: UIViewController {
+final class RegisterViewController: UIViewController {
     
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
@@ -603,6 +603,7 @@ class RegisterViewController: UIViewController {
 }
 
 extension RegisterViewController: UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         if collectionView == self.pictureCollectionView {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
@@ -621,6 +622,7 @@ extension RegisterViewController: UICollectionViewDelegate {
             })
         }
     }
+    
 }
 
 extension RegisterViewController: UITextFieldDelegate {
@@ -672,6 +674,7 @@ extension RegisterViewController: UITextViewDelegate {
 }
 
 extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         guard let url = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
             return
@@ -683,6 +686,7 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
     }
+    
 }
 
 extension RegisterViewController: UIScrollViewDelegate {
@@ -694,7 +698,9 @@ extension RegisterViewController: UIScrollViewDelegate {
 }
 
 extension RegisterViewController: BuddyChoiceDelegate {
+    
     func buddySelectingDidCompleted(_ buddyList: [Buddy]) {
         self.registerViewModel.didBuddyUpdated(buddyList)
     }
+    
 }

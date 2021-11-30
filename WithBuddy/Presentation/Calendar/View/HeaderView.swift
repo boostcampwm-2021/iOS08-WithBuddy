@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HeaderView: UIView {
+final class HeaderView: UIView {
     
     private let userFaceImageView = UIImageView()
     private let userCommentLabel = PurpleLabel()

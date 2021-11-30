@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LoadingView: UIView {
+final class LoadingView: UIView {
 
     private var titleLabel = UILabel()
     private var lazyBehavior = UIDynamicItemBehavior()

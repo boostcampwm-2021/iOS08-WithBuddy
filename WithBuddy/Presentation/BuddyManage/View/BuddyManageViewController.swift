@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class BuddyManageViewController: UIViewController {
+final class BuddyManageViewController: UIViewController {
 
     private let searchView = SearchView()
     private let addButton = UIButton()
@@ -193,6 +193,7 @@ extension BuddyManageViewController: UICollectionViewDelegate {
 }
 
 extension BuddyManageViewController: BuddyCustomDelegate {
+    
     func buddyEditDidCompleted(_ buddy: Buddy) {
         self.buddyManageViewModel.buddyDidEdited(buddy)
     }
@@ -200,11 +201,14 @@ extension BuddyManageViewController: BuddyCustomDelegate {
     func buddyAddDidCompleted(_ buddy: Buddy) {
         self.buddyManageViewModel.buddyDidAdded(buddy)
     }
+    
 }
 
 extension BuddyManageViewController: UIGestureRecognizerDelegate {
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool{
         self.view.endEditing(true)
         return true
    }
+    
 }

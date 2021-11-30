@@ -9,8 +9,10 @@ import Foundation
 import Combine
 
 protocol PurposeUseCaseProtocol {
+    
     func fetchTopFourPurpose(before date: Date) -> AnyPublisher<[String], Never>
     func engToKor(eng: String) -> String
+    
 }
 
 final class PurposeUseCase: PurposeUseCaseProtocol {

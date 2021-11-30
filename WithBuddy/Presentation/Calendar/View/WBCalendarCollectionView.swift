@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WBCalendarCollectionView: UICollectionView {
+final class WBCalendarCollectionView: UICollectionView {
 
     init() {
         super.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -39,4 +39,5 @@ class WBCalendarCollectionView: UICollectionView {
         
         self.collectionViewLayout = UICollectionViewCompositionalLayout(section: section)
     }
+    
 }

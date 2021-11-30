@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import SafariServices
 
-class SettingViewController: UIViewController {
+final class SettingViewController: UIViewController {
     
     private let userImageView = UIImageView()
     private let userNameLabel = UILabel()
@@ -178,6 +178,7 @@ class SettingViewController: UIViewController {
 }
 
 extension SettingViewController: BuddyCustomDelegate {
+    
     func buddyAddDidCompleted(_ buddy: Buddy) {
         self.settingViewModel.didMyBuddyChanged(buddy: buddy)
         self.settingViewModel.fetchMyBuddy()
@@ -187,4 +188,5 @@ extension SettingViewController: BuddyCustomDelegate {
         self.settingViewModel.didMyBuddyChanged(buddy: buddy)
         self.settingViewModel.fetchMyBuddy()
     }
+    
 }

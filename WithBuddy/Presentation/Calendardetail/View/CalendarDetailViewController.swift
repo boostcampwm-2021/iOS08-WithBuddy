@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class CalendarDetailViewController: UIViewController {
+final class CalendarDetailViewController: UIViewController {
     
     private lazy var detailLabel = PurpleTitleLabel()
     private lazy var detailTableView = UITableView()
@@ -80,6 +80,7 @@ class CalendarDetailViewController: UIViewController {
 }
 
 extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         self.calendarDetailViewModel.count
     }
@@ -127,7 +128,9 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
 }
 
 protocol GatheringListDelegate: AnyObject {
+    
     func gatheringListTouched(_: Gathering)
     func editGathering(_: Gathering)
     func deleteGathering()
+    
 }

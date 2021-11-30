@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 @objc(BuddyEntity)
-public class BuddyEntity: NSManagedObject {
+public final class BuddyEntity: NSManagedObject {
     
     @NSManaged public var id: UUID
     @NSManaged public var name: String

@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 enum BuddyCustomError: LocalizedError {
+    
     case nameLength
     
     var errorDescription: String? {
@@ -16,9 +17,11 @@ enum BuddyCustomError: LocalizedError {
         case .nameLength: return "버디의 이름은 2글자에서 10글자로 설정해주세요."
         }
     }
+    
 }
 
-class BuddyCustomViewModel {
+final class BuddyCustomViewModel {
+    
     private var id: UUID?
     @Published private(set) var name: String = ""
     @Published private(set) var face: Face = Face(color: .purple, number: 1)
@@ -65,4 +68,5 @@ class BuddyCustomViewModel {
             }
         }
     }
+    
 }

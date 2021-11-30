@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class CalendarViewController: UIViewController {
+final class CalendarViewController: UIViewController {
     
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()

@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class BuddyManageViewModel {
+final class BuddyManageViewModel {
     
     @Published private(set) var storedBuddyList: [Buddy] = []
     private(set) var failSignal = PassthroughSubject<BuddyChoiceError, Never>()

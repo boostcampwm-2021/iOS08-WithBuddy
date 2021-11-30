@@ -196,6 +196,7 @@ final class UserCreateViewController: UIViewController {
 }
 
 extension UserCreateViewController: BuddyCustomDelegate {
+    
     func buddyEditDidCompleted(_ buddy: Buddy) {
         self.userCreateViewModel.userDidChanged(buddy: buddy)
     }
@@ -203,4 +204,5 @@ extension UserCreateViewController: BuddyCustomDelegate {
     func buddyAddDidCompleted(_ buddy: Buddy) {
         self.userCreateViewModel.userDidChanged(buddy: buddy)
     }
+    
 }

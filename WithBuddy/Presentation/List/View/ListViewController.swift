@@ -184,8 +184,10 @@ extension ListViewController: UITableViewDelegate {
 }
 
 extension ListViewController: UIGestureRecognizerDelegate {
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool{
         self.view.endEditing(true)
         return true
    }
+    
 }

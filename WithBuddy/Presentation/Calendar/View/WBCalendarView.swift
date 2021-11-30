@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class WBCalendarView: UIView {
+final class WBCalendarView: UIView {
     
     private let calendarManager = CalendarUseCase()
     private lazy var thisMonthLabel = PurpleTitleLabel()

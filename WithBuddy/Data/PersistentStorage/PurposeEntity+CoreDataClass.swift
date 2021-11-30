@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 @objc(PurposeEntity)
-public class PurposeEntity: NSManagedObject {
+public final class PurposeEntity: NSManagedObject {
     
     @NSManaged public var name: String
     @NSManaged public var gatheringList: Set<GatheringEntity>

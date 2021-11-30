@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 enum RegisterError: LocalizedError {
+    
     case noBuddy
     case noType
     
@@ -18,9 +19,10 @@ enum RegisterError: LocalizedError {
         case .noType: return "최소 한개 이상의 모임 목적을 추가해 주세요."
         }
     }
+    
 }
 
-class RegisterViewModel {
+final class RegisterViewModel {
     
     private var date: Date?
     private var place: String?

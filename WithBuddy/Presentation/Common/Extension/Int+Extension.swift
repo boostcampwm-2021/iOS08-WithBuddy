@@ -16,5 +16,6 @@ extension Int {
     static let fullGatheringStatus = 0
     
     static let maxDayOfMonth = 42
+    static let numOfWeek = 7
     
 }

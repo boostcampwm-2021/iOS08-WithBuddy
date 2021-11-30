@@ -68,7 +68,7 @@ final class ImageTextCollectionViewCell: UICollectionViewCell {
         self.textLabel.textAlignment = .center
         self.textLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.textLabel.topAnchor.constraint(equalTo: self.image.bottomAnchor, constant: 10),
+            self.textLabel.topAnchor.constraint(equalTo: self.image.bottomAnchor, constant: .innerPartInset),
             self.textLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             self.textLabel.widthAnchor.constraint(equalToConstant: self.frame.width)
         ])

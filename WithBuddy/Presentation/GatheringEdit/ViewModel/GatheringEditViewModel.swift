@@ -50,7 +50,7 @@ final class GatheringEditViewModel {
     }
     
     func didBuddyAdded(_ buddy: Buddy) {
-        self.buddyList.insert(buddy, at: 0)
+        self.buddyList.insert(buddy, at: Int.zero)
     }
     
     func didBuddyUpdated(_ buddyList: [Buddy]) {

@@ -78,7 +78,7 @@ final class RegisterViewController: UIViewController {
         let memoButtomY = self.memoBackgroundView.frame.origin.y + self.memoBackgroundView.frame.height - self.scrollView.bounds.origin.y
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let offset = memoButtomY + keyboardSize.height - self.scrollView.bounds.height
-            if offset > 0 {
+            if offset > CGFloat.zero {
                 self.scrollView.bounds.origin.y += offset
             }
         }
@@ -94,7 +94,7 @@ final class RegisterViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] purposeList in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
-                snapshot.appendSections([0])
+                snapshot.appendSections([Int.zero])
                 snapshot.appendItems(purposeList)
                 self?.purposeDataSource.apply(snapshot, animatingDifferences: true)
             }
@@ -105,10 +105,10 @@ final class RegisterViewController: UIViewController {
             .sink { [weak self] buddyList in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
                 if buddyList.isEmpty {
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "DefaultFace")])
                 } else {
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems(buddyList)
                 }
                 self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
@@ -124,10 +124,10 @@ final class RegisterViewController: UIViewController {
                         return
                     }
                     let fileUrl = URL(fileURLWithPath: filePath)
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems([fileUrl])
                 } else {
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems(pictures)
                 }
                 self?.pictureDataSource.apply(snapshot, animatingDifferences: true)
@@ -166,8 +166,8 @@ final class RegisterViewController: UIViewController {
         guard let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: gathering.date) else { return }
         let content = UNMutableNotificationContent()
         content.title = "위드버디"
-        let firstBuddyName = gathering.buddyList.first?.name ?? ""
-        let buddyCountString = gathering.buddyList.count == 1 ? "" : "외 \(gathering.buddyList.count-1)명"
+        let firstBuddyName = gathering.buddyList.first?.name ?? String()
+        let buddyCountString = gathering.buddyList.count == 1 ? String() : "외 \(gathering.buddyList.count-1)명"
         content.body = "어제 \(firstBuddyName)님 \(buddyCountString)과의 만남은 어떠셨나요?"
         
         let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDay)
@@ -349,7 +349,7 @@ final class RegisterViewController: UIViewController {
             self.registerViewModel.didPurposeTouched(indexPath.item)
             
             guard let cell = self.purposeCollectionView.cellForItem(at: indexPath) as? ImageTextCollectionViewCell  else { return }
-            cell.animateButtonTap(scale: 0.8)
+            cell.animateButtonTap()
         }
     }
     
@@ -414,8 +414,13 @@ final class RegisterViewController: UIViewController {
         ])
     }
     
+<<<<<<< HEAD
     @objc private func didBuddyAddButtonTouched(_ sender: UIButton) {
         self.buddyAddButton.animateButtonTap(scale: 0.8)
+=======
+    @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
+        self.buddyAddButton.animateButtonTap()
+>>>>>>> f74bd6a ((#269) style: magic number 수정)
         self.registerViewModel.didAddBuddyTouched()
     }
     
@@ -562,8 +567,13 @@ final class RegisterViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+<<<<<<< HEAD
     @objc private func didPictureButtonTouched(_ sender: UIButton) {
         self.pictureAddButton.animateButtonTap(scale: 0.8)
+=======
+    @objc private func onPictureButtonTouched(_ sender: UIButton) {
+        self.pictureAddButton.animateButtonTap()
+>>>>>>> f74bd6a ((#269) style: magic number 수정)
         switch PHPhotoLibrary.authorizationStatus() {
         case .authorized: self.presentImagePicker()
         case .notDetermined: self.requestAuthorization()
@@ -574,8 +584,13 @@ final class RegisterViewController: UIViewController {
     
     // MARK: - CompletePart
     
+<<<<<<< HEAD
     @objc private func didCancelButtonTouched() {
         let alert = UIAlertController(title: "기록한 내용은 저장되지 않습니다. 그래도 나가시겠습니까?", message: "", preferredStyle: UIAlertController.Style.alert)
+=======
+    @objc private func alertCancel() {
+        let alert = UIAlertController(title: "기록한 내용은 저장되지 않습니다. 그래도 나가시겠습니까?", message: String(), preferredStyle: UIAlertController.Style.alert)
+>>>>>>> f74bd6a ((#269) style: magic number 수정)
         let noAction = UIAlertAction(title: "취소", style: .cancel)
         let okAction = UIAlertAction(title: "OK", style: .destructive, handler: { _ in
             self.navigationController?.popViewController(animated: true)
@@ -625,7 +640,7 @@ extension RegisterViewController: UICollectionViewDelegate {
             })
         } else {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
-                let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
+                let delete = UIAction(title: NSLocalizedString("삭제", comment: String()),
                                       image: UIImage(systemName: "trash")) { _ in
                     self.registerViewModel.didBuddyDeleteTouched(in: indexPath.item)
                 }

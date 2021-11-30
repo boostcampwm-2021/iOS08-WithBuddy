@@ -140,7 +140,7 @@ final class GatheringDetailViewController: UIViewController {
     
     private func configureDataSource(by gathering: Gathering) {
         var purposeSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
-        purposeSnapshot.appendSections([0])
+        purposeSnapshot.appendSections([Int.zero])
         let purposeList = PurposeCategory.allCases.map({ placeType -> CheckableInfo? in
             var korDescription = "\(placeType)"
             korDescription = self.gatheringDetailViewModel.toKor(eng: "\(placeType)")
@@ -151,10 +151,10 @@ final class GatheringDetailViewController: UIViewController {
         self.purposeDataSource.apply(purposeSnapshot, animatingDifferences: true)
         var buddySnapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
         if gathering.buddyList.isEmpty {
-            buddySnapshot.appendSections([0])
+            buddySnapshot.appendSections([Int.zero])
             buddySnapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "DefaultFace")])
         } else {
-            buddySnapshot.appendSections([0])
+            buddySnapshot.appendSections([Int.zero])
             buddySnapshot.appendItems(gathering.buddyList)
         }
         self.buddyDataSource.apply(buddySnapshot, animatingDifferences: true)
@@ -163,10 +163,10 @@ final class GatheringDetailViewController: UIViewController {
         if pictures.isEmpty {
             guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else { return }
             let fileUrl = URL(fileURLWithPath: filePath)
-            pictureSnapshot.appendSections([0])
+            pictureSnapshot.appendSections([Int.zero])
             pictureSnapshot.appendItems([fileUrl])
         } else {
-            pictureSnapshot.appendSections([0])
+            pictureSnapshot.appendSections([Int.zero])
             pictureSnapshot.appendItems(pictures)
         }
         self.pictureDataSource.apply(pictureSnapshot, animatingDifferences: true)

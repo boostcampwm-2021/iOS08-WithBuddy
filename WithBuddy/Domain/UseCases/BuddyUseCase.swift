@@ -61,9 +61,10 @@ final class BuddyUseCase {
     }
     
     private func makeRandomFace() -> String {
+        let maxNumOfFace = 9
         let colorList = [FaceColor.blue, FaceColor.green, FaceColor.pink, FaceColor.purple, FaceColor.red, FaceColor.yellow]
-        guard let color = colorList.randomElement() else { return "FacePurple1" }
-        guard let randomNumber = (1...9).randomElement() else { return "FacePurple1" }
+        guard let color = colorList.randomElement() else { return "FacePurple" }
+        guard let randomNumber = (1...maxNumOfFace).randomElement() else { return "FacePurple1" }
         
         return "\(color)\(randomNumber)"
     }

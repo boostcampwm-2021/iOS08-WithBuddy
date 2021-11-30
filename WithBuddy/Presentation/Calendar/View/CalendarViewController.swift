@@ -102,27 +102,27 @@ final class CalendarViewController: UIViewController {
     private func configureHeaderView() {
         self.contentView.addSubview(headerView)
         self.headerView.backgroundColor = .systemBackground
-        self.headerView.layer.cornerRadius = 10
+        self.headerView.layer.cornerRadius = .whiteViewCornerRadius
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.headerView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 20),
-            self.headerView.heightAnchor.constraint(equalToConstant: 80),
-            self.headerView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
-            self.headerView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20)
+            self.headerView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: .plusInset),
+            self.headerView.heightAnchor.constraint(equalToConstant: .headerViewHeight),
+            self.headerView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.headerView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])
     }
     
     private func configurCalendar() {
         self.contentView.addSubview(calendarView)
         self.calendarView.backgroundColor = .systemBackground
-        self.calendarView.layer.cornerRadius = 10
+        self.calendarView.layer.cornerRadius = .whiteViewCornerRadius
         self.calendarView.collectionView.delegate = self
         self.calendarView.collectionView.dataSource = self
         self.calendarView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.calendarView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
-            self.calendarView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
-            self.calendarView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: 10),
+            self.calendarView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.calendarView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
+            self.calendarView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: .innerPartInset),
             self.calendarView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
             self.calendarView.heightAnchor.constraint(equalTo: self.calendarView.widthAnchor, multiplier: 1.6)
         ])
@@ -138,9 +138,9 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifier, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
-        let day = self.calendarViewModel.totalDays.indices ~= indexPath.item ? self.calendarViewModel.totalDays[indexPath.item] : 0
-        let face = self.calendarViewModel.totalFaces.indices ~= indexPath.item ? self.calendarViewModel.totalFaces[indexPath.item] : ""
-        let gatheringNum = self.calendarViewModel.totalGathering.indices ~= indexPath.item ? self.calendarViewModel.totalGathering[indexPath.item] : 0
+        let day = self.calendarViewModel.totalDays.indices ~= indexPath.item ? self.calendarViewModel.totalDays[indexPath.item] : Int.zero
+        let face = self.calendarViewModel.totalFaces.indices ~= indexPath.item ? self.calendarViewModel.totalFaces[indexPath.item] : String()
+        let gatheringNum = self.calendarViewModel.totalGathering.indices ~= indexPath.item ? self.calendarViewModel.totalGathering[indexPath.item] : Int.zero
         cell.update(day: day, face: face)
         if gatheringNum > 1 {
             cell.update(extraNum: gatheringNum - 1)
@@ -155,7 +155,7 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? WBCalendarViewCell,
               !self.calendarViewModel.totalFaces[indexPath.item].isEmpty else { return }
-        cell.animateButtonTap(scale: 0.8)
+        cell.animateButtonTap()
         
         let calendarDetailViewController = CalendarDetailViewController(
             calendarDetailViewModel: CalendarDetailViewModel(

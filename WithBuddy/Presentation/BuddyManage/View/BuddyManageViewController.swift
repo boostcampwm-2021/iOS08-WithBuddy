@@ -44,7 +44,7 @@ final class BuddyManageViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] buddyList in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
-                snapshot.appendSections([0])
+                snapshot.appendSections([Int.zero])
                 snapshot.appendItems(buddyList)
                 self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
             }
@@ -69,12 +69,12 @@ final class BuddyManageViewController: UIViewController {
     private func configureSearchView() {
         self.view.addSubview(self.searchView)
         self.searchView.searchTextField.delegate = self
-        self.searchView.layer.cornerRadius = 10
+        self.searchView.layer.cornerRadius = .whiteViewCornerRadius
         self.searchView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.searchView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            self.searchView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            self.searchView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            self.searchView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: .plusInset),
+            self.searchView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: .minusInset),
             self.searchView.heightAnchor.constraint(equalToConstant: 45)
         ])
     }
@@ -89,7 +89,7 @@ final class BuddyManageViewController: UIViewController {
         
         self.addButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.addButton.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: 10),
+            self.addButton.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: .innerPartInset),
             self.addButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.addButton.heightAnchor.constraint(equalToConstant: .buddyAndPurposeWidth),
             self.addButton.widthAnchor.constraint(equalTo: self.addButton.heightAnchor)
@@ -114,10 +114,10 @@ final class BuddyManageViewController: UIViewController {
         
         self.buddyCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.buddyCollectionView.topAnchor.constraint(equalTo: self.addButton.bottomAnchor, constant: 10),
+            self.buddyCollectionView.topAnchor.constraint(equalTo: self.addButton.bottomAnchor, constant: .innerPartInset),
             self.buddyCollectionView.leadingAnchor.constraint(equalTo: self.searchView.leadingAnchor),
             self.buddyCollectionView.trailingAnchor.constraint(equalTo: self.searchView.trailingAnchor),
-            self.buddyCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            self.buddyCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: .minusInset)
         ])
     }
     
@@ -132,7 +132,7 @@ final class BuddyManageViewController: UIViewController {
         let buddyList = self.buddyManageViewModel.storedBuddyList
         let filtered = buddyList.filter{ $0.name.contains(text) }
         var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
-        snapshot.appendSections([0])
+        snapshot.appendSections([Int.zero])
         if text.isEmpty {
             snapshot.appendItems(buddyList)
         } else {
@@ -179,7 +179,7 @@ extension BuddyManageViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
-            let edit = UIAction(title: NSLocalizedString("편집", comment: ""),
+            let edit = UIAction(title: NSLocalizedString("편집", comment: String()),
                                 image: UIImage(systemName: "pencil.circle")) { _ in
                 let buddyCustomViewController = BuddyCustomViewController()
                 buddyCustomViewController.delegate = self
@@ -187,7 +187,7 @@ extension BuddyManageViewController: UICollectionViewDelegate {
                 buddyCustomViewController.configure(by: self.buddyManageViewModel[indexPath.item])
                 self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
             }
-            let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
+            let delete = UIAction(title: NSLocalizedString("삭제", comment: String()),
                                   image: UIImage(systemName: "trash")) { _ in
                 self.buddyManageViewModel.didBuddyDeleted(in: indexPath.item)
             }

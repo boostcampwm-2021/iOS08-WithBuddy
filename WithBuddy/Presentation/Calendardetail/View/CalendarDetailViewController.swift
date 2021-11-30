@@ -10,6 +10,8 @@ import Combine
 
 final class CalendarDetailViewController: UIViewController {
     
+    private let detailViewMargin = 15.0
+    
     private lazy var detailLabel = PurpleTitleLabel()
     private lazy var detailTableView = UITableView()
     private var calendarDetailViewModel: CalendarDetailViewModel
@@ -55,11 +57,12 @@ final class CalendarDetailViewController: UIViewController {
     }
     
     private func configureDetailLabel() {
+        
         self.view.addSubview(self.detailLabel)
         self.detailLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.detailLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 15),
-            self.detailLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 15)
+            self.detailLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: self.detailViewMargin),
+            self.detailLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: self.detailViewMargin)
         ])
     }
     
@@ -71,10 +74,10 @@ final class CalendarDetailViewController: UIViewController {
         self.detailTableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
         self.detailTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.detailTableView.topAnchor.constraint(equalTo: self.detailLabel.bottomAnchor, constant: 20),
-            self.detailTableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 15),
-            self.detailTableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -15),
-            self.detailTableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -20)
+            self.detailTableView.topAnchor.constraint(equalTo: self.detailLabel.bottomAnchor, constant: .plusInset),
+            self.detailTableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: self.detailViewMargin),
+            self.detailTableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -self.detailViewMargin),
+            self.detailTableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: .minusInset)
         ])
     }
     

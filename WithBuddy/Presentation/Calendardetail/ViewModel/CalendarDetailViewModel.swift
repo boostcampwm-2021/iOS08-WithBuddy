@@ -9,7 +9,7 @@ import Foundation
 
 final class CalendarDetailViewModel {
     
-    @Published private(set) var dayLabel: String = ""
+    @Published private(set) var dayLabel: String = String()
     @Published private(set) var gatheringList: [Gathering] = []
     
     private let selectedDate: Date

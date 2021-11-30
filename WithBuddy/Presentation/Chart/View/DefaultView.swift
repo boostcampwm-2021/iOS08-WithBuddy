@@ -8,7 +8,8 @@
 import UIKit
 
 final class DefaultView: UIView {
-    
+
+    private let imageViewSize = CGFloat(65)
     private let imageView = UIImageView()
     private let label = PurpleLabel()
 
@@ -32,10 +33,10 @@ final class DefaultView: UIView {
         self.imageView.image = .purpleFaceImage
         self.imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 20),
+            self.imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: .plusInset),
             self.imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            self.imageView.widthAnchor.constraint(equalToConstant: 65),
-            self.imageView.heightAnchor.constraint(equalToConstant: 65)
+            self.imageView.widthAnchor.constraint(equalToConstant: self.imageViewSize),
+            self.imageView.heightAnchor.constraint(equalToConstant: self.imageViewSize)
         ])
     }
     
@@ -46,7 +47,7 @@ final class DefaultView: UIView {
         self.label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.label.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            self.label.topAnchor.constraint(equalTo: self.imageView.bottomAnchor, constant: 10),
+            self.label.topAnchor.constraint(equalTo: self.imageView.bottomAnchor, constant: .innerPartInset),
             self.label.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             self.label.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])

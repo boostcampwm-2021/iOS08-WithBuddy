@@ -23,7 +23,7 @@ final class SearchView: UIView {
     }
     
     func reset() {
-        self.searchTextField.text = ""
+        self.searchTextField.text = String()
     }
     
     private func configure() {

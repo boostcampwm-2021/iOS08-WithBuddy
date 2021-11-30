@@ -58,12 +58,12 @@ final class ListViewController: UIViewController {
     private func configureSearchView() {
         self.view.addSubview(self.searchView)
         self.searchView.searchTextField.delegate = self
-        self.searchView.layer.cornerRadius = 10
+        self.searchView.layer.cornerRadius = .whiteViewCornerRadius
         self.searchView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.searchView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            self.searchView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            self.searchView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            self.searchView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: .plusInset),
+            self.searchView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: .minusInset),
             self.searchView.heightAnchor.constraint(equalToConstant: 45)
         ])
     }
@@ -81,16 +81,16 @@ final class ListViewController: UIViewController {
         
         self.listTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.listTableView.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: 20),
+            self.listTableView.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: .plusInset),
             self.listTableView.leadingAnchor.constraint(equalTo: self.searchView.leadingAnchor),
             self.listTableView.trailingAnchor.constraint(equalTo: self.searchView.trailingAnchor),
-            self.listTableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            self.listTableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: .minusInset)
         ])
     }
     
     private func reloadGathering(list: [Gathering]) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Gathering>()
-        snapshot.appendSections([0])
+        snapshot.appendSections([Int.zero])
         snapshot.appendItems(list)
         self.listDataSource.apply(snapshot, animatingDifferences: true)
     }
@@ -99,7 +99,7 @@ final class ListViewController: UIViewController {
         let gatheringList = self.listViewModel.gatheringList
         let filtered = gatheringList.filter{ $0.buddyList.contains{ $0.name.contains(filter) } }
         var snapshot = NSDiffableDataSourceSnapshot<Int, Gathering>()
-        snapshot.appendSections([0])
+        snapshot.appendSections([Int.zero])
         if filter.isEmpty {
             snapshot.appendItems(gatheringList)
         } else {

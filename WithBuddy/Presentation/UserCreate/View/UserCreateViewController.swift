@@ -142,7 +142,7 @@ final class UserCreateViewController: UIViewController {
         self.stackView.addArrangedSubview(self.editButton)
         self.editButton.layer.borderWidth = 1
         self.editButton.layer.borderColor = UIColor.labelPurple?.cgColor
-        self.editButton.layer.cornerRadius = 10
+        self.editButton.layer.cornerRadius = .buttonCornerRadius
         self.editButton.setTitle("캐릭터 수정하기", for: .normal)
         self.editButton.setTitleColor(.labelPurple, for: .normal)
         self.editButton.addTarget(self, action: #selector(self.didEditButtonTouched), for: .touchUpInside)
@@ -168,7 +168,7 @@ final class UserCreateViewController: UIViewController {
     private func configureCompleteButton() {
         self.view.addSubview(self.completeButton)
         self.completeButton.backgroundColor = .systemGray3
-        self.completeButton.layer.cornerRadius = 10
+        self.completeButton.layer.cornerRadius = .buttonCornerRadius
         self.completeButton.setTitle("내 캐릭터 생성 완료", for: .normal)
         self.completeButton.addTarget(self, action: #selector(self.didCompleteButtonTouched), for: .touchUpInside)
         

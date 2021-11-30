@@ -26,13 +26,13 @@ final class WBCalendarCollectionView: UICollectionView {
     
     private func configureLayout() {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0/7.0),
+            widthDimension: .fractionalWidth(1.0/CGFloat(Int.numOfWeek)),
             heightDimension: .fractionalHeight(1.0)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0/6.0)
+            heightDimension: .fractionalHeight(1.0/(CGFloat(.numOfWeek - 1)))
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)

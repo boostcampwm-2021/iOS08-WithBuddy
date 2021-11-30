@@ -10,7 +10,7 @@ import UIKit
 final class TabBarViewController: UITabBarController {
     
     private var registerButton = UIButton()
-    private var prevIndex = 0
+    private var prevIndex = Int.zero
     private let loadingView = LoadingView()
     
     override func viewDidLoad() {
@@ -95,11 +95,11 @@ final class TabBarViewController: UITabBarController {
                   let titleText = titleLabel.text else { return }
             let titleSize = titleText.size(withAttributes: [NSAttributedString.Key.font: titleLabel.font as Any])
 
-            button.imageEdgeInsets = UIEdgeInsets(top: -(titleSize.height + 3), left: 0, bottom: 0, right: -image.size.width)
-            button.titleEdgeInsets = UIEdgeInsets(top: 3, left: -titleSize.width/2-11, bottom: -image.size.height, right: 0)
+            button.imageEdgeInsets = UIEdgeInsets(top: -(titleSize.height + 3), left: CGFloat.zero, bottom: CGFloat.zero, right: -image.size.width)
+            button.titleEdgeInsets = UIEdgeInsets(top: 3, left: -titleSize.width/2-11, bottom: -image.size.height, right: CGFloat.zero)
             self.registerButton = button
         }
-        self.registerButton.frame = CGRect(x: 0, y: 0, width: circleDiameter, height: circleDiameter)
+        self.registerButton.frame = CGRect(x: CGFloat.zero, y: CGFloat.zero, width: circleDiameter, height: circleDiameter)
         self.registerButton.layer.cornerRadius = 0.5 * self.registerButton.bounds.size.width
         self.registerButton.titleLabel?.font = .systemFont(ofSize: 10)
         self.registerButton.addTarget(self, action: #selector(didRegisterButtonTouched), for: .touchUpInside)

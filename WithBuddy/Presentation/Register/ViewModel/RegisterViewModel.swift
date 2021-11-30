@@ -61,7 +61,7 @@ final class RegisterViewModel {
     }
     
     func didBuddyAdded(_ buddy: Buddy) {
-        self.buddyList.insert(buddy, at: 0)
+        self.buddyList.insert(buddy, at: Int.zero)
     }
     
     func didBuddyUpdated(_ buddyList: [Buddy]) {
@@ -73,7 +73,7 @@ final class RegisterViewModel {
     }
     
     func didPicturePicked(_ picture: URL) {
-        self.pictures.insert(picture, at: 0)
+        self.pictures.insert(picture, at: Int.zero)
     }
     
     func didPictureDeleteTouched(in idx: Int) {

@@ -15,7 +15,7 @@ final class WBCalendarViewCell: UICollectionViewCell {
     
     private var dayOfCell: UILabel = {
         let label = UILabel()
-        label.text = ""
+        label.text = String()
         label.font = .boldSystemFont(ofSize: .dayLabelSize)
         label.textColor = .labelPurple
         return label
@@ -35,7 +35,7 @@ final class WBCalendarViewCell: UICollectionViewCell {
         super.prepareForReuse()
         self.backgroundColor = .systemBackground
         self.buddyImageView.image = nil
-        self.extraGatheringLabel.text = ""
+        self.extraGatheringLabel.text = String()
     }
     
     private func configure() {
@@ -56,7 +56,7 @@ final class WBCalendarViewCell: UICollectionViewCell {
     
     private func configureCell() {
         self.backgroundColor = .systemBackground
-        self.layer.cornerRadius = 0
+        self.layer.cornerRadius = CGFloat.zero
     }
     
     private func configureBuddyImageView() {
@@ -73,7 +73,7 @@ final class WBCalendarViewCell: UICollectionViewCell {
     
     private func configureExtraGatheringLabel() {
         self.addSubview(self.extraGatheringLabel)
-        self.extraGatheringLabel.text = ""
+        self.extraGatheringLabel.text = String()
         self.extraGatheringLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.extraGatheringLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
@@ -83,7 +83,7 @@ final class WBCalendarViewCell: UICollectionViewCell {
     }
     
     func update(day: Int, face: String) {
-        self.dayOfCell.text = day > 0 ? String(day) : ""
+        self.dayOfCell.text = day > Int.zero ? String(day) : String()
         if !face.isEmpty {
             self.buddyImageView.image = UIImage(named: face)
         }
@@ -91,7 +91,7 @@ final class WBCalendarViewCell: UICollectionViewCell {
     
     func highlightCell() {
         self.backgroundColor = .backgroundPurple
-        self.layer.cornerRadius = 10
+        self.layer.cornerRadius = .whiteViewCornerRadius
     }
     
     func update(extraNum: Int) {

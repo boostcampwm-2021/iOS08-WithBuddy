@@ -138,7 +138,7 @@ final class RegisterViewController: UIViewController {
     private func bindSignal() {
         self.registerViewModel.registerDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] gathering in
+            .sink { [weak self] gathering in
                 self?.didRegisterSucceed()
                 self?.registerNotification(gathering: gathering)
             }
@@ -146,14 +146,14 @@ final class RegisterViewController: UIViewController {
         
         self.registerViewModel.registerFailSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] result in
+            .sink { [weak self] result in
                 self?.didRegisterFailed(result)
             }
             .store(in: &self.cancellables)
         
         self.registerViewModel.addBuddySignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] buddyList in
+            .sink { [weak self] buddyList in
                 let buddyChoiceViewController = BuddyChoiceViewController()
                 buddyChoiceViewController.delegate = self
                 buddyChoiceViewController.configureBuddyList(by: buddyList)

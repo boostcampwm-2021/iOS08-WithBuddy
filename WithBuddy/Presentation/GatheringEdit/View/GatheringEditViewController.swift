@@ -180,7 +180,7 @@ final class GatheringEditViewController: UIViewController {
     private func bindSignal() {
         self.gatheringEditViewModel.editDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] gathering in
+            .sink { [weak self] gathering in
                 self?.alertSuccess(gathering: gathering)
                 self?.registerNotification(gathering: gathering)
             }
@@ -188,14 +188,14 @@ final class GatheringEditViewController: UIViewController {
         
         self.gatheringEditViewModel.editFailSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] result in
+            .sink { [weak self] result in
                 self?.alertError(result)
             }
             .store(in: &self.cancellables)
         
         self.gatheringEditViewModel.addBuddySignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] buddyList in
+            .sink { [weak self] buddyList in
                 let buddyChoiceViewController = BuddyChoiceViewController()
                 buddyChoiceViewController.delegate = self
                 buddyChoiceViewController.configureBuddyList(by: buddyList)

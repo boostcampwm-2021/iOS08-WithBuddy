@@ -48,7 +48,7 @@ final class BuddyChoiceViewController: UIViewController {
         
         self.buddyChoiceViewModel.doneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] checkedBuddyList in
+            .sink { [weak self] checkedBuddyList in
                 self?.delegate?.didBuddySelectingCompleted(checkedBuddyList)
                 self?.navigationController?.popViewController(animated: true)
             }
@@ -56,7 +56,7 @@ final class BuddyChoiceViewController: UIViewController {
         
         self.buddyChoiceViewModel.failSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] result in
+            .sink { [weak self] result in
                 self?.alertError(result)
             }
             .store(in: &self.cancellables)

@@ -97,14 +97,14 @@ final class BuddyCustomViewController: UIViewController {
         
         self.buddyCustomViewModel.$name
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] text in
+            .sink { [weak self] text in
                 self?.nameTextField.text = text
             }
             .store(in: &self.cancellables)
         
         self.buddyCustomViewModel.addDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] buddy in
+            .sink { [weak self] buddy in
                 self?.delegate?.didBuddyAddCompleted(buddy)
                 self?.navigationController?.popViewController(animated: true)
             }
@@ -112,7 +112,7 @@ final class BuddyCustomViewController: UIViewController {
         
         self.buddyCustomViewModel.editDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] buddy in
+            .sink { [weak self] buddy in
                 self?.delegate?.didBuddyEditCompleted(buddy)
                 self?.navigationController?.popViewController(animated: true)
             }
@@ -120,7 +120,7 @@ final class BuddyCustomViewController: UIViewController {
         
         self.buddyCustomViewModel.failSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] result in
+            .sink { [weak self] result in
                 self?.alertError(result)
             }
             .store(in: &self.cancellables)

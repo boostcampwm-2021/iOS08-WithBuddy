@@ -27,10 +27,10 @@ final class SettingViewModel {
     
     func didGatheringResetTouched() {
         self.gatheringUseCase.deleteAllGathering()
-            .sink { error in
+            .sink { [weak self] error in
                 switch error {
                 case .failure(let error):
-                    self.deleteSignal.send(("삭제 실패", error.errorDescription))
+                    self?.deleteSignal.send(("삭제 실패", error.errorDescription))
                 case .finished:
                     return
                 }

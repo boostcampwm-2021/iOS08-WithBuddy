@@ -37,5 +37,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert, .sound])
     }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        guard let window = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window,
+              let id = UUID(uuidString: response.notification.request.identifier) else { return }
+        
+        let tabBarController = TabBarViewController()
+        tabBarController.selectedIndex = 3
+        let navigationController = UINavigationController(rootViewController: tabBarController)
+        let gatheringDetailViewController = GatheringDetailViewController()
+        gatheringDetailViewController.id = id
+        navigationController.pushViewController(gatheringDetailViewController, animated: true)
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
+        
+        completionHandler()
+    }
 }
 

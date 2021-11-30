@@ -20,7 +20,7 @@ enum BuddyChoiceError: LocalizedError {
     }
 }
 
-class BuddyChoiceViewModel {
+final class BuddyChoiceViewModel {
     
     @Published private(set) var storedBuddyList: [Buddy] = []
     private(set) var doneSignal = PassthroughSubject<[Buddy], Never>()

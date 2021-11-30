@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PurpleLabel: UILabel {
+final class PurpleLabel: UILabel {
 
     override init(frame: CGRect) {
         super.init(frame: frame)

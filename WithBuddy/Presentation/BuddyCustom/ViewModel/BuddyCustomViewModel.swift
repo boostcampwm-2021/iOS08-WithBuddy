@@ -18,7 +18,7 @@ enum BuddyCustomError: LocalizedError {
     }
 }
 
-class BuddyCustomViewModel {
+final class BuddyCustomViewModel {
     private var id: UUID?
     @Published private(set) var name: String = ""
     @Published private(set) var face: Face = Face(color: .purple, number: 1)

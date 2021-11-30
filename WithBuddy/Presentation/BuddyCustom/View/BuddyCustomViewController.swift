@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class BuddyCustomViewController: UIViewController {
+final class BuddyCustomViewController: UIViewController {
     
     private var scrollView = UIScrollView()
     private var contentView = UIView()

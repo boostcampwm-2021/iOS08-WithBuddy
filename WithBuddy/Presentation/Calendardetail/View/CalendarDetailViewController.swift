@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class CalendarDetailViewController: UIViewController {
+final class CalendarDetailViewController: UIViewController {
     
     private lazy var detailLabel = PurpleTitleLabel()
     private lazy var detailTableView = UITableView()

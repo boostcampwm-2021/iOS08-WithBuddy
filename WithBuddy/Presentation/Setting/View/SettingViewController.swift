@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import SafariServices
 
-class SettingViewController: UIViewController {
+final class SettingViewController: UIViewController {
     
     private let userImageView = UIImageView()
     private let userNameLabel = UILabel()

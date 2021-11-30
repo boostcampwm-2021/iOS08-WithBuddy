@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class BuddyChoiceViewController: UIViewController {
+final class BuddyChoiceViewController: UIViewController {
     
     private let searchView = SearchView()
     private let addButton = UIButton()

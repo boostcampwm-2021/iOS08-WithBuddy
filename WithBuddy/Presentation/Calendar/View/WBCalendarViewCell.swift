@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WBCalendarViewCell: UICollectionViewCell {
+final class WBCalendarViewCell: UICollectionViewCell {
     
     static let identifier = "WBCalendarViewCell"
     private var buddyImageView = UIImageView()

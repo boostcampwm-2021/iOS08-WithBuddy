@@ -10,7 +10,7 @@ import Combine
 import Photos
 import UserNotifications
 
-class RegisterViewController: UIViewController {
+final class RegisterViewController: UIViewController {
     
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()

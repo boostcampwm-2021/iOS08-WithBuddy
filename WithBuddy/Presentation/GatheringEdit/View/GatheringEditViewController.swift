@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class GatheringEditViewController: UIViewController {
+final class GatheringEditViewController: UIViewController {
     
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()

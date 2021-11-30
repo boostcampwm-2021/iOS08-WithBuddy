@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class GatheringDetailViewController: UIViewController {
+final class GatheringDetailViewController: UIViewController {
     
     var id: UUID?
     private lazy var scrollView = UIScrollView()

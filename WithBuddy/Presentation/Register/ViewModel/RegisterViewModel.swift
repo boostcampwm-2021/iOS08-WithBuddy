@@ -20,7 +20,7 @@ enum RegisterError: LocalizedError {
     }
 }
 
-class RegisterViewModel {
+final class RegisterViewModel {
     
     private var date: Date?
     private var place: String?

@@ -78,14 +78,16 @@ class BuddyManageViewController: UIViewController {
         self.view.addSubview(self.addButton)
         let config = UIImage.SymbolConfiguration(
             pointSize: 60, weight: .medium, scale: .default)
-        let image = UIImage(systemName: "person.badge.plus", withConfiguration: config)
+        let image = UIImage(named: "PlusBuddy", in: .main, with: config)
         self.addButton.setImage(image, for: .normal)
         self.addButton.addTarget(self, action: #selector(self.newBuddyButtonTouched(_:)), for: .touchUpInside)
         
         self.addButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.addButton.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: 10),
-            self.addButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+            self.addButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.addButton.heightAnchor.constraint(equalToConstant: .buddyAndPurposeWidth),
+            self.addButton.widthAnchor.constraint(equalTo: self.addButton.heightAnchor)
         ])
     }
     

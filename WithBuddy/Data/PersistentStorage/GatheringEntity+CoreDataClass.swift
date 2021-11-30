@@ -74,6 +74,7 @@ extension GatheringEntity {
                          memo: self.memo,
                          picture: self.picture)
     }
+    
 }
 
 extension GatheringEntity: Comparable {

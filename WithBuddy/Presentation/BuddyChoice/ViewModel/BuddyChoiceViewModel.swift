@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 enum BuddyChoiceError: LocalizedError {
+    
     case noBuddy
     case oneMoreGathering
     
@@ -18,6 +19,7 @@ enum BuddyChoiceError: LocalizedError {
         case .oneMoreGathering: return "해당 버디가 한개 이상의 모임에 속해 있습니다."
         }
     }
+    
 }
 
 final class BuddyChoiceViewModel {

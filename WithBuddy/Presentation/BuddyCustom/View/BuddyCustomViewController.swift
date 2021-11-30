@@ -317,6 +317,8 @@ extension BuddyCustomViewController: UITextFieldDelegate {
 }
 
 protocol BuddyCustomDelegate: AnyObject {
+    
     func buddyAddDidCompleted(_: Buddy)
     func buddyEditDidCompleted(_: Buddy)
+    
 }

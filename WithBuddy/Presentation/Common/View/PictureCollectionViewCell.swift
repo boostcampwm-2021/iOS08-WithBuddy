@@ -8,6 +8,7 @@
 import UIKit
 
 final class PictureCollectionViewCell: UICollectionViewCell {
+    
     static let identifier = "PictureCollectionViewCell"
     
     private var photoImage = UIImageView()

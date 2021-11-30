@@ -8,6 +8,7 @@
 import UIKit
 
 final class ImageTextCollectionViewCell: UICollectionViewCell {
+    
     static let identifier = "ImageTextCollectionViewCell"
     
     private var image = UIImageView()

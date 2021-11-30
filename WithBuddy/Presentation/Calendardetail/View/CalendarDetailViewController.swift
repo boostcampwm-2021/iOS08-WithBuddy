@@ -80,6 +80,7 @@ final class CalendarDetailViewController: UIViewController {
 }
 
 extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         self.calendarDetailViewModel.count
     }
@@ -127,7 +128,9 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
 }
 
 protocol GatheringListDelegate: AnyObject {
+    
     func gatheringListTouched(_: Gathering)
     func editGathering(_: Gathering)
     func deleteGathering()
+    
 }

@@ -650,6 +650,7 @@ final class GatheringEditViewController: UIViewController {
 }
 
 extension GatheringEditViewController: UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         if collectionView == self.pictureCollectionView {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
@@ -668,6 +669,7 @@ extension GatheringEditViewController: UICollectionViewDelegate {
             })
         }
     }
+    
 }
 
 extension GatheringEditViewController: UITextFieldDelegate {
@@ -719,6 +721,7 @@ extension GatheringEditViewController: UITextViewDelegate {
 }
 
 extension GatheringEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         guard let url = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
             return
@@ -730,10 +733,13 @@ extension GatheringEditViewController: UIImagePickerControllerDelegate, UINaviga
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
     }
+    
 }
 
 extension GatheringEditViewController: BuddyChoiceDelegate {
+    
     func buddySelectingDidCompleted(_ buddyList: [Buddy]) {
         self.gatheringEditViewModel.didBuddyUpdated(buddyList)
     }
+    
 }

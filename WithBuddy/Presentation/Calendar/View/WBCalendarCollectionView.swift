@@ -39,4 +39,5 @@ final class WBCalendarCollectionView: UICollectionView {
         
         self.collectionViewLayout = UICollectionViewCompositionalLayout(section: section)
     }
+    
 }

@@ -91,7 +91,7 @@ final class SettingViewController: UIViewController {
         self.modifyButton.layer.cornerRadius = 10
         self.modifyButton.tintColor = .white
         self.modifyButton.sizeToFit()
-        self.modifyButton.addTarget(self, action: #selector(self.moveToBuddyCustom), for: .touchUpInside)
+        self.modifyButton.addTarget(self, action: #selector(self.didProfileEditButtonTouched), for: .touchUpInside)
         self.modifyButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.modifyButton.topAnchor.constraint(equalTo: self.userImageView.centerYAnchor, constant: 5),
@@ -101,7 +101,7 @@ final class SettingViewController: UIViewController {
         ])
     }
     
-    @objc private func moveToBuddyCustom(_ sender: UIButton) {
+    @objc private func didProfileEditButtonTouched(_ sender: UIButton) {
         self.modifyButton.animateButtonTap(scale: 0.9)
         guard let myBuddy = self.settingViewModel.myBuddy else { return }
         let buddyCustomViewController = BuddyCustomViewController()
@@ -121,10 +121,10 @@ final class SettingViewController: UIViewController {
         self.view.addSubview(self.removeAllGatheringButton)
         self.removeAllGatheringButton.setTitle("모임 목록 초기화", for: .normal)
         self.makeButtonLayer(button: self.removeAllGatheringButton, upperView: self.userNameLabel, constant: 100)
-        self.removeAllGatheringButton.addTarget(self, action: #selector(self.removeAlert), for: .touchUpInside)
+        self.removeAllGatheringButton.addTarget(self, action: #selector(self.didRemoveButtonTouched), for: .touchUpInside)
     }
     
-    @objc private func removeAlert() {
+    @objc private func didRemoveButtonTouched() {
         self.removeAllGatheringButton.animateButtonTap(scale: 0.9)
         let alert = UIAlertController(title: nil, message: "모임 목록을 정말로 초기화하시겠습니까?", preferredStyle: UIAlertController.Style.alert)
         let cancelAction = UIAlertAction(title: "취소", style: .cancel)
@@ -139,14 +139,14 @@ final class SettingViewController: UIViewController {
     private func configureManageBuddyButton() {
         self.view.addSubview(self.manageBuddyButton)
         self.manageBuddyButton.setTitle("버디 관리", for: .normal)
-        self.manageBuddyButton.addTarget(self, action: #selector(self.moveToBuddyManage), for: .touchUpInside)
+        self.manageBuddyButton.addTarget(self, action: #selector(self.didBuddyManageButtonTouched), for: .touchUpInside)
         self.makeButtonLayer(button: self.manageBuddyButton, upperView: self.removeAllGatheringButton, constant: 15)
     }
     
     private func configureDeveloperInfo() {
         self.view.addSubview(self.developerInfoButton)
         self.developerInfoButton.setTitle("개발자 정보", for: .normal)
-        self.developerInfoButton.addTarget(self, action: #selector(self.moveToDeveloperInfo), for: .touchUpInside)
+        self.developerInfoButton.addTarget(self, action: #selector(self.didDeveloperInfoTouched), for: .touchUpInside)
         self.makeButtonLayer(button: self.developerInfoButton, upperView: self.manageBuddyButton, constant: 15)
     }
     
@@ -165,11 +165,11 @@ final class SettingViewController: UIViewController {
         ])
     }
     
-    @objc private func moveToBuddyManage(_ sender: UIButton) {
+    @objc private func didBuddyManageButtonTouched(_ sender: UIButton) {
         self.navigationController?.pushViewController(BuddyManageViewController(), animated: true)
     }
     
-    @objc private func moveToDeveloperInfo(_ sender: UIButton) {
+    @objc private func didDeveloperInfoTouched(_ sender: UIButton) {
         guard let wikiURL = URL(string: "https://github.com/boostcampwm-2021/iOS08-WithBuddy/wiki") else { return }
         let developSafariView: SFSafariViewController = SFSafariViewController(url: wikiURL)
         self.present(developSafariView, animated: true, completion: nil)

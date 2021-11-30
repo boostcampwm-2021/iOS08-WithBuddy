@@ -57,7 +57,7 @@ final class GatheringDetailViewController: UIViewController {
         super.viewDidLoad()
         self.configure()
         self.bind()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .done, target: self, action: #selector(self.editGathering))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .done, target: self, action: #selector(self.didEditButtonTouched))
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -465,7 +465,7 @@ final class GatheringDetailViewController: UIViewController {
         self.pictureCollectionView.collectionViewLayout = layout
     }
     
-    @objc private func editGathering() {
+    @objc private func didEditButtonTouched() {
         self.gatheringDetailViewModel.didEditButtonTouched()
     }
     

@@ -138,19 +138,19 @@ final class ChartViewController: UIViewController {
     }
     
     private func configureBubbleGesture(imageView: UIView) {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.bubbleTapAction))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.didBubbleTouched))
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(tapGesture)
     }
                                     
     private func configureDescriptionViewGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.descriptionViewTapAction))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.didDescriptionViewTouched))
         self.bubbleChartView.bubbleDescriptionView.isUserInteractionEnabled = true
         self.bubbleChartView.bubbleDescriptionView.addGestureRecognizer(tapGesture)
     }
     
     private func configureEditButtonGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.editButtonTapAction))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.didEditButtonTouched))
         self.bubbleChartView.bubbleDescriptionView.editButton.isUserInteractionEnabled = true
         self.bubbleChartView.bubbleDescriptionView.editButton.addGestureRecognizer(tapGesture)
     }
@@ -178,16 +178,16 @@ final class ChartViewController: UIViewController {
         self.latestOldChartView.update(oldName: buddy.name, face: buddy.face)
     }
     
-    @objc private func bubbleTapAction(_ sender: UITapGestureRecognizer) {
+    @objc private func didBubbleTouched(_ sender: UITapGestureRecognizer) {
         guard let tag = sender.view?.tag else { return }
         self.bubbleChartView.showDescriptionView(name: self.viewModel[tag].name)
     }
     
-    @objc private func descriptionViewTapAction(_ sender: UITapGestureRecognizer) {
+    @objc private func didDescriptionViewTouched(_ sender: UITapGestureRecognizer) {
         self.bubbleChartView.hideDescriptionView()
     }
     
-    @objc private func editButtonTapAction(_ sender: UITapGestureRecognizer) {
+    @objc private func didEditButtonTouched(_ sender: UITapGestureRecognizer) {
         guard let buddy = self.viewModel.selectedBuddy else { return }
         let buddyCustomViewController = BuddyCustomViewController()
         buddyCustomViewController.delegate = self

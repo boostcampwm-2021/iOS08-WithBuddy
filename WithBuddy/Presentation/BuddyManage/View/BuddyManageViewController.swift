@@ -85,7 +85,7 @@ final class BuddyManageViewController: UIViewController {
             pointSize: 60, weight: .medium, scale: .default)
         let image = UIImage(named: "PlusBuddy", in: .main, with: config)
         self.addButton.setImage(image, for: .normal)
-        self.addButton.addTarget(self, action: #selector(self.newBuddyButtonTouched(_:)), for: .touchUpInside)
+        self.addButton.addTarget(self, action: #selector(self.didNewBuddyButtonTouched), for: .touchUpInside)
         
         self.addButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -105,7 +105,7 @@ final class BuddyManageViewController: UIViewController {
         let panGesture = UIPanGestureRecognizer()
         panGesture.delegate = self
         self.buddyCollectionView.addGestureRecognizer(panGesture)
-        self.buddyCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:))))
+        self.buddyCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didCollectionViewTouched)))
         
         let buddyFlowLayout = UICollectionViewFlowLayout()
         buddyFlowLayout.scrollDirection = .vertical
@@ -121,7 +121,7 @@ final class BuddyManageViewController: UIViewController {
         ])
     }
     
-    @objc private func newBuddyButtonTouched(_ sender: UIButton) {
+    @objc private func didNewBuddyButtonTouched(_ sender: UIButton) {
         let buddyCustomViewController = BuddyCustomViewController()
         buddyCustomViewController.delegate = self
         buddyCustomViewController.title = "버디 생성"
@@ -148,7 +148,7 @@ final class BuddyManageViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+    @objc func didCollectionViewTouched(_ sender: UITapGestureRecognizer) {
         if sender.state == .ended {
             self.view.endEditing(true)
         }

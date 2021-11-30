@@ -102,7 +102,7 @@ final class TabBarViewController: UITabBarController {
         self.registerButton.frame = CGRect(x: 0, y: 0, width: circleDiameter, height: circleDiameter)
         self.registerButton.layer.cornerRadius = 0.5 * self.registerButton.bounds.size.width
         self.registerButton.titleLabel?.font = .systemFont(ofSize: 10)
-        self.registerButton.addTarget(self, action: #selector(registerAction), for: .touchUpInside)
+        self.registerButton.addTarget(self, action: #selector(didRegisterButtonTouched), for: .touchUpInside)
         
         self.view.addSubview(self.registerButton)
         self.registerButton.translatesAutoresizingMaskIntoConstraints = false
@@ -114,7 +114,7 @@ final class TabBarViewController: UITabBarController {
         ])
     }
     
-    @objc private func registerAction(_ sender: UIButton) {
+    @objc private func didRegisterButtonTouched(_ sender: UIButton) {
         let registerViewController = RegisterViewController()
         self.navigationController?.pushViewController(registerViewController, animated: true)
     }

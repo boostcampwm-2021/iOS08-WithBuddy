@@ -77,7 +77,7 @@ final class ListViewController: UIViewController {
         let panGesture = UIPanGestureRecognizer()
         panGesture.delegate = self
         self.listTableView.addGestureRecognizer(panGesture)
-        self.listTableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:))))
+        self.listTableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didCollectionViewTouched)))
         
         self.listTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -119,7 +119,7 @@ final class ListViewController: UIViewController {
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
-    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+    @objc func didCollectionViewTouched(_ sender: UITapGestureRecognizer) {
         if sender.state == .ended {
             self.view.endEditing(true)
         }

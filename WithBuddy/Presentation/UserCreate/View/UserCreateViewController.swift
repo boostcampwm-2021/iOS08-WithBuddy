@@ -145,7 +145,7 @@ final class UserCreateViewController: UIViewController {
         self.editButton.layer.cornerRadius = 10
         self.editButton.setTitle("캐릭터 수정하기", for: .normal)
         self.editButton.setTitleColor(.labelPurple, for: .normal)
-        self.editButton.addTarget(self, action: #selector(self.editButtonTouched), for: .touchUpInside)
+        self.editButton.addTarget(self, action: #selector(self.didEditButtonTouched), for: .touchUpInside)
         
         self.editButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -154,7 +154,7 @@ final class UserCreateViewController: UIViewController {
         ])
     }
     
-    @objc private func editButtonTouched(_ sender: UIButton) {
+    @objc private func didEditButtonTouched(_ sender: UIButton) {
         self.userCreateViewModel.startEditing()
     }
     
@@ -170,7 +170,7 @@ final class UserCreateViewController: UIViewController {
         self.completeButton.backgroundColor = .systemGray3
         self.completeButton.layer.cornerRadius = 10
         self.completeButton.setTitle("내 캐릭터 생성 완료", for: .normal)
-        self.completeButton.addTarget(self, action: #selector(self.completeButtonTouched), for: .touchUpInside)
+        self.completeButton.addTarget(self, action: #selector(self.didCompleteButtonTouched), for: .touchUpInside)
         
         self.completeButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -181,7 +181,7 @@ final class UserCreateViewController: UIViewController {
         ])
     }
     
-    @objc private func completeButtonTouched(_ sender: UIButton) {
+    @objc private func didCompleteButtonTouched(_ sender: UIButton) {
         UIView.animate(withDuration: 0.2) { [weak self] in
             self?.completeButton.transform = CGAffineTransform(scaleX: CGFloat(0.9), y: CGFloat(0.9))
         } completion: { [weak self] _ in

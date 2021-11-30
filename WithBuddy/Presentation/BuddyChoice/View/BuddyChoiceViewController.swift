@@ -28,7 +28,7 @@ final class BuddyChoiceViewController: UIViewController {
         super.viewDidLoad()
         self.configure()
         self.bind()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.completeButtonTouched))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.didCompleteButtonTouched))
     }
     
     func configureBuddyList(by buddyList: [Buddy]) {
@@ -88,7 +88,7 @@ final class BuddyChoiceViewController: UIViewController {
             pointSize: 60, weight: .medium, scale: .default)
         let image = UIImage(named: "PlusBuddy", in: .main, with: config)
         self.addButton.setImage(image, for: .normal)
-        self.addButton.addTarget(self, action: #selector(self.newBuddyButtonTouched(_:)), for: .touchUpInside)
+        self.addButton.addTarget(self, action: #selector(self.didNewBuddyButtonTouched), for: .touchUpInside)
         
         self.addButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -108,7 +108,7 @@ final class BuddyChoiceViewController: UIViewController {
         let panGesture = UIPanGestureRecognizer()
         panGesture.delegate = self
         self.buddyCollectionView.addGestureRecognizer(panGesture)
-        self.buddyCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:))))
+        self.buddyCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didCollectionViewTouched)))
         
         let buddyFlowLayout = UICollectionViewFlowLayout()
         buddyFlowLayout.scrollDirection = .vertical
@@ -136,13 +136,13 @@ final class BuddyChoiceViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    @objc private func newBuddyButtonTouched(_ sender: UIButton) {
+    @objc private func didNewBuddyButtonTouched(_ sender: UIButton) {
         let buddyCustomViewController = BuddyCustomViewController()
         buddyCustomViewController.delegate = self
         self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
     }
     
-    @objc private func completeButtonTouched() {
+    @objc private func didCompleteButtonTouched() {
         self.buddyChoiceViewModel.didBuddySelectingCompleted()
     }
     
@@ -159,7 +159,7 @@ final class BuddyChoiceViewController: UIViewController {
         self.buddyDataSource.apply(snapshot, animatingDifferences: true)
     }
     
-    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+    @objc func didCollectionViewTouched(_ sender: UITapGestureRecognizer) {
         if sender.state == .ended {
             self.view.endEditing(true)
         }

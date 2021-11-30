@@ -76,6 +76,7 @@ class SettingViewController: UIViewController {
         self.userNameLabel.text = "UserName"
         self.userNameLabel.font = .systemFont(ofSize: .titleLabelSize)
         self.userNameLabel.textAlignment = .center
+        self.userNameLabel.font = UIFont.systemFont(ofSize: 23)
         self.userNameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.userNameLabel.bottomAnchor.constraint(equalTo: self.userImageView.centerYAnchor, constant: -10),
@@ -86,10 +87,9 @@ class SettingViewController: UIViewController {
     private func configureModifyButton() {
         self.view.addSubview(self.modifyButton)
         self.modifyButton.setTitle("프로필 수정", for: .normal)
-        self.modifyButton.setTitleColor(.labelPurple, for: .normal)
-        self.modifyButton.layer.borderWidth = 1
-        self.modifyButton.layer.cornerRadius = 5
-        self.modifyButton.layer.borderColor = UIColor.labelPurple?.cgColor
+        self.modifyButton.backgroundColor = .labelPurple
+        self.modifyButton.layer.cornerRadius = 10
+        self.modifyButton.tintColor = .white
         self.modifyButton.sizeToFit()
         self.modifyButton.addTarget(self, action: #selector(self.moveToBuddyCustom), for: .touchUpInside)
         self.modifyButton.translatesAutoresizingMaskIntoConstraints = false

@@ -15,4 +15,6 @@ extension Int {
     static let noGatheringStatus = 1
     static let fullGatheringStatus = 0
     
+    static let maxDayOfMonth = 42
+    
 }

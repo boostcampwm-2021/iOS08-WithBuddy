@@ -8,10 +8,6 @@
 import Foundation
 import Combine
 
-protocol SettingViewModelProtocol {
-    
-}
-
 final class SettingViewModel {
     
     @Published private(set) var myBuddy: Buddy?

@@ -29,6 +29,7 @@ final class TabBarViewController: UITabBarController {
         super.viewDidAppear(animated)
         self.loadingView.addFaces()
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: animated)

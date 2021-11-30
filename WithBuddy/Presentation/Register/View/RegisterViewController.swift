@@ -14,7 +14,6 @@ final class RegisterViewController: UIViewController {
     
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
-    
     private lazy var dateTitleLabel = PurpleTitleLabel()
     private lazy var datePicker = UIDatePicker()
     private lazy var placeTitleLabel = PurpleTitleLabel()
@@ -251,6 +250,7 @@ final class RegisterViewController: UIViewController {
             self.datePicker.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset)
         ])
     }
+    
     @objc private func didDateChanged(_ sender: UIDatePicker) {
         self.registerViewModel.didDatePicked(sender.date)
     }

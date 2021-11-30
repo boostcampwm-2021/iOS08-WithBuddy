@@ -108,7 +108,7 @@ class GatheringDetailViewController: UIViewController {
             .sink(receiveValue: { [weak self] gathering in
                 if let gathering = gathering {
                     self?.configure(by: gathering)
-                } 
+                }
             })
             .store(in: &self.cancellables)
     }

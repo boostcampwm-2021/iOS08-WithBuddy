@@ -280,7 +280,6 @@ extension CoreDataManager: CoreDataManagable {
         )
         
         return self.fetch(request: request).first
-        
     }
     
 }

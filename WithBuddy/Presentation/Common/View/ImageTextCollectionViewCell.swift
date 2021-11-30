@@ -23,9 +23,7 @@ final class ImageTextCollectionViewCell: UICollectionViewCell {
     }
     
     func update(image: UIImage?, text: String, check: Bool?) {
-        guard let image = image else {
-            return
-        }
+        guard let image = image else { return }
         self.backgroundColor = .backgroundPurple
         self.image.image = image
         self.textLabel.text = text
@@ -38,9 +36,7 @@ final class ImageTextCollectionViewCell: UICollectionViewCell {
     }
     
     func update(image: UIImage?, text: String) {
-        guard let image = image else {
-            return
-        }
+        guard let image = image else { return }
         self.backgroundColor = .backgroundPurple
         self.image.image = image
         self.textLabel.text = text

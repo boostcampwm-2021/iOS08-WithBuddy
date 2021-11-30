@@ -687,9 +687,7 @@ extension RegisterViewController: UITextViewDelegate {
 extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        guard let url = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
-            return
-        }
+        guard let url = info[UIImagePickerController.InfoKey.imageURL] as? URL else { return }
         self.registerViewModel.didPicturePicked(url)
         dismiss(animated: true, completion: nil)
     }

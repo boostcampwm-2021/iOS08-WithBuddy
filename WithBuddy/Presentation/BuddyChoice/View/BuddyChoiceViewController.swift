@@ -40,7 +40,7 @@ final class BuddyChoiceViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] buddyList in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
-                snapshot.appendSections([0])
+                snapshot.appendSections([Int.zero])
                 snapshot.appendItems(buddyList)
                 self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
             }
@@ -72,12 +72,12 @@ final class BuddyChoiceViewController: UIViewController {
     private func configureSearchView() {
         self.view.addSubview(self.searchView)
         self.searchView.searchTextField.delegate = self
-        self.searchView.layer.cornerRadius = 10
+        self.searchView.layer.cornerRadius = .whiteViewCornerRadius
         self.searchView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.searchView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            self.searchView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            self.searchView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            self.searchView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: .plusInset),
+            self.searchView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: .minusInset),
             self.searchView.heightAnchor.constraint(equalToConstant: 45)
         ])
     }
@@ -92,7 +92,7 @@ final class BuddyChoiceViewController: UIViewController {
         
         self.addButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.addButton.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: 10),
+            self.addButton.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: .innerPartInset),
             self.addButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.addButton.heightAnchor.constraint(equalToConstant: .buddyAndPurposeWidth),
             self.addButton.widthAnchor.constraint(equalTo: self.addButton.heightAnchor)
@@ -117,15 +117,15 @@ final class BuddyChoiceViewController: UIViewController {
         
         self.buddyCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.buddyCollectionView.topAnchor.constraint(equalTo: self.addButton.bottomAnchor, constant: 10),
+            self.buddyCollectionView.topAnchor.constraint(equalTo: self.addButton.bottomAnchor, constant: .innerPartInset),
             self.buddyCollectionView.leadingAnchor.constraint(equalTo: self.searchView.leadingAnchor),
             self.buddyCollectionView.trailingAnchor.constraint(equalTo: self.searchView.trailingAnchor),
-            self.buddyCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            self.buddyCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: .minusInset)
         ])
     }
     
     private func alertError(_ error: BuddyChoiceError) {
-        var titleMessage = ""
+        var titleMessage = String()
         switch error {
         case .oneMoreGathering: titleMessage = "삭제 실패"
         case .noBuddy: titleMessage = "등록 실패"
@@ -190,21 +190,21 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? ImageTextCollectionViewCell else { return }
-        cell.animateButtonTap(scale: 0.8)
+        cell.animateButtonTap()
         self.buddyChoiceViewModel.didBuddyChecked(in: indexPath.item)
         self.view.endEditing(true)
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
-            let edit = UIAction(title: NSLocalizedString("편집", comment: ""),
+            let edit = UIAction(title: NSLocalizedString("편집", comment: String()),
                                 image: UIImage(systemName: "pencil.circle")) { _ in
                 let buddyCustomViewController = BuddyCustomViewController()
                 buddyCustomViewController.delegate = self
                 buddyCustomViewController.configure(by: self.buddyChoiceViewModel[indexPath.item])
                 self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
             }
-            let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
+            let delete = UIAction(title: NSLocalizedString("삭제", comment: String()),
                                   image: UIImage(systemName: "trash")) { _ in
                 self.buddyChoiceViewModel.didBuddyDeleted(in: indexPath.item)
             }

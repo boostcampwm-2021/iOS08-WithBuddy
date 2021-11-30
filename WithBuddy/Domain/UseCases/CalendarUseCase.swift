@@ -54,7 +54,7 @@ final class CalendarUseCase {
     }
     
     func numOfDaysInMonth(baseDate: Date) -> Int {
-        guard let range = self.calendar.range(of: .day, in: .month, for: baseDate) else { return 0 }
+        guard let range = self.calendar.range(of: .day, in: .month, for: baseDate) else { return Int.zero }
         return range.count
     }
     
@@ -74,13 +74,13 @@ final class CalendarUseCase {
     func month(baseDate: Date) -> Int {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "M"
-        return Int(dateFormatter.string(from: baseDate)) ?? 0
+        return Int(dateFormatter.string(from: baseDate)) ?? Int.zero
     }
     
     func day(baseDate: Date) -> Int {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd"
-        return Int(dateFormatter.string(from: baseDate)) ?? 0
+        return Int(dateFormatter.string(from: baseDate)) ?? Int.zero
     }
     
     func isSameDay(date1: Date, date2: Date) -> Bool {

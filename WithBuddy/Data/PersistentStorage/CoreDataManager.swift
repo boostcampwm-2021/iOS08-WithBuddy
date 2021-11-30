@@ -44,7 +44,7 @@ final class CoreDataManager {
     }
     
     static let shared = CoreDataManager()
-    let calendarUseCase = CalendarUseCase()
+    private let calendarUseCase = CalendarUseCase()
     
     private init() {
         self.context.perform { [weak self] in

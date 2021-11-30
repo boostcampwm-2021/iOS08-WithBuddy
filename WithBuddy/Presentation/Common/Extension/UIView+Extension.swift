@@ -9,7 +9,7 @@ import UIKit
 
 extension UIView {
     
-    func animateButtonTap(scale: Float) {
+    func animateButtonTap(scale: Float = 0.8) {
         UIView.animate(withDuration: 0.2) { [weak self] in
             self?.transform = CGAffineTransform(scaleX: CGFloat(scale), y: CGFloat(scale))
         } completion: { [weak self] _ in

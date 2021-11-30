@@ -10,6 +10,8 @@ import SwiftUI
 
 struct Provider: TimelineProvider {
     
+    let updateCycle = 5
+    
     func placeholder(in context: Context) -> SimpleEntry {
         SimpleEntry(date: Date())
     }
@@ -23,7 +25,7 @@ struct Provider: TimelineProvider {
         var entries: [SimpleEntry] = []
 
         let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
+        for hourOffset in Int.zero..<self.updateCycle {
             let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
             let entry = SimpleEntry(date: entryDate)
             entries.append(entry)

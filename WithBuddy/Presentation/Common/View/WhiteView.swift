@@ -21,7 +21,7 @@ final class WhiteView: UIView {
     
     private func configure() {
         self.backgroundColor = .systemBackground
-        self.layer.cornerRadius = 10
+        self.layer.cornerRadius = .whiteViewCornerRadius
     }
 
 }

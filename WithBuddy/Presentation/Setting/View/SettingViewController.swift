@@ -80,7 +80,7 @@ final class SettingViewController: UIViewController {
         self.userNameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.userNameLabel.bottomAnchor.constraint(equalTo: self.userImageView.centerYAnchor, constant: -10),
-            self.userNameLabel.leadingAnchor.constraint(equalTo: self.userImageView.trailingAnchor, constant: 20)
+            self.userNameLabel.leadingAnchor.constraint(equalTo: self.userImageView.trailingAnchor, constant: .plusInset)
         ])
     }
     
@@ -88,7 +88,7 @@ final class SettingViewController: UIViewController {
         self.view.addSubview(self.modifyButton)
         self.modifyButton.setTitle("프로필 수정", for: .normal)
         self.modifyButton.backgroundColor = .labelPurple
-        self.modifyButton.layer.cornerRadius = 10
+        self.modifyButton.layer.cornerRadius = .buttonCornerRadius
         self.modifyButton.tintColor = .white
         self.modifyButton.sizeToFit()
         self.modifyButton.addTarget(self, action: #selector(self.didProfileEditButtonTouched), for: .touchUpInside)
@@ -153,7 +153,7 @@ final class SettingViewController: UIViewController {
     private func makeButtonLayer(button: UIButton, upperView: UIView, constant: CGFloat) {
         button.setTitleColor(.labelPurple, for: .normal)
         button.contentHorizontalAlignment = .left
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+        button.titleEdgeInsets = UIEdgeInsets(top: CGFloat.zero, left: 15, bottom: CGFloat.zero, right: CGFloat.zero)
         button.backgroundColor = .systemBackground
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false

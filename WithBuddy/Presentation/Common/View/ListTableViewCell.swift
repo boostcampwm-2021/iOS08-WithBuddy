@@ -41,7 +41,7 @@ final class ListTableViewCell: UITableViewCell {
     }
     
     private func update(imageNames: [String], stackView: UIStackView) {
-        (0..<min(4, imageNames.count)).forEach { index in
+        (Int.zero..<min(4, imageNames.count)).forEach { index in
             guard let image = UIImage(named: imageNames[index]) else { return }
             let imageView = UIImageView(image: image)
             stackView.addArrangedSubview(imageView)
@@ -69,8 +69,8 @@ final class ListTableViewCell: UITableViewCell {
         self.dateLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.dateLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 15),
-            self.dateLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
-            self.dateLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20)
+            self.dateLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: .plusInset),
+            self.dateLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: .minusInset)
         ])
     }
     
@@ -100,7 +100,7 @@ final class ListTableViewCell: UITableViewCell {
         self.addSubview(self.buddyStackView)
         self.buddyStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.buddyStackView.leadingAnchor.constraint(equalTo: self.buddyLabel.trailingAnchor, constant: 10),
+            self.buddyStackView.leadingAnchor.constraint(equalTo: self.buddyLabel.trailingAnchor, constant: .innerPartInset),
             self.buddyStackView.centerYAnchor.constraint(equalTo: self.buddyLabel.centerYAnchor)
         ])
     }
@@ -109,7 +109,7 @@ final class ListTableViewCell: UITableViewCell {
         self.addSubview(self.purposeStackView)
         self.purposeStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.purposeStackView.leadingAnchor.constraint(equalTo: self.purposeLabel.trailingAnchor, constant: 10),
+            self.purposeStackView.leadingAnchor.constraint(equalTo: self.purposeLabel.trailingAnchor, constant: .innerPartInset),
             self.purposeStackView.centerYAnchor.constraint(equalTo: self.purposeLabel.centerYAnchor)
         ])
     }

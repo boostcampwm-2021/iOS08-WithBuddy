@@ -8,7 +8,7 @@
 import UIKit
 
 final class LoadingView: UIView {
-
+    
     private var titleLabel = UILabel()
     lazy var animator = UIDynamicAnimator(referenceView: self)
     lazy var gravity = UIGravityBehavior()
@@ -63,7 +63,7 @@ final class LoadingView: UIView {
                                CGPoint(x: width * 0.6, y: height * 0.01),
                                CGPoint(x: width * 0.7, y: height * 0.1)]
 
-        for idx in 0..<fallingBuddys.count {
+        for idx in Int.zero..<fallingBuddys.count {
             let squareSize = CGSize(width: .fallingBuddySize, height: .fallingBuddySize)
             let centerPoint = fallingPosition[idx]
             let frame = CGRect(origin: centerPoint, size: squareSize)
@@ -89,7 +89,8 @@ final class LoadingView: UIView {
     }
     
     private func expandView(duration: CGFloat) {
-        if duration < 0.5 {
+        let minAnimationDuration = 0.5
+        if duration < minAnimationDuration {
             self.animateTitleTransition(duration: duration)
         } else {
             UIView.animate(withDuration: duration) { [weak self] in
@@ -113,7 +114,7 @@ final class LoadingView: UIView {
             self?.titleLabel.transform = CGAffineTransform(translationX: 0, y: -(UIScreen.main.bounds.height * 0.17))
         } completion: { [weak self] _ in
             UIView.animate(withDuration: duration) {
-                self?.alpha = 0
+                self?.alpha = CGFloat.zero
             } completion: { [weak self] _ in
                 self?.removeFromSuperview()
             }

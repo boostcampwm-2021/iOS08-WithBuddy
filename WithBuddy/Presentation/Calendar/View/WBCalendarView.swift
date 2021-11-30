@@ -41,14 +41,14 @@ final class WBCalendarView: UIView {
     
     func reloadMonthLabel(month: String) {
         self.thisMonthLabel.text = month
-        self.thisMonthLabel.font = UIFont.monospacedSystemFont(ofSize: 16, weight: .medium)
+        self.thisMonthLabel.font = UIFont.monospacedSystemFont(ofSize: .thisMonthLabelFontSize, weight: .medium)
     }
     
     private func configureThisMonth() {
         self.addSubview(thisMonthLabel)
         self.thisMonthLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.thisMonthLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 35),
+            self.thisMonthLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: .thisMonthLabelTopAnchor),
             self.thisMonthLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
     }
@@ -64,9 +64,9 @@ final class WBCalendarView: UIView {
         self.nextMonthButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.prevMonthButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor),
-            self.prevMonthButton.trailingAnchor.constraint(equalTo: self.thisMonthLabel.leadingAnchor, constant: -5),
+            self.prevMonthButton.trailingAnchor.constraint(equalTo: self.thisMonthLabel.leadingAnchor, constant: .moveMonthButtonMinusInset),
             self.nextMonthButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor),
-            self.nextMonthButton.leadingAnchor.constraint(equalTo: self.thisMonthLabel.trailingAnchor, constant: 5)
+            self.nextMonthButton.leadingAnchor.constraint(equalTo: self.thisMonthLabel.trailingAnchor, constant: .moveMonthButtonPlusInset)
         ])
     }
     
@@ -74,14 +74,14 @@ final class WBCalendarView: UIView {
         self.addSubview(self.todayButton)
         self.todayButton.setTitle("Today", for: .normal)
         self.todayButton.backgroundColor = .labelPurple
-        self.todayButton.layer.cornerRadius = 5
+        self.todayButton.layer.cornerRadius = .smallButtonCornerRadius
         self.todayButton.tintColor = .white
         self.todayButton.titleLabel?.font = .systemFont(ofSize: 12)
         self.todayButton.addTarget(self, action: #selector(self.didThisMonthTouched), for: .touchUpInside)
         self.todayButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.todayButton.widthAnchor.constraint(equalToConstant: 10 +  (self.todayButton.titleLabel?.intrinsicContentSize.width ?? 0)),
-            self.todayButton.leadingAnchor.constraint(equalTo: self.nextMonthButton.trailingAnchor, constant: 15),
+            self.todayButton.widthAnchor.constraint(equalToConstant: .todayButtonMargin * 2 +  (self.todayButton.titleLabel?.intrinsicContentSize.width ?? CGFloat.zero)),
+            self.todayButton.leadingAnchor.constraint(equalTo: self.nextMonthButton.trailingAnchor, constant: .todayButtonLeadingAnchor),
             self.todayButton.centerYAnchor.constraint(equalTo: self.thisMonthLabel.centerYAnchor)
         ])
     }
@@ -90,9 +90,9 @@ final class WBCalendarView: UIView {
         self.addSubview(self.weekStackView)
         self.weekStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.weekStackView.topAnchor.constraint(equalTo: self.thisMonthLabel.bottomAnchor, constant: 30),
-            self.weekStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),
-            self.weekStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -15)
+            self.weekStackView.topAnchor.constraint(equalTo: self.thisMonthLabel.bottomAnchor, constant: .weekStackViewTopAnchor),
+            self.weekStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: .weekStackViewPlusMargin),
+            self.weekStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: .weekStackViewMinusMargin)
         ])
         self.weekStackView.axis = .horizontal
         self.weekStackView.addArrangedSubview(self.makeWeekLabel(text: "일"))
@@ -110,10 +110,10 @@ final class WBCalendarView: UIView {
         self.collectionView.alwaysBounceVertical = false
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.collectionView.topAnchor.constraint(equalTo: self.weekStackView.bottomAnchor, constant: 10),
+            self.collectionView.topAnchor.constraint(equalTo: self.weekStackView.bottomAnchor, constant: .calendarBodyTopAnchor),
             self.collectionView.leadingAnchor.constraint(equalTo: self.weekStackView.leadingAnchor),
             self.collectionView.trailingAnchor.constraint(equalTo: self.weekStackView.trailingAnchor),
-            self.collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10)
+            self.collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: .calendarBodyBottomAnchor)
         ])
     }
     
@@ -136,7 +136,7 @@ final class WBCalendarView: UIView {
     
     @objc private func didThisMonthTouched(_ sender: UIButton) {
         self.collectionView.fadeAnimation()
-        self.monthButtonSignal.send(0)
+        self.monthButtonSignal.send(Int.zero)
         self.todayButton.animateButtonTap(scale: 0.9)
     }
     

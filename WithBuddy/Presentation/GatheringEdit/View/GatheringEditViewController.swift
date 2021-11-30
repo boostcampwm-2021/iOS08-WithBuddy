@@ -78,7 +78,7 @@ final class GatheringEditViewController: UIViewController {
         let memoButtomY = self.memoBackgroundView.frame.origin.y + self.memoBackgroundView.frame.height - self.scrollView.bounds.origin.y
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let offset = memoButtomY + keyboardSize.height - self.scrollView.bounds.height
-            if offset > 0 {
+            if offset > CGFloat.zero {
                 self.scrollView.bounds.origin.y += offset
             }
         }
@@ -97,14 +97,14 @@ final class GatheringEditViewController: UIViewController {
         self.gatheringEditViewModel.gatheringId = gathering.id
         self.datePicker.date = gathering.date
         self.gatheringEditViewModel.didDatePicked(gathering.date)
-        self.gatheringEditViewModel.didPlaceChanged(gathering.place ?? "")
+        self.gatheringEditViewModel.didPlaceChanged(gathering.place ?? String())
         for (idx, place) in PurposeCategory.allCases.enumerated() {
             if gathering.purpose.contains(place.description) {
                 self.gatheringEditViewModel.didPurposeTouched(idx)
             }
         }
         self.gatheringEditViewModel.didBuddyUpdated(gathering.buddyList)
-        self.gatheringEditViewModel.didMemoChanged(gathering.memo ?? "")
+        self.gatheringEditViewModel.didMemoChanged(gathering.memo ?? String())
         guard let pictures = gathering.picture else { return }
         for url in pictures {
             self.gatheringEditViewModel.didPicturePicked(url)
@@ -125,7 +125,7 @@ final class GatheringEditViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] purposeList in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
-                snapshot.appendSections([0])
+                snapshot.appendSections([Int.zero])
                 snapshot.appendItems(purposeList)
                 self?.purposeDataSource.apply(snapshot, animatingDifferences: true)
             }
@@ -138,10 +138,10 @@ final class GatheringEditViewController: UIViewController {
             .sink { [weak self] buddyList in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
                 if buddyList.isEmpty {
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "DefaultFace")])
                 } else {
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems(buddyList)
                 }
                 self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
@@ -166,10 +166,10 @@ final class GatheringEditViewController: UIViewController {
                 if pictures.isEmpty {
                     guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else { return }
                     let fileUrl = URL(fileURLWithPath: filePath)
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems([fileUrl])
                 } else {
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems(pictures)
                 }
                 self?.pictureDataSource.apply(snapshot, animatingDifferences: true)
@@ -208,8 +208,8 @@ final class GatheringEditViewController: UIViewController {
         guard let nextDay = Calendar.current.date(byAdding: .minute, value: 1, to: gathering.date) else { return }
         let content = UNMutableNotificationContent()
         content.title = "위드버디"
-        let firstBuddyName = gathering.buddyList.first?.name ?? ""
-        let buddyCountString = gathering.buddyList.count == 1 ? "" : "외 \(gathering.buddyList.count-1)명"
+        let firstBuddyName = gathering.buddyList.first?.name ?? String()
+        let buddyCountString = gathering.buddyList.count == 1 ? String() : "외 \(gathering.buddyList.count-1)명"
         content.body = "어제 \(firstBuddyName)님 \(buddyCountString)과의 만남은 어떠셨나요?"
         let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDay)
         let trigger = UNCalendarNotificationTrigger(
@@ -394,7 +394,7 @@ final class GatheringEditViewController: UIViewController {
            self.gatheringEditViewModel.didPurposeTouched(indexPath.item)
            
            guard let cell = self.purposeCollectionView.cellForItem(at: indexPath) as? ImageTextCollectionViewCell  else { return }
-           cell.animateButtonTap(scale: 0.8)
+           cell.animateButtonTap()
        }
     }
     
@@ -459,7 +459,7 @@ final class GatheringEditViewController: UIViewController {
     }
     
     @objc private func didBuddyAddButtonTouched(_ sender: UIButton) {
-        self.buddyAddButton.animateButtonTap(scale: 0.8)
+        self.buddyAddButton.animateButtonTap()
         self.gatheringEditViewModel.didAddBuddyTouched()
     }
     
@@ -579,7 +579,7 @@ final class GatheringEditViewController: UIViewController {
     }
     
     @objc private func didPictureButtonTouched(_ sender: UIButton) {
-        self.pictureAddButton.animateButtonTap(scale: 0.8)
+        self.pictureAddButton.animateButtonTap()
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .photoLibrary
@@ -607,7 +607,7 @@ final class GatheringEditViewController: UIViewController {
     // MARK: - CompletePart
     
     @objc private func didCancelButtonTouched() {
-        let alert = UIAlertController(title: "기록한 내용은 저장되지 않습니다. 그래도 나가시겠습니까?", message: "", preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: "기록한 내용은 저장되지 않습니다. 그래도 나가시겠습니까?", message: String(), preferredStyle: UIAlertController.Style.alert)
         let noAction = UIAlertAction(title: "취소", style: .cancel)
         let okAction = UIAlertAction(title: "OK", style: .destructive, handler: { _ in
             self.navigationController?.popViewController(animated: true)
@@ -670,7 +670,7 @@ extension GatheringEditViewController: UICollectionViewDelegate {
             })
         } else {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
-                let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
+                let delete = UIAction(title: NSLocalizedString("삭제", comment: String()),
                                       image: UIImage(systemName: "trash")) { _ in
                     self.gatheringEditViewModel.didBuddyDeleteTouched(in: indexPath.item)
                 }

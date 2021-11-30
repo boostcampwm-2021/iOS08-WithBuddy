@@ -57,10 +57,11 @@ final class BuddyCustomViewController: UIViewController {
     }
 
     @objc private func didTextChanged(_ notification: Notification) {
+        let maxNameLen = 10
         if let textField = notification.object as? UITextField {
             guard let text = textField.text else { return }
-            
-            if text.count > 10 {
+        
+            if text.count > maxNameLen {
                 let index = text.index(text.startIndex, offsetBy: 10)
                 let newString = String(text[..<index])
                 textField.text = newString
@@ -78,14 +79,14 @@ final class BuddyCustomViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] face in
                 var colorSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
-                colorSnapshot.appendSections([0])
+                colorSnapshot.appendSections([Int.zero])
                 colorSnapshot.appendItems(FaceColor.allCases.map({
                     CheckableInfo(engDescription: $0.description, korDescription: $0.description, check: $0 == face.color)
                 }))
                 self?.colorDataSource.apply(colorSnapshot, animatingDifferences: true)
                 
                 var faceSnapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
-                faceSnapshot.appendSections([0])
+                faceSnapshot.appendSections([Int.zero])
                 faceSnapshot.appendItems((Int.minFaceNum...Int.maxFaceNum).map({
                     CheckableInfo(engDescription: "\(face.color)\($0)", korDescription: "\(face.color)\($0)", check: $0 == face.number)
                 }))
@@ -172,7 +173,7 @@ final class BuddyCustomViewController: UIViewController {
         
         self.nameTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.nameTextField.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
+            self.nameTextField.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: .innerPartInset),
             self.nameTextField.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor)
         ])
     }
@@ -195,7 +196,7 @@ final class BuddyCustomViewController: UIViewController {
         
         self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.buddyImageView.topAnchor.constraint(equalTo: self.lineView.bottomAnchor, constant: 10),
+            self.buddyImageView.topAnchor.constraint(equalTo: self.lineView.bottomAnchor, constant: .innerPartInset),
             self.buddyImageView.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
             self.buddyImageView.widthAnchor.constraint(equalToConstant: 250),
             self.buddyImageView.heightAnchor.constraint(equalToConstant: 250)
@@ -208,8 +209,8 @@ final class BuddyCustomViewController: UIViewController {
         
         self.colorTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.colorTitleLabel.topAnchor.constraint(equalTo: self.buddyImageView.bottomAnchor, constant: 20),
-            self.colorTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20)
+            self.colorTitleLabel.topAnchor.constraint(equalTo: self.buddyImageView.bottomAnchor, constant: .plusInset),
+            self.colorTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset)
         ])
     }
     
@@ -228,9 +229,9 @@ final class BuddyCustomViewController: UIViewController {
         
         self.colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.colorCollectionView.topAnchor.constraint(equalTo: self.colorTitleLabel.bottomAnchor, constant: 10),
-            self.colorCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
-            self.colorCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+            self.colorCollectionView.topAnchor.constraint(equalTo: self.colorTitleLabel.bottomAnchor, constant: .innerPartInset),
+            self.colorCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.colorCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
             self.colorCollectionView.heightAnchor.constraint(equalToConstant: width)
         ])
     }
@@ -248,8 +249,8 @@ final class BuddyCustomViewController: UIViewController {
         
         self.faceTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.faceTitleLabel.topAnchor.constraint(equalTo: self.colorCollectionView.bottomAnchor, constant: 20),
-            self.faceTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20)
+            self.faceTitleLabel.topAnchor.constraint(equalTo: self.colorCollectionView.bottomAnchor, constant: .plusInset),
+            self.faceTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset)
         ])
     }
     
@@ -268,9 +269,9 @@ final class BuddyCustomViewController: UIViewController {
         
         self.faceCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.faceCollectionView.topAnchor.constraint(equalTo: self.faceTitleLabel.bottomAnchor, constant: 10),
-            self.faceCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
-            self.faceCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+            self.faceCollectionView.topAnchor.constraint(equalTo: self.faceTitleLabel.bottomAnchor, constant: .innerPartInset),
+            self.faceCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.faceCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
             self.faceCollectionView.heightAnchor.constraint(equalToConstant: totalHeight),
             self.faceCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
         ])

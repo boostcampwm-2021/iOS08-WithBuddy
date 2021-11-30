@@ -31,7 +31,7 @@ final class SettingViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] message in
                 let alert = UIAlertController(title: message.0, message: message.1, preferredStyle: UIAlertController.Style.alert)
-                let okAction = UIAlertAction(title: "OK", style: .destructive)
+                let okAction = UIAlertAction(title: "OK", style: .default)
                 alert.addAction(okAction)
                 self?.present(alert, animated: true, completion: nil)
             }.store(in: &self.cancellable)

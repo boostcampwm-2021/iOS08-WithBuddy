@@ -60,6 +60,7 @@ final class RegisterViewController: UIViewController {
         self.registerViewModel.didDatePicked(Date())
         self.title = "모임 등록"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.labelPurple as Any]
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .done, target: self, action: #selector(self.alertCancel))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addGathering))
     }
     
@@ -573,6 +574,17 @@ final class RegisterViewController: UIViewController {
     }
     
     // MARK: - CompletePart
+    
+    @objc private func alertCancel() {
+        let alert = UIAlertController(title: "기록한 내용은 저장되지 않습니다. 그래도 나가시겠습니까?", message: "", preferredStyle: UIAlertController.Style.alert)
+        let noAction = UIAlertAction(title: "취소", style: .cancel)
+        let okAction = UIAlertAction(title: "OK", style: .destructive, handler: { _ in
+            self.navigationController?.popViewController(animated: true)
+        })
+        alert.addAction(noAction)
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+    }
     
     private func alertSuccess() {
         let alert = UIAlertController(title: "등록 완료", message: "모임 등록이 완료되었습니다!", preferredStyle: UIAlertController.Style.alert)

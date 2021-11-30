@@ -57,6 +57,7 @@ final class ChartViewModel {
     
     private func fetchPurposeRank() {
         self.purposeUseCase.fetchTopFourPurpose(before: Date())
+            .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] rank in
                 self?.purposeRank = rank.map{ ($0, self?.purposeUseCase.engToKor(eng: $0) ?? String()) }
             }).store(in: &self.cancellable)

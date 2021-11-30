@@ -8,12 +8,11 @@
 import Foundation
 
 struct Face: CustomStringConvertible {
-    
+
+    var color: FaceColor
+    var number: Int
     var description: String {
         return "\(self.color.description)\(self.number)"
     }
-    
-    var color: FaceColor
-    var number: Int
     
 }

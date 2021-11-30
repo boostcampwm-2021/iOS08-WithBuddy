@@ -10,8 +10,6 @@ import UIKit
 final class LoadingView: UIView {
 
     private var titleLabel = UILabel()
-    private var lazyBehavior = UIDynamicItemBehavior()
-
     lazy var animator = UIDynamicAnimator(referenceView: self)
     lazy var gravity = UIGravityBehavior()
     lazy var collider = UICollisionBehavior()

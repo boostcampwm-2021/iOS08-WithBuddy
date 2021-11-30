@@ -10,7 +10,6 @@ import Combine
 
 final class CalendarViewModel {
     
-    let maxDayOfMonth = 42
     private let calendarUseCase: CalendarUseCase
     private let gatheringUseCase: GatheringUseCase
     private let userUseCase: UserUseCase
@@ -112,7 +111,7 @@ final class CalendarViewModel {
     private func reloadDays() {
         let numOfDaysInMonth = calendarUseCase.numOfDaysInMonth(baseDate: self.calendarMonth)
         let firstDayIndex = calendarUseCase.findFirstDayIndex(of: self.calendarMonth)
-        self.totalDays = Array(repeating: 0, count: self.maxDayOfMonth)
+        self.totalDays = Array(repeating: 0, count: .maxDayOfMonth)
         
         for index in 0..<numOfDaysInMonth {
             self.totalDays[index+firstDayIndex] = index + 1
@@ -126,7 +125,7 @@ final class CalendarViewModel {
     func reloadFaces() {
         let firstDayIndex = self.calendarUseCase.findFirstDayIndex(of: self.calendarMonth)
         self.thisMonthGathrtingList = self.gatheringUseCase.fetchGathering(month: self.calendarMonth)
-        self.totalFaces = Array(repeating: "", count: self.maxDayOfMonth)
+        self.totalFaces = Array(repeating: "", count: .maxDayOfMonth)
         
         self.thisMonthGathrtingList.reversed().forEach {
             let day = self.calendarUseCase.day(baseDate: $0.date)

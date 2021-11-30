@@ -15,6 +15,7 @@ final class GatheringEditViewModel {
     private var checkedPurposeList: [CheckableInfo] {
         return self.purposeList.filter( { $0.check })
     }
+    
     private(set) var addBuddySignal = PassthroughSubject<[Buddy], Never>()
     private(set) var editDoneSignal = PassthroughSubject<Gathering, Never>()
     private(set) var editFailSignal = PassthroughSubject<RegisterError, Never>()

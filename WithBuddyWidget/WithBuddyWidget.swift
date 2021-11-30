@@ -75,7 +75,6 @@ struct SmallWidget: View {
 struct MediumWidget: View {
     
     var entry: Provider.Entry
-    
     var body: some View {
         ZStack {
             Color(.backgroundPurple)
@@ -98,7 +97,6 @@ struct MediumWidget: View {
 struct LargeWidget: View {
     
     var entry: Provider.Entry
-    
     var body: some View {
         ZStack {
             Color(.backgroundPurple)

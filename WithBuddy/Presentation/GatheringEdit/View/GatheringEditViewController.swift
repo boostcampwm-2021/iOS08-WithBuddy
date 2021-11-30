@@ -12,10 +12,8 @@ final class GatheringEditViewController: UIViewController {
     
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
-    
     private lazy var dateTitleLabel = PurpleTitleLabel()
     private lazy var datePicker = UIDatePicker()
-  
     private lazy var placeTitleLabel = PurpleTitleLabel()
     private lazy var placeBackgroundView = WhiteView()
     private lazy var placeTextField = UITextField()
@@ -301,6 +299,7 @@ final class GatheringEditViewController: UIViewController {
             self.datePicker.heightAnchor.constraint(equalToConstant: .backgroudHeight)
         ])
     }
+    
     @objc private func didDateChanged(_ sender: UIDatePicker) {
         self.gatheringEditViewModel.didDatePicked(sender.date)
     }

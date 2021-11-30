@@ -7,10 +7,15 @@
 
 import UIKit
 
+<<<<<<< HEAD
 final class PictureCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "PictureCollectionViewCell"
+=======
+class PictureCollectionViewCell: UICollectionViewCell {
+>>>>>>> ab81c0b ((#245) style: 코드스타일 맞추기)
     
+    static let identifier = "PictureCollectionViewCell"
     private var photoImage = UIImageView()
     
     required init?(coder: NSCoder) {

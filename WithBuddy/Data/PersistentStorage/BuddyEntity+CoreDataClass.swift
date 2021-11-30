@@ -59,7 +59,6 @@ extension BuddyEntity {
         for gatheringEntity in self.gatheringList.sorted(by: >) where gatheringEntity.date <= date {
             return gatheringEntity.date
         }
-        
         return nil
     }
     

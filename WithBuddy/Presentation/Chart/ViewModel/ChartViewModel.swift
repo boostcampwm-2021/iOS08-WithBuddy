@@ -39,7 +39,6 @@ final class ChartViewModel {
         let buddy = self.buddyRank[index].0
         self.selectedBuddy = buddy
         return buddy
-        
     }
     
     func fetch() {

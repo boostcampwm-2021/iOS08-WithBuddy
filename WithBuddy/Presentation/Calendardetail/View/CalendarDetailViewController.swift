@@ -82,7 +82,7 @@ final class CalendarDetailViewController: UIViewController {
 extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.calendarDetailViewModel.count
+        return self.calendarDetailViewModel.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

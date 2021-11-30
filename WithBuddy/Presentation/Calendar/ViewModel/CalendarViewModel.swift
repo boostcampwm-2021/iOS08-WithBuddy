@@ -96,7 +96,7 @@ final class CalendarViewModel {
     }
     
     func findDate(index: Int) -> Date {
-        self.calendarUseCase.makeDay(month: self.calendarMonth, day: self.totalDays[index])
+        return self.calendarUseCase.makeDay(month: self.calendarMonth, day: self.totalDays[index])
     }
     
     private func fetchBuddyFace() {

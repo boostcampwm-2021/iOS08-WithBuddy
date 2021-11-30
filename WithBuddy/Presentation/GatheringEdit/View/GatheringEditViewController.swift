@@ -593,7 +593,7 @@ final class GatheringEditViewController: UIViewController {
         self.deleteButton.backgroundColor = .graphRed
         self.deleteButton.layer.cornerRadius = .buttonCornerRadius
         self.deleteButton.setTitle("모임 삭제", for: .normal)
-        self.deleteButton.addTarget(self, action: #selector(self.deleteGathering), for: .touchUpInside)
+        self.deleteButton.addTarget(self, action: #selector(self.didDeleteButtonTouched), for: .touchUpInside)
         self.deleteButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.deleteButton.topAnchor.constraint(equalTo: self.pictureCollectionView.bottomAnchor, constant: .plusInset),
@@ -637,7 +637,7 @@ final class GatheringEditViewController: UIViewController {
         self.gatheringEditViewModel.didDoneTouched()
     }
     
-    @objc private func deleteGathering() {
+    @objc private func didDeleteButtonTouched() {
         guard let id = self.gatheringEditViewModel.gatheringId else { return }
         self.deleteButton.animateButtonTap(scale: 0.9)
         let alert = UIAlertController(title: "모임 삭제", message: "정말로 삭제하시겠습니까?", preferredStyle: .alert)

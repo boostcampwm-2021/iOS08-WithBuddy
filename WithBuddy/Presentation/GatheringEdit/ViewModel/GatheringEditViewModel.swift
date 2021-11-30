@@ -32,7 +32,9 @@ final class GatheringEditViewModel {
     private var purposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared)
     
     init() {
-        self.configure()
+        self.purposeList = PurposeCategory.allCases.map({
+            CheckableInfo(engDescription: "\($0)", korDescription: self.purposeUseCase.engToKor(eng: "\($0)"), check: false)
+        })
     }
     
     func didDatePicked(_ date: Date) {
@@ -107,10 +109,6 @@ final class GatheringEditViewModel {
     func didDeleteButtonTouched() {
         guard let id = self.gatheringId else { return }
         self.gatheringUseCase.deleteGathering(id)
-    }
-    
-    private func configure() {
-        self.purposeList = PurposeCategory.allCases.map({ CheckableInfo(engDescription: "\($0)", korDescription: self.purposeUseCase.engToKor(eng: "\($0)"), check: false) })
     }
     
 }

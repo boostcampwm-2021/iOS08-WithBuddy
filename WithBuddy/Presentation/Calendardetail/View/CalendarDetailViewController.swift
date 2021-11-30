@@ -102,7 +102,7 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { _, _, completion in
-            self.calendarDetailViewModel.deleteGathering(index: indexPath.row)
+            self.calendarDetailViewModel.didDeleteButtonTouched(index: indexPath.row)
             self.delegate?.deleteGathering()
             tableView.deleteRows(at: [indexPath], with: .automatic)
             completion(true)

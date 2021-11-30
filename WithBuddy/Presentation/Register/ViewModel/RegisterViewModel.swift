@@ -43,7 +43,9 @@ final class RegisterViewModel {
     private var purposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared)
     
     init() {
-        self.configure()
+        self.purposeList = PurposeCategory.allCases.map({
+            CheckableInfo(engDescription: "\($0)", korDescription: self.purposeUseCase.engToKor(eng: "\($0)"), check: false)
+        })
     }
     
     func didDatePicked(_ date: Date) {
@@ -111,10 +113,6 @@ final class RegisterViewModel {
     
     func didAddBuddyTouched() {
         self.addBuddySignal.send(self.buddyList)
-    }
-    
-    private func configure() {
-        self.purposeList = PurposeCategory.allCases.map({ CheckableInfo(engDescription: "\($0)", korDescription: self.purposeUseCase.engToKor(eng: "\($0)"), check: false) })
     }
     
 }

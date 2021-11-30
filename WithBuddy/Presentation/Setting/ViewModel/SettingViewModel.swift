@@ -43,7 +43,7 @@ final class SettingViewModel {
         self.userUseCase.createUser(buddy: buddy)
     }
     
-    func fetchMyBuddy() {
+    func reloadMyBuddy() {
         self.myBuddy = self.userUseCase.fetchUser()
     }
     

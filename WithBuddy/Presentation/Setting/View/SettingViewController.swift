@@ -55,7 +55,7 @@ final class SettingViewController: UIViewController {
         self.configureUserImage()
         self.configureUserName()
         self.configureModifyButton()
-        self.settingViewModel.fetchMyBuddy()
+        self.settingViewModel.reloadMyBuddy()
     }
     
     private func configureUserImage() {
@@ -181,12 +181,12 @@ extension SettingViewController: BuddyCustomDelegate {
     
     func didBuddyAddCompleted(_ buddy: Buddy) {
         self.settingViewModel.didMyBuddyChanged(buddy: buddy)
-        self.settingViewModel.fetchMyBuddy()
+        self.settingViewModel.reloadMyBuddy()
     }
     
     func didBuddyEditCompleted(_ buddy: Buddy) {
         self.settingViewModel.didMyBuddyChanged(buddy: buddy)
-        self.settingViewModel.fetchMyBuddy()
+        self.settingViewModel.reloadMyBuddy()
     }
     
 }

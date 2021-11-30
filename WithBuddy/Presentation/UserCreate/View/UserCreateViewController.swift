@@ -155,7 +155,7 @@ final class UserCreateViewController: UIViewController {
     }
     
     @objc private func didEditButtonTouched(_ sender: UIButton) {
-        self.userCreateViewModel.startEditing()
+        self.userCreateViewModel.didEditingStarted()
     }
     
     private func configureGuideLabel() {
@@ -188,7 +188,7 @@ final class UserCreateViewController: UIViewController {
             UIView.animate(withDuration: 0.2) {
                 self?.completeButton.transform = CGAffineTransform.identity
             } completion: { [weak self] _ in
-                self?.userCreateViewModel.endEditing()
+                self?.userCreateViewModel.didEditingEnded()
             }
         }
     }

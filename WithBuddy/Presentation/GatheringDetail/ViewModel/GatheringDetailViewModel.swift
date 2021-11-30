@@ -23,7 +23,7 @@ final class GatheringDetailViewModel {
         self.purposeUseCase = purposeUseCase
     }
     
-    func viewDidAppear(with id: UUID) {
+    func viewWillAppear(with id: UUID) {
         self.gathering = self.gatheringUseCase.fetchGathering(id: id)
     }
     
@@ -32,7 +32,7 @@ final class GatheringDetailViewModel {
         self.goEditSignal.send(gathering)
     }
     
-    func engToKor(eng: String) -> String {
+    func toKor(eng: String) -> String {
         return self.purposeUseCase.engToKor(eng: eng)
     }
     

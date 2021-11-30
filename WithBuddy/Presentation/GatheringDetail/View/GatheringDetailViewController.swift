@@ -62,13 +62,9 @@ final class GatheringDetailViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.title = "모임 상세화면"
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         guard let id = self.id else { return }
-        self.gatheringDetailViewModel.viewDidAppear(with: id)
+        self.gatheringDetailViewModel.viewWillAppear(with: id)
+        self.title = "모임 상세화면"
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -147,7 +143,7 @@ final class GatheringDetailViewController: UIViewController {
         purposeSnapshot.appendSections([0])
         let purposeList = PurposeCategory.allCases.map({ placeType -> CheckableInfo? in
             var korDescription = "\(placeType)"
-            korDescription = self.gatheringDetailViewModel.engToKor(eng: "\(placeType)")
+            korDescription = self.gatheringDetailViewModel.toKor(eng: "\(placeType)")
             if gathering.purpose.contains(placeType.description) { return CheckableInfo(engDescription: "\(placeType)", korDescription: korDescription, check: true) }
             return nil
         }).compactMap({ $0 })

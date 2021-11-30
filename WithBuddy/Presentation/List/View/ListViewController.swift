@@ -35,9 +35,9 @@ final class ListViewController: UIViewController {
         self.bind()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.listViewModel.fetch()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.listViewModel.viewWillAppear()
         self.searchView.reset()
     }
     
@@ -104,13 +104,13 @@ final class ListViewController: UIViewController {
             snapshot.appendItems(gatheringList)
         } else {
             snapshot.appendItems(filtered)
-            self.listViewModel.searched(list: filtered)
+            self.listViewModel.didBuddySearched(list: filtered)
         }
         self.listDataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func deleteGathering(index: Int) {
-        self.listViewModel.deleteGathering(index: index)
+        self.listViewModel.didGatheringDeleted(index: index)
     }
     
     private func editGathering(gathering: Gathering) {

@@ -21,7 +21,7 @@ final class CalendarDetailViewModel {
         self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
         self.calendarUseCase = CalendarUseCase()
         self.dayLabel = self.calendarUseCase.convertToString(day: self.selectedDate)
-        self.fetch()
+        self.gatheringList = self.gatheringUseCase.fetchGathering(including: self.selectedDate)
     }
     
     var count: Int {
@@ -32,13 +32,9 @@ final class CalendarDetailViewModel {
         return self.gatheringList[index]
     }
     
-    func deleteGathering(index: Int) {
+    func didDeleteButtonTouched(index: Int) {
         let gathering = self.gatheringList.remove(at: index)
         self.gatheringUseCase.deleteGathering(gathering.id)
-    }
-    
-    private func fetch() {
-        self.gatheringList = self.gatheringUseCase.fetchGathering(including: self.selectedDate)
     }
 
 }

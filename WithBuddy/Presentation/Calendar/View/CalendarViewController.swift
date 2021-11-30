@@ -25,12 +25,7 @@ final class CalendarViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.headerView.reloadHeaderComment(text: self.calendarViewModel.headerComment())
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.calendarViewModel.viewDidAppear()
+        self.calendarViewModel.viewWillAppear()
     }
     
     private func configure() {
@@ -44,33 +39,40 @@ final class CalendarViewController: UIViewController {
     private func bind() {
         self.calendarViewModel.monthSubject
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] month in
+            .sink { [weak self] month in
                 self?.calendarView.reloadMonthLabel(month: month)
             }.store(in: &self.cancellables)
         
         self.calendarViewModel.didDaysReloadSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] _ in
+            .sink { [weak self] _ in
                 self?.calendarView.collectionView.reloadData()
             }.store(in: &self.cancellables)
         
         self.calendarViewModel.didGatheringReloadSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] _ in
+            .sink { [weak self] _ in
                 self?.calendarView.collectionView.reloadData()
             }.store(in: &self.cancellables)
         
         self.calendarView.monthButtonSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] number in
+            .sink { [weak self] number in
                 self?.calendarViewModel.didMonthButtonTouched(number: number)
             }.store(in: &self.cancellables)
         
         self.calendarViewModel.$myFace
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] face in
+            .sink { [weak self] face in
                 guard let face = face else { return }
                 self?.headerView.update(face: face)
+            }.store(in: &self.cancellables)
+        
+        self.calendarViewModel.$headerComment
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] comment in
+                guard let comment = comment else { return }
+                self?.headerView.reloadHeaderComment(text: comment)
             }.store(in: &self.cancellables)
     }
     

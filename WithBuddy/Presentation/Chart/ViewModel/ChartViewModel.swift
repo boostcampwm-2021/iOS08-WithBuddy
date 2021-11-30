@@ -41,7 +41,7 @@ final class ChartViewModel {
         return buddy
     }
     
-    func fetch() {
+    func viewWillAppear() {
         self.fetchBuddyRank()
         self.fetchPurposeRank()
         self.fetchLatestAndOldBuddy()

@@ -24,9 +24,9 @@ final class ChartViewController: UIViewController {
         self.bind()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.viewModel.fetch()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.viewModel.viewWillAppear()
         self.bubbleChartView.hideDescriptionView()
     }
     

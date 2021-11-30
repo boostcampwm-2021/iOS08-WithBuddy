@@ -27,7 +27,7 @@ final class ChartViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.viewModel.fetch()
-        self.bubbleChartView.hiddenDescriptionView()
+        self.bubbleChartView.hideDescriptionView()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -184,7 +184,7 @@ final class ChartViewController: UIViewController {
     }
     
     @objc private func descriptionViewTapAction(_ sender: UITapGestureRecognizer) {
-        self.bubbleChartView.hiddenDescriptionView()
+        self.bubbleChartView.hideDescriptionView()
     }
     
     @objc private func editButtonTapAction(_ sender: UITapGestureRecognizer) {
@@ -200,12 +200,12 @@ final class ChartViewController: UIViewController {
 
 extension ChartViewController: BuddyCustomDelegate {
     
-    func buddyEditDidCompleted(_ buddy: Buddy) {
-        self.bubbleChartView.hiddenDescriptionView()
+    func didBuddyEditCompleted(_ buddy: Buddy) {
+        self.bubbleChartView.hideDescriptionView()
         self.viewModel.didBuddyEdited(buddy)
     }
     
-    func buddyAddDidCompleted(_ buddy: Buddy) {
+    func didBuddyAddCompleted(_ buddy: Buddy) {
         
     }
     

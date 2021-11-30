@@ -96,7 +96,7 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.dismiss(animated: true, completion: {
-            self.delegate?.gatheringListTouched(self.calendarDetailViewModel[indexPath.item])
+            self.delegate?.didGatheringListTouched(self.calendarDetailViewModel[indexPath.item])
         })
     }
     
@@ -130,7 +130,7 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
 
 protocol GatheringListDelegate: AnyObject {
     
-    func gatheringListTouched(_: Gathering)
+    func didGatheringListTouched(_: Gathering)
     func editGathering(_: Gathering)
     func deleteGathering()
     

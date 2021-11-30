@@ -90,11 +90,11 @@ final class GatheringDetailViewController: UIViewController {
     }
     
     private func bind() {
-        self.signalBind()
-        self.dataBind()
+        self.bindSignal()
+        self.bindData()
     }
     
-    private func signalBind() {
+    private func bindSignal() {
         self.gatheringDetailViewModel.goEditSignal
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] gathering in
@@ -106,7 +106,7 @@ final class GatheringDetailViewController: UIViewController {
             .store(in: &cancellables)
     }
     
-    private func dataBind() {
+    private func bindData() {
         self.gatheringDetailViewModel.$gathering
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] gathering in

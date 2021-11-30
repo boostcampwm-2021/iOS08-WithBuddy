@@ -85,11 +85,11 @@ final class RegisterViewController: UIViewController {
     }
     
     private func bind() {
-        self.dataBind()
-        self.signalBind()
+        self.bindData()
+        self.bindSignal()
     }
     
-    private func dataBind() {
+    private func bindData() {
         self.registerViewModel.$purposeList
             .receive(on: DispatchQueue.main)
             .sink { [weak self] purposeList in
@@ -135,7 +135,7 @@ final class RegisterViewController: UIViewController {
             .store(in: &self.cancellables)
     }
     
-    private func signalBind() {
+    private func bindSignal() {
         self.registerViewModel.registerDoneSignal
             .receive(on: DispatchQueue.main)
             .sink{ [weak self] gathering in
@@ -555,7 +555,7 @@ final class RegisterViewController: UIViewController {
         }
     }
     
-    private func alertAuthorization() {
+    private func presentDeniedAuthorization() {
         let alert = UIAlertController(title: "갤러리 접근권한이 없습니다", message: "설정 > WithBuddy > 사진에서 접근권한을 허용해주세요", preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
@@ -567,7 +567,7 @@ final class RegisterViewController: UIViewController {
         switch PHPhotoLibrary.authorizationStatus() {
         case .authorized: self.presentImagePicker()
         case .notDetermined: self.requestAuthorization()
-        case .denied: self.alertAuthorization()
+        case .denied: self.presentDeniedAuthorization()
         default: break
         }
     }
@@ -710,7 +710,7 @@ extension RegisterViewController: UIScrollViewDelegate {
 
 extension RegisterViewController: BuddyChoiceDelegate {
     
-    func buddySelectingDidCompleted(_ buddyList: [Buddy]) {
+    func didBuddySelectingCompleted(_ buddyList: [Buddy]) {
         self.registerViewModel.didBuddyUpdated(buddyList)
     }
     

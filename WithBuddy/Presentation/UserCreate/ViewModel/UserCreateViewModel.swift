@@ -16,15 +16,15 @@ final class UserCreateViewModel {
     
     private var userUseCase = UserUseCase()
     
-    func userDidChanged(buddy: Buddy) {
+    func didUserChanged(buddy: Buddy) {
         self.buddy = buddy
     }
     
-    func editStart() {
+    func startEditing() {
         self.editStartSignal.send(self.buddy)
     }
     
-    func createComplte() {
+    func endEditing() {
         self.completeSignal.send(self.buddy)
         if let buddy = self.buddy {
             self.userUseCase.createUser(buddy: buddy)

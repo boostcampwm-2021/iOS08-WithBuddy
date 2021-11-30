@@ -155,7 +155,7 @@ final class UserCreateViewController: UIViewController {
     }
     
     @objc private func editButtonTouched(_ sender: UIButton) {
-        self.userCreateViewModel.editStart()
+        self.userCreateViewModel.startEditing()
     }
     
     private func configureGuideLabel() {
@@ -188,7 +188,7 @@ final class UserCreateViewController: UIViewController {
             UIView.animate(withDuration: 0.2) {
                 self?.completeButton.transform = CGAffineTransform.identity
             } completion: { [weak self] _ in
-                self?.userCreateViewModel.createComplte()
+                self?.userCreateViewModel.endEditing()
             }
         }
     }
@@ -197,12 +197,12 @@ final class UserCreateViewController: UIViewController {
 
 extension UserCreateViewController: BuddyCustomDelegate {
     
-    func buddyEditDidCompleted(_ buddy: Buddy) {
-        self.userCreateViewModel.userDidChanged(buddy: buddy)
+    func didBuddyEditCompleted(_ buddy: Buddy) {
+        self.userCreateViewModel.didUserChanged(buddy: buddy)
     }
     
-    func buddyAddDidCompleted(_ buddy: Buddy) {
-        self.userCreateViewModel.userDidChanged(buddy: buddy)
+    func didBuddyAddCompleted(_ buddy: Buddy) {
+        self.userCreateViewModel.didUserChanged(buddy: buddy)
     }
     
 }

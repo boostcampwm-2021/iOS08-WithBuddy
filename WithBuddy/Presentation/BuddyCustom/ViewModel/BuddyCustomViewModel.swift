@@ -29,7 +29,7 @@ final class BuddyCustomViewModel {
     private(set) var editDoneSignal = PassthroughSubject<Buddy, Never>()
     private(set) var failSignal = PassthroughSubject<BuddyCustomError, Never>()
     
-    func buddyDidInserted(_ buddy: Buddy) {
+    func didBuddyInserted(_ buddy: Buddy) {
         self.id = buddy.id
         self.name = buddy.name
         
@@ -43,15 +43,15 @@ final class BuddyCustomViewModel {
         }
     }
     
-    func colorDidChosen(in idx: Int) {
+    func didColorChosend(in idx: Int) {
         self.face.color = FaceColor.allCases[idx]
     }
     
-    func faceDidChosen(in idx: Int) {
+    func didFaceChosen(in idx: Int) {
         self.face.number = idx + 1
     }
     
-    func nameDidChaged(name: String) {
+    func didNameChaged(name: String) {
         self.name = name
     }
     

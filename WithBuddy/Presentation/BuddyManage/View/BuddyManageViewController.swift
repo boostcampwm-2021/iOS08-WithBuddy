@@ -63,7 +63,7 @@ final class BuddyManageViewController: UIViewController {
         self.configureSearchView()
         self.configureButton()
         self.configureBuddyCollectionView()
-        self.buddyManageViewModel.buddyListDidLoaded()
+        self.buddyManageViewModel.didBuddyListLoaded()
     }
     
     private func configureSearchView() {
@@ -189,7 +189,7 @@ extension BuddyManageViewController: UICollectionViewDelegate {
             }
             let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
                                   image: UIImage(systemName: "trash")) { _ in
-                self.buddyManageViewModel.buddyDidDeleted(in: indexPath.item)
+                self.buddyManageViewModel.didBuddyDeleted(in: indexPath.item)
             }
             return UIMenu(title: "이 버디를", children: [edit, delete])
         })
@@ -199,12 +199,12 @@ extension BuddyManageViewController: UICollectionViewDelegate {
 
 extension BuddyManageViewController: BuddyCustomDelegate {
     
-    func buddyEditDidCompleted(_ buddy: Buddy) {
+    func didBuddyEditCompleted(_ buddy: Buddy) {
         self.buddyManageViewModel.buddyDidEdited(buddy)
     }
     
-    func buddyAddDidCompleted(_ buddy: Buddy) {
-        self.buddyManageViewModel.buddyDidAdded(buddy)
+    func didBuddyAddCompleted(_ buddy: Buddy) {
+        self.buddyManageViewModel.didBuddyAdded(buddy)
     }
     
 }

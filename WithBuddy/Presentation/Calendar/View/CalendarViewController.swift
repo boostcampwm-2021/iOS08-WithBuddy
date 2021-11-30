@@ -177,7 +177,7 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
 
 extension CalendarViewController: GatheringListDelegate {
     
-    func gatheringListTouched(_ gathering: Gathering) {
+    func didGatheringListTouched(_ gathering: Gathering) {
             let gatheringDetailViewController = GatheringDetailViewController()
             gatheringDetailViewController.id = gathering.id
             self.navigationController?.pushViewController(gatheringDetailViewController, animated: true)

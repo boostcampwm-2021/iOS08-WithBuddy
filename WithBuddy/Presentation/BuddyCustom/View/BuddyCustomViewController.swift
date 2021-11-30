@@ -70,7 +70,7 @@ final class BuddyCustomViewController: UIViewController {
     }
     
     func configure(by buddy: Buddy) {
-        self.buddyCustomViewModel.buddyDidInserted(buddy)
+        self.buddyCustomViewModel.didBuddyInserted(buddy)
     }
     
     private func bind() {
@@ -105,7 +105,7 @@ final class BuddyCustomViewController: UIViewController {
         self.buddyCustomViewModel.addDoneSignal
             .receive(on: DispatchQueue.main)
             .sink{ [weak self] buddy in
-                self?.delegate?.buddyAddDidCompleted(buddy)
+                self?.delegate?.didBuddyAddCompleted(buddy)
                 self?.navigationController?.popViewController(animated: true)
             }
             .store(in: &self.cancellables)
@@ -113,7 +113,7 @@ final class BuddyCustomViewController: UIViewController {
         self.buddyCustomViewModel.editDoneSignal
             .receive(on: DispatchQueue.main)
             .sink{ [weak self] buddy in
-                self?.delegate?.buddyEditDidCompleted(buddy)
+                self?.delegate?.didBuddyEditCompleted(buddy)
                 self?.navigationController?.popViewController(animated: true)
             }
             .store(in: &self.cancellables)
@@ -237,7 +237,7 @@ final class BuddyCustomViewController: UIViewController {
     
     @objc func colorCollectionViewDidTouched(_ sender: UITapGestureRecognizer) {
         if let indexPath = self.colorCollectionView.indexPathForItem(at: sender.location(in: self.colorCollectionView)) {
-            self.buddyCustomViewModel.colorDidChosen(in: indexPath.item)
+            self.buddyCustomViewModel.didColorChosend(in: indexPath.item)
             self.view.endEditing(true)
         }
     }
@@ -278,7 +278,7 @@ final class BuddyCustomViewController: UIViewController {
     
     @objc func faceCollectionViewDidTouched(_ sender: UITapGestureRecognizer) {
         if let indexPath = self.faceCollectionView.indexPathForItem(at: sender.location(in: self.faceCollectionView)) {
-            self.buddyCustomViewModel.faceDidChosen(in: indexPath.item)
+            self.buddyCustomViewModel.didFaceChosen(in: indexPath.item)
             self.view.endEditing(true)
         }
     }
@@ -309,14 +309,14 @@ extension BuddyCustomViewController: UITextFieldDelegate {
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let text = textField.text else { return }
-        self.buddyCustomViewModel.nameDidChaged(name: text)
+        self.buddyCustomViewModel.didNameChaged(name: text)
     }
     
 }
 
 protocol BuddyCustomDelegate: AnyObject {
     
-    func buddyAddDidCompleted(_: Buddy)
-    func buddyEditDidCompleted(_: Buddy)
+    func didBuddyAddCompleted(_: Buddy)
+    func didBuddyEditCompleted(_: Buddy)
     
 }

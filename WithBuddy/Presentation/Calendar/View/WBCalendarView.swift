@@ -58,8 +58,8 @@ final class WBCalendarView: UIView {
         self.addSubview(self.nextMonthButton)
         self.prevMonthButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
         self.nextMonthButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
-        self.prevMonthButton.addTarget(self, action: #selector(self.minusMonth), for: .touchUpInside)
-        self.nextMonthButton.addTarget(self, action: #selector(self.plusMonth), for: .touchUpInside)
+        self.prevMonthButton.addTarget(self, action: #selector(self.didMinusMonthTouched), for: .touchUpInside)
+        self.nextMonthButton.addTarget(self, action: #selector(self.didPlusMonthTouched), for: .touchUpInside)
         self.prevMonthButton.translatesAutoresizingMaskIntoConstraints = false
         self.nextMonthButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -77,7 +77,7 @@ final class WBCalendarView: UIView {
         self.todayButton.layer.cornerRadius = 5
         self.todayButton.tintColor = .white
         self.todayButton.titleLabel?.font = .systemFont(ofSize: 12)
-        self.todayButton.addTarget(self, action: #selector(self.thisMonth), for: .touchUpInside)
+        self.todayButton.addTarget(self, action: #selector(self.didThisMonthTouched), for: .touchUpInside)
         self.todayButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.todayButton.widthAnchor.constraint(equalToConstant: 10 +  (self.todayButton.titleLabel?.intrinsicContentSize.width ?? 0)),
@@ -118,10 +118,10 @@ final class WBCalendarView: UIView {
     }
     
     private func configureTapGesture() {
-        let swipeLeftToRight = UISwipeGestureRecognizer(target: self, action: #selector(self.minusMonth))
+        let swipeLeftToRight = UISwipeGestureRecognizer(target: self, action: #selector(self.didMinusMonthTouched))
         swipeLeftToRight.direction = UISwipeGestureRecognizer.Direction.right
         self.collectionView.addGestureRecognizer(swipeLeftToRight)
-        let swipeRightToLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.plusMonth))
+        let swipeRightToLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.didPlusMonthTouched))
         swipeRightToLeft.direction = UISwipeGestureRecognizer.Direction.left
         self.collectionView.addGestureRecognizer(swipeRightToLeft)
     }
@@ -134,18 +134,18 @@ final class WBCalendarView: UIView {
         return label
     }
     
-    @objc private func thisMonth(_ sender: UIButton) {
+    @objc private func didThisMonthTouched(_ sender: UIButton) {
         self.collectionView.fadeAnimation()
         self.monthButtonSignal.send(0)
         self.todayButton.animateButtonTap(scale: 0.9)
     }
     
-    @objc private func minusMonth(_ sender: UIButton) {
+    @objc private func didMinusMonthTouched(_ sender: UIButton) {
         self.collectionView.fadeAnimation()
         self.monthButtonSignal.send(-1)
     }
     
-    @objc private func plusMonth(_ sender: UIButton) {
+    @objc private func didPlusMonthTouched(_ sender: UIButton) {
         self.collectionView.fadeAnimation()
         self.monthButtonSignal.send(1)
     }

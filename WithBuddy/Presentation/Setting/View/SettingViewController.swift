@@ -179,12 +179,12 @@ final class SettingViewController: UIViewController {
 
 extension SettingViewController: BuddyCustomDelegate {
     
-    func buddyAddDidCompleted(_ buddy: Buddy) {
+    func didBuddyAddCompleted(_ buddy: Buddy) {
         self.settingViewModel.didMyBuddyChanged(buddy: buddy)
         self.settingViewModel.fetchMyBuddy()
     }
     
-    func buddyEditDidCompleted(_ buddy: Buddy) {
+    func didBuddyEditCompleted(_ buddy: Buddy) {
         self.settingViewModel.didMyBuddyChanged(buddy: buddy)
         self.settingViewModel.fetchMyBuddy()
     }

@@ -747,7 +747,7 @@ extension GatheringEditViewController: UIImagePickerControllerDelegate, UINaviga
 
 extension GatheringEditViewController: BuddyChoiceDelegate {
     
-    func buddySelectingDidCompleted(_ buddyList: [Buddy]) {
+    func didBuddySelectingCompleted(_ buddyList: [Buddy]) {
         self.gatheringEditViewModel.didBuddyUpdated(buddyList)
     }
     

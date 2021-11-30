@@ -32,7 +32,7 @@ final class BuddyChoiceViewController: UIViewController {
     }
     
     func configureBuddyList(by buddyList: [Buddy]) {
-        self.buddyChoiceViewModel.buddyListDidLoaded(by: buddyList)
+        self.buddyChoiceViewModel.didBuddyListLoaded(by: buddyList)
     }
     
     private func bind() {
@@ -49,7 +49,7 @@ final class BuddyChoiceViewController: UIViewController {
         self.buddyChoiceViewModel.doneSignal
             .receive(on: DispatchQueue.main)
             .sink{ [weak self] checkedBuddyList in
-                self?.delegate?.buddySelectingDidCompleted(checkedBuddyList)
+                self?.delegate?.didBuddySelectingCompleted(checkedBuddyList)
                 self?.navigationController?.popViewController(animated: true)
             }
             .store(in: &self.cancellables)
@@ -143,7 +143,7 @@ final class BuddyChoiceViewController: UIViewController {
     }
     
     @objc private func completeButtonTouched() {
-        self.buddyChoiceViewModel.buddySelectingDidCompleted()
+        self.buddyChoiceViewModel.didBuddySelectingCompleted()
     }
     
     private func searchBuddy(by text: String) {
@@ -191,7 +191,7 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? ImageTextCollectionViewCell else { return }
         cell.animateButtonTap(scale: 0.8)
-        self.buddyChoiceViewModel.buddyDidChecked(in: indexPath.item)
+        self.buddyChoiceViewModel.didBuddyChecked(in: indexPath.item)
         self.view.endEditing(true)
     }
     
@@ -206,7 +206,7 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
             }
             let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
                                   image: UIImage(systemName: "trash")) { _ in
-                self.buddyChoiceViewModel.buddyDidADeleted(in: indexPath.item)
+                self.buddyChoiceViewModel.didBuddyDeleted(in: indexPath.item)
             }
             return UIMenu(title: "이 버디를", children: [edit, delete])
         })
@@ -216,12 +216,12 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
 
 extension BuddyChoiceViewController: BuddyCustomDelegate {
     
-    func buddyEditDidCompleted(_ buddy: Buddy) {
-        self.buddyChoiceViewModel.buddyDidEdited(buddy)
+    func didBuddyEditCompleted(_ buddy: Buddy) {
+        self.buddyChoiceViewModel.didBuddyEdited(buddy)
     }
     
-    func buddyAddDidCompleted(_ buddy: Buddy) {
-        self.buddyChoiceViewModel.buddyDidAdded(buddy)
+    func didBuddyAddCompleted(_ buddy: Buddy) {
+        self.buddyChoiceViewModel.didBuddyAdded(buddy)
     }
     
 }
@@ -237,6 +237,6 @@ extension BuddyChoiceViewController: UIGestureRecognizerDelegate {
 
 protocol BuddyChoiceDelegate: AnyObject {
     
-    func buddySelectingDidCompleted(_: [Buddy])
+    func didBuddySelectingCompleted(_: [Buddy])
     
 }

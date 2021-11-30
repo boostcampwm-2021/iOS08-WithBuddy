@@ -40,7 +40,7 @@ final class BuddyCustomViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .backgroundPurple
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.completeCustom))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.didDoneTouched))
         
         self.configure()
         self.bind()
@@ -48,7 +48,7 @@ final class BuddyCustomViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didTextChanged), name: UITextField.textDidChangeNotification, object: nil)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -56,7 +56,7 @@ final class BuddyCustomViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UITextField.textDidChangeNotification, object: nil)
     }
 
-    @objc private func textDidChange(_ notification: Notification) {
+    @objc private func didTextChanged(_ notification: Notification) {
         if let textField = notification.object as? UITextField {
             guard let text = textField.text else { return }
             
@@ -70,7 +70,7 @@ final class BuddyCustomViewController: UIViewController {
     }
     
     func configure(by buddy: Buddy) {
-        self.buddyCustomViewModel.buddyDidInserted(buddy)
+        self.buddyCustomViewModel.didBuddyInserted(buddy)
     }
     
     private func bind() {
@@ -97,30 +97,30 @@ final class BuddyCustomViewController: UIViewController {
         
         self.buddyCustomViewModel.$name
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] text in
+            .sink { [weak self] text in
                 self?.nameTextField.text = text
             }
             .store(in: &self.cancellables)
         
         self.buddyCustomViewModel.addDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] buddy in
-                self?.delegate?.buddyAddDidCompleted(buddy)
+            .sink { [weak self] buddy in
+                self?.delegate?.didBuddyAddCompleted(buddy)
                 self?.navigationController?.popViewController(animated: true)
             }
             .store(in: &self.cancellables)
         
         self.buddyCustomViewModel.editDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] buddy in
-                self?.delegate?.buddyEditDidCompleted(buddy)
+            .sink { [weak self] buddy in
+                self?.delegate?.didBuddyEditCompleted(buddy)
                 self?.navigationController?.popViewController(animated: true)
             }
             .store(in: &self.cancellables)
         
         self.buddyCustomViewModel.failSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] result in
+            .sink { [weak self] result in
                 self?.alertError(result)
             }
             .store(in: &self.cancellables)
@@ -151,7 +151,7 @@ final class BuddyCustomViewController: UIViewController {
     
     private func configureContentView() {
         self.scrollView.addSubview(self.contentView)
-        self.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapEmptySpace)))
+        self.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didEmptySpacedTouched)))
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
@@ -217,7 +217,7 @@ final class BuddyCustomViewController: UIViewController {
         self.contentView.addSubview(self.colorCollectionView)
         self.colorCollectionView.backgroundColor = .clear
         self.colorCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.colorCollectionViewDidTouched(_:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.didColorCollectionViewTouched))
         self.colorCollectionView.addGestureRecognizer(tap)
         
         let flowLayout = UICollectionViewFlowLayout()
@@ -235,9 +235,9 @@ final class BuddyCustomViewController: UIViewController {
         ])
     }
     
-    @objc func colorCollectionViewDidTouched(_ sender: UITapGestureRecognizer) {
+    @objc func didColorCollectionViewTouched(_ sender: UITapGestureRecognizer) {
         if let indexPath = self.colorCollectionView.indexPathForItem(at: sender.location(in: self.colorCollectionView)) {
-            self.buddyCustomViewModel.colorDidChosen(in: indexPath.item)
+            self.buddyCustomViewModel.didColorChosend(in: indexPath.item)
             self.view.endEditing(true)
         }
     }
@@ -257,7 +257,7 @@ final class BuddyCustomViewController: UIViewController {
         self.contentView.addSubview(self.faceCollectionView)
         self.faceCollectionView.backgroundColor = .clear
         self.faceCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.faceCollectionViewDidTouched(_:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.didFaceCollectionViewTouched))
         self.faceCollectionView.addGestureRecognizer(tap)
         
         let flowLayout = UICollectionViewFlowLayout()
@@ -276,9 +276,9 @@ final class BuddyCustomViewController: UIViewController {
         ])
     }
     
-    @objc func faceCollectionViewDidTouched(_ sender: UITapGestureRecognizer) {
+    @objc func didFaceCollectionViewTouched(_ sender: UITapGestureRecognizer) {
         if let indexPath = self.faceCollectionView.indexPathForItem(at: sender.location(in: self.faceCollectionView)) {
-            self.buddyCustomViewModel.faceDidChosen(in: indexPath.item)
+            self.buddyCustomViewModel.didFaceChosen(in: indexPath.item)
             self.view.endEditing(true)
         }
     }
@@ -290,11 +290,11 @@ final class BuddyCustomViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    @objc private func completeCustom() {
+    @objc private func didDoneTouched() {
         self.buddyCustomViewModel.didDoneTouched()
     }
     
-    @objc private func tapEmptySpace(){
+    @objc private func didEmptySpacedTouched(){
         self.nameTextField.resignFirstResponder()
     }
     
@@ -309,14 +309,14 @@ extension BuddyCustomViewController: UITextFieldDelegate {
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let text = textField.text else { return }
-        self.buddyCustomViewModel.nameDidChaged(name: text)
+        self.buddyCustomViewModel.didNameChaged(name: text)
     }
     
 }
 
 protocol BuddyCustomDelegate: AnyObject {
     
-    func buddyAddDidCompleted(_: Buddy)
-    func buddyEditDidCompleted(_: Buddy)
+    func didBuddyAddCompleted(_: Buddy)
+    func didBuddyEditCompleted(_: Buddy)
     
 }

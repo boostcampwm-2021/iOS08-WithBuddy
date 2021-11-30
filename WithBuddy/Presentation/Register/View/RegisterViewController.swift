@@ -59,13 +59,13 @@ final class RegisterViewController: UIViewController {
         self.configure()
         self.registerViewModel.didDatePicked(Date())
         self.title = "모임 등록"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .done, target: self, action: #selector(self.alertCancel))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addGathering))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .done, target: self, action: #selector(self.didCancelButtonTouched))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.didDoneTouched))
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(willKeyboardShow), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -73,7 +73,7 @@ final class RegisterViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
+    @objc func willKeyboardShow(notification: NSNotification) {
         guard !placeTextField.isFirstResponder else { return }
         let memoButtomY = self.memoBackgroundView.frame.origin.y + self.memoBackgroundView.frame.height - self.scrollView.bounds.origin.y
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
@@ -85,11 +85,11 @@ final class RegisterViewController: UIViewController {
     }
     
     private func bind() {
-        self.dataBind()
-        self.signalBind()
+        self.bindData()
+        self.bindSignal()
     }
     
-    private func dataBind() {
+    private func bindData() {
         self.registerViewModel.$purposeList
             .receive(on: DispatchQueue.main)
             .sink { [weak self] purposeList in
@@ -135,25 +135,25 @@ final class RegisterViewController: UIViewController {
             .store(in: &self.cancellables)
     }
     
-    private func signalBind() {
+    private func bindSignal() {
         self.registerViewModel.registerDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] gathering in
-                self?.alertSuccess()
+            .sink { [weak self] gathering in
+                self?.didRegisterSucceed()
                 self?.registerNotification(gathering: gathering)
             }
             .store(in: &self.cancellables)
         
         self.registerViewModel.registerFailSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] result in
-                self?.alertError(result)
+            .sink { [weak self] result in
+                self?.didRegisterFailed(result)
             }
             .store(in: &self.cancellables)
         
         self.registerViewModel.addBuddySignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] buddyList in
+            .sink { [weak self] buddyList in
                 let buddyChoiceViewController = BuddyChoiceViewController()
                 buddyChoiceViewController.delegate = self
                 buddyChoiceViewController.configureBuddyList(by: buddyList)
@@ -207,7 +207,7 @@ final class RegisterViewController: UIViewController {
     
     private func configureContentView() {
         self.scrollView.addSubview(self.contentView)
-        self.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapEmptySpace)))
+        self.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didEmptySpacedTouched)))
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
@@ -242,7 +242,7 @@ final class RegisterViewController: UIViewController {
         self.datePicker.datePickerMode = .dateAndTime
         self.datePicker.locale = Locale(identifier: "ko-KR")
         self.datePicker.timeZone = .autoupdatingCurrent
-        self.datePicker.addTarget(self, action: #selector(self.didDateChanged(_:)), for: .valueChanged)
+        self.datePicker.addTarget(self, action: #selector(self.didDateChanged), for: .valueChanged)
         
         self.datePicker.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -326,7 +326,7 @@ final class RegisterViewController: UIViewController {
         self.purposeCollectionView.backgroundColor = .clear
         self.purposeCollectionView.showsHorizontalScrollIndicator = false
         self.purposeCollectionView.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.collectionViewDidTouched(_:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.didCollectionViewTouched))
         self.purposeCollectionView.addGestureRecognizer(tap)
         self.purposeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
         
@@ -344,7 +344,7 @@ final class RegisterViewController: UIViewController {
         ])
     }
     
-    @objc func collectionViewDidTouched(_ sender: UITapGestureRecognizer) {
+    @objc func didCollectionViewTouched(_ sender: UITapGestureRecognizer) {
         if let indexPath = self.purposeCollectionView.indexPathForItem(at: sender.location(in: self.purposeCollectionView)) {
             self.registerViewModel.didPurposeTouched(indexPath.item)
             
@@ -380,7 +380,7 @@ final class RegisterViewController: UIViewController {
         let image = UIImage(named: "Plus", in: .main, with: config)
         self.buddyAddButton.setImage(image, for: .normal)
         self.buddyAddButton.tintColor = .labelPurple
-        self.buddyAddButton.addTarget(self, action: #selector(self.onBuddyAddButtonTouched(_:)), for: .touchUpInside)
+        self.buddyAddButton.addTarget(self, action: #selector(self.didBuddyAddButtonTouched), for: .touchUpInside)
         
         self.buddyAddButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -414,7 +414,7 @@ final class RegisterViewController: UIViewController {
         ])
     }
     
-    @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
+    @objc private func didBuddyAddButtonTouched(_ sender: UIButton) {
         self.buddyAddButton.animateButtonTap(scale: 0.8)
         self.registerViewModel.didAddBuddyTouched()
     }
@@ -497,7 +497,7 @@ final class RegisterViewController: UIViewController {
         let image = UIImage(systemName: "plus.square", withConfiguration: config)
         self.pictureAddButton.setImage(image, for: .normal)
         self.pictureAddButton.tintColor = .labelPurple
-        self.pictureAddButton.addTarget(self, action: #selector(self.onPictureButtonTouched(_:)), for: .touchUpInside)
+        self.pictureAddButton.addTarget(self, action: #selector(self.didPictureButtonTouched), for: .touchUpInside)
         
         self.pictureAddButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -555,26 +555,26 @@ final class RegisterViewController: UIViewController {
         }
     }
     
-    private func alertAuthorization() {
+    private func presentDeniedAuthorization() {
         let alert = UIAlertController(title: "갤러리 접근권한이 없습니다", message: "설정 > WithBuddy > 사진에서 접근권한을 허용해주세요", preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
     }
     
-    @objc private func onPictureButtonTouched(_ sender: UIButton) {
+    @objc private func didPictureButtonTouched(_ sender: UIButton) {
         self.pictureAddButton.animateButtonTap(scale: 0.8)
         switch PHPhotoLibrary.authorizationStatus() {
         case .authorized: self.presentImagePicker()
         case .notDetermined: self.requestAuthorization()
-        case .denied: self.alertAuthorization()
+        case .denied: self.presentDeniedAuthorization()
         default: break
         }
     }
     
     // MARK: - CompletePart
     
-    @objc private func alertCancel() {
+    @objc private func didCancelButtonTouched() {
         let alert = UIAlertController(title: "기록한 내용은 저장되지 않습니다. 그래도 나가시겠습니까?", message: "", preferredStyle: UIAlertController.Style.alert)
         let noAction = UIAlertAction(title: "취소", style: .cancel)
         let okAction = UIAlertAction(title: "OK", style: .destructive, handler: { _ in
@@ -585,7 +585,7 @@ final class RegisterViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func alertSuccess() {
+    private func didRegisterSucceed() {
         let alert = UIAlertController(title: "등록 완료", message: "모임 등록이 완료되었습니다!", preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in
             self.navigationController?.popViewController(animated: true)
@@ -594,20 +594,20 @@ final class RegisterViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func alertError(_ error: RegisterError) {
+    private func didRegisterFailed(_ error: RegisterError) {
         let alert = UIAlertController(title: "등록 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
     }
     
-    @objc private func addGathering() {
+    @objc private func didDoneTouched() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in
             self.registerViewModel.didDoneTouched()
         }
     }
     
-    @objc private func tapEmptySpace(){
+    @objc private func didEmptySpacedTouched(){
         self.view.endEditing(true)
     }
     
@@ -710,7 +710,7 @@ extension RegisterViewController: UIScrollViewDelegate {
 
 extension RegisterViewController: BuddyChoiceDelegate {
     
-    func buddySelectingDidCompleted(_ buddyList: [Buddy]) {
+    func didBuddySelectingCompleted(_ buddyList: [Buddy]) {
         self.registerViewModel.didBuddyUpdated(buddyList)
     }
     

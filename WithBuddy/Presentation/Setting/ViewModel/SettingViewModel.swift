@@ -27,10 +27,11 @@ final class SettingViewModel {
     
     func didGatheringResetTouched() {
         self.gatheringUseCase.deleteAllGathering()
-            .sink { error in
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] error in
                 switch error {
                 case .failure(let error):
-                    self.deleteSignal.send(("삭제 실패", error.errorDescription))
+                    self?.deleteSignal.send(("삭제 실패", error.errorDescription))
                 case .finished:
                     return
                 }
@@ -43,7 +44,7 @@ final class SettingViewModel {
         self.userUseCase.createUser(buddy: buddy)
     }
     
-    func fetchMyBuddy() {
+    func reloadMyBuddy() {
         self.myBuddy = self.userUseCase.fetchUser()
     }
     

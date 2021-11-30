@@ -10,6 +10,9 @@ import Combine
 
 final class CalendarViewModel {
     
+    @Published private(set) var myFace: String?
+    @Published private(set) var headerComment: String?
+    
     private let calendarUseCase: CalendarUseCase
     private let gatheringUseCase: GatheringUseCase
     private let userUseCase: UserUseCase
@@ -17,7 +20,6 @@ final class CalendarViewModel {
     private var currentDate: Date
     private var thisMonthGathrtingList = [Gathering]()
     
-    @Published private(set) var myFace: String?
     private(set) var isSameMonth: Int?
     private(set) var totalDays = [Int]()
     private(set) var totalFaces = [String]()
@@ -34,16 +36,17 @@ final class CalendarViewModel {
         self.calendarMonth = self.calendarUseCase.firstTimeOfDay(baseDate: Date())
     }
     
-    func viewDidAppear() {
+    func viewWillAppear() {
         self.fetchBuddyFace()
         self.currentDate = Date()
         self.sendMonthSubject()
         self.reloadDays()
         self.reloadFaces()
         self.reloadTotalGathering()
+        self.loadHeaderComment()
     }
     
-    func headerComment() -> String {
+    private func loadHeaderComment() {
         let gatheringList = self.gatheringUseCase.gatheringStatus(date: currentDate)
         var gatheringExist = [0, 0, 0, 0, 0, 0, 0]
         var day = Date()
@@ -55,7 +58,7 @@ final class CalendarViewModel {
             }
             day = self.calendarUseCase.nextDay(baseDate: day)
         }
-        return selectHeaderComment(gatheringExist: gatheringExist)
+        self.headerComment = selectHeaderComment(gatheringExist: gatheringExist)
     }
     
     private func selectHeaderComment(gatheringExist: [Int]) -> String {

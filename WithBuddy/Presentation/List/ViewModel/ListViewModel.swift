@@ -19,7 +19,6 @@ final class ListViewModel {
     init(buddyUseCase: BuddyUseCase, gatheringUseCase: GatheringUseCase) {
         self.buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
         self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
-        self.configure()
     }
     
     var count: Int {
@@ -33,7 +32,12 @@ final class ListViewModel {
         return self.gatheringList[index]
     }
     
-    func searched(list: [Gathering]) {
+    func viewWillAppear() {
+        self.gatheringList = self.gatheringUseCase.fetchGathering()
+        self.isSearched = false
+    }
+    
+    func didBuddySearched(list: [Gathering]) {
         if list.isEmpty {
             self.isSearched = false
             return
@@ -42,18 +46,9 @@ final class ListViewModel {
         self.searchedList = list
     }
     
-    func deleteGathering(index: Int) {
+    func didGatheringDeleted(index: Int) {
         let gathering = self.gatheringList.remove(at: index)
         self.gatheringUseCase.deleteGathering(gathering.id)
-    }
-    
-    private func configure() {
-        self.fetch()
-    }
-    
-    func fetch() {
-        self.gatheringList = self.gatheringUseCase.fetchGathering()
-        self.isSearched = false
     }
     
 }

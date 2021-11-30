@@ -57,18 +57,14 @@ final class GatheringDetailViewController: UIViewController {
         super.viewDidLoad()
         self.configure()
         self.bind()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .done, target: self, action: #selector(self.editGathering))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "편집", style: .done, target: self, action: #selector(self.didEditButtonTouched))
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.title = "모임 상세화면"
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         guard let id = self.id else { return }
-        self.gatheringDetailViewModel.viewDidAppear(with: id)
+        self.gatheringDetailViewModel.viewWillAppear(with: id)
+        self.title = "모임 상세화면"
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -90,11 +86,11 @@ final class GatheringDetailViewController: UIViewController {
     }
     
     private func bind() {
-        self.signalBind()
-        self.dataBind()
+        self.bindSignal()
+        self.bindData()
     }
     
-    private func signalBind() {
+    private func bindSignal() {
         self.gatheringDetailViewModel.goEditSignal
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] gathering in
@@ -106,7 +102,7 @@ final class GatheringDetailViewController: UIViewController {
             .store(in: &cancellables)
     }
     
-    private func dataBind() {
+    private func bindData() {
         self.gatheringDetailViewModel.$gathering
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] gathering in
@@ -147,7 +143,7 @@ final class GatheringDetailViewController: UIViewController {
         purposeSnapshot.appendSections([0])
         let purposeList = PurposeCategory.allCases.map({ placeType -> CheckableInfo? in
             var korDescription = "\(placeType)"
-            korDescription = self.gatheringDetailViewModel.engToKor(eng: "\(placeType)")
+            korDescription = self.gatheringDetailViewModel.toKor(eng: "\(placeType)")
             if gathering.purpose.contains(placeType.description) { return CheckableInfo(engDescription: "\(placeType)", korDescription: korDescription, check: true) }
             return nil
         }).compactMap({ $0 })
@@ -465,7 +461,7 @@ final class GatheringDetailViewController: UIViewController {
         self.pictureCollectionView.collectionViewLayout = layout
     }
     
-    @objc private func editGathering() {
+    @objc private func didEditButtonTouched() {
         self.gatheringDetailViewModel.didEditButtonTouched()
     }
     

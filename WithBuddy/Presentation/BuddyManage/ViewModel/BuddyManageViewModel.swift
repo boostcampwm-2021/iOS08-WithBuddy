@@ -18,7 +18,7 @@ final class BuddyManageViewModel {
         return self.storedBuddyList[index]
     }
     
-    func buddyDidDeleted(in idx: Int) {
+    func didBuddyDeleted(in idx: Int) {
         do {
             try self.buddyUseCase.deleteBuddy(storedBuddyList[idx])
             self.storedBuddyList.remove(at: idx)
@@ -28,12 +28,12 @@ final class BuddyManageViewModel {
         }
     }
     
-    func buddyDidAdded(_ buddy: Buddy) {
+    func didBuddyAdded(_ buddy: Buddy) {
         self.buddyUseCase.insertBuddy(buddy)
         self.storedBuddyList.append(buddy)
     }
     
-    func buddyListDidLoaded() {
+    func didBuddyListLoaded() {
         self.storedBuddyList = self.buddyUseCase.fetchBuddy()
     }
     

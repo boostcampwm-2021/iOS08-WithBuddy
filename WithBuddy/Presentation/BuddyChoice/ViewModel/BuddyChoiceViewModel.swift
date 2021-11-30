@@ -40,7 +40,7 @@ final class BuddyChoiceViewModel {
         return self.storedBuddyList[index]
     }
     
-    func buddyDidADeleted(in idx: Int) {
+    func didBuddyDeleted(in idx: Int) {
         do {
             try self.buddyUseCase.deleteBuddy(storedBuddyList[idx])
             self.storedBuddyList.remove(at: idx)
@@ -50,12 +50,12 @@ final class BuddyChoiceViewModel {
         }
     }
     
-    func buddyDidAdded(_ buddy: Buddy) {
+    func didBuddyAdded(_ buddy: Buddy) {
         self.buddyUseCase.insertBuddy(buddy)
         self.storedBuddyList.append(buddy)
     }
     
-    func buddyDidChecked(in idx: Int) {
+    func didBuddyChecked(in idx: Int) {
         if self.storedBuddyList[idx].check != nil {
             self.storedBuddyList[idx].check?.toggle()
         } else {
@@ -63,7 +63,7 @@ final class BuddyChoiceViewModel {
         }
     }
     
-    func buddyListDidLoaded(by buddyList: [Buddy]) {
+    func didBuddyListLoaded(by buddyList: [Buddy]) {
         let storedBuddyList = self.buddyUseCase.fetchBuddy()
         storedBuddyList.forEach( { buddy in
             var checkedBuddy = buddy
@@ -76,7 +76,7 @@ final class BuddyChoiceViewModel {
         })
     }
     
-    func buddySelectingDidCompleted() {
+    func didBuddySelectingCompleted() {
         if self.checkedBuddyList.isEmpty {
             self.failSignal.send(BuddyChoiceError.noBuddy)
         } else {
@@ -84,7 +84,7 @@ final class BuddyChoiceViewModel {
         }
     }
     
-    func buddyDidEdited(_ buddy: Buddy) {
+    func didBuddyEdited(_ buddy: Buddy) {
         guard let idx = self.storedBuddyList.firstIndex(where: {
             $0.id == buddy.id
         }) else { return }

@@ -59,13 +59,13 @@ final class GatheringEditViewController: UIViewController {
         self.configure()
         self.gatheringEditViewModel.didDatePicked(Date())
         self.title = "모임 편집"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .done, target: self, action: #selector(self.alertCancel))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addGathering))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .done, target: self, action: #selector(self.didCancelButtonTouched))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.didDoneTouched))
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(willKeyboardShow), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -73,7 +73,7 @@ final class GatheringEditViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
+    @objc func willKeyboardShow(notification: NSNotification) {
         guard !placeTextField.isFirstResponder else { return }
         let memoButtomY = self.memoBackgroundView.frame.origin.y + self.memoBackgroundView.frame.height - self.scrollView.bounds.origin.y
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
@@ -180,7 +180,7 @@ final class GatheringEditViewController: UIViewController {
     private func bindSignal() {
         self.gatheringEditViewModel.editDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] gathering in
+            .sink { [weak self] gathering in
                 self?.alertSuccess(gathering: gathering)
                 self?.registerNotification(gathering: gathering)
             }
@@ -188,14 +188,14 @@ final class GatheringEditViewController: UIViewController {
         
         self.gatheringEditViewModel.editFailSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] result in
+            .sink { [weak self] result in
                 self?.alertError(result)
             }
             .store(in: &self.cancellables)
         
         self.gatheringEditViewModel.addBuddySignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] buddyList in
+            .sink { [weak self] buddyList in
                 let buddyChoiceViewController = BuddyChoiceViewController()
                 buddyChoiceViewController.delegate = self
                 buddyChoiceViewController.configureBuddyList(by: buddyList)
@@ -254,7 +254,7 @@ final class GatheringEditViewController: UIViewController {
     
     private func configureContentView() {
         self.scrollView.addSubview(self.contentView)
-        self.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapEmptySpace)))
+        self.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didEmptySpacedTouched)))
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
@@ -371,7 +371,7 @@ final class GatheringEditViewController: UIViewController {
         self.purposeCollectionView.backgroundColor = .clear
         self.purposeCollectionView.showsHorizontalScrollIndicator = false
         self.purposeCollectionView.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.collectionViewDidTouched(_:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.didCollectionViewTouched))
         self.purposeCollectionView.addGestureRecognizer(tap)
         self.purposeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
 
@@ -389,7 +389,7 @@ final class GatheringEditViewController: UIViewController {
         ])
     }
 
-    @objc func collectionViewDidTouched(_ sender: UITapGestureRecognizer) {
+    @objc func didCollectionViewTouched(_ sender: UITapGestureRecognizer) {
        if let indexPath = self.purposeCollectionView.indexPathForItem(at: sender.location(in: self.purposeCollectionView)) {
            self.gatheringEditViewModel.didPurposeTouched(indexPath.item)
            
@@ -424,7 +424,7 @@ final class GatheringEditViewController: UIViewController {
             pointSize: .buddyAndPurposeWidth, weight: .medium, scale: .default)
         let image = UIImage(systemName: "plus.circle", withConfiguration: config)
         self.buddyAddButton.setImage(image, for: .normal)
-        self.buddyAddButton.addTarget(self, action: #selector(self.onBuddyAddButtonTouched(_:)), for: .touchUpInside)
+        self.buddyAddButton.addTarget(self, action: #selector(self.didBuddyAddButtonTouched), for: .touchUpInside)
         
         self.buddyAddButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -458,7 +458,7 @@ final class GatheringEditViewController: UIViewController {
         ])
     }
     
-    @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
+    @objc private func didBuddyAddButtonTouched(_ sender: UIButton) {
         self.buddyAddButton.animateButtonTap(scale: 0.8)
         self.gatheringEditViewModel.didAddBuddyTouched()
     }
@@ -538,7 +538,7 @@ final class GatheringEditViewController: UIViewController {
             pointSize: 30, weight: .medium, scale: .default)
         let image = UIImage(systemName: "plus.square", withConfiguration: config)
         self.pictureAddButton.setImage(image, for: .normal)
-        self.pictureAddButton.addTarget(self, action: #selector(self.onPictureButtonTouched(_:)), for: .touchUpInside)
+        self.pictureAddButton.addTarget(self, action: #selector(self.didPictureButtonTouched), for: .touchUpInside)
         
         self.pictureAddButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -578,7 +578,7 @@ final class GatheringEditViewController: UIViewController {
         self.pictureCollectionView.collectionViewLayout = layout
     }
     
-    @objc private func onPictureButtonTouched(_ sender: UIButton) {
+    @objc private func didPictureButtonTouched(_ sender: UIButton) {
         self.pictureAddButton.animateButtonTap(scale: 0.8)
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -593,7 +593,7 @@ final class GatheringEditViewController: UIViewController {
         self.deleteButton.backgroundColor = .graphRed
         self.deleteButton.layer.cornerRadius = .buttonCornerRadius
         self.deleteButton.setTitle("모임 삭제", for: .normal)
-        self.deleteButton.addTarget(self, action: #selector(self.deleteGathering), for: .touchUpInside)
+        self.deleteButton.addTarget(self, action: #selector(self.didDeleteButtonTouched), for: .touchUpInside)
         self.deleteButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.deleteButton.topAnchor.constraint(equalTo: self.pictureCollectionView.bottomAnchor, constant: .plusInset),
@@ -606,7 +606,7 @@ final class GatheringEditViewController: UIViewController {
     
     // MARK: - CompletePart
     
-    @objc private func alertCancel() {
+    @objc private func didCancelButtonTouched() {
         let alert = UIAlertController(title: "기록한 내용은 저장되지 않습니다. 그래도 나가시겠습니까?", message: "", preferredStyle: UIAlertController.Style.alert)
         let noAction = UIAlertAction(title: "취소", style: .cancel)
         let okAction = UIAlertAction(title: "OK", style: .destructive, handler: { _ in
@@ -633,11 +633,11 @@ final class GatheringEditViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    @objc private func addGathering() {
+    @objc private func didDoneTouched() {
         self.gatheringEditViewModel.didDoneTouched()
     }
     
-    @objc private func deleteGathering() {
+    @objc private func didDeleteButtonTouched() {
         guard let id = self.gatheringEditViewModel.gatheringId else { return }
         self.deleteButton.animateButtonTap(scale: 0.9)
         let alert = UIAlertController(title: "모임 삭제", message: "정말로 삭제하시겠습니까?", preferredStyle: .alert)
@@ -652,7 +652,7 @@ final class GatheringEditViewController: UIViewController {
         self.present(alert, animated: true)
     }
     
-    @objc private func tapEmptySpace(){
+    @objc private func didEmptySpacedTouched(){
         self.view.endEditing(true)
     }
     
@@ -747,7 +747,7 @@ extension GatheringEditViewController: UIImagePickerControllerDelegate, UINaviga
 
 extension GatheringEditViewController: BuddyChoiceDelegate {
     
-    func buddySelectingDidCompleted(_ buddyList: [Buddy]) {
+    func didBuddySelectingCompleted(_ buddyList: [Buddy]) {
         self.gatheringEditViewModel.didBuddyUpdated(buddyList)
     }
     

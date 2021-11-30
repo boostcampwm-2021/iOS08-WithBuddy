@@ -67,7 +67,7 @@ final class BubbleChartView: UIView {
         self.bubbleDescriptionView.update(name: name)
     }
     
-    func hiddenDescriptionView() {
+    func hideDescriptionView() {
         self.bubbleDescriptionView.isHidden = true
     }
     

@@ -28,11 +28,11 @@ final class BuddyChoiceViewController: UIViewController {
         super.viewDidLoad()
         self.configure()
         self.bind()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.completeButtonTouched))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.didCompleteButtonTouched))
     }
     
     func configureBuddyList(by buddyList: [Buddy]) {
-        self.buddyChoiceViewModel.buddyListDidLoaded(by: buddyList)
+        self.buddyChoiceViewModel.didBuddyListLoaded(by: buddyList)
     }
     
     private func bind() {
@@ -48,15 +48,15 @@ final class BuddyChoiceViewController: UIViewController {
         
         self.buddyChoiceViewModel.doneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] checkedBuddyList in
-                self?.delegate?.buddySelectingDidCompleted(checkedBuddyList)
+            .sink { [weak self] checkedBuddyList in
+                self?.delegate?.didBuddySelectingCompleted(checkedBuddyList)
                 self?.navigationController?.popViewController(animated: true)
             }
             .store(in: &self.cancellables)
         
         self.buddyChoiceViewModel.failSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] result in
+            .sink { [weak self] result in
                 self?.alertError(result)
             }
             .store(in: &self.cancellables)
@@ -88,7 +88,7 @@ final class BuddyChoiceViewController: UIViewController {
             pointSize: 60, weight: .medium, scale: .default)
         let image = UIImage(named: "PlusBuddy", in: .main, with: config)
         self.addButton.setImage(image, for: .normal)
-        self.addButton.addTarget(self, action: #selector(self.newBuddyButtonTouched(_:)), for: .touchUpInside)
+        self.addButton.addTarget(self, action: #selector(self.didNewBuddyButtonTouched), for: .touchUpInside)
         
         self.addButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -108,7 +108,7 @@ final class BuddyChoiceViewController: UIViewController {
         let panGesture = UIPanGestureRecognizer()
         panGesture.delegate = self
         self.buddyCollectionView.addGestureRecognizer(panGesture)
-        self.buddyCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:))))
+        self.buddyCollectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didCollectionViewTouched)))
         
         let buddyFlowLayout = UICollectionViewFlowLayout()
         buddyFlowLayout.scrollDirection = .vertical
@@ -136,14 +136,14 @@ final class BuddyChoiceViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    @objc private func newBuddyButtonTouched(_ sender: UIButton) {
+    @objc private func didNewBuddyButtonTouched(_ sender: UIButton) {
         let buddyCustomViewController = BuddyCustomViewController()
         buddyCustomViewController.delegate = self
         self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
     }
     
-    @objc private func completeButtonTouched() {
-        self.buddyChoiceViewModel.buddySelectingDidCompleted()
+    @objc private func didCompleteButtonTouched() {
+        self.buddyChoiceViewModel.didBuddySelectingCompleted()
     }
     
     private func searchBuddy(by text: String) {
@@ -159,7 +159,7 @@ final class BuddyChoiceViewController: UIViewController {
         self.buddyDataSource.apply(snapshot, animatingDifferences: true)
     }
     
-    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+    @objc func didCollectionViewTouched(_ sender: UITapGestureRecognizer) {
         if sender.state == .ended {
             self.view.endEditing(true)
         }
@@ -191,7 +191,7 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? ImageTextCollectionViewCell else { return }
         cell.animateButtonTap(scale: 0.8)
-        self.buddyChoiceViewModel.buddyDidChecked(in: indexPath.item)
+        self.buddyChoiceViewModel.didBuddyChecked(in: indexPath.item)
         self.view.endEditing(true)
     }
     
@@ -206,7 +206,7 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
             }
             let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
                                   image: UIImage(systemName: "trash")) { _ in
-                self.buddyChoiceViewModel.buddyDidADeleted(in: indexPath.item)
+                self.buddyChoiceViewModel.didBuddyDeleted(in: indexPath.item)
             }
             return UIMenu(title: "이 버디를", children: [edit, delete])
         })
@@ -216,12 +216,12 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
 
 extension BuddyChoiceViewController: BuddyCustomDelegate {
     
-    func buddyEditDidCompleted(_ buddy: Buddy) {
-        self.buddyChoiceViewModel.buddyDidEdited(buddy)
+    func didBuddyEditCompleted(_ buddy: Buddy) {
+        self.buddyChoiceViewModel.didBuddyEdited(buddy)
     }
     
-    func buddyAddDidCompleted(_ buddy: Buddy) {
-        self.buddyChoiceViewModel.buddyDidAdded(buddy)
+    func didBuddyAddCompleted(_ buddy: Buddy) {
+        self.buddyChoiceViewModel.didBuddyAdded(buddy)
     }
     
 }
@@ -237,6 +237,6 @@ extension BuddyChoiceViewController: UIGestureRecognizerDelegate {
 
 protocol BuddyChoiceDelegate: AnyObject {
     
-    func buddySelectingDidCompleted(_: [Buddy])
+    func didBuddySelectingCompleted(_: [Buddy])
     
 }

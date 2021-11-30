@@ -38,13 +38,13 @@ final class CalendarDetailViewController: UIViewController {
     private func bind() {
         self.calendarDetailViewModel.$dayLabel
         .receive(on: DispatchQueue.main)
-        .sink{ [weak self] label in
+        .sink { [weak self] label in
             self?.detailLabel.text = label + " 모임"
         }.store(in: &self.cancellables)
         
         self.calendarDetailViewModel.$gatheringList
         .receive(on: DispatchQueue.main)
-        .sink{ [weak self] _ in
+        .sink { [weak self] _ in
             self?.detailTableView.reloadData()
         }.store(in: &self.cancellables)
     }
@@ -96,13 +96,13 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.dismiss(animated: true, completion: {
-            self.delegate?.gatheringListTouched(self.calendarDetailViewModel[indexPath.item])
+            self.delegate?.didGatheringListTouched(self.calendarDetailViewModel[indexPath.item])
         })
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { _, _, completion in
-            self.calendarDetailViewModel.deleteGathering(index: indexPath.row)
+            self.calendarDetailViewModel.didDeleteButtonTouched(index: indexPath.row)
             self.delegate?.deleteGathering()
             tableView.deleteRows(at: [indexPath], with: .automatic)
             completion(true)
@@ -130,7 +130,7 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
 
 protocol GatheringListDelegate: AnyObject {
     
-    func gatheringListTouched(_: Gathering)
+    func didGatheringListTouched(_: Gathering)
     func editGathering(_: Gathering)
     func deleteGathering()
     

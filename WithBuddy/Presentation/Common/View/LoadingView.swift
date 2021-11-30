@@ -42,7 +42,7 @@ final class LoadingView: UIView {
     private func configureTitle() {
         self.addSubview(self.titleLabel)
         self.titleLabel.text = "위드버디"
-        self.appNameAnimation()
+        self.animateAppName()
         self.titleLabel.font = UIFont(name: "Cafe24Ssurround", size: UIScreen.main.bounds.width / 6)
         self.titleLabel.textColor = .white
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -84,31 +84,31 @@ final class LoadingView: UIView {
         self.dynamicItemBehavior.addItem(face)
     }
 
-    private func appNameAnimation() {
-        self.viewExpand(duration: 0.7)
+    private func animateAppName() {
+        self.expandView(duration: 0.7)
     }
     
-    private func viewExpand(duration: CGFloat) {
+    private func expandView(duration: CGFloat) {
         if duration < 0.5 {
-            self.titleTransitionAnimation(duration: duration)
+            self.animateTitleTransition(duration: duration)
         } else {
             UIView.animate(withDuration: duration) { [weak self] in
                 self?.titleLabel.transform = CGAffineTransform(scaleX: CGFloat(duration * 2.5), y: CGFloat(duration * 2.5))
             } completion: { [weak self] _ in
-                self?.viewIdentity(duration: duration - 0.1)
+                self?.transformViewIdentity(duration: duration - 0.1)
             }
         }
     }
     
-    private func viewIdentity(duration: CGFloat) {
+    private func transformViewIdentity(duration: CGFloat) {
         UIView.animate(withDuration: duration) { [weak self] in
             self?.titleLabel.transform = CGAffineTransform.identity
         } completion: { [weak self] _ in
-            self?.viewExpand(duration: duration)
+            self?.expandView(duration: duration)
         }
     }
     
-    private func titleTransitionAnimation(duration: CGFloat) {
+    private func animateTitleTransition(duration: CGFloat) {
         UIView.animate(withDuration: duration * 2) { [weak self] in
             self?.titleLabel.transform = CGAffineTransform(translationX: 0, y: -(UIScreen.main.bounds.height * 0.17))
         } completion: { [weak self] _ in

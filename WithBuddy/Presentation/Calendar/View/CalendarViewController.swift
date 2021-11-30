@@ -131,7 +131,7 @@ final class CalendarViewController: UIViewController {
 extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        .maxDayOfMonth
+        return .maxDayOfMonth
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

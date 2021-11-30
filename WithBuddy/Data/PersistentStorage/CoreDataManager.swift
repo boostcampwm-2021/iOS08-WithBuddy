@@ -278,7 +278,6 @@ extension CoreDataManager: CoreDataManagable {
             #keyPath(GatheringEntity.id),
             id as CVarArg
         )
-        
         return self.fetch(request: request).first
     }
     

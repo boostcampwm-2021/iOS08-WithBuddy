@@ -25,6 +25,7 @@ protocol CoreDataManagable {
     func deleteGathering(_ gatheringId: UUID)
     func fetchPurpose() -> AnyPublisher<[PurposeEntity], Never>
     func deleteAllGathering() -> AnyPublisher<Void, CoreDataManager.CoreDataError>
+    func fetchGathering(id: UUID) -> GatheringEntity?
     
 }
 
@@ -32,9 +33,13 @@ final class CoreDataManager {
     
     enum CoreDataError: LocalizedError {
         case deleteFail
+        case noGathering
         
         var errorDescription: String? {
-            return "삭제에 실패하셨습니다."
+            switch self {
+            case .deleteFail: return "삭제에 실패하셨습니다."
+            case .noGathering: return "해당 모임을 찾을 수 없습니다."
+            }
         }
     }
     
@@ -264,6 +269,17 @@ extension CoreDataManager: CoreDataManagable {
                 promise(.failure(.deleteFail))
             }
         }.eraseToAnyPublisher()
+    }
+    
+    func fetchGathering(id: UUID) -> GatheringEntity? {
+        let request = GatheringEntity.fetchRequest()
+        request.predicate = NSPredicate(
+            format: "%K == %@",
+            #keyPath(GatheringEntity.id),
+            id as CVarArg
+        )
+        
+        return self.fetch(request: request).first
     }
     
 }

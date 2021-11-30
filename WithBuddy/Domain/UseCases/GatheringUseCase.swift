@@ -20,6 +20,11 @@ final class GatheringUseCase {
         return self.coreDataManager.fetchAllGathering().map{ $0.toDomain() }
     }
     
+    func fetchGathering(id: UUID) -> Gathering? {
+        guard let gatheringEntity = self.coreDataManager.fetchGathering(id: id) else { return nil }
+        return gatheringEntity.toDomain()
+    }
+    
     func fetchGathering(including name: String) -> [Gathering] {
         return self.coreDataManager.fetchGathering(including: name).map{ $0.toDomain() }
     }

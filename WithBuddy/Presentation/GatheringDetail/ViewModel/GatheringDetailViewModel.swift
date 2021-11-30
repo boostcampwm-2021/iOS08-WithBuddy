@@ -12,10 +12,19 @@ class GatheringDetailViewModel {
     
     @Published private(set) var gathering: Gathering?
     private(set) var goEditSignal = PassthroughSubject<Gathering, Never>()
-    private let purposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared)
+    private let gatheringUseCase: GatheringUseCase
+    private let purposeUseCase: PurposeUseCase
     
-    func didGatheringChanged(to gathering: Gathering) {
-        self.gathering = gathering
+    init(
+        gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared),
+        purposeUseCase: PurposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared)
+    ) {
+        self.gatheringUseCase = gatheringUseCase
+        self.purposeUseCase = purposeUseCase
+    }
+    
+    func viewDidAppear(with id: UUID) {
+        self.gathering = self.gatheringUseCase.fetchGathering(id: id)
     }
     
     func didEditButtonTouched() {

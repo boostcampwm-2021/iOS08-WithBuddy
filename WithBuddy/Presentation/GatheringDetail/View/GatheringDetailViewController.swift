@@ -10,6 +10,7 @@ import Combine
 
 class GatheringDetailViewController: UIViewController {
     
+    var id: UUID?
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
     
@@ -60,8 +61,15 @@ class GatheringDetailViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.title = "모임 상세화면"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.labelPurple as Any]
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        guard let id = self.id else { return }
+        self.gatheringDetailViewModel.viewDidAppear(with: id)
     }
     
     private func configure() {
@@ -88,7 +96,6 @@ class GatheringDetailViewController: UIViewController {
             .sink(receiveValue: { [weak self] gathering in
                 let gatheringEditViewController = GatheringEditViewController()
                 gatheringEditViewController.configure(by: gathering)
-                gatheringEditViewController.delegate = self
                 self?.navigationController?.navigationBar.topItem?.title = "Back"
                 self?.navigationController?.pushViewController(gatheringEditViewController, animated: true)
             })
@@ -104,10 +111,6 @@ class GatheringDetailViewController: UIViewController {
                 }
             })
             .store(in: &self.cancellables)
-    }
-    
-    func update(by gathering: Gathering) {
-        self.gatheringDetailViewModel.didGatheringChanged(to: gathering)
     }
     
     func configure(by gathering: Gathering) {
@@ -460,14 +463,6 @@ class GatheringDetailViewController: UIViewController {
     
     @objc private func editGathering() {
         self.gatheringDetailViewModel.didEditButtonTouched()
-    }
-    
-}
-
-extension GatheringDetailViewController: GatheringEditDelegate {
-    
-    func didGatheringEdited(to gathering: Gathering) {
-        self.gatheringDetailViewModel.didGatheringChanged(to: gathering)
     }
     
 }

@@ -179,7 +179,7 @@ extension CalendarViewController: GatheringListDelegate {
     
     func gatheringListTouched(_ gathering: Gathering) {
             let gatheringDetailViewController = GatheringDetailViewController()
-            gatheringDetailViewController.update(by: gathering)
+            gatheringDetailViewController.id = gathering.id
             self.navigationController?.pushViewController(gatheringDetailViewController, animated: true)
     }
     

@@ -619,7 +619,7 @@ extension RegisterViewController: UICollectionViewDelegate {
         if collectionView == self.pictureCollectionView {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
                 let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash")) { _ in
-                    self.registerViewModel.didBuddyDeleteTouched(in: indexPath.item)
+                    self.registerViewModel.didPictureDeleteTouched(in: indexPath.item)
                 }
                 return UIMenu(title: "이 사진을", children: [delete])
             })

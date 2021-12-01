@@ -209,7 +209,7 @@ final class GatheringEditViewController: UIViewController {
     }
     
     private func registerNotification(gathering: Gathering) {
-        guard let nextDay = Calendar.current.date(byAdding: .minute, value: 1, to: gathering.date) else { return }
+        guard let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: gathering.date) else { return }
         let content = UNMutableNotificationContent()
         content.title = "위드버디"
         let firstBuddyName = gathering.buddyList.first?.name ?? String()
@@ -673,7 +673,7 @@ extension GatheringEditViewController: UICollectionViewDelegate {
         if collectionView == self.pictureCollectionView {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
                 let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash")) { _ in
-                    self.gatheringEditViewModel.didBuddyDeleteTouched(in: indexPath.item)
+                    self.gatheringEditViewModel.didPictureDeleteTouched(in: indexPath.item)
                 }
                 return UIMenu(title: "이 사진을", children: [delete])
             })

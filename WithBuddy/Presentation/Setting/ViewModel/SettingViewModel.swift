@@ -25,6 +25,10 @@ final class SettingViewModel {
         self.gatheringUseCase = gatheringUseCase
     }
     
+    func viewWillAppear() {
+        self.myBuddy = self.userUseCase.fetchUser()
+    }
+    
     func didGatheringResetTouched() {
         self.gatheringUseCase.deleteAllGathering()
             .receive(on: DispatchQueue.main)
@@ -42,10 +46,6 @@ final class SettingViewModel {
     
     func didMyBuddyChanged(buddy: Buddy) {
         self.userUseCase.createUser(buddy: buddy)
-    }
-    
-    func reloadMyBuddy() {
-        self.myBuddy = self.userUseCase.fetchUser()
     }
     
 }

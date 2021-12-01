@@ -26,6 +26,11 @@ final class SettingViewController: UIViewController {
         self.bind()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.settingViewModel.viewWillAppear()
+    }
+    
     private func bind() {
         self.settingViewModel.deleteSignal
             .receive(on: DispatchQueue.main)
@@ -55,7 +60,6 @@ final class SettingViewController: UIViewController {
         self.configureUserImage()
         self.configureUserName()
         self.configureModifyButton()
-        self.settingViewModel.reloadMyBuddy()
     }
     
     private func configureUserImage() {
@@ -103,12 +107,9 @@ final class SettingViewController: UIViewController {
     
     @objc private func didProfileEditButtonTouched(_ sender: UIButton) {
         self.modifyButton.animateButtonTap(scale: 0.9)
-        guard let myBuddy = self.settingViewModel.myBuddy else { return }
-        let buddyCustomViewController = BuddyCustomViewController()
-        buddyCustomViewController.delegate = self
-        buddyCustomViewController.configure(by: myBuddy)
-        buddyCustomViewController.title = "프로필 수정"
-        self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
+        let userEditViewController = UserEditViewController()
+        userEditViewController.title = "프로필 수정"
+        self.navigationController?.pushViewController(userEditViewController, animated: true)
     }
     
     private func configureButtons() {
@@ -173,20 +174,6 @@ final class SettingViewController: UIViewController {
         guard let wikiURL = URL(string: "https://github.com/boostcampwm-2021/iOS08-WithBuddy/wiki") else { return }
         let developSafariView: SFSafariViewController = SFSafariViewController(url: wikiURL)
         self.present(developSafariView, animated: true, completion: nil)
-    }
-    
-}
-
-extension SettingViewController: BuddyCustomDelegate {
-    
-    func didBuddyAddCompleted(_ buddy: Buddy) {
-        self.settingViewModel.didMyBuddyChanged(buddy: buddy)
-        self.settingViewModel.reloadMyBuddy()
-    }
-    
-    func didBuddyEditCompleted(_ buddy: Buddy) {
-        self.settingViewModel.didMyBuddyChanged(buddy: buddy)
-        self.settingViewModel.reloadMyBuddy()
     }
     
 }

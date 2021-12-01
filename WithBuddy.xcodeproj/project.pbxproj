@@ -73,6 +73,8 @@
 		BB8744552756B39B0032E8DF /* ColorCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8744542756B39B0032E8DF /* ColorCollectionView.swift */; };
 		BB8744572756B5430032E8DF /* FaceCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8744562756B5430032E8DF /* FaceCollectionView.swift */; };
 		BB87445A275718490032E8DF /* UserCustomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB874459275718490032E8DF /* UserCustomViewModel.swift */; };
+		BB87445F27571FC10032E8DF /* UserEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB87445E27571FC10032E8DF /* UserEditViewController.swift */; };
+		BB87446127571FD00032E8DF /* UserEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB87446027571FD00032E8DF /* UserEditViewModel.swift */; };
 		BBF7FF2F272FB51400B71C97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF2E272FB51400B71C97 /* Assets.xcassets */; };
 		BBF7FF32272FB51400B71C97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBF7FF30272FB51400B71C97 /* LaunchScreen.storyboard */; };
 		BBF7FF40272FB7B700B71C97 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF7FF3F272FB7B700B71C97 /* TabBarViewController.swift */; };
@@ -193,6 +195,8 @@
 		BB8744542756B39B0032E8DF /* ColorCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCollectionView.swift; sourceTree = "<group>"; };
 		BB8744562756B5430032E8DF /* FaceCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceCollectionView.swift; sourceTree = "<group>"; };
 		BB874459275718490032E8DF /* UserCustomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCustomViewModel.swift; sourceTree = "<group>"; };
+		BB87445E27571FC10032E8DF /* UserEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEditViewController.swift; sourceTree = "<group>"; };
+		BB87446027571FD00032E8DF /* UserEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEditViewModel.swift; sourceTree = "<group>"; };
 		BBF7FF22272FB51000B71C97 /* WithBuddy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WithBuddy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF7FF25272FB51000B71C97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BBF7FF27272FB51000B71C97 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -600,6 +604,31 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		BB87445B27571F840032E8DF /* UserEdit */ = {
+			isa = PBXGroup;
+			children = (
+				BB87445C27571FA50032E8DF /* View */,
+				BB87445D27571FAB0032E8DF /* ViewModel */,
+			);
+			path = UserEdit;
+			sourceTree = "<group>";
+		};
+		BB87445C27571FA50032E8DF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BB87445E27571FC10032E8DF /* UserEditViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		BB87445D27571FAB0032E8DF /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				BB87446027571FD00032E8DF /* UserEditViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		BBF7FF19272FB51000B71C97 = {
 			isa = PBXGroup;
 			children = (
@@ -661,6 +690,7 @@
 				F78F14942743A5B00034E740 /* BuddyManage */,
 				85FA1D97272FEBBB00825C64 /* List */,
 				BB2D255C2731315E00E7BF35 /* Setting */,
+				BB87445B27571F840032E8DF /* UserEdit */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -945,6 +975,7 @@
 				F7E8AC3B273CD4DC005F8306 /* FaceColor.swift in Sources */,
 				8A07DF6D2743C21B008F6E58 /* GatheringDetailViewModel.swift in Sources */,
 				BB0EF0DE2740FA15003B4B6F /* WBCalendarCollectionView.swift in Sources */,
+				BB87446127571FD00032E8DF /* UserEditViewModel.swift in Sources */,
 				F7E8AC2F273CB5F9005F8306 /* Gathering.swift in Sources */,
 				8560CCBA274B8E0F0076F500 /* PurpleLabel.swift in Sources */,
 				F7A7699B2732588500FF83EA /* WBCalendarView.swift in Sources */,
@@ -993,6 +1024,7 @@
 				BB2D25BD273B585200E7BF35 /* RegisterViewModel.swift in Sources */,
 				F78F149B2743C1CF0034E740 /* BuddyManageViewModel.swift in Sources */,
 				8A73D679273A61EC001D5184 /* BuddyChoiceViewController.swift in Sources */,
+				BB87445F27571FC10032E8DF /* UserEditViewController.swift in Sources */,
 				854AA7662733A37200663911 /* ListViewModel.swift in Sources */,
 				8A397A2C274B8AE80060443C /* UserCreateViewModel.swift in Sources */,
 				BB2D258F2739299A00E7BF35 /* CoreDataManager.swift in Sources */,

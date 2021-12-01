@@ -85,10 +85,15 @@ final class BuddyChoiceViewModel {
     }
     
     func didBuddyEdited(_ buddy: Buddy) {
+        var editedBuddy = buddy
         guard let idx = self.storedBuddyList.firstIndex(where: {
             $0.id == buddy.id
         }) else { return }
-        self.storedBuddyList[idx] = buddy
+        if let check = self.storedBuddyList[idx].check,
+           check {
+            editedBuddy.check = true
+        }
+        self.storedBuddyList[idx] = editedBuddy
         self.buddyUseCase.updateBuddy(buddy)
     }
     

@@ -104,7 +104,10 @@ final class GatheringEditViewController: UIViewController {
             }
         }
         self.gatheringEditViewModel.didBuddyUpdated(gathering.buddyList)
-        self.gatheringEditViewModel.didMemoChanged(gathering.memo ?? String())
+        if let memo = gathering.memo,
+           !memo.isEmpty {
+            self.gatheringEditViewModel.didMemoChanged(memo)
+        }
         guard let pictures = gathering.picture else { return }
         for url in pictures {
             self.gatheringEditViewModel.didPicturePicked(url)
@@ -153,6 +156,7 @@ final class GatheringEditViewController: UIViewController {
         self.gatheringEditViewModel.$memo
             .receive(on: DispatchQueue.main)
             .sink { [weak self] memo in
+                guard let memo = memo else { return }
                 self?.memoTextView.text = memo
             }
             .store(in: &self.cancellables)
@@ -336,6 +340,9 @@ final class GatheringEditViewController: UIViewController {
     
     private func configurePlaceTextField() {
         self.placeBackgroundView.addSubview(self.placeTextField)
+        if let color = UIColor.labelPurple {
+            self.placeTextField.attributedPlaceholder = NSAttributedString(string: "모임 장소를 적어보아요", attributes: [NSAttributedString.Key.foregroundColor: color])
+        }
         self.placeTextField.delegate = self
         
         self.placeTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -497,11 +504,13 @@ final class GatheringEditViewController: UIViewController {
     private func configureMemoTextView() {
         self.memoBackgroundView.addSubview(self.memoTextView)
         self.memoTextView.backgroundColor = .systemBackground
-        self.memoTextView.font =  UIFont.systemFont(ofSize: .labelSize, weight: .medium)
+        self.memoTextView.font = UIFont.systemFont(ofSize: .labelSize, weight: .medium)
         self.memoTextView.textContentType = .none
         self.memoTextView.autocapitalizationType = .none
         self.memoTextView.autocorrectionType = .no
         self.memoTextView.delegate = self
+        self.memoTextView.text = "모임에 대한 메모를 적어보아요."
+        self.memoTextView.textColor = .labelPurple
         
         self.memoTextView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -717,7 +726,7 @@ extension GatheringEditViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "모임에 대한 메모를 적어주세요."
+            textView.text = "모임에 대한 메모를 적어보아요."
             textView.textColor = .labelPurple
         }
     }

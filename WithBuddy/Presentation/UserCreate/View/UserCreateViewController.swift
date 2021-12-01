@@ -72,12 +72,12 @@ final class UserCreateViewController: UIViewController {
         self.userCreateViewModel.editStartSignal
             .receive(on: DispatchQueue.main)
             .sink { [weak self] buddy in
-                let buddyCustomViewController = BuddyCustomViewController()
-                buddyCustomViewController.delegate = self
+                let userCustomViewController = UserCustomViewController()
+                userCustomViewController.delegate = self
                 if let buddy = buddy {
-                    buddyCustomViewController.configure(by: buddy)
+                    userCustomViewController.configure(by: buddy)
                 }
-                self?.navigationController?.pushViewController(buddyCustomViewController, animated: true)
+                self?.navigationController?.pushViewController(userCustomViewController, animated: true)
             }
             .store(in: &self.cancellables)
         
@@ -195,13 +195,9 @@ final class UserCreateViewController: UIViewController {
 
 }
 
-extension UserCreateViewController: BuddyCustomDelegate {
+extension UserCreateViewController: UserCustomDelegate {
     
-    func didBuddyEditCompleted(_ buddy: Buddy) {
-        self.userCreateViewModel.didUserChanged(buddy: buddy)
-    }
-    
-    func didBuddyAddCompleted(_ buddy: Buddy) {
+    func didDoneTouched(_ buddy: Buddy) {
         self.userCreateViewModel.didUserChanged(buddy: buddy)
     }
     

@@ -27,9 +27,14 @@ final class BuddyCustomViewModel {
     private var id: UUID?
     @Published private(set) var name: String = String()
     @Published private(set) var face: Face = Face(color: .purple, number: 1)
-    private(set) var addDoneSignal = PassthroughSubject<Buddy, Never>()
-    private(set) var editDoneSignal = PassthroughSubject<Buddy, Never>()
+    private(set) var addDoneSignal = PassthroughSubject<Void, Never>()
+    private(set) var editDoneSignal = PassthroughSubject<Void, Never>()
     private(set) var failSignal = PassthroughSubject<BuddyCustomError, Never>()
+    private let buddyUseCase: BuddyUseCase
+    
+    init(buddyUseCase: BuddyUseCase = BuddyUseCase()){
+        self.buddyUseCase = buddyUseCase
+    }
     
     func didBuddyInserted(_ buddy: Buddy) {
         self.id = buddy.id
@@ -61,12 +66,12 @@ final class BuddyCustomViewModel {
         if self.name.count < self.minNameLen {
             self.failSignal.send(BuddyCustomError.nameLength)
         } else {
-            var newBuddy = Buddy(id: UUID(), name: self.name, face: "\(self.face)")
             if let id = self.id {
-                newBuddy.id = id
-                self.editDoneSignal.send(newBuddy)
+                self.buddyUseCase.updateBuddy(Buddy(id: id, name: self.name, face: "\(self.face)"))
+                self.editDoneSignal.send()
             } else {
-                self.addDoneSignal.send(newBuddy)
+                self.buddyUseCase.insertBuddy(Buddy(id: UUID(), name: self.name, face: "\(self.face)"))
+                self.addDoneSignal.send()
             }
         }
     }

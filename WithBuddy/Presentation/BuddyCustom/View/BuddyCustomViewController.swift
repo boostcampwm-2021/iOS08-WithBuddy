@@ -10,24 +10,13 @@ import Combine
 
 final class BuddyCustomViewController: UIViewController {
     
-    private var scrollView = UIScrollView()
-    private var contentView = UIView()
-    
-    private var nameTextField = UITextField()
-    private var lineView = UIView()
-    private var buddyImageView = UIImageView()
-    
-    private var colorTitleLabel = BlackTitleLabel()
-    private var colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
-    private lazy var colorDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.colorCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
+    private lazy var buddyCustomView = BuddyCustomView()
+    private lazy var colorDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.buddyCustomView.colorCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as? ImageCollectionViewCell else { preconditionFailure() }
         cell.update(image: UIImage(named: itemIdentifier.engDescription), check: itemIdentifier.check)
         return cell
     }
-    
-    private var faceTitleLabel = BlackTitleLabel()
-    private var faceCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
-    private lazy var faceDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.faceCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
+    private lazy var faceDataSource = UICollectionViewDiffableDataSource<Int, CheckableInfo>(collectionView: self.buddyCustomView.faceCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: CheckableInfo) -> UICollectionViewCell? in
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCollectionViewCell.identifier, for: indexPath) as? ImageCollectionViewCell else { preconditionFailure() }
         cell.update(image: UIImage(named: itemIdentifier.engDescription), check: itemIdentifier.check)
         return cell
@@ -35,13 +24,11 @@ final class BuddyCustomViewController: UIViewController {
     
     private var buddyCustomViewModel = BuddyCustomViewModel()
     private var cancellables: Set<AnyCancellable> = []
-    weak var delegate: BuddyCustomDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .backgroundPurple
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.didDoneTouched))
-        
         self.configure()
         self.bind()
     }
@@ -55,17 +42,13 @@ final class BuddyCustomViewController: UIViewController {
         super.viewDidDisappear(animated)
         NotificationCenter.default.removeObserver(self, name: UITextField.textDidChangeNotification, object: nil)
     }
-
-    @objc private func didTextChanged(_ notification: Notification) {
-        let maxNameLen = 10
-        if let textField = notification.object as? UITextField {
-            guard let text = textField.text else { return }
-        
-            if text.count > maxNameLen {
+    
+    @objc private func didTextChanged() {
+        if let text = self.buddyCustomView.nameTextField.text {
+            if text.count > 10 {
                 let index = text.index(text.startIndex, offsetBy: 10)
-                let newString = String(text[..<index])
-                textField.text = newString
-                textField.resignFirstResponder()
+                self.buddyCustomView.nameTextField.text = String(text[..<index])
+                self.buddyCustomView.nameTextField.resignFirstResponder()
             }
         }
     }
@@ -92,29 +75,27 @@ final class BuddyCustomViewController: UIViewController {
                 }))
                 self?.faceDataSource.apply(faceSnapshot, animatingDifferences: true)
                 
-                self?.buddyImageView.image = UIImage(named: "\(face)")
+                self?.buddyCustomView.buddyImageView.image = UIImage(named: "\(face)")
             }
             .store(in: &self.cancellables)
         
         self.buddyCustomViewModel.$name
             .receive(on: DispatchQueue.main)
             .sink { [weak self] text in
-                self?.nameTextField.text = text
+                self?.buddyCustomView.nameTextField.text = text
             }
             .store(in: &self.cancellables)
         
         self.buddyCustomViewModel.addDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] buddy in
-                self?.delegate?.didBuddyAddCompleted(buddy)
+            .sink { [weak self] in
                 self?.navigationController?.popViewController(animated: true)
             }
             .store(in: &self.cancellables)
         
         self.buddyCustomViewModel.editDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] buddy in
-                self?.delegate?.didBuddyEditCompleted(buddy)
+            .sink { [weak self] in
                 self?.navigationController?.popViewController(animated: true)
             }
             .store(in: &self.cancellables)
@@ -128,160 +109,18 @@ final class BuddyCustomViewController: UIViewController {
     }
     
     private func configure() {
-        self.configureScrollView()
-        self.configureContentView()
-        self.configureNameTextField()
-        self.configureLineView()
-        self.configureMyBuddyImageView()
-        self.configureColorTitleLabel()
-        self.configureColorCollectionView()
-        self.configureFaceTitleLabel()
-        self.configureFaceCollectionView()
-    }
-    
-    private func configureScrollView() {
-        self.view.addSubview(self.scrollView)
-        self.scrollView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            self.scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-            self.scrollView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-            self.scrollView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
-        ])
-    }
-    
-    private func configureContentView() {
-        self.scrollView.addSubview(self.contentView)
-        self.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didEmptySpacedTouched)))
-        self.contentView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
-            self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
-            self.contentView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor),
-            self.contentView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor),
-            self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor)
-        ])
-    }
-    
-    private func configureNameTextField() {
-        self.contentView.addSubview(self.nameTextField)
-        if let color = UIColor.labelPurple {
-            self.nameTextField.attributedPlaceholder = NSAttributedString(string: "이름을 입력해주세요.", attributes: [NSAttributedString.Key.foregroundColor: color])
-        }
-        self.nameTextField.delegate = self
-        self.nameTextField.textAlignment = .center
+        self.view.addSubview(self.buddyCustomView)
         
-        self.nameTextField.translatesAutoresizingMaskIntoConstraints = false
+        buddyCustomView.nameTextField.delegate = self
+        buddyCustomView.colorCollectionView.delegate = self
+        buddyCustomView.faceCollectionView.delegate = self
+        self.buddyCustomView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.nameTextField.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: .innerPartInset),
-            self.nameTextField.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor)
+            self.buddyCustomView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.buddyCustomView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            self.buddyCustomView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            self.buddyCustomView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
         ])
-    }
-    
-    private func configureLineView() {
-        self.contentView.addSubview(self.lineView)
-        self.lineView.backgroundColor = .labelPurple
-        
-        self.lineView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.lineView.topAnchor.constraint(equalTo: self.nameTextField.bottomAnchor, constant: 5),
-            self.lineView.leadingAnchor.constraint(equalTo: self.nameTextField.leadingAnchor),
-            self.lineView.trailingAnchor.constraint(equalTo: self.nameTextField.trailingAnchor),
-            self.lineView.heightAnchor.constraint(equalToConstant: 1)
-        ])
-    }
-    
-    private func configureMyBuddyImageView() {
-        self.contentView.addSubview(self.buddyImageView)
-        
-        self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.buddyImageView.topAnchor.constraint(equalTo: self.lineView.bottomAnchor, constant: .innerPartInset),
-            self.buddyImageView.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
-            self.buddyImageView.widthAnchor.constraint(equalToConstant: 250),
-            self.buddyImageView.heightAnchor.constraint(equalToConstant: 250)
-        ])
-    }
-    
-    private func configureColorTitleLabel() {
-        self.contentView.addSubview(self.colorTitleLabel)
-        self.colorTitleLabel.text = "색상"
-        
-        self.colorTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.colorTitleLabel.topAnchor.constraint(equalTo: self.buddyImageView.bottomAnchor, constant: .plusInset),
-            self.colorTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset)
-        ])
-    }
-    
-    private func configureColorCollectionView() {
-        self.contentView.addSubview(self.colorCollectionView)
-        self.colorCollectionView.backgroundColor = .clear
-        self.colorCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.didColorCollectionViewTouched))
-        self.colorCollectionView.addGestureRecognizer(tap)
-        
-        let flowLayout = UICollectionViewFlowLayout()
-        let width = (self.view.frame.width - (.plusInset * 2))/6 - .innerPartInset
-        flowLayout.itemSize = CGSize(width: width, height: width)
-        flowLayout.scrollDirection = .horizontal
-        self.colorCollectionView.collectionViewLayout = flowLayout
-        
-        self.colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.colorCollectionView.topAnchor.constraint(equalTo: self.colorTitleLabel.bottomAnchor, constant: .innerPartInset),
-            self.colorCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
-            self.colorCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
-            self.colorCollectionView.heightAnchor.constraint(equalToConstant: width)
-        ])
-    }
-    
-    @objc func didColorCollectionViewTouched(_ sender: UITapGestureRecognizer) {
-        if let indexPath = self.colorCollectionView.indexPathForItem(at: sender.location(in: self.colorCollectionView)) {
-            self.buddyCustomViewModel.didColorChosend(in: indexPath.item)
-            self.view.endEditing(true)
-        }
-    }
-    
-    private func configureFaceTitleLabel() {
-        self.contentView.addSubview(self.faceTitleLabel)
-        self.faceTitleLabel.text = "얼굴"
-        
-        self.faceTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.faceTitleLabel.topAnchor.constraint(equalTo: self.colorCollectionView.bottomAnchor, constant: .plusInset),
-            self.faceTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset)
-        ])
-    }
-    
-    private func configureFaceCollectionView() {
-        self.contentView.addSubview(self.faceCollectionView)
-        self.faceCollectionView.backgroundColor = .clear
-        self.faceCollectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: ImageCollectionViewCell.identifier)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.didFaceCollectionViewTouched))
-        self.faceCollectionView.addGestureRecognizer(tap)
-        
-        let flowLayout = UICollectionViewFlowLayout()
-        let width = (self.view.frame.width - (.plusInset * 2))/5 - .innerPartInset
-        let totalHeight = width*3 + 20
-        flowLayout.itemSize = CGSize(width: width, height: width)
-        self.faceCollectionView.collectionViewLayout = flowLayout
-        
-        self.faceCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.faceCollectionView.topAnchor.constraint(equalTo: self.faceTitleLabel.bottomAnchor, constant: .innerPartInset),
-            self.faceCollectionView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
-            self.faceCollectionView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
-            self.faceCollectionView.heightAnchor.constraint(equalToConstant: totalHeight),
-            self.faceCollectionView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
-        ])
-    }
-    
-    @objc func didFaceCollectionViewTouched(_ sender: UITapGestureRecognizer) {
-        if let indexPath = self.faceCollectionView.indexPathForItem(at: sender.location(in: self.faceCollectionView)) {
-            self.buddyCustomViewModel.didFaceChosen(in: indexPath.item)
-            self.view.endEditing(true)
-        }
     }
     
     private func alertError(_ error: BuddyCustomError) {
@@ -295,10 +134,6 @@ final class BuddyCustomViewController: UIViewController {
         self.buddyCustomViewModel.didDoneTouched()
     }
     
-    @objc private func didEmptySpacedTouched(){
-        self.nameTextField.resignFirstResponder()
-    }
-    
 }
 
 extension BuddyCustomViewController: UITextFieldDelegate {
@@ -310,14 +145,29 @@ extension BuddyCustomViewController: UITextFieldDelegate {
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let text = textField.text else { return }
+        print(text)
         self.buddyCustomViewModel.didNameChaged(name: text)
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else { return false }
+        if text.count >= 10 && range.length == 0 && range.location < 10 {
+            return false
+        }
+        return true
+    }
+
 }
 
-protocol BuddyCustomDelegate: AnyObject {
+extension BuddyCustomViewController: UICollectionViewDelegate {
     
-    func didBuddyAddCompleted(_: Buddy)
-    func didBuddyEditCompleted(_: Buddy)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.view.endEditing(true)
+        if collectionView == self.buddyCustomView.colorCollectionView {
+            self.buddyCustomViewModel.didColorChosend(in: indexPath.item)
+        } else {
+            self.buddyCustomViewModel.didFaceChosen(in: indexPath.item)
+        }
+    }
     
 }

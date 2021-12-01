@@ -27,6 +27,7 @@ final class BuddyChoiceViewModel {
     @Published private(set) var storedBuddyList: [Buddy] = []
     private(set) var doneSignal = PassthroughSubject<[Buddy], Never>()
     private(set) var failSignal = PassthroughSubject<BuddyChoiceError, Never>()
+    private var selectedBuddyList: [Buddy] = []
     private var checkedBuddyList: [Buddy] {
         return self.storedBuddyList.filter( {
             guard let check = $0.check else { return false }
@@ -38,6 +39,21 @@ final class BuddyChoiceViewModel {
     
     subscript(index: Int) -> Buddy {
         return self.storedBuddyList[index]
+    }
+    
+    func viewWillAppear() {
+        let idList = self.selectedBuddyList.map{ $0.id }
+        var storedBuddyList = [Buddy]()
+        self.buddyUseCase.fetchBuddy().forEach { buddy in
+            if idList.contains(buddy.id) {
+                var insertBuddy = buddy
+                insertBuddy.check = true
+                storedBuddyList.append(insertBuddy)
+            } else {
+                storedBuddyList.append(buddy)
+            }
+        }
+        self.storedBuddyList = storedBuddyList
     }
     
     func didBuddyDeleted(in idx: Int) {
@@ -64,16 +80,7 @@ final class BuddyChoiceViewModel {
     }
     
     func didBuddyListLoaded(by buddyList: [Buddy]) {
-        let storedBuddyList = self.buddyUseCase.fetchBuddy()
-        storedBuddyList.forEach( { buddy in
-            var checkedBuddy = buddy
-            checkedBuddy.check = true
-            if buddyList.contains(checkedBuddy) || buddyList.contains(buddy) {
-                self.storedBuddyList.append(checkedBuddy)
-            } else {
-                self.storedBuddyList.append(buddy)
-            }
-        })
+        self.selectedBuddyList = buddyList
     }
     
     func didBuddySelectingCompleted() {
@@ -82,14 +89,6 @@ final class BuddyChoiceViewModel {
         } else {
             self.doneSignal.send(self.checkedBuddyList)
         }
-    }
-    
-    func didBuddyEdited(_ buddy: Buddy) {
-        guard let idx = self.storedBuddyList.firstIndex(where: {
-            $0.id == buddy.id
-        }) else { return }
-        self.storedBuddyList[idx] = buddy
-        self.buddyUseCase.updateBuddy(buddy)
     }
     
 }

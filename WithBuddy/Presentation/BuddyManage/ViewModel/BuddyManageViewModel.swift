@@ -18,31 +18,22 @@ final class BuddyManageViewModel {
         return self.storedBuddyList[index]
     }
     
+    func viewWillAppear() {
+        self.didBuddyListLoaded()
+    }
+    
     func didBuddyDeleted(in idx: Int) {
         do {
             try self.buddyUseCase.deleteBuddy(storedBuddyList[idx])
-            self.storedBuddyList.remove(at: idx)
+            self.didBuddyListLoaded()
         } catch let error {
             guard let error = error as? BuddyChoiceError else { return }
             self.failSignal.send(error)
         }
     }
     
-    func didBuddyAdded(_ buddy: Buddy) {
-        self.buddyUseCase.insertBuddy(buddy)
-        self.storedBuddyList.append(buddy)
-    }
-    
-    func didBuddyListLoaded() {
+    private func didBuddyListLoaded() {
         self.storedBuddyList = self.buddyUseCase.fetchBuddy()
-    }
-    
-    func buddyDidEdited(_ buddy: Buddy) {
-        guard let idx = self.storedBuddyList.firstIndex(where: {
-            $0.id == buddy.id
-        }) else { return }
-        self.storedBuddyList[idx] = buddy
-        self.buddyUseCase.updateBuddy(buddy)
     }
     
 }

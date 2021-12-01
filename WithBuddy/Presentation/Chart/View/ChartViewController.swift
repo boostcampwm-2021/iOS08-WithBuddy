@@ -190,23 +190,9 @@ final class ChartViewController: UIViewController {
     @objc private func didEditButtonTouched(_ sender: UITapGestureRecognizer) {
         guard let buddy = self.viewModel.selectedBuddy else { return }
         let buddyCustomViewController = BuddyCustomViewController()
-        buddyCustomViewController.delegate = self
         buddyCustomViewController.title = "버디 편집"
         buddyCustomViewController.configure(by: buddy)
         self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
     }
 
-}
-
-extension ChartViewController: BuddyCustomDelegate {
-    
-    func didBuddyEditCompleted(_ buddy: Buddy) {
-        self.bubbleChartView.hideDescriptionView()
-        self.viewModel.didBuddyEdited(buddy)
-    }
-    
-    func didBuddyAddCompleted(_ buddy: Buddy) {
-        
-    }
-    
 }

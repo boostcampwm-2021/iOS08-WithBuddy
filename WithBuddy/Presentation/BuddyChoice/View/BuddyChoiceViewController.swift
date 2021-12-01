@@ -31,6 +31,11 @@ final class BuddyChoiceViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.didCompleteButtonTouched))
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.buddyChoiceViewModel.viewWillAppear()
+    }
+    
     func configureBuddyList(by buddyList: [Buddy]) {
         self.buddyChoiceViewModel.didBuddyListLoaded(by: buddyList)
     }
@@ -138,7 +143,6 @@ final class BuddyChoiceViewController: UIViewController {
     
     @objc private func didNewBuddyButtonTouched(_ sender: UIButton) {
         let buddyCustomViewController = BuddyCustomViewController()
-        buddyCustomViewController.delegate = self
         self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
     }
     
@@ -200,7 +204,6 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
             let edit = UIAction(title: NSLocalizedString("편집", comment: String()),
                                 image: UIImage(systemName: "pencil.circle")) { _ in
                 let buddyCustomViewController = BuddyCustomViewController()
-                buddyCustomViewController.delegate = self
                 buddyCustomViewController.configure(by: self.buddyChoiceViewModel[indexPath.item])
                 self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
             }
@@ -210,18 +213,6 @@ extension BuddyChoiceViewController: UICollectionViewDelegate {
             }
             return UIMenu(title: "이 버디를", children: [edit, delete])
         })
-    }
-    
-}
-
-extension BuddyChoiceViewController: BuddyCustomDelegate {
-    
-    func didBuddyEditCompleted(_ buddy: Buddy) {
-        self.buddyChoiceViewModel.didBuddyEdited(buddy)
-    }
-    
-    func didBuddyAddCompleted(_ buddy: Buddy) {
-        self.buddyChoiceViewModel.didBuddyAdded(buddy)
     }
     
 }

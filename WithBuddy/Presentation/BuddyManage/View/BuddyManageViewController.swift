@@ -31,6 +31,7 @@ final class BuddyManageViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.buddyManageViewModel.viewWillAppear()
         self.title = "버디 관리"
     }
     
@@ -63,7 +64,6 @@ final class BuddyManageViewController: UIViewController {
         self.configureSearchView()
         self.configureButton()
         self.configureBuddyCollectionView()
-        self.buddyManageViewModel.didBuddyListLoaded()
     }
     
     private func configureSearchView() {
@@ -123,7 +123,6 @@ final class BuddyManageViewController: UIViewController {
     
     @objc private func didNewBuddyButtonTouched(_ sender: UIButton) {
         let buddyCustomViewController = BuddyCustomViewController()
-        buddyCustomViewController.delegate = self
         buddyCustomViewController.title = "버디 생성"
         self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
     }
@@ -182,7 +181,6 @@ extension BuddyManageViewController: UICollectionViewDelegate {
             let edit = UIAction(title: NSLocalizedString("편집", comment: String()),
                                 image: UIImage(systemName: "pencil.circle")) { _ in
                 let buddyCustomViewController = BuddyCustomViewController()
-                buddyCustomViewController.delegate = self
                 buddyCustomViewController.title = "버디 편집"
                 buddyCustomViewController.configure(by: self.buddyManageViewModel[indexPath.item])
                 self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
@@ -195,18 +193,6 @@ extension BuddyManageViewController: UICollectionViewDelegate {
         })
     }
 
-}
-
-extension BuddyManageViewController: BuddyCustomDelegate {
-    
-    func didBuddyEditCompleted(_ buddy: Buddy) {
-        self.buddyManageViewModel.buddyDidEdited(buddy)
-    }
-    
-    func didBuddyAddCompleted(_ buddy: Buddy) {
-        self.buddyManageViewModel.didBuddyAdded(buddy)
-    }
-    
 }
 
 extension BuddyManageViewController: UIGestureRecognizerDelegate {

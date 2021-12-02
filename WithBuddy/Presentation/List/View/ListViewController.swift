@@ -72,7 +72,6 @@ final class ListViewController: UIViewController {
         self.view.addSubview(self.listTableView)
         self.listTableView.delegate = self
         self.listTableView.backgroundColor = .clear
-        self.listTableView.separatorStyle = .none
         self.listTableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
         
         let panGesture = UIPanGestureRecognizer()

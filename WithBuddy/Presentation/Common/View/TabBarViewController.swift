@@ -17,6 +17,7 @@ final class TabBarViewController: UITabBarController {
         super.viewDidLoad()
         self.view.backgroundColor = .backgroundPurple
         self.tabBar.backgroundColor = .systemBackground
+        self.tabBar.tintColor = .labelPurple
         self.configure()
     }
     
@@ -59,27 +60,29 @@ final class TabBarViewController: UITabBarController {
         let register = RegisterViewController()
         let list = ListViewController()
         let setting = SettingViewController()
-        self.configureTab(controller: calendar, title: "일정", photoName: "calendar")
-        self.configureTab(controller: chart, title: "통계", photoName: "chart.bar.xaxis")
-        self.configureTab(controller: list, title: "목록", photoName: "list.bullet.rectangle.fill")
-        self.configureTab(controller: setting, title: "설정", photoName: "gearshape.fill")
+        self.configureTab(controller: calendar, title: "일정", photoName: "Calendar")
+        self.configureTab(controller: chart, title: "통계", photoName: "Chart")
+        self.configureTab(controller: list, title: "목록", photoName: "List")
+        self.configureTab(controller: setting, title: "설정", photoName: "Setting")
         self.viewControllers = [calendar, chart, register, list, setting]
     }
     
     private func configureTab(controller: UIViewController, title: String, photoName: String) {
-        let tabBarItem = UITabBarItem(title: title, image: UIImage(systemName: photoName), selectedImage: UIImage(systemName: photoName))
+        let image = UIImage(named: photoName)?.withRenderingMode(.alwaysTemplate)
+        let tabBarItem = UITabBarItem(title: title, image: image, selectedImage: image)
         controller.tabBarItem = tabBarItem
     }
     
     private func configureButton() {
         let circleDiameter = self.tabBar.layer.bounds.height * 1.5
+        let image = UIImage(named: "Gathering")?.withRenderingMode(.alwaysTemplate)
         if #available(iOS 15.0, *) {
             var config = UIButton.Configuration.filled()
             var attText = AttributedString("모임등록")
             attText.font = UIFont.systemFont(ofSize: 10.0, weight: .medium)
             config.attributedTitle = attText
             config.imagePadding = 7
-            config.image = UIImage(systemName: "person.3.fill")
+            config.image = image
             config.imagePlacement = .top
             config.cornerStyle = .capsule
             self.registerButton = UIButton(configuration: config, primaryAction: nil)
@@ -87,7 +90,7 @@ final class TabBarViewController: UITabBarController {
             let button = UIButton()
             button.backgroundColor = .labelPurple
             button.setTitle("모임등록", for: .normal)
-            button.setImage(UIImage(systemName: "person.3.fill"), for: .normal)
+            button.setImage(image, for: .normal)
             button.setPreferredSymbolConfiguration(.init(pointSize: 21, weight: .regular, scale: .default), forImageIn: .normal)
             button.tintColor = .white
             guard let image = button.imageView?.image,

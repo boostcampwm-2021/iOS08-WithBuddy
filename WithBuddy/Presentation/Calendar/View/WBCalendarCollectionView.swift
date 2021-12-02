@@ -22,6 +22,7 @@ final class WBCalendarCollectionView: UICollectionView {
     private func configure() {
         self.register(WBCalendarViewCell.self, forCellWithReuseIdentifier: WBCalendarViewCell.identifier)
         self.configureLayout()
+        self.backgroundColor = .clear
     }
     
     private func configureLayout() {

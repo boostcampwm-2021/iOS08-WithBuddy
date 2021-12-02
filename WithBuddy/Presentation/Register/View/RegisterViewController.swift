@@ -243,11 +243,13 @@ final class RegisterViewController: UIViewController {
         self.datePicker.locale = Locale(identifier: "ko-KR")
         self.datePicker.timeZone = .autoupdatingCurrent
         self.datePicker.addTarget(self, action: #selector(self.didDateChanged), for: .valueChanged)
+        self.datePicker.contentHorizontalAlignment = .leading
         
         self.datePicker.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.datePicker.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: .innerPartInset),
-            self.datePicker.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset)
+            self.datePicker.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.datePicker.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor)
         ])
     }
     

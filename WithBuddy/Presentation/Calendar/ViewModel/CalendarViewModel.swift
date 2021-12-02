@@ -36,7 +36,7 @@ final class CalendarViewModel {
         self.calendarMonth = self.calendarUseCase.firstTimeOfDay(baseDate: Date())
     }
     
-    func viewWillAppear() {
+    func viewDidAppear() {
         self.fetchBuddyFace()
         self.currentDate = Date()
         self.sendMonthSubject()

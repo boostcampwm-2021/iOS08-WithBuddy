@@ -27,7 +27,6 @@ final class SettingViewModel {
     
     func didGatheringResetTouched() {
         self.gatheringUseCase.deleteAllGathering()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] error in
                 switch error {
                 case .failure(let error):

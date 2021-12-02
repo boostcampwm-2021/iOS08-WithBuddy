@@ -98,8 +98,8 @@ final class TabBarViewController: UITabBarController {
                   let titleText = titleLabel.text else { return }
             let titleSize = titleText.size(withAttributes: [NSAttributedString.Key.font: titleLabel.font as Any])
 
-            button.imageEdgeInsets = UIEdgeInsets(top: -(titleSize.height + 3), left: CGFloat.zero, bottom: CGFloat.zero, right: -image.size.width)
-            button.titleEdgeInsets = UIEdgeInsets(top: 3, left: -titleSize.width/2-11, bottom: -image.size.height, right: CGFloat.zero)
+            button.imageEdgeInsets = UIEdgeInsets(top: -(titleSize.height + 3), left: image.size.width - 2, bottom: CGFloat.zero, right: CGFloat.zero)
+            button.titleEdgeInsets = UIEdgeInsets(top: 3, left: -titleSize.width/2 + 6, bottom: -image.size.height, right: CGFloat.zero)
             self.registerButton = button
         }
         self.registerButton.frame = CGRect(x: CGFloat.zero, y: CGFloat.zero, width: circleDiameter, height: circleDiameter)

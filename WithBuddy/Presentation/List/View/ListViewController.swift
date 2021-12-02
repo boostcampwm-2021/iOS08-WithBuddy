@@ -92,7 +92,11 @@ final class ListViewController: UIViewController {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Gathering>()
         snapshot.appendSections([Int.zero])
         snapshot.appendItems(list)
-        self.listDataSource.apply(snapshot, animatingDifferences: true)
+        if #available(iOS 15.0, *) {
+            self.listDataSource.apply(snapshot, animatingDifferences: true)
+        } else {
+            self.listDataSource.apply(snapshot, animatingDifferences: false)
+        }
     }
     
     private func reloadGathering(filter: String) {

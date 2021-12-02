@@ -23,9 +23,9 @@ final class CalendarViewController: UIViewController {
         self.configure()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.calendarViewModel.viewWillAppear()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.calendarViewModel.viewDidAppear()
     }
     
     private func configure() {

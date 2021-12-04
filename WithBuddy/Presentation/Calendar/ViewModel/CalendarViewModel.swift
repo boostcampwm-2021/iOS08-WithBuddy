@@ -8,16 +8,6 @@
 import Foundation
 import Combine
 
-protocol CalendarViewModlInput {
-    
-}
-
-protocol CalendarViewModelOutput {
-    var facePublisher: Published<String?>.Publisher { get }
-    var didDaysReloadSignal: PassthroughSubject<Void, Never> { get }
-}
-
-protocol CalendarViewModelProtocol: CalendarViewModlInput & CalendarViewModelOutput {}
 
 final class CalendarViewModel {
     

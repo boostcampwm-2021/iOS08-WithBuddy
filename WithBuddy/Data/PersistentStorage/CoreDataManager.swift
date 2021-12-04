@@ -229,7 +229,8 @@ extension CoreDataManager: GatheringManagable {
                 do {
                     try self.backgroundContext.save()
                     promise(.success(gatheringEntity))
-                } catch {
+                } catch let error {
+                    print(error)
                     promise(.failure(.gatheringInsert))
                 }
             }
@@ -404,9 +405,11 @@ extension CoreDataManager: GatheringManagable {
     func deleteAllGathering() -> AnyPublisher<Void, CoreDataError> {
         return Future { promise in
             do {
-                let request: NSFetchRequest<NSFetchRequestResult> = GatheringEntity.fetchRequest()
-                let deleteRequest = NSBatchDeleteRequest(fetchRequest: request)
-                try self.backgroundContext.execute(deleteRequest)
+                let request = GatheringEntity.fetchRequest()
+                let fetchReuslt = try self.backgroundContext.fetch(request)
+                
+                fetchReuslt.forEach { self.backgroundContext.delete($0) }
+                try self.backgroundContext.save()
                 promise(.success(()))
             } catch {
                 promise(.failure(.gatheringDelete))

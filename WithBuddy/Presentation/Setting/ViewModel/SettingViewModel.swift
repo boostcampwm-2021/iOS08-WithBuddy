@@ -19,7 +19,7 @@ final class SettingViewModel {
     
     init(
         userUseCase: UserUseCase = UserUseCase(),
-        gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
+        gatheringUseCase: GatheringUseCaseProtocol = GatheringUseCase(coreDataManager: CoreDataManager.shared)
     ) {
         self.userUseCase = userUseCase
         self.gatheringUseCase = gatheringUseCase

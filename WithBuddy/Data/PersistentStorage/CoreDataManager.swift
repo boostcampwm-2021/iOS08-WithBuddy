@@ -8,12 +8,6 @@
 import CoreData
 import Combine
 
-protocol CoreDataManagable {
-
-    func fetchPurpose() -> AnyPublisher<[PurposeEntity], Never>
-    
-}
-
 protocol BuddyManagable {
     
     func insertBuddy(_ buddy: Buddy) -> AnyPublisher<BuddyEntity, CoreDataManager.CoreDataError>
@@ -37,6 +31,12 @@ protocol GatheringManagable {
     
 }
 
+protocol PurposeManagable {
+
+    func fetchPurpose() -> AnyPublisher<[PurposeEntity], CoreDataManager.CoreDataError>
+
+}
+
 final class CoreDataManager {
     
     enum CoreDataError: LocalizedError {
@@ -49,6 +49,7 @@ final class CoreDataManager {
         case gatheringFetch
         case gatheringUpdate
         case gatheringDelete
+        case purposeFetch
         
         var errorDescription: String? {
             switch self {
@@ -61,6 +62,7 @@ final class CoreDataManager {
             case .gatheringFetch: return "모임을 불러올 수 없습니다."
             case .gatheringUpdate: return "모임을 수정할 수 없습니다."
             case .gatheringDelete: return "모임을 삭제할 수 없습니다."
+            case .purposeFetch: return "목적을 불러올 수 없습니다."
             }
         }
     }
@@ -414,13 +416,22 @@ extension CoreDataManager: GatheringManagable {
     
 }
 
-extension CoreDataManager: CoreDataManagable {
+extension CoreDataManager: PurposeManagable {
     
-    func fetchPurpose() -> AnyPublisher<[PurposeEntity], Never> {
-        let request = PurposeEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "gatheringList.@count > 0")
-        return Just(self.fetch(request: request))
-            .eraseToAnyPublisher()
+    func fetchPurpose() -> AnyPublisher<[PurposeEntity], CoreDataError> {
+        return Future { promise in
+            do {
+                let request = PurposeEntity.fetchRequest()
+                request.predicate = NSPredicate(
+                    format: "%K.@count > 0",
+                    #keyPath(PurposeEntity.gatheringList)
+                )
+                let fetchResult = try self.backgroundContext.fetch(request)
+                promise(.success(fetchResult))
+            } catch {
+                promise(.failure(.purposeFetch))
+            }
+        }.eraseToAnyPublisher()
     }
     
 }

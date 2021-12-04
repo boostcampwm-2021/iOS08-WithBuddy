@@ -18,7 +18,7 @@ final class ListViewModel {
     private var cancellable: Set<AnyCancellable> = []
     
     init(
-        gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
+        gatheringUseCase: GatheringUseCaseProtocol = GatheringUseCase(coreDataManager: CoreDataManager.shared)
     ) {
         self.gatheringUseCase = gatheringUseCase
     }

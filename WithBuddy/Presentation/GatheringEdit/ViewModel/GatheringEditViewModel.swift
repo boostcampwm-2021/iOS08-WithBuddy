@@ -28,13 +28,13 @@ final class GatheringEditViewModel {
     @Published private(set) var memo: String?
     @Published private(set) var pictures: [URL] = []
     
-    private var gatheringUseCase: GatheringUseCase
-    private var purposeUseCase: PurposeUseCase
+    private var gatheringUseCase: GatheringUseCaseProtocol
+    private var purposeUseCase: PurposeUseCaseProtocol
     private var cancellable: Set<AnyCancellable> = []
     
     init(
-        gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared),
-        purposeUseCase: PurposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared)
+        gatheringUseCase: GatheringUseCaseProtocol = GatheringUseCase(coreDataManager: CoreDataManager.shared),
+        purposeUseCase: PurposeUseCaseProtocol = PurposeUseCase(coreDataManager: CoreDataManager.shared)
     ) {
         self.gatheringUseCase = gatheringUseCase
         self.purposeUseCase = purposeUseCase

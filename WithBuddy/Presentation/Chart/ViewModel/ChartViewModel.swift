@@ -25,8 +25,8 @@ final class ChartViewModel {
     private(set) var selectedBuddy: Buddy?
     
     init(
-        buddyUseCase: BuddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared),
-        purposeUseCase: PurposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared),
+        buddyUseCase: BuddyUseCaseProtocol = BuddyUseCase(coreDataManager: CoreDataManager.shared),
+        purposeUseCase: PurposeUseCaseProtocol = PurposeUseCase(coreDataManager: CoreDataManager.shared),
         userUseCase: UserUseCase = UserUseCase()
     ) {
         self.buddyUseCase = buddyUseCase
@@ -72,10 +72,14 @@ final class ChartViewModel {
     
     private func fetchPurposeRank() {
         self.purposeUseCase.fetchTopFourPurpose(before: Date())
-            .sink(receiveValue: { [weak self] rank in
+            .sink { completion in
+                //TODO: purpose fetch error alert 하기
+                print(completion)
+            } receiveValue: { [weak self] rank in
                 guard let self = self else { return }
                 self.purposeRank = rank.map{ ($0, self.purposeUseCase.engToKor(eng: $0)) }
-            }).store(in: &self.cancellable)
+            }
+            .store(in: &self.cancellable)
     }
     
     private func fetchLatestAndOldBuddy() {

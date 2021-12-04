@@ -44,8 +44,8 @@ final class RegisterViewModel {
     private var cancellable: Set<AnyCancellable> = []
     
     init(
-        gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared),
-        purposeUseCase: PurposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared),
+        gatheringUseCase: GatheringUseCaseProtocol = GatheringUseCase(coreDataManager: CoreDataManager.shared),
+        purposeUseCase: PurposeUseCaseProtocol = PurposeUseCase(coreDataManager: CoreDataManager.shared),
         pictureUseCase: PictureUseCase = PictureUseCase()
     ) {
         self.gatheringUseCase = gatheringUseCase

@@ -38,9 +38,10 @@ final class RegisterViewModel {
     @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var pictures: [URL] = []
     
-    private var gatheringUseCase: GatheringUseCase
-    private var purposeUseCase: PurposeUseCase
+    private var gatheringUseCase: GatheringUseCaseProtocol
+    private var purposeUseCase: PurposeUseCaseProtocol
     private var pictureUseCase: PictureUseCase
+    private var cancellable: Set<AnyCancellable> = []
     
     init(
         gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared),
@@ -115,7 +116,13 @@ final class RegisterViewModel {
                 picture: self.pictures
             )
             self.gatheringUseCase.insertGathering(gathering)
-            self.registerDoneSignal.send(gathering)
+                .sink { completion in
+                    //TODO: insert 실패 alert 띄우기
+                    print(completion)
+                } receiveValue: { [weak self] gathering in
+                    self?.registerDoneSignal.send(gathering)
+                }
+                .store(in: &self.cancellable)
         }
     }
     

@@ -29,7 +29,7 @@ final class BuddyUseCase: BuddyUseCaseProtocol {
     
     func fetchBuddy() -> AnyPublisher<[Buddy], CoreDataManager.CoreDataError> {
         self.coreDataManager.fetchAllBuddy()
-            .map{ buddyEntityList in buddyEntityList.map{ $0.toDomain() } }
+            .map{ buddyEntityList in buddyEntityList.map{ $0.toDomain() }.sorted() }
             .eraseToAnyPublisher()
     }
     
@@ -40,6 +40,7 @@ final class BuddyUseCase: BuddyUseCaseProtocol {
                 .filter{ $0.findRecentlyDate(before: date) != nil}
                 .sorted { $0.findRecentlyDate(before: date) ?? Date() > $1.findRecentlyDate(before: date) ?? Date() }
                 .map { $0.toDomain() }
+                .sorted()
             }.eraseToAnyPublisher()
     }
     

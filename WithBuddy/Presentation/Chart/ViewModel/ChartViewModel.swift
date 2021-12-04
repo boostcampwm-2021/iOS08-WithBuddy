@@ -17,7 +17,6 @@ final class ChartViewModel {
     private(set) var buddyEditSuccessSignal = PassthroughSubject<Void, Never>()
     private(set) var buddyEditFailSignal = PassthroughSubject<CoreDataManager.CoreDataError, Never>()
     
-    private let gatheringUseCase: GatheringUseCase
     private let buddyUseCase: BuddyUseCaseProtocol
     private let purposeUseCase: PurposeUseCaseProtocol
     private let userUseCase: UserUseCase
@@ -26,12 +25,10 @@ final class ChartViewModel {
     private(set) var selectedBuddy: Buddy?
     
     init(
-        gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared),
         buddyUseCase: BuddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared),
         purposeUseCase: PurposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared),
         userUseCase: UserUseCase = UserUseCase()
     ) {
-        self.gatheringUseCase = gatheringUseCase
         self.buddyUseCase = buddyUseCase
         self.purposeUseCase = purposeUseCase
         self.userUseCase = userUseCase

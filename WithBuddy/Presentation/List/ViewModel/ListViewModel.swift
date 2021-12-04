@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 final class ListViewModel {
     
@@ -13,7 +14,8 @@ final class ListViewModel {
     private(set) var searchedList: [Gathering] = []
     private(set) var isSearched: Bool = false
     
-    private let gatheringUseCase: GatheringUseCase
+    private let gatheringUseCase: GatheringUseCaseProtocol
+    private var cancellable: Set<AnyCancellable> = []
     
     init(
         gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
@@ -33,8 +35,15 @@ final class ListViewModel {
     }
     
     func viewWillAppear() {
-        self.gatheringList = self.gatheringUseCase.fetchGathering()
-        self.isSearched = false
+        self.gatheringUseCase.fetchAllGathering()
+            .sink { completion in
+                //TODO: gathering fetch error alert하기
+                print(completion)
+            } receiveValue: { [weak self] gatheringList in
+                self?.gatheringList = gatheringList
+                self?.isSearched = false
+            }
+            .store(in: &self.cancellable)
     }
     
     func didBuddySearched(list: [Gathering]) {
@@ -47,8 +56,14 @@ final class ListViewModel {
     }
     
     func didGatheringDeleted(index: Int) {
-        let gathering = self.gatheringList.remove(at: index)
-        self.gatheringUseCase.deleteGathering(gathering.id)
+        self.gatheringUseCase.deleteGathering(self.gatheringList[index].id)
+            .sink { completion in
+                //TODO: gathering delete error alert하기
+                print(completion)
+            } receiveValue: { [weak self] in
+                self?.gatheringList.remove(at: index)
+            }
+            .store(in: &self.cancellable)
     }
     
 }

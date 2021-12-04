@@ -18,6 +18,7 @@ final class GatheringEditViewModel {
     
     private(set) var addBuddySignal = PassthroughSubject<[Buddy], Never>()
     private(set) var editDoneSignal = PassthroughSubject<Gathering, Never>()
+    private(set) var deleteDoneSignal = PassthroughSubject<Void, Never>()
     private(set) var editFailSignal = PassthroughSubject<RegisterError, Never>()
     
     @Published private(set) var place: String?
@@ -29,6 +30,7 @@ final class GatheringEditViewModel {
     
     private var gatheringUseCase: GatheringUseCase
     private var purposeUseCase: PurposeUseCase
+    private var cancellable: Set<AnyCancellable> = []
     
     init(
         gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared),
@@ -102,7 +104,13 @@ final class GatheringEditViewModel {
             )
             
             self.gatheringUseCase.updateGathering(gathering)
-            self.editDoneSignal.send(gathering)
+                .sink { completion in
+                    //TODO: update error alert하기
+                    print(completion)
+                } receiveValue: { [weak self] gathering in
+                    self?.editDoneSignal.send(gathering)
+                }
+                .store(in: &self.cancellable)
         }
     }
     
@@ -113,6 +121,13 @@ final class GatheringEditViewModel {
     func didDeleteButtonTouched() {
         guard let id = self.gatheringId else { return }
         self.gatheringUseCase.deleteGathering(id)
+            .sink { completion in
+                //TODO: delete error alert하기
+                print(completion)
+            } receiveValue: { [weak self] in
+                self?.deleteDoneSignal.send()
+            }
+            .store(in: &self.cancellable)
     }
     
 }

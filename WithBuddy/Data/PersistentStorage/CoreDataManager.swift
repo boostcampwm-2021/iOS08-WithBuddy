@@ -11,12 +11,7 @@ import Combine
 protocol CoreDataManagable {
     
     @discardableResult func insertGathering(_ gathering: Gathering) -> Bool
-    @discardableResult func insertBuddy(_ buddy: Buddy) -> Bool
-    @discardableResult func updateBuddy(_ buddy: Buddy) -> Bool
-    @discardableResult func deleteBuddy(_ buddy: Buddy) throws -> Bool
-    func fetchAllBuddy() -> [BuddyEntity]
     func fetchAllGathering() -> [GatheringEntity]
-    func fetchBuddy(name: String) -> [BuddyEntity]
     func fetchGathering(including name: String) -> [GatheringEntity]
     func fetchGathering(including day: Date) -> [GatheringEntity]
     func fetchGathering(month: Date) -> [GatheringEntity]
@@ -29,24 +24,48 @@ protocol CoreDataManagable {
     
 }
 
+protocol BuddyManagable {
+    
+    func insertBuddy(_ buddy: Buddy) -> AnyPublisher<BuddyEntity, CoreDataManager.CoreDataError>
+    func fetchAllBuddy() -> AnyPublisher<[BuddyEntity], CoreDataManager.CoreDataError>
+    func updateBuddy(_ buddy: Buddy) -> AnyPublisher<BuddyEntity, CoreDataManager.CoreDataError>
+    func deleteBuddy(_ buddy: Buddy) -> AnyPublisher<Void, CoreDataManager.CoreDataError>
+    
+}
+
 final class CoreDataManager {
     
     enum CoreDataError: LocalizedError {
-        case deleteFail
-        case noGathering
+        case oneMoreGathering
+        case buddyInsert
+        case buddyFetch
+        case buddyUpdate
+        case buddyDelete
+        case gatheringInsert
+        case gatheringFetch
+        case gatheringUpdate
+        case gatheringDelete
         
         var errorDescription: String? {
             switch self {
-            case .deleteFail: return "삭제에 실패하셨습니다."
-            case .noGathering: return "해당 모임을 찾을 수 없습니다."
+            case .oneMoreGathering: return "버디가 하나 이상의 모임에 속해있습니다."
+            case .buddyInsert: return "버디를 생성할 수 없습니다."
+            case .buddyFetch: return "버디를 불러올 수 없습니다."
+            case .buddyUpdate: return "버디를 수정할 수 없습니다."
+            case .buddyDelete: return "버디를 삭제할 수 없습니다."
+            case .gatheringInsert: return "모임을 생성할 수 없습니다."
+            case .gatheringFetch: return "모임을 불러올 수 없습니다."
+            case .gatheringUpdate: return "모임을 수정할 수 없습니다."
+            case .gatheringDelete: return "모임을 삭제할 수 없습니다."
             }
         }
     }
     
     static let shared = CoreDataManager()
-    private let calendarUseCase = CalendarUseCase()
+    private let calendarUseCase: CalendarUseCase
     
-    private init() {
+    private init(calendarUseCase: CalendarUseCase = CalendarUseCase()) {
+        self.calendarUseCase = calendarUseCase
         self.context.perform { [weak self] in
             guard let self = self,
                   let purpose = try? self.context.fetch(PurposeEntity.fetchRequest()) else { return }
@@ -70,9 +89,17 @@ final class CoreDataManager {
         return container
     }()
     
-    private var context: NSManagedObjectContext {
-        self.persistentContainer.viewContext
-    }
+    private lazy var context: NSManagedObjectContext = {
+        let context = self.persistentContainer.viewContext
+        context.automaticallyMergesChangesFromParent = true
+        return context
+    }()
+    
+    private lazy var backgroundContext: NSManagedObjectContext = {
+        let context = self.persistentContainer.newBackgroundContext()
+        context.automaticallyMergesChangesFromParent = true
+        return context
+    }()
     
     private func fetch<T: NSManagedObject>(request: NSFetchRequest<T>) -> [T] {
         do {
@@ -87,35 +114,111 @@ final class CoreDataManager {
     private func fetchBuddyEntity(of buddyList: [Buddy]) -> [BuddyEntity] {
         let request = BuddyEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id IN %@", buddyList.map{ $0.id })
-        return self.fetch(request: request)
+        guard let fetchResult = try? self.backgroundContext.fetch(request) else { return [] }
+        return fetchResult
     }
     
     private func fetchPurposeEntity(of purposeList: [String]) -> [PurposeEntity] {
         let request = PurposeEntity.fetchRequest()
         request.predicate = NSPredicate(format: "name IN %@", purposeList)
-        return self.fetch(request: request)
+        guard let fetchResult = try? self.backgroundContext.fetch(request) else { return [] }
+        return fetchResult
+    }
+    
+}
+
+extension CoreDataManager: BuddyManagable {
+    
+    func fetchAllBuddy() -> AnyPublisher<[BuddyEntity], CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                do {
+                    let request = BuddyEntity.fetchRequest()
+                    let fetchResult = try self.backgroundContext.fetch(request)
+                    promise(.success(fetchResult.sorted()))
+                } catch {
+                    promise(.failure(.buddyFetch))
+                }
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    func insertBuddy(_ buddy: Buddy) -> AnyPublisher<BuddyEntity, CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                let buddyEntity = BuddyEntity(context: self.backgroundContext, buddy: buddy)
+                do {
+                    try self.backgroundContext.save()
+                    promise(.success(buddyEntity))
+                } catch {
+                    promise(.failure(.buddyInsert))
+                }
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    func updateBuddy(_ buddy: Buddy) -> AnyPublisher<BuddyEntity, CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                let request = BuddyEntity.fetchRequest()
+                request.predicate = NSPredicate(
+                    format: "%K == %@",
+                    #keyPath(BuddyEntity.id),
+                    buddy.id as CVarArg
+                )
+                do {
+                    let fetchResult = try self.backgroundContext.fetch(request)
+                    guard let buddyEntity = fetchResult.first else { return }
+                    buddyEntity.name = buddy.name
+                    buddyEntity.face = buddy.face
+                    
+                    if self.backgroundContext.hasChanges {
+                        try self.backgroundContext.save()
+                    }
+                    promise(.success(buddyEntity))
+                } catch {
+                    promise(.failure(.buddyUpdate))
+                }
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    func deleteBuddy(_ buddy: Buddy) -> AnyPublisher<Void, CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                let request = BuddyEntity.fetchRequest()
+                request.predicate = NSPredicate(
+                    format: "%K == %@",
+                    #keyPath(BuddyEntity.id) ,
+                    buddy.id as CVarArg
+                )
+                do {
+                    let fetchResult = try self.backgroundContext.fetch(request)
+                    guard let buddyEntity = fetchResult.first else { return }
+                    if !buddyEntity.gatheringList.isEmpty {
+                        promise(.failure(.oneMoreGathering))
+                    } else {
+                        self.backgroundContext.delete(buddyEntity)
+                        try self.backgroundContext.save()
+                        promise(.success(()))
+                    }
+                } catch {
+                    promise(.failure(.buddyDelete))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
     
 }
 
 extension CoreDataManager: CoreDataManagable {
     
-    func fetchAllBuddy() -> [BuddyEntity] {
-        return self.fetch(request: BuddyEntity.fetchRequest()).sorted()
-    }
-    
     func fetchAllGathering() -> [GatheringEntity] {
         return self.fetch(request: GatheringEntity.fetchRequest()).sorted(by: >)
     }
     
-    func fetchBuddy(name: String) -> [BuddyEntity] {
-        let request = BuddyEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "name == %@", name)
-        return self.fetch(request: request)
-    }
-    
     func fetchGathering(including name: String) -> [GatheringEntity] {
-        return self.fetchBuddy(name: name).compactMap{ $0.gatheringList }.map{ Array($0) }.compactMap{ $0 }.flatMap{ $0 }.sorted(by: >)
+        return []
     }
     
     func fetchGathering(including day: Date) -> [GatheringEntity] {
@@ -146,62 +249,10 @@ extension CoreDataManager: CoreDataManagable {
     }
     
     @discardableResult
-    func insertBuddy(_ buddy: Buddy) -> Bool {
-        BuddyEntity(context: self.context, buddy: buddy)
-        
-        do {
-            try self.context.save()
-            return true
-        } catch {
-            print(error.localizedDescription)
-            return false
-        }
-    }
-    
-    @discardableResult
     func insertGathering(_ gathering: Gathering) -> Bool {
         let gatheringEntity = GatheringEntity(context: self.context, gathering: gathering)
         gatheringEntity.addToBuddyList(NSSet(array: self.fetchBuddyEntity(of: gathering.buddyList)))
         gatheringEntity.addToPurposeList(NSSet(array: self.fetchPurposeEntity(of: gathering.purpose)))
-        
-        do {
-            try self.context.save()
-            return true
-        } catch {
-            print(error.localizedDescription)
-            return false
-        }
-    }
-    
-    @discardableResult
-    func updateBuddy(_ buddy: Buddy) -> Bool {
-        let request = BuddyEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@", buddy.id as CVarArg )
-        
-        guard let buddyEntity = self.fetch(request: request).first else { return false }
-        buddyEntity.name = buddy.name
-        buddyEntity.face = buddy.face
-        
-        do {
-            try self.context.save()
-            return true
-        } catch {
-            print(error.localizedDescription)
-            return false
-        }
-    }
-    
-    @discardableResult
-    func deleteBuddy(_ buddy: Buddy) throws -> Bool {
-        let request = BuddyEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@", buddy.id as CVarArg )
-        
-        guard let buddyEntity = self.fetch(request: request).first else { return false }
-        if !buddyEntity.gatheringList.isEmpty {
-            throw BuddyChoiceError.oneMoreGathering
-        }
-        
-        self.context.delete(buddyEntity)
         
         do {
             try self.context.save()
@@ -266,7 +317,7 @@ extension CoreDataManager: CoreDataManagable {
                 try self.context.save()
                 promise(.success(()))
             } catch {
-                promise(.failure(.deleteFail))
+                promise(.failure(.gatheringDelete))
             }
         }.eraseToAnyPublisher()
     }

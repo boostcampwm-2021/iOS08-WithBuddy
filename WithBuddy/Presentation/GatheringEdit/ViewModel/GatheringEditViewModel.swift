@@ -27,11 +27,15 @@ final class GatheringEditViewModel {
     @Published private(set) var memo: String?
     @Published private(set) var pictures: [URL] = []
     
-    private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
-    private var gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
-    private var purposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared)
+    private var gatheringUseCase: GatheringUseCase
+    private var purposeUseCase: PurposeUseCase
     
-    init() {
+    init(
+        gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared),
+        purposeUseCase: PurposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared)
+    ) {
+        self.gatheringUseCase = gatheringUseCase
+        self.purposeUseCase = purposeUseCase
         self.purposeList = PurposeCategory.allCases.map({
             CheckableInfo(engDescription: "\($0)", korDescription: self.purposeUseCase.engToKor(eng: "\($0)"), check: false)
         })

@@ -141,9 +141,9 @@ final class BuddyManageViewController: UIViewController {
         self.buddyDataSource.apply(snapshot, animatingDifferences: true)
     }
     
-    private func alertError(_ error: BuddyChoiceError) {
-        let alert = UIAlertController(title: "삭제 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
+    private func alertError(_ error: CoreDataManager.CoreDataError) {
+        let alert = UIAlertController(title: "오류가 발생했습니다.", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title: "OK", style: .default)
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
     }

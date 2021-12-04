@@ -38,12 +38,18 @@ final class RegisterViewModel {
     @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var pictures: [URL] = []
     
-    private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
-    private var gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
-    private var purposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared)
-    private var pictureUseCase = PictureUseCase()
+    private var gatheringUseCase: GatheringUseCase
+    private var purposeUseCase: PurposeUseCase
+    private var pictureUseCase: PictureUseCase
     
-    init() {
+    init(
+        gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared),
+        purposeUseCase: PurposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared),
+        pictureUseCase: PictureUseCase = PictureUseCase()
+    ) {
+        self.gatheringUseCase = gatheringUseCase
+        self.purposeUseCase = purposeUseCase
+        self.pictureUseCase = pictureUseCase
         self.purposeList = PurposeCategory.allCases.map({
             CheckableInfo(engDescription: "\($0)", korDescription: self.purposeUseCase.engToKor(eng: "\($0)"), check: false)
         })

@@ -32,7 +32,7 @@ final class BuddyChoiceViewController: UIViewController {
     }
     
     func configureBuddyList(by buddyList: [Buddy]) {
-        self.buddyChoiceViewModel.didBuddyListLoaded(by: buddyList)
+        self.buddyChoiceViewModel.didBuddyListLoaded(selectedBuddyList: buddyList)
     }
     
     private func bind() {
@@ -124,14 +124,9 @@ final class BuddyChoiceViewController: UIViewController {
         ])
     }
     
-    private func alertError(_ error: BuddyChoiceError) {
-        var titleMessage = String()
-        switch error {
-        case .oneMoreGathering: titleMessage = "삭제 실패"
-        case .noBuddy: titleMessage = "등록 실패"
-        }
-        let alert = UIAlertController(title: titleMessage, message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
+    private func alertError(_ error: CoreDataManager.CoreDataError) {
+        let alert = UIAlertController(title: "오류가 발생했습니다.", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title: "OK", style: .default)
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
     }

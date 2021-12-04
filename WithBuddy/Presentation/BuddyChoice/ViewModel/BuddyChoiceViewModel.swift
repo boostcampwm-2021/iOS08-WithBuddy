@@ -8,25 +8,12 @@
 import Foundation
 import Combine
 
-enum BuddyChoiceError: LocalizedError {
-    
-    case noBuddy
-    case oneMoreGathering
-    
-    var errorDescription: String? {
-        switch self {
-        case .noBuddy: return "최소 한명 이상의 버디를 추가해 주세요."
-        case .oneMoreGathering: return "해당 버디가 한개 이상의 모임에 속해 있습니다."
-        }
-    }
-    
-}
-
 final class BuddyChoiceViewModel {
     
     @Published private(set) var storedBuddyList: [Buddy] = []
     private(set) var doneSignal = PassthroughSubject<[Buddy], Never>()
-    private(set) var failSignal = PassthroughSubject<BuddyChoiceError, Never>()
+    private(set) var failSignal = PassthroughSubject<CoreDataManager.CoreDataError, Never>()
+    private(set) var deleteSuccessSignal = PassthroughSubject<Void, Never>()
     private var checkedBuddyList: [Buddy] {
         return self.storedBuddyList.filter( {
             guard let check = $0.check else { return false }
@@ -34,25 +21,46 @@ final class BuddyChoiceViewModel {
         })
     }
     
-    private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
+    private var buddyUseCase: BuddyUseCaseProtocol
+    private var cancellable: Set<AnyCancellable> = []
+    
+    init(buddyUseCase: BuddyUseCaseProtocol = BuddyUseCase(coreDataManager: CoreDataManager.shared)) {
+        self.buddyUseCase = buddyUseCase
+    }
     
     subscript(index: Int) -> Buddy {
         return self.storedBuddyList[index]
     }
     
     func didBuddyDeleted(in idx: Int) {
-        do {
-            try self.buddyUseCase.deleteBuddy(storedBuddyList[idx])
-            self.storedBuddyList.remove(at: idx)
-        } catch let error {
-            guard let error = error as? BuddyChoiceError else { return }
-            self.failSignal.send(error)
-        }
+        self.buddyUseCase.deleteBuddy(self.storedBuddyList[idx])
+            .sink { [weak self] completion in
+                switch completion {
+                case .failure(let error):
+                    self?.failSignal.send(error)
+                case .finished:
+                    return
+                }
+            } receiveValue: { [weak self] in
+                self?.storedBuddyList.remove(at: idx)
+                self?.deleteSuccessSignal.send()
+            }
+            .store(in: &self.cancellable)
     }
     
     func didBuddyAdded(_ buddy: Buddy) {
         self.buddyUseCase.insertBuddy(buddy)
-        self.storedBuddyList.append(buddy)
+            .sink { [weak self] completion in
+                switch completion {
+                case .failure(let error):
+                    self?.failSignal.send(error)
+                case .finished:
+                    return
+                }
+            } receiveValue: { [weak self] buddy in
+                //TODO: 성공 alert 처리 하기
+                self?.storedBuddyList.append(buddy)
+            }.store(in: &self.cancellable)
     }
     
     func didBuddyChecked(in idx: Int) {
@@ -63,38 +71,58 @@ final class BuddyChoiceViewModel {
         }
     }
     
-    func didBuddyListLoaded(by buddyList: [Buddy]) {
-        let storedBuddyList = self.buddyUseCase.fetchBuddy()
-        storedBuddyList.forEach( { buddy in
-            var checkedBuddy = buddy
-            checkedBuddy.check = true
-            if buddyList.contains(checkedBuddy) || buddyList.contains(buddy) {
-                self.storedBuddyList.append(checkedBuddy)
-            } else {
-                self.storedBuddyList.append(buddy)
-            }
-        })
+    func didBuddyListLoaded(selectedBuddyList: [Buddy]) {
+        self.buddyUseCase.fetchBuddy()
+            .sink { completion in
+                //TODO: 버디 목록 fetch 실패 처리 하기
+                print(completion)
+            } receiveValue: { [weak self] buddyList in
+                self?.configureSelectedBuddy(selectedBuddyList: selectedBuddyList, to: buddyList)
+            }.store(in: &self.cancellable)
     }
     
     func didBuddySelectingCompleted() {
-        if self.checkedBuddyList.isEmpty {
-            self.failSignal.send(BuddyChoiceError.noBuddy)
-        } else {
-            self.doneSignal.send(self.checkedBuddyList)
-        }
+        self.doneSignal.send(self.checkedBuddyList)
     }
     
     func didBuddyEdited(_ buddy: Buddy) {
-        var editedBuddy = buddy
-        guard let idx = self.storedBuddyList.firstIndex(where: {
-            $0.id == buddy.id
-        }) else { return }
-        if let check = self.storedBuddyList[idx].check,
-           check {
-            editedBuddy.check = true
-        }
-        self.storedBuddyList[idx] = editedBuddy
         self.buddyUseCase.updateBuddy(buddy)
+            .sink { [weak self] completion in
+                switch completion {
+                case .failure(let error):
+                    self?.failSignal.send(error)
+                case .finished:
+                    return
+                }
+            } receiveValue: { [weak self] buddy in
+                var editedBuddy = buddy
+                guard let idx = self?.storedBuddyList.firstIndex(where: {
+                    $0.id == buddy.id
+                }) else { return }
+                if let check = self?.storedBuddyList[idx].check,
+                   check {
+                    editedBuddy.check = true
+                }
+                //TODO: 성공 alert 처리 하기
+                self?.storedBuddyList[idx] = editedBuddy
+            }
+            .store(in: &self.cancellable)
+    }
+    
+    private func configureSelectedBuddy(selectedBuddyList: [Buddy], to buddyList: [Buddy]) {
+        var storedBuddyList = [Buddy]()
+        let idList = selectedBuddyList.map { $0.id }
+        
+        buddyList.forEach { buddy in
+            if idList.contains(buddy.id) {
+                var insertedBuddy = buddy
+                insertedBuddy.check = true
+                storedBuddyList.append(insertedBuddy)
+            } else {
+                storedBuddyList.append(buddy)
+            }
+        }
+        self.storedBuddyList = storedBuddyList
     }
     
 }

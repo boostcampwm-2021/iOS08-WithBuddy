@@ -13,12 +13,12 @@ final class ListViewModel {
     private(set) var searchedList: [Gathering] = []
     private(set) var isSearched: Bool = false
     
-    private let buddyUseCase: BuddyUseCase
     private let gatheringUseCase: GatheringUseCase
     
-    init(buddyUseCase: BuddyUseCase, gatheringUseCase: GatheringUseCase) {
-        self.buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
-        self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
+    init(
+        gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
+    ) {
+        self.gatheringUseCase = gatheringUseCase
     }
     
     var count: Int {

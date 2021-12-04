@@ -6,51 +6,68 @@
 //
 
 import Foundation
+import Combine
 
-final class BuddyUseCase {
+protocol BuddyUseCaseProtocol {
     
-    private let coreDataManager: CoreDataManagable
+    func fetchBuddy() -> AnyPublisher<[Buddy], CoreDataManager.CoreDataError>
+    func fetchBuddy(before date: Date) -> AnyPublisher<[Buddy], CoreDataManager.CoreDataError>
+    func fetchBuddyRank(before date: Date) -> AnyPublisher<[(Buddy, Int)], CoreDataManager.CoreDataError>
+    func insertBuddy(_ buddy: Buddy) -> AnyPublisher<Buddy, CoreDataManager.CoreDataError>
+    func updateBuddy(_ buddy: Buddy) -> AnyPublisher<Buddy, CoreDataManager.CoreDataError>
+    func deleteBuddy(_ buddy: Buddy) -> AnyPublisher<Void, CoreDataManager.CoreDataError>
     
-    init(coreDataManager: CoreDataManagable = CoreDataManager.shared) {
+}
+
+final class BuddyUseCase: BuddyUseCaseProtocol {
+    
+    private let coreDataManager: BuddyManagable
+    
+    init(coreDataManager: BuddyManagable = CoreDataManager.shared) {
         self.coreDataManager = coreDataManager
     }
     
-    func fetchBuddy() -> [Buddy] {
-        return self.coreDataManager.fetchAllBuddy().map{ $0.toDomain() }
+    func fetchBuddy() -> AnyPublisher<[Buddy], CoreDataManager.CoreDataError> {
+        self.coreDataManager.fetchAllBuddy()
+            .map{ buddyEntityList in buddyEntityList.map{ $0.toDomain() } }
+            .eraseToAnyPublisher()
     }
     
-    func fetchBuddy(name: String) -> [Buddy] {
-        return self.coreDataManager.fetchBuddy(name: name).map{ $0.toDomain() }
+    func fetchBuddy(before date: Date) -> AnyPublisher<[Buddy], CoreDataManager.CoreDataError> {
+        self.coreDataManager.fetchAllBuddy()
+            .map{ buddyEntityList in
+                buddyEntityList
+                .filter{ $0.findRecentlyDate(before: date) != nil}
+                .sorted { $0.findRecentlyDate(before: date) ?? Date() > $1.findRecentlyDate(before: date) ?? Date() }
+                .map { $0.toDomain() }
+            }.eraseToAnyPublisher()
     }
     
-    func fetchBuddy(before date: Date) -> [Buddy] {
-        return self.coreDataManager.fetchAllBuddy()
-            .filter { $0.findRecentlyDate(before: date) != nil }
-            .sorted { $0.findRecentlyDate(before: date) ?? Date() > $1.findRecentlyDate(before: date) ?? Date() }
-            .map { $0.toDomain() }
+    func fetchBuddyRank(before date: Date) -> AnyPublisher<[(Buddy, Int)], CoreDataManager.CoreDataError> {
+        self.coreDataManager.fetchAllBuddy()
+            .map{ buddyEntityList in
+                buddyEntityList
+                .map{ ($0.toDomain(), $0.gatheringList.filter{ gathering in gathering.date <= date }.count) }
+                .filter{ $0.1 != Int.zero }
+                .sorted{ $0.1 > $1.1 }
+            }.eraseToAnyPublisher()
     }
     
-    func fetchBuddyRank(before date: Date) -> [(Buddy, Int)] {
-        return self.coreDataManager.fetchAllBuddy()
-            .map { ($0.toDomain(), $0.gatheringList.filter{ gathering in gathering.date <= date }.count) }
-            .filter { $0.1 != Int.zero }
-            .sorted{ $0.1 > $1.1 }
-    }
-    
-    func insertBuddy(_ buddy: Buddy) {
+    func insertBuddy(_ buddy: Buddy) -> AnyPublisher<Buddy, CoreDataManager.CoreDataError> {
         self.coreDataManager.insertBuddy(buddy)
+            .map { $0.toDomain() }
+            .eraseToAnyPublisher()
     }
     
-    func updateBuddy(_ buddy: Buddy) {
+    func updateBuddy(_ buddy: Buddy) -> AnyPublisher<Buddy, CoreDataManager.CoreDataError> {
         self.coreDataManager.updateBuddy(buddy)
+            .map{ $0.toDomain() }
+            .eraseToAnyPublisher()
     }
     
-    func deleteBuddy(_ buddy: Buddy) throws {
-        do {
-            try self.coreDataManager.deleteBuddy(buddy)
-        } catch {
-            throw error
-        }
+    func deleteBuddy(_ buddy: Buddy) -> AnyPublisher<Void, CoreDataManager.CoreDataError> {
+        self.coreDataManager.deleteBuddy(buddy)
+            .eraseToAnyPublisher()
     }
     
 }

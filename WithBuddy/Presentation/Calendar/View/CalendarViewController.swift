@@ -128,6 +128,11 @@ final class CalendarViewController: UIViewController {
         ])
     }
     
+    private func deleteNotification(id: UUID) {
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [id.uuidString])
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id.uuidString])
+    }
+    
 }
 
 extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -187,8 +192,9 @@ extension CalendarViewController: GatheringListDelegate {
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
-    func deleteGathering() {
+    func deleteGathering(id: UUID) {
         self.calendarViewModel.viewDidAppear()
+        self.deleteNotification(id: id)
     }
     
 }

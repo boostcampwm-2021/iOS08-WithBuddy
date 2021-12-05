@@ -30,6 +30,7 @@ final class SettingViewController: UIViewController {
         self.settingViewModel.deleteSignal
             .receive(on: DispatchQueue.main)
             .sink { [weak self] message in
+                if message.0 == "삭제 성공" { self?.deleteNotification() }
                 let alert = UIAlertController(title: message.0, message: message.1, preferredStyle: UIAlertController.Style.alert)
                 let okAction = UIAlertAction(title: "OK", style: .default)
                 alert.addAction(okAction)
@@ -44,6 +45,11 @@ final class SettingViewController: UIViewController {
                 self?.userNameLabel.text = buddy.name
             }
             .store(in: &self.cancellable)
+    }
+    
+    private func deleteNotification() {
+        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
     }
     
     private func configure() {

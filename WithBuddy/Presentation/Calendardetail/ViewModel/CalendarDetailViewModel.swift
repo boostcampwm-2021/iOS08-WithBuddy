@@ -13,7 +13,7 @@ final class CalendarDetailViewModel {
     @Published private(set) var dayLabel: String = String()
     @Published private(set) var gatheringList: [Gathering] = []
     
-    private(set) var deleteSuccessSingal = PassthroughSubject<Void, Never>()
+    private(set) var deleteSuccessSingal = PassthroughSubject<Gathering, Never>()
     private let gatheringUseCase: GatheringUseCaseProtocol
     private let calendarUseCase: CalendarUseCase
     private var cancellable: Set<AnyCancellable> = []
@@ -62,8 +62,8 @@ final class CalendarDetailViewModel {
                     return
                 }
             } receiveValue: { [weak self] in
-                self?.gatheringList.remove(at: index)
-                self?.deleteSuccessSingal.send()
+                guard let gathering = self?.gatheringList.remove(at: index) else { return }
+                self?.deleteSuccessSingal.send(gathering)
             }
             .store(in: &self.cancellable)
     }

@@ -52,8 +52,8 @@ final class CalendarDetailViewController: UIViewController {
         
         self.calendarDetailViewModel.deleteSuccessSingal
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                self?.delegate?.deleteGathering()
+            .sink { [weak self] gathering in
+                self?.delegate?.deleteGathering(id: gathering.id)
             }.store(in: &self.cancellables)
     }
     
@@ -112,7 +112,6 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { _, _, completion in
             self.calendarDetailViewModel.didDeleteButtonTouched(index: indexPath.row)
-            self.delegate?.deleteGathering()
             completion(true)
         }
         deleteAction.backgroundColor = .graphRed
@@ -140,6 +139,6 @@ protocol GatheringListDelegate: AnyObject {
     
     func didGatheringListTouched(_: Gathering)
     func editGathering(_: Gathering)
-    func deleteGathering()
+    func deleteGathering(id: UUID)
     
 }

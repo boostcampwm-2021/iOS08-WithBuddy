@@ -1,17 +1,21 @@
 #  위드버디
+> 친구들과의 일정과 추억을 캐릭터와 함께 기록해 관리할 수 있는 서비스
 
-<div align="center"><img src="https://i.imgur.com/2e7YUm2.png" width=100>
-    <img src="https://i.imgur.com/VaK4t6s.png" width=100>
-    <img src="https://i.imgur.com/YH1zvuk.png" width=100>
-    <img src="https://i.imgur.com/CeHxwEX.png" width=100>
-    <img src="https://i.imgur.com/HOdXEB0.png" width=100>
-    <img src="https://i.imgur.com/IPxujow.png" width=100> <br/> 💜 위드코로나엔 위드버디 💜 </div>
+<div align="center">
+    
+<img src="https://i.imgur.com/8qlm9Fh.png" width=120>
+<img src="https://i.imgur.com/ciK5eGR.png" width=120>
+<img src="https://i.imgur.com/djHxXK8.png" width=120>
+<img src="https://i.imgur.com/9nQ3Zji.png" width=120>
+<img src="https://i.imgur.com/oJmVeFT.png" width=120>
+<img src="https://i.imgur.com/WnOcUq1.png" width=120>
+<img src="https://i.imgur.com/t5q2x5x.png" width=120>
+    
+</br>
 
-<br/>
-
-## 👫🏻 위드버디 소개
-
-친구들과의 일정과 추억을 캐릭터와 함께 기록해 관리할 수 있는 서비스입니다.
+[🔗 위드버디 앱 설치하러가기!](https://apps.apple.com/kr/app/id1597395615) 
+    
+</div>
 
 <br/>
 
@@ -20,55 +24,82 @@
 |```S005``` 김두연|```S020``` 박인우|```S021``` 박정아|```S036``` 이나정|
 |:-:|:-:|:-:|:-:|
 |<img src="https://avatars.githubusercontent.com/u/63900674?s=400&v=4" width=100>|<img src="https://avatars.githubusercontent.com/u/70463738?v=4" width=100>|<img src="https://avatars.githubusercontent.com/u/28800101?v=4" width=100>|<img src="https://avatars.githubusercontent.com/u/55748244?v=4" width=100>|
-|[duyeonnn](https://github.com/duyeonnn)|[inuinseoul](https://github.com/inuinseoul)| [co3oing](https://github.com/co3oing) |[dailynj](https://github.com/dailynj)|
+|[@duyeonnn](https://github.com/duyeonnn)|[@inuinseoul](https://github.com/inuinseoul)| [@co3oing](https://github.com/co3oing) |[@dailynj](https://github.com/dailynj)|
 
 <br/>
 
-## 📱 Preview
+## 📱 기능 소개
 
-|로딩화면|일정화면|통계화면|
-|:-:|:-:|:-:|
-|<img src="https://user-images.githubusercontent.com/55748244/142988296-9d8cb2c0-6d72-4b5b-ac6a-7f7e3dab8a2f.gif" width=270>|<img src="https://i.imgur.com/95TXoeI.gif" width=200>|<img src="https://i.imgur.com/jw1IzoN.gif" width=200>|
-||사용자가 등록한 모임에 대한 내용을 달력화면에서 한번에 확인할 수 있습니다.|사용자가 등록한 모임들에 대한 다양한 통계를 확인할 수 있습니다.|
+> **모임을 간단하게 등록할 수 있어요**
 
-<!--
-|모임등록|버디추가|
-|:-:|:-:|
-|<img src="https://i.imgur.com/S6S7fzr.gif" width=200>|<img src="https://i.imgur.com/YuaKMHg.gif" width=200>|
-|사용자가 원하는 정보를 입력해 새로운 모임을 생성할 수 있습니다.|자유롭게 캐릭터를 커스텀하여 버디를 추가할 수 있습니다.|
+- **모임의 날짜와 시간, 만난 장소, 만난 목적을 기록**할 수 있습니다.
+- **메모와 사진을 함께 저장**하여 모임을 추억할 수 있습니다.
+- 색상과 얼굴을 선택하여 **친구의 캐릭터를 직접 생성**할 수 있습니다.
 
-|목록화면|설정화면|
-|:-:|:-:|
-|<img src="https://i.imgur.com/FJ6sUR8.gif" width=200>|<img src="https://i.imgur.com/l8lDmQI.gif" width=200>|
-|사용자가 등록한 모임들을 리스트형태로 확인할 수 있습니다.|설정화면에서 다양한 설정을 변경할 수 있습니다|
--->
+<div align="center">
+    
+<img width = 175, src="https://user-images.githubusercontent.com/70463738/144739331-c13554d8-5f26-4962-a4ed-9d68b3e75f47.gif">
+<img width = 200, src="https://user-images.githubusercontent.com/70463738/144739337-3c84bbfc-a00d-4db5-9deb-d8c64d003b67.png">
+<img width = 200, src="https://user-images.githubusercontent.com/70463738/144739338-21ecd3de-2c4e-4347-bec6-6730053452da.png">
+    
+</br>
+    
+<img width = 200, src="https://user-images.githubusercontent.com/70463738/144739339-7f5ebf8d-7f17-48f5-a577-f8f5bb65814d.png">
+<img width = 200, src="https://user-images.githubusercontent.com/70463738/144739340-117347aa-2f00-4f31-a563-28feb82ffd21.png">
+    
+</div>
 
-<br/>
 
-## ✨ Feature
 
-### 일정관리 기능
+> **달력을 통해 모임을 한눈에 확인할 수 있어요**
 
-- 일정 유무에 따라 본인의 캐릭터가 관련 정보를 알려줍니다.
-- 달력에서 모임을 가졌던 친구의 캐릭터를 한눈에 확인할 수 있습니다.
+- 모임의 유무/빈도에 따라 본인의 캐릭터가 관련 정보를 알려줍니다.
+- **달력에서 모임일정을 한눈에 확인**할 수 있습니다.
+- 모임에서 만났던 **친구들을 각자의 캐릭터로 쉽게 확인**할 수 있습니다.
+- 달력에서 날짜를 클릭하면 **해당 날짜의 모임을 모두 확인**할 수 있습니다.
 
-### 통계 기능
+<div align="center">
+    
+<img width = 184, src="https://user-images.githubusercontent.com/70463738/144739341-b4c9462a-9baf-4a43-ad94-2d2a367673f0.png">
+<img width = 200, src="https://user-images.githubusercontent.com/70463738/144739342-209bae1a-cfe7-4309-950d-fe8151434c7b.png">
+    
+</div>
+
+> **모임의 분석결과를 확인 할 수 있어요**
 
 - 시각화된 그래프를 통해 자신의 만남에 대한 다양한 통계를 확인할 수 있습니다.
-    - 가장 많이 만난 친구 순위(버블차트)
-    - 내가 모임을 가지는 목적 순위
-    - 가장 최근에 만난 친구 / 만난지 가장 오래된 친구
+    - 버블차트로 **가장 많이 만난 친구들의 순위**를 확인할 수 있습니다.
+    - 내가 **모임을 가지는 목적**을 순서대로 확인할 수 있습니다.
+    - **가장 최근에 만난 친구 / 만난지 가장 오래된 친구**를 확인할 수 있습니다.
 
-### 기록 기능
+<div align="center">
+    
+<img width = 200, src="https://user-images.githubusercontent.com/70463738/144739343-f66b59dd-137e-43b0-b827-f5b54c20877d.png">
+    
+</div>
 
-- 모임의 날짜, 장소, 목적, 만난 사람, 메모, 사진을 저장해 친구와의 만남을 기록할 수 있습니다.
-- 색상과 표정으로 친구의 캐릭터를 직접 만들 수 있습니다.
+> **모임목록과 친구목록을 관리할 수 있어요**
+
+- 모임을 **날짜순으로 한번에 확인하고 편집, 삭제**할 수 있습니다.
+- 친구목록에서 **친구를 생성, 편집, 삭제**할 수 있습니다.
+- 설정에서 **모임목록을 초기화**할 수 있습니다.
+
+<div align="center">
+    
+<img width = 200, src="https://user-images.githubusercontent.com/70463738/144739344-313ab3cb-cf5c-43f7-9ba2-57983d2344c9.png">
+<img width = 200, src="https://user-images.githubusercontent.com/70463738/144739345-d4518fe8-5d05-41b2-9493-d28f01b6f784.png">
+<img width = 200, src="https://user-images.githubusercontent.com/70463738/144739347-3bda184c-2d67-4292-b63d-707005618e91.png">
+    
+</div>
+
 
 <br/>
 
 ## 📁 프로젝트 구조
 
 - **MVVM Clean Architecture**를 기본으로 하고 진행하면서 개선
+
+![](https://i.imgur.com/rBZfTQy.png)
 
 ```
 Application
@@ -80,8 +111,6 @@ Application
 Domain
     - Entities
     - UseCases
-    - Interfaces
-        - Repositories
         
 Presentation
     - Common View
@@ -96,25 +125,14 @@ Presentation
           - xxViewController
           - xxView
         - ViewModel
+    ...
 
 Data
-    - Repositories
     - PersistentStorage
 ```
- 
-<br/>
- 
-## ⚙️ 프레임워크
 
 <br/>
 
-## 💪 기술적 도전
+## 🧐 더 많은 정보를 원하신다면?
 
-- 
-
-<br/>
-
-## 📲 설치방법
-
-- [배포링크](https://lunchscreen.github.io/withBuddy/)
-- 현재는 CodeSquad 그룹에 소속된 기기만 설치가 가능합니다.
+[위드버디 Wiki로 놀러오세요~](https://github.com/boostcampwm-2021/iOS08-WithBuddy/wiki)

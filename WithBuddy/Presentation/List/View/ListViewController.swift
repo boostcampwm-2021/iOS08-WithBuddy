@@ -46,7 +46,20 @@ final class ListViewController: UIViewController {
                 self?.reloadGathering(list: getheringList)
             }
             .store(in: &self.cancellables)
+        
+        self.listViewModel.deleteSuccessSignal
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] gathering in
+                self?.deleteNotification(id: gathering.id)
+            }
+            .store(in: &self.cancellables)
     }
+    
+    private func deleteNotification(id: UUID) {
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [id.uuidString])
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id.uuidString])
+    }
+    
     
     private func configureSearchView() {
         self.view.addSubview(self.searchView)

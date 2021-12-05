@@ -88,7 +88,6 @@ final class ChartViewModel {
                 //TODO: 에러 처리 하기
                 print(completion)
             } receiveValue: { [weak self] buddyList in
-                print(2, Thread.current.isMainThread)
                 self?.oldBuddy = buddyList.last
                 self?.latestBuddy = buddyList.first
             }.store(in: &self.cancellable)

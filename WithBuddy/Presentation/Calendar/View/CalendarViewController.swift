@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class CalendarViewController: UIViewController {
+final class CalendarViewController: UIViewController {
     
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
@@ -21,11 +21,6 @@ class CalendarViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configure()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.headerView.reloadHeaderComment(text: self.calendarViewModel.headerComment())
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -44,33 +39,40 @@ class CalendarViewController: UIViewController {
     private func bind() {
         self.calendarViewModel.monthSubject
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] month in
+            .sink { [weak self] month in
                 self?.calendarView.reloadMonthLabel(month: month)
             }.store(in: &self.cancellables)
         
         self.calendarViewModel.didDaysReloadSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] _ in
+            .sink { [weak self] _ in
                 self?.calendarView.collectionView.reloadData()
             }.store(in: &self.cancellables)
         
         self.calendarViewModel.didGatheringReloadSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] _ in
+            .sink { [weak self] _ in
                 self?.calendarView.collectionView.reloadData()
             }.store(in: &self.cancellables)
         
         self.calendarView.monthButtonSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] number in
+            .sink { [weak self] number in
                 self?.calendarViewModel.didMonthButtonTouched(number: number)
             }.store(in: &self.cancellables)
         
         self.calendarViewModel.$myFace
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] face in
+            .sink { [weak self] face in
                 guard let face = face else { return }
                 self?.headerView.update(face: face)
+            }.store(in: &self.cancellables)
+        
+        self.calendarViewModel.$headerComment
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] comment in
+                guard let comment = comment else { return }
+                self?.headerView.reloadHeaderComment(text: comment)
             }.store(in: &self.cancellables)
     }
     
@@ -100,30 +102,35 @@ class CalendarViewController: UIViewController {
     private func configureHeaderView() {
         self.contentView.addSubview(headerView)
         self.headerView.backgroundColor = .systemBackground
-        self.headerView.layer.cornerRadius = 10
+        self.headerView.layer.cornerRadius = .whiteViewCornerRadius
         self.headerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.headerView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 20),
-            self.headerView.heightAnchor.constraint(equalToConstant: 80),
-            self.headerView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
-            self.headerView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20)
+            self.headerView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: .plusInset),
+            self.headerView.heightAnchor.constraint(equalToConstant: .headerViewHeight),
+            self.headerView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.headerView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])
     }
     
     private func configurCalendar() {
         self.contentView.addSubview(calendarView)
         self.calendarView.backgroundColor = .systemBackground
-        self.calendarView.layer.cornerRadius = 10
+        self.calendarView.layer.cornerRadius = .whiteViewCornerRadius
         self.calendarView.collectionView.delegate = self
         self.calendarView.collectionView.dataSource = self
         self.calendarView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.calendarView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
-            self.calendarView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
-            self.calendarView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: 10),
+            self.calendarView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.calendarView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
+            self.calendarView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor, constant: .innerPartInset),
             self.calendarView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
             self.calendarView.heightAnchor.constraint(equalTo: self.calendarView.widthAnchor, multiplier: 1.6)
         ])
+    }
+    
+    private func deleteNotification(id: UUID) {
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [id.uuidString])
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id.uuidString])
     }
     
 }
@@ -131,15 +138,18 @@ class CalendarViewController: UIViewController {
 extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        self.calendarViewModel.maxDayOfMonth
+        return .maxDayOfMonth
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WBCalendarViewCell.identifier, for: indexPath) as? WBCalendarViewCell else { return UICollectionViewCell() }
-        let day = self.calendarViewModel.totalDays.indices ~= indexPath.item ? self.calendarViewModel.totalDays[indexPath.item] : 0
-        let face = self.calendarViewModel.totalFaces.indices ~= indexPath.item ? self.calendarViewModel.totalFaces[indexPath.item] : ""
+        let day = self.calendarViewModel.totalDays.indices ~= indexPath.item ? self.calendarViewModel.totalDays[indexPath.item] : Int.zero
+        let face = self.calendarViewModel.totalFaces.indices ~= indexPath.item ? self.calendarViewModel.totalFaces[indexPath.item] : String()
+        let gatheringNum = self.calendarViewModel.totalGathering.indices ~= indexPath.item ? self.calendarViewModel.totalGathering[indexPath.item] : Int.zero
         cell.update(day: day, face: face)
-        
+        if gatheringNum > 1 {
+            cell.update(extraNum: gatheringNum - 1)
+        }
         if let index = self.calendarViewModel.isSameMonth, index == indexPath.item {
             cell.highlightCell()
         }
@@ -150,13 +160,9 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? WBCalendarViewCell,
               !self.calendarViewModel.totalFaces[indexPath.item].isEmpty else { return }
-        cell.animateButtonTap(scale: 0.8)
+        cell.animateButtonTap()
         
-        let calendarDetailViewController = CalendarDetailViewController(
-            calendarDetailViewModel: CalendarDetailViewModel(
-                selectedDate: self.calendarViewModel.findDate(index: indexPath.item)
-            )
-        )
+        let calendarDetailViewController = CalendarDetailViewController(date: self.calendarViewModel.findDate(index: indexPath.item))
         calendarDetailViewController.delegate = self
         
         if #available(iOS 15.0, *) {
@@ -174,9 +180,9 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
 
 extension CalendarViewController: GatheringListDelegate {
     
-    func gatheringListTouched(_ gathering: Gathering) {
+    func didGatheringListTouched(_ gathering: Gathering) {
             let gatheringDetailViewController = GatheringDetailViewController()
-            gatheringDetailViewController.configure(by: gathering)
+            gatheringDetailViewController.id = gathering.id
             self.navigationController?.pushViewController(gatheringDetailViewController, animated: true)
     }
     
@@ -186,8 +192,9 @@ extension CalendarViewController: GatheringListDelegate {
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
-    func deleteGathering() {
-        self.calendarViewModel.reloadFaces()
+    func deleteGathering(id: UUID) {
+        self.calendarViewModel.viewDidAppear()
+        self.deleteNotification(id: id)
     }
     
 }

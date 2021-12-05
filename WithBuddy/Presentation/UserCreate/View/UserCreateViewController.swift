@@ -28,13 +28,23 @@ final class UserCreateViewController: UIViewController {
         self.bind()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.loadingView.addFaces()
     }
     
     private func configure() {
-        self.view.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.view.backgroundColor = .backgroundPurple
         self.configureTitleLabel()
         self.configureStackView()
         self.configureNameLabel()
@@ -46,7 +56,7 @@ final class UserCreateViewController: UIViewController {
 
     func configureLoading() {
         self.view.addSubview(self.loadingView)
-        self.loadingView.backgroundColor = UIColor(named: "GraphPurple2")
+        self.loadingView.backgroundColor = .graphPurple2
         self.loadingView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.loadingView.topAnchor.constraint(equalTo: self.view.topAnchor),
@@ -63,8 +73,8 @@ final class UserCreateViewController: UIViewController {
                 if let buddy = buddy  {
                     self?.nameLabel.text = buddy.name
                     self?.buddyImageView.image = UIImage(named: "\(buddy.face)")
-                    self?.completeButton.backgroundColor = UIColor(named: "GraphPurple")
-                    self?.completeButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
+                    self?.completeButton.backgroundColor = .graphPurple
+                    self?.completeButton.setTitleColor(.labelPurple, for: .normal)
                 }
             }
             .store(in: &self.cancellables)
@@ -99,7 +109,7 @@ final class UserCreateViewController: UIViewController {
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
         self.titleLabel.text = "위드버디"
         self.titleLabel.font = UIFont(name: "Cafe24Ssurround", size: UIScreen.main.bounds.width / 6)
-        self.titleLabel.textColor = UIColor(named: "LabelPurple")
+        self.titleLabel.textColor = .labelPurple
         
         NSLayoutConstraint.activate([
             self.titleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: UIScreen.main.bounds.height * 0.03),
@@ -129,7 +139,7 @@ final class UserCreateViewController: UIViewController {
     
     private func configureBuddyImageView() {
         self.stackView.addArrangedSubview(self.buddyImageView)
-        self.buddyImageView.image = UIImage(named: "DefaultFace")
+        self.buddyImageView.image = .defaultFaceImage
         self.buddyImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.buddyImageView.leadingAnchor.constraint(equalTo: self.stackView.leadingAnchor, constant: 50),
@@ -141,11 +151,11 @@ final class UserCreateViewController: UIViewController {
     private func configureEditButton() {
         self.stackView.addArrangedSubview(self.editButton)
         self.editButton.layer.borderWidth = 1
-        self.editButton.layer.borderColor = UIColor(named: "LabelPurple")?.cgColor
-        self.editButton.layer.cornerRadius = 10
+        self.editButton.layer.borderColor = UIColor.labelPurple?.cgColor
+        self.editButton.layer.cornerRadius = .buttonCornerRadius
         self.editButton.setTitle("캐릭터 수정하기", for: .normal)
-        self.editButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
-        self.editButton.addTarget(self, action: #selector(self.editButtonTouched), for: .touchUpInside)
+        self.editButton.setTitleColor(.labelPurple, for: .normal)
+        self.editButton.addTarget(self, action: #selector(self.didEditButtonTouched), for: .touchUpInside)
         
         self.editButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -154,8 +164,8 @@ final class UserCreateViewController: UIViewController {
         ])
     }
     
-    @objc private func editButtonTouched(_ sender: UIButton) {
-        self.userCreateViewModel.editStart()
+    @objc private func didEditButtonTouched(_ sender: UIButton) {
+        self.userCreateViewModel.didEditingStarted()
     }
     
     private func configureGuideLabel() {
@@ -168,9 +178,9 @@ final class UserCreateViewController: UIViewController {
     private func configureCompleteButton() {
         self.view.addSubview(self.completeButton)
         self.completeButton.backgroundColor = .systemGray3
-        self.completeButton.layer.cornerRadius = 10
+        self.completeButton.layer.cornerRadius = .buttonCornerRadius
         self.completeButton.setTitle("내 캐릭터 생성 완료", for: .normal)
-        self.completeButton.addTarget(self, action: #selector(self.completeButtonTouched), for: .touchUpInside)
+        self.completeButton.addTarget(self, action: #selector(self.didCompleteButtonTouched), for: .touchUpInside)
         
         self.completeButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -181,14 +191,14 @@ final class UserCreateViewController: UIViewController {
         ])
     }
     
-    @objc private func completeButtonTouched(_ sender: UIButton) {
+    @objc private func didCompleteButtonTouched(_ sender: UIButton) {
         UIView.animate(withDuration: 0.2) { [weak self] in
             self?.completeButton.transform = CGAffineTransform(scaleX: CGFloat(0.9), y: CGFloat(0.9))
         } completion: { [weak self] _ in
             UIView.animate(withDuration: 0.2) {
                 self?.completeButton.transform = CGAffineTransform.identity
             } completion: { [weak self] _ in
-                self?.userCreateViewModel.createComplte()
+                self?.userCreateViewModel.didEditingEnded()
             }
         }
     }
@@ -196,11 +206,13 @@ final class UserCreateViewController: UIViewController {
 }
 
 extension UserCreateViewController: BuddyCustomDelegate {
-    func buddyEditDidCompleted(_ buddy: Buddy) {
-        self.userCreateViewModel.userDidChanged(buddy: buddy)
+    
+    func didBuddyEditCompleted(_ buddy: Buddy) {
+        self.userCreateViewModel.didUserChanged(buddy: buddy)
     }
     
-    func buddyAddDidCompleted(_ buddy: Buddy) {
-        self.userCreateViewModel.userDidChanged(buddy: buddy)
+    func didBuddyAddCompleted(_ buddy: Buddy) {
+        self.userCreateViewModel.didUserChanged(buddy: buddy)
     }
+    
 }

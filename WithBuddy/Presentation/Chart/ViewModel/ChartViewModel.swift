@@ -10,106 +10,87 @@ import Combine
 
 final class ChartViewModel {
     
-    @Published private(set) var name: String?
     @Published private(set) var buddyRank: [(Buddy, Int)] = []
     @Published private(set) var purposeRank: [(String, String)] = []
     @Published private(set) var latestBuddy: Buddy?
     @Published private(set) var oldBuddy: Buddy?
+    private(set) var buddyEditSuccessSignal = PassthroughSubject<Void, Never>()
+    private(set) var buddyEditFailSignal = PassthroughSubject<CoreDataManager.CoreDataError, Never>()
     
-    private let gatheringUseCase: GatheringUseCase
-    private let buddyUseCase: BuddyUseCase
+    private let buddyUseCase: BuddyUseCaseProtocol
     private let purposeUseCase: PurposeUseCaseProtocol
     private let userUseCase: UserUseCase
-    private var gatheringList: [Gathering] = []
-    private var buddyList: [Buddy] = []
+    private var cancellable: Set<AnyCancellable> = []
+    
+    private(set) var selectedBuddy: Buddy?
     
     init(
-        gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared),
-        buddyUseCase: BuddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared),
-        purposeUseCase: PurposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared),
+        buddyUseCase: BuddyUseCaseProtocol = BuddyUseCase(coreDataManager: CoreDataManager.shared),
+        purposeUseCase: PurposeUseCaseProtocol = PurposeUseCase(coreDataManager: CoreDataManager.shared),
         userUseCase: UserUseCase = UserUseCase()
     ) {
-        self.gatheringUseCase = gatheringUseCase
         self.buddyUseCase = buddyUseCase
         self.purposeUseCase = purposeUseCase
         self.userUseCase = userUseCase
     }
     
-    func fetch() {
-        self.fetchName()
-        self.fetchGatheringAndBuddy()
+    subscript(index: Int) -> Buddy {
+        let buddy = self.buddyRank[index].0
+        self.selectedBuddy = buddy
+        return buddy
+    }
+    
+    func viewDidAppear() {
         self.fetchBuddyRank()
         self.fetchPurposeRank()
-        self.fetchLatestBuddy()
-        self.fetchOldBuddy()
+        self.fetchLatestAndOldBuddy()
     }
     
-    private func fetchName() {
-        guard let buddy = self.userUseCase.fetchUser() else { return }
-        self.name = buddy.name
-    }
-    
-    private func fetchGatheringAndBuddy() {
-        self.gatheringList = self.gatheringUseCase.fetchGathering()
-        self.buddyList = self.buddyUseCase.fetchBuddy()
+    func didBuddyEdited(_ buddy: Buddy) {
+        self.buddyUseCase.updateBuddy(buddy)
+            .sink { [weak self] completion in
+                switch completion {
+                case .failure(let error):
+                    self?.buddyEditFailSignal.send(error)
+                case .finished:
+                    return
+                }
+            } receiveValue: { [weak self] buddy in
+                self?.buddyEditSuccessSignal.send()
+            }.store(in: &self.cancellable)
     }
     
     private func fetchBuddyRank() {
-        var buddyMap: [Buddy: Int] = [:]
-        self.buddyList.forEach { buddy in
-            buddyMap[buddy] = 0
-        }
-        
-        self.gatheringList.forEach { gathering in
-            gathering.buddyList.forEach { buddy in
-                buddyMap[buddy]? += 1
-            }
-        }
-        
-        let sortedBuddyList = buddyMap.sorted{
-            if $0.value == $1.value { return $0.key.name < $1.key.name }
-            return $0.value > $1.value
-        }
-        let index = min(5, sortedBuddyList.count - 1)
-        if Int.zero <= index {
-            self.buddyRank = Array(sortedBuddyList[...index].filter{ $0.value != Int.zero }.map{ ($0.key, $0.value) })
-        }
+        self.buddyUseCase.fetchBuddyRank(before: Date())
+            .sink { completion in
+                //TODO: 에러 처리 하기
+                print(completion)
+            } receiveValue: { [weak self] buddyRank in
+                self?.buddyRank = Array(buddyRank.prefix(5))
+            }.store(in: &self.cancellable)
     }
     
     private func fetchPurposeRank() {
-        self.purposeUseCase.fetchTopFourPurpose()
-            .sink(receiveValue: { rank in
+        self.purposeUseCase.fetchTopFourPurpose(before: Date())
+            .sink { completion in
+                //TODO: purpose fetch error alert 하기
+                print(completion)
+            } receiveValue: { [weak self] rank in
+                guard let self = self else { return }
                 self.purposeRank = rank.map{ ($0, self.purposeUseCase.engToKor(eng: $0)) }
-            }).cancel()
-    }
-    
-    private func fetchLatestBuddy() {
-        let currentDate = Date()
-        for gathering in self.gatheringList where gathering.date < currentDate {
-            self.latestBuddy = gathering.buddyList.first
-            return
-        }
-        self.latestBuddy = nil
-    }
-    
-    private func fetchOldBuddy() {
-        var buddyList = Set(self.buddyList)
-        
-        gatheringList.forEach { gathering in
-            gathering.buddyList.forEach { buddy in
-                buddyList.remove(buddy)
-                if buddyList.count == 1 {
-                    self.oldBuddy = buddyList.first
-                    return
-                }
             }
-            if buddyList.count == 1 { return }
-        }
-        
-        if self.oldBuddy == nil {
-            self.oldBuddy = gatheringList.last?.buddyList.last
-            return
-        }
+            .store(in: &self.cancellable)
+    }
+    
+    private func fetchLatestAndOldBuddy() {
+        self.buddyUseCase.fetchBuddy(before: Date())
+            .sink{ completion in
+                //TODO: 에러 처리 하기
+                print(completion)
+            } receiveValue: { [weak self] buddyList in
+                self?.oldBuddy = buddyList.last
+                self?.latestBuddy = buddyList.first
+            }.store(in: &self.cancellable)
     }
     
 }

@@ -9,17 +9,17 @@ import UIKit
 
 final class BubbleChartView: UIView {
     
-    private let nameLabel = PurpleTitleLabel()
-    private let titleLabel = BlackTitleLabel()
+    private let titleLabel = PurpleTitleLabel()
     private let whiteView = WhiteView()
-    private let firstBubbleImageView = UIImageView()
-    private let secondBubbleImageView = UIImageView()
-    private let thirdBubbleImageView = UIImageView()
-    private let fourthBubbleImageView = UIImageView()
-    private let fifthBubbleImageView = UIImageView()
+    private(set) var firstBubbleImageView = UIImageView()
+    private(set) var secondBubbleImageView = UIImageView()
+    private(set) var thirdBubbleImageView = UIImageView()
+    private(set) var fourthBubbleImageView = UIImageView()
+    private(set) var fifthBubbleImageView = UIImageView()
+    private(set) var bubbleDescriptionView = BubbleDescriptionView()
     private let defaultView = DefaultView()
     
-    private let maxLength = CGFloat(130)
+    private let maxLength = CGFloat.chartBubbleMaxLength
     private var maxCount: Int?
     
     override init(frame: CGRect) {
@@ -30,10 +30,6 @@ final class BubbleChartView: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.configure()
-    }
-    
-    func update(name: String) {
-        self.nameLabel.text = name
     }
     
     func update(list: [(Buddy, Int)]) {
@@ -60,11 +56,19 @@ final class BubbleChartView: UIView {
     }
     
     func resetBubbles() {
-        self.firstBubbleImageView.frame.size = CGSize.zero
         self.secondBubbleImageView.frame.size = CGSize.zero
         self.thirdBubbleImageView.frame.size = CGSize.zero
         self.fourthBubbleImageView.frame.size = CGSize.zero
         self.fifthBubbleImageView.frame.size = CGSize.zero
+    }
+    
+    func showDescriptionView(name: String) {
+        self.bubbleDescriptionView.isHidden = false
+        self.bubbleDescriptionView.update(name: name)
+    }
+    
+    func hideDescriptionView() {
+        self.bubbleDescriptionView.isHidden = true
     }
     
     private func update(imageView: UIImageView, face: String?, count: Int?, xValue: CGFloat, yValue: CGFloat) {
@@ -90,38 +94,23 @@ final class BubbleChartView: UIView {
         imageView.isHidden = true
     }
     
-    private func animateBubble(imageView: UIImageView, count: Int?, length: CGFloat) {
-        UIView.animate(withDuration: 1) {
-            imageView.frame.size = CGSize(width: length, height: length)
-        }
-    }
-    
     private func configure() {
-        self.configureNameLabel()
         self.configureTitleLabel()
         self.configureWhiteView()
         self.configureChart()
         self.configureFirstBubble()
         self.configureBubbles()
+        self.configureBubbleDescriptionView()
         self.configureDefaultView()
-    }
-    
-    private func configureNameLabel() {
-        self.addSubview(self.nameLabel)
-        self.nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            self.nameLabel.topAnchor.constraint(equalTo: self.topAnchor)
-        ])
     }
     
     private func configureTitleLabel() {
         self.addSubview(self.titleLabel)
-        self.titleLabel.text = "님이 많이 만난 버디"
+        self.titleLabel.text = .bubbleChartTitle
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.titleLabel.leadingAnchor.constraint(equalTo: self.nameLabel.trailingAnchor),
-            self.titleLabel.centerYAnchor.constraint(equalTo: self.nameLabel.centerYAnchor)
+            self.titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            self.titleLabel.topAnchor.constraint(equalTo: self.topAnchor)
         ])
     }
     
@@ -129,10 +118,10 @@ final class BubbleChartView: UIView {
         self.addSubview(self.whiteView)
         self.whiteView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.whiteView.leadingAnchor.constraint(equalTo: self.nameLabel.leadingAnchor),
-            self.whiteView.topAnchor.constraint(equalTo: self.nameLabel.bottomAnchor, constant: 10),
+            self.whiteView.leadingAnchor.constraint(equalTo: self.titleLabel.leadingAnchor),
+            self.whiteView.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: .innerPartInset),
             self.whiteView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            self.whiteView.heightAnchor.constraint(equalToConstant: 250),
+            self.whiteView.heightAnchor.constraint(equalToConstant: .bubbleChartHeight),
             self.whiteView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
@@ -147,7 +136,7 @@ final class BubbleChartView: UIView {
     }
     
     private func configureFirstBubble() {
-        self.firstBubbleImageView.image = UIImage(named: "FacePurple1")
+        self.firstBubbleImageView.image = .defaultFaceImage
         self.firstBubbleImageView.isHidden =  true
         self.firstBubbleImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -167,7 +156,29 @@ final class BubbleChartView: UIView {
     
     private func configureBubble(imageView: UIImageView) {
         imageView.isHidden = true
-        imageView.frame.size = CGSize(width: 0, height: 0)
+        imageView.frame.size = CGSize.zero
+        imageView.tag = { () -> Int in
+            switch imageView {
+            case firstBubbleImageView: return 0
+            case secondBubbleImageView: return 1
+            case thirdBubbleImageView: return 2
+            case fourthBubbleImageView: return 3
+            case fifthBubbleImageView: return 4
+            default: return 5
+            }
+        }()
+    }
+    
+    private func configureBubbleDescriptionView() {
+        self.whiteView.addSubview(self.bubbleDescriptionView)
+        self.bubbleDescriptionView.isHidden = true
+        self.bubbleDescriptionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.bubbleDescriptionView.leadingAnchor.constraint(equalTo: self.whiteView.leadingAnchor),
+            self.bubbleDescriptionView.topAnchor.constraint(equalTo: self.whiteView.topAnchor),
+            self.bubbleDescriptionView.trailingAnchor.constraint(equalTo: self.whiteView.trailingAnchor),
+            self.bubbleDescriptionView.bottomAnchor.constraint(equalTo: self.whiteView.bottomAnchor)
+        ])
     }
     
     private func configureDefaultView() {
@@ -176,8 +187,8 @@ final class BubbleChartView: UIView {
         NSLayoutConstraint.activate([
             self.defaultView.centerXAnchor.constraint(equalTo: self.whiteView.centerXAnchor),
             self.defaultView.centerYAnchor.constraint(equalTo: self.whiteView.centerYAnchor),
-            self.defaultView.widthAnchor.constraint(equalToConstant: 200),
-            self.defaultView.heightAnchor.constraint(equalToConstant: 200)
+            self.defaultView.widthAnchor.constraint(equalToConstant: .chartDefaultViewLength),
+            self.defaultView.heightAnchor.constraint(equalToConstant: .chartDefaultViewLength)
         ])
     }
 

@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import SafariServices
 
-class SettingViewController: UIViewController {
+final class SettingViewController: UIViewController {
     
     private let userImageView = UIImageView()
     private let userNameLabel = UILabel()
@@ -30,8 +30,9 @@ class SettingViewController: UIViewController {
         self.settingViewModel.deleteSignal
             .receive(on: DispatchQueue.main)
             .sink { [weak self] message in
+                if message.0 == "삭제 성공" { self?.deleteNotification() }
                 let alert = UIAlertController(title: message.0, message: message.1, preferredStyle: UIAlertController.Style.alert)
-                let okAction = UIAlertAction(title: "OK", style: .destructive)
+                let okAction = UIAlertAction(title: "OK", style: .default)
                 alert.addAction(okAction)
                 self?.present(alert, animated: true, completion: nil)
             }.store(in: &self.cancellable)
@@ -46,6 +47,11 @@ class SettingViewController: UIViewController {
             .store(in: &self.cancellable)
     }
     
+    private func deleteNotification() {
+        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+    }
+    
     private func configure() {
         self.configureUserInfo()
         self.configureButtons()
@@ -55,12 +61,12 @@ class SettingViewController: UIViewController {
         self.configureUserImage()
         self.configureUserName()
         self.configureModifyButton()
-        self.settingViewModel.fetchMyBuddy()
+        self.settingViewModel.reloadMyBuddy()
     }
     
     private func configureUserImage() {
         self.view.addSubview(self.userImageView)
-        self.userImageView.image = UIImage(named: "FacePurple3")
+        self.userImageView.image = .defaultFaceImage
         self.userImageView.sizeToFit()
         self.userImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -76,22 +82,22 @@ class SettingViewController: UIViewController {
         self.userNameLabel.text = "UserName"
         self.userNameLabel.font = .systemFont(ofSize: .titleLabelSize)
         self.userNameLabel.textAlignment = .center
+        self.userNameLabel.font = UIFont.systemFont(ofSize: 23)
         self.userNameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.userNameLabel.bottomAnchor.constraint(equalTo: self.userImageView.centerYAnchor, constant: -10),
-            self.userNameLabel.leadingAnchor.constraint(equalTo: self.userImageView.trailingAnchor, constant: 20)
+            self.userNameLabel.leadingAnchor.constraint(equalTo: self.userImageView.trailingAnchor, constant: .plusInset)
         ])
     }
     
     private func configureModifyButton() {
         self.view.addSubview(self.modifyButton)
         self.modifyButton.setTitle("프로필 수정", for: .normal)
-        self.modifyButton.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
-        self.modifyButton.layer.borderWidth = 1
-        self.modifyButton.layer.cornerRadius = 5
-        self.modifyButton.layer.borderColor = UIColor(named: "LabelPurple")?.cgColor
+        self.modifyButton.backgroundColor = .labelPurple
+        self.modifyButton.layer.cornerRadius = .buttonCornerRadius
+        self.modifyButton.tintColor = .white
         self.modifyButton.sizeToFit()
-        self.modifyButton.addTarget(self, action: #selector(self.moveToBuddyCustom), for: .touchUpInside)
+        self.modifyButton.addTarget(self, action: #selector(self.didProfileEditButtonTouched), for: .touchUpInside)
         self.modifyButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.modifyButton.topAnchor.constraint(equalTo: self.userImageView.centerYAnchor, constant: 5),
@@ -101,12 +107,13 @@ class SettingViewController: UIViewController {
         ])
     }
     
-    @objc private func moveToBuddyCustom(_ sender: UIButton) {
+    @objc private func didProfileEditButtonTouched(_ sender: UIButton) {
         self.modifyButton.animateButtonTap(scale: 0.9)
         guard let myBuddy = self.settingViewModel.myBuddy else { return }
         let buddyCustomViewController = BuddyCustomViewController()
         buddyCustomViewController.delegate = self
         buddyCustomViewController.configure(by: myBuddy)
+        buddyCustomViewController.title = "프로필 수정"
         self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
     }
     
@@ -120,10 +127,10 @@ class SettingViewController: UIViewController {
         self.view.addSubview(self.removeAllGatheringButton)
         self.removeAllGatheringButton.setTitle("모임 목록 초기화", for: .normal)
         self.makeButtonLayer(button: self.removeAllGatheringButton, upperView: self.userNameLabel, constant: 100)
-        self.removeAllGatheringButton.addTarget(self, action: #selector(self.removeAlert), for: .touchUpInside)
+        self.removeAllGatheringButton.addTarget(self, action: #selector(self.didRemoveButtonTouched), for: .touchUpInside)
     }
     
-    @objc private func removeAlert() {
+    @objc private func didRemoveButtonTouched() {
         self.removeAllGatheringButton.animateButtonTap(scale: 0.9)
         let alert = UIAlertController(title: nil, message: "모임 목록을 정말로 초기화하시겠습니까?", preferredStyle: UIAlertController.Style.alert)
         let cancelAction = UIAlertAction(title: "취소", style: .cancel)
@@ -138,21 +145,21 @@ class SettingViewController: UIViewController {
     private func configureManageBuddyButton() {
         self.view.addSubview(self.manageBuddyButton)
         self.manageBuddyButton.setTitle("버디 관리", for: .normal)
-        self.manageBuddyButton.addTarget(self, action: #selector(self.moveToBuddyManage), for: .touchUpInside)
+        self.manageBuddyButton.addTarget(self, action: #selector(self.didBuddyManageButtonTouched), for: .touchUpInside)
         self.makeButtonLayer(button: self.manageBuddyButton, upperView: self.removeAllGatheringButton, constant: 15)
     }
     
     private func configureDeveloperInfo() {
         self.view.addSubview(self.developerInfoButton)
         self.developerInfoButton.setTitle("개발자 정보", for: .normal)
-        self.developerInfoButton.addTarget(self, action: #selector(self.moveToDeveloperInfo), for: .touchUpInside)
+        self.developerInfoButton.addTarget(self, action: #selector(self.didDeveloperInfoTouched), for: .touchUpInside)
         self.makeButtonLayer(button: self.developerInfoButton, upperView: self.manageBuddyButton, constant: 15)
     }
     
     private func makeButtonLayer(button: UIButton, upperView: UIView, constant: CGFloat) {
-        button.setTitleColor(UIColor(named: "LabelPurple"), for: .normal)
+        button.setTitleColor(.labelPurple, for: .normal)
         button.contentHorizontalAlignment = .left
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+        button.titleEdgeInsets = UIEdgeInsets(top: CGFloat.zero, left: 15, bottom: CGFloat.zero, right: CGFloat.zero)
         button.backgroundColor = .systemBackground
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -164,11 +171,11 @@ class SettingViewController: UIViewController {
         ])
     }
     
-    @objc private func moveToBuddyManage(_ sender: UIButton) {
+    @objc private func didBuddyManageButtonTouched(_ sender: UIButton) {
         self.navigationController?.pushViewController(BuddyManageViewController(), animated: true)
     }
     
-    @objc private func moveToDeveloperInfo(_ sender: UIButton) {
+    @objc private func didDeveloperInfoTouched(_ sender: UIButton) {
         guard let wikiURL = URL(string: "https://github.com/boostcampwm-2021/iOS08-WithBuddy/wiki") else { return }
         let developSafariView: SFSafariViewController = SFSafariViewController(url: wikiURL)
         self.present(developSafariView, animated: true, completion: nil)
@@ -177,13 +184,15 @@ class SettingViewController: UIViewController {
 }
 
 extension SettingViewController: BuddyCustomDelegate {
-    func buddyAddDidCompleted(_ buddy: Buddy) {
+    
+    func didBuddyAddCompleted(_ buddy: Buddy) {
         self.settingViewModel.didMyBuddyChanged(buddy: buddy)
-        self.settingViewModel.fetchMyBuddy()
+        self.settingViewModel.reloadMyBuddy()
     }
     
-    func buddyEditDidCompleted(_ buddy: Buddy) {
+    func didBuddyEditCompleted(_ buddy: Buddy) {
         self.settingViewModel.didMyBuddyChanged(buddy: buddy)
-        self.settingViewModel.fetchMyBuddy()
+        self.settingViewModel.reloadMyBuddy()
     }
+    
 }

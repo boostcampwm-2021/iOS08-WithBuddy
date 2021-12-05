@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HeaderView: UIView {
+final class HeaderView: UIView {
     
     private let userFaceImageView = UIImageView()
     private let userCommentLabel = PurpleLabel()
@@ -39,23 +39,23 @@ class HeaderView: UIView {
         self.addSubview(userFaceImageView)
         self.userFaceImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.userFaceImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
+            self.userFaceImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: .innerPartInset),
             self.userFaceImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            self.userFaceImageView.widthAnchor.constraint(equalToConstant: 70),
-            self.userFaceImageView.heightAnchor.constraint(equalToConstant: 70)
+            self.userFaceImageView.widthAnchor.constraint(equalToConstant: .headerFaceSize),
+            self.userFaceImageView.heightAnchor.constraint(equalToConstant: .headerFaceSize)
         ])
     }
     
     private func configureUserCommentLabel() {
         self.addSubview(userCommentLabel)
-        self.userCommentLabel.numberOfLines = 0
-        self.userCommentLabel.font = .systemFont(ofSize: 14)
+        self.userCommentLabel.numberOfLines = Int.zero
+        self.userCommentLabel.font = .systemFont(ofSize: .headerCommentFontSize)
         self.userCommentLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.userCommentLabel.leadingAnchor.constraint(equalTo: self.userFaceImageView.trailingAnchor, constant: 5),
+            self.userCommentLabel.leadingAnchor.constraint(equalTo: self.userFaceImageView.trailingAnchor, constant: .headerInnerInset),
             self.userCommentLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            self.userCommentLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
-            self.userCommentLabel.heightAnchor.constraint(equalToConstant: 60)
+            self.userCommentLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: .minusInset),
+            self.userCommentLabel.heightAnchor.constraint(equalToConstant: .userCommentLabelHeight)
         ])
     }
     

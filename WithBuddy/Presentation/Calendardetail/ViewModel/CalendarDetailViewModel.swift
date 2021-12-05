@@ -6,22 +6,24 @@
 //
 
 import Foundation
+import Combine
 
 final class CalendarDetailViewModel {
     
-    @Published private(set) var dayLabel: String = ""
+    @Published private(set) var dayLabel: String = String()
     @Published private(set) var gatheringList: [Gathering] = []
     
-    private let selectedDate: Date
-    private let gatheringUseCase: GatheringUseCase
+    private(set) var deleteSuccessSingal = PassthroughSubject<Gathering, Never>()
+    private let gatheringUseCase: GatheringUseCaseProtocol
     private let calendarUseCase: CalendarUseCase
+    private var cancellable: Set<AnyCancellable> = []
     
-    init(selectedDate: Date) {
-        self.selectedDate = selectedDate
-        self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
-        self.calendarUseCase = CalendarUseCase()
-        self.dayLabel = self.calendarUseCase.convertToString(day: self.selectedDate)
-        self.fetch()
+    init(
+        gatheringUseCase: GatheringUseCaseProtocol = GatheringUseCase(coreDataManager: CoreDataManager.shared),
+        calendarUseCase: CalendarUseCase = CalendarUseCase()
+    ) {
+        self.gatheringUseCase = gatheringUseCase
+        self.calendarUseCase = calendarUseCase
     }
     
     var count: Int {
@@ -32,13 +34,38 @@ final class CalendarDetailViewModel {
         return self.gatheringList[index]
     }
     
-    func deleteGathering(index: Int) {
-        let gathering = self.gatheringList.remove(at: index)
-        self.gatheringUseCase.deleteGathering(gathering.id)
+    func viewDidLoad(with date: Date) {
+        self.dayLabel = self.calendarUseCase.convertToString(day: date)
+        self.gatheringUseCase.fetchGathering(day: date)
+            .sink { completion in
+                switch completion {
+                case .failure(let error):
+                    //TODO: gathering fetch error alert해주기
+                    print(error.errorDescription)
+                case .finished:
+                    return
+                }
+            } receiveValue: { [weak self] gatheringList in
+                self?.gatheringList = gatheringList
+            }
+            .store(in: &self.cancellable)
     }
     
-    private func fetch() {
-        self.gatheringList = self.gatheringUseCase.fetchGathering(including: self.selectedDate)
+    func didDeleteButtonTouched(index: Int) {
+        self.gatheringUseCase.deleteGathering(gatheringList[index].id)
+            .sink { completion in
+                switch completion {
+                case .failure(let error):
+                    //TODO: gathering 삭제 오류 alert 해주기
+                    print(error.errorDescription)
+                case .finished:
+                    return
+                }
+            } receiveValue: { [weak self] in
+                guard let gathering = self?.gatheringList.remove(at: index) else { return }
+                self?.deleteSuccessSingal.send(gathering)
+            }
+            .store(in: &self.cancellable)
     }
 
 }

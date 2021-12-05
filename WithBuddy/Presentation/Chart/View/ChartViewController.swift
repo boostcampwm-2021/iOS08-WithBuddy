@@ -26,7 +26,8 @@ final class ChartViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.viewModel.fetch()
+        self.viewModel.viewDidAppear()
+        self.bubbleChartView.hideDescriptionView()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -39,19 +40,26 @@ final class ChartViewController: UIViewController {
         self.configureBubbleChartView()
         self.configurePurposeChartView()
         self.configureLatestOldChartView()
+        self.configureBubbleGesture()
+        self.configureDescriptionViewGesture()
+        self.configureEditButtonGesture()
     }
     
     private func bind() {
-        self.viewModel.$name
+        self.viewModel.buddyEditSuccessSignal
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] name in
-                guard let name = name else { return }
-                self?.bubbleChartView.update(name: name)
-                self?.purposeChartView.update(name: name)
-                self?.latestOldChartView.update(name: name)
-            })
+            .sink { [weak self] in
+                self?.alert(message: nil)
+            }
             .store(in: &self.cancellables)
-                    
+        
+        self.viewModel.buddyEditFailSignal
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] error in
+                self?.alert(message: error.errorDescription)
+            }
+            .store(in: &self.cancellables)
+        
         self.viewModel.$buddyRank
             .receive(on: DispatchQueue.main)
             .sink { [weak self] list in
@@ -108,9 +116,9 @@ final class ChartViewController: UIViewController {
         self.contentView.addSubview(self.bubbleChartView)
         self.bubbleChartView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.bubbleChartView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 20),
-            self.bubbleChartView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 20),
-            self.bubbleChartView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20)
+            self.bubbleChartView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.bubbleChartView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: .plusInset),
+            self.bubbleChartView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])
     }
     
@@ -119,7 +127,7 @@ final class ChartViewController: UIViewController {
         self.purposeChartView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.purposeChartView.leadingAnchor.constraint(equalTo: self.bubbleChartView.leadingAnchor),
-            self.purposeChartView.topAnchor.constraint(equalTo: self.bubbleChartView.bottomAnchor, constant: 20),
+            self.purposeChartView.topAnchor.constraint(equalTo: self.bubbleChartView.bottomAnchor, constant: .plusInset),
             self.purposeChartView.trailingAnchor.constraint(equalTo: self.bubbleChartView.trailingAnchor)
         ])
     }
@@ -129,16 +137,36 @@ final class ChartViewController: UIViewController {
         self.latestOldChartView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.latestOldChartView.leadingAnchor.constraint(equalTo: self.bubbleChartView.leadingAnchor),
-            self.latestOldChartView.topAnchor.constraint(equalTo: self.purposeChartView.bottomAnchor, constant: 20),
+            self.latestOldChartView.topAnchor.constraint(equalTo: self.purposeChartView.bottomAnchor, constant: .plusInset),
             self.latestOldChartView.trailingAnchor.constraint(equalTo: self.bubbleChartView.trailingAnchor),
             self.latestOldChartView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
         ])
     }
     
-    private func update(name: String) {
-        self.bubbleChartView.update(name: name)
-        self.purposeChartView.update(name: name)
-        self.latestOldChartView.update(name: name)
+    private func configureBubbleGesture() {
+        self.configureBubbleGesture(imageView: self.bubbleChartView.firstBubbleImageView)
+        self.configureBubbleGesture(imageView: self.bubbleChartView.secondBubbleImageView)
+        self.configureBubbleGesture(imageView: self.bubbleChartView.thirdBubbleImageView)
+        self.configureBubbleGesture(imageView: self.bubbleChartView.fourthBubbleImageView)
+        self.configureBubbleGesture(imageView: self.bubbleChartView.fifthBubbleImageView)
+    }
+    
+    private func configureBubbleGesture(imageView: UIView) {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.didBubbleTouched))
+        imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(tapGesture)
+    }
+                                    
+    private func configureDescriptionViewGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.didDescriptionViewTouched))
+        self.bubbleChartView.bubbleDescriptionView.isUserInteractionEnabled = true
+        self.bubbleChartView.bubbleDescriptionView.addGestureRecognizer(tapGesture)
+    }
+    
+    private func configureEditButtonGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.didEditButtonTouched))
+        self.bubbleChartView.bubbleDescriptionView.editButton.isUserInteractionEnabled = true
+        self.bubbleChartView.bubbleDescriptionView.editButton.addGestureRecognizer(tapGesture)
     }
     
     private func update(buddyList: [(Buddy, Int)]?) {
@@ -163,5 +191,50 @@ final class ChartViewController: UIViewController {
         guard let buddy = oldBuddy else { return }
         self.latestOldChartView.update(oldName: buddy.name, face: buddy.face)
     }
+    
+    private func alert(message: String?) {
+        if let message = message {
+            let alert = UIAlertController(title: "수정 실패", message: message, preferredStyle: UIAlertController.Style.alert)
+            let action = UIAlertAction(title: "OK", style: .default)
+            alert.addAction(action)
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: "수정 성공", message: "버디 수정이 완료되었습니다.", preferredStyle: UIAlertController.Style.alert)
+            let action = UIAlertAction(title: "OK", style: .default)
+            alert.addAction(action)
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    @objc private func didBubbleTouched(_ sender: UITapGestureRecognizer) {
+        guard let tag = sender.view?.tag else { return }
+        self.bubbleChartView.showDescriptionView(name: self.viewModel[tag].name)
+    }
+    
+    @objc private func didDescriptionViewTouched(_ sender: UITapGestureRecognizer) {
+        self.bubbleChartView.hideDescriptionView()
+    }
+    
+    @objc private func didEditButtonTouched(_ sender: UITapGestureRecognizer) {
+        guard let buddy = self.viewModel.selectedBuddy else { return }
+        let buddyCustomViewController = BuddyCustomViewController()
+        buddyCustomViewController.delegate = self
+        buddyCustomViewController.title = "버디 편집"
+        buddyCustomViewController.configure(by: buddy)
+        self.navigationController?.pushViewController(buddyCustomViewController, animated: true)
+    }
 
+}
+
+extension ChartViewController: BuddyCustomDelegate {
+    
+    func didBuddyEditCompleted(_ buddy: Buddy) {
+        self.bubbleChartView.hideDescriptionView()
+        self.viewModel.didBuddyEdited(buddy)
+    }
+    
+    func didBuddyAddCompleted(_ buddy: Buddy) {
+        
+    }
+    
 }

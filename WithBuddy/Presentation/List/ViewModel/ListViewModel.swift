@@ -6,20 +6,22 @@
 //
 
 import Foundation
+import Combine
 
 final class ListViewModel {
     
     @Published private(set) var gatheringList: [Gathering] = []
     private(set) var searchedList: [Gathering] = []
     private(set) var isSearched: Bool = false
+    private(set) var deleteSuccessSignal = PassthroughSubject<Gathering, Never>()
     
-    private let buddyUseCase: BuddyUseCase
-    private let gatheringUseCase: GatheringUseCase
+    private let gatheringUseCase: GatheringUseCaseProtocol
+    private var cancellable: Set<AnyCancellable> = []
     
-    init(buddyUseCase: BuddyUseCase, gatheringUseCase: GatheringUseCase) {
-        self.buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
-        self.gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
-        self.configure()
+    init(
+        gatheringUseCase: GatheringUseCaseProtocol = GatheringUseCase(coreDataManager: CoreDataManager.shared)
+    ) {
+        self.gatheringUseCase = gatheringUseCase
     }
     
     var count: Int {
@@ -33,7 +35,19 @@ final class ListViewModel {
         return self.gatheringList[index]
     }
     
-    func searched(list: [Gathering]) {
+    func viewWillAppear() {
+        self.gatheringUseCase.fetchAllGathering()
+            .sink { completion in
+                //TODO: gathering fetch error alert하기
+                print(completion)
+            } receiveValue: { [weak self] gatheringList in
+                self?.gatheringList = gatheringList
+                self?.isSearched = false
+            }
+            .store(in: &self.cancellable)
+    }
+    
+    func didBuddySearched(list: [Gathering]) {
         if list.isEmpty {
             self.isSearched = false
             return
@@ -42,18 +56,16 @@ final class ListViewModel {
         self.searchedList = list
     }
     
-    func deleteGathering(index: Int) {
-        let gathering = self.gatheringList.remove(at: index)
-        self.gatheringUseCase.deleteGathering(gathering.id)
-    }
-    
-    private func configure() {
-        self.fetch()
-    }
-    
-    func fetch() {
-        self.gatheringList = self.gatheringUseCase.fetchGathering()
-        self.isSearched = false
+    func didGatheringDeleted(index: Int) {
+        self.gatheringUseCase.deleteGathering(self.gatheringList[index].id)
+            .sink { completion in
+                //TODO: gathering delete error alert하기
+                print(completion)
+            } receiveValue: { [weak self] in
+                guard let gathering = self?.gatheringList.remove(at: index) else { return }
+                self?.deleteSuccessSignal.send(gathering)
+            }
+            .store(in: &self.cancellable)
     }
     
 }

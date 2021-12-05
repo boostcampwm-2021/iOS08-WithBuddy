@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "buddyFace@1x.png",
+      "filename" : "Chart@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "buddyFace@2x.png",
+      "filename" : "Chart@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "buddyFace@3x.png",
+      "filename" : "Chart@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

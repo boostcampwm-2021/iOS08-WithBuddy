@@ -7,9 +7,9 @@
 
 import UIKit
 
-class ImageCollectionViewCell: UICollectionViewCell {
-    static let identifier = "ImageCollectionViewCell"
+final class ImageCollectionViewCell: UICollectionViewCell {
     
+    static let identifier = "ImageCollectionViewCell"
     private var image = UIImageView()
     
     required init?(coder: NSCoder) {
@@ -23,7 +23,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
     }
     
     func update(image: UIImage?, check: Bool) {
-        self.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.backgroundColor = .backgroundPurple
         self.image.image = image
         if check {
             self.image.alpha = 1.0

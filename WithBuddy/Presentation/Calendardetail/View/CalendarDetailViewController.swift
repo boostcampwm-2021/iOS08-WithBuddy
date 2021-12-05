@@ -8,44 +8,53 @@
 import UIKit
 import Combine
 
-class CalendarDetailViewController: UIViewController {
+final class CalendarDetailViewController: UIViewController {
     
+    private let detailViewMargin = 15.0
+    private var date: Date
     private lazy var detailLabel = PurpleTitleLabel()
     private lazy var detailTableView = UITableView()
-    private var calendarDetailViewModel: CalendarDetailViewModel
+    private let calendarDetailViewModel = CalendarDetailViewModel()
     private var cancellables: Set<AnyCancellable> = []
     
     weak var delegate: GatheringListDelegate?
     
-    init(calendarDetailViewModel: CalendarDetailViewModel) {
-        self.calendarDetailViewModel = calendarDetailViewModel
+    init(date: Date) {
+        self.date = date
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
-        self.calendarDetailViewModel = CalendarDetailViewModel(selectedDate: Date())
+        self.date = Date()
         super.init(coder: coder)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.view.backgroundColor = .backgroundPurple
         self.bind()
         self.configure()
+        self.calendarDetailViewModel.viewDidLoad(with: date)
     }
     
     private func bind() {
         self.calendarDetailViewModel.$dayLabel
-        .receive(on: DispatchQueue.main)
-        .sink{ [weak self] label in
-            self?.detailLabel.text = label + " 모임"
-        }.store(in: &self.cancellables)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] label in
+                self?.detailLabel.text = label + " 모임"
+            }.store(in: &self.cancellables)
         
         self.calendarDetailViewModel.$gatheringList
-        .receive(on: DispatchQueue.main)
-        .sink{ [weak self] _ in
-            self?.detailTableView.reloadData()
-        }.store(in: &self.cancellables)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.detailTableView.reloadData()
+            }.store(in: &self.cancellables)
+        
+        self.calendarDetailViewModel.deleteSuccessSingal
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] gathering in
+                self?.delegate?.deleteGathering(id: gathering.id)
+            }.store(in: &self.cancellables)
     }
     
     private func configure() {
@@ -54,34 +63,36 @@ class CalendarDetailViewController: UIViewController {
     }
     
     private func configureDetailLabel() {
+        
         self.view.addSubview(self.detailLabel)
         self.detailLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.detailLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 15),
-            self.detailLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 15)
+            self.detailLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: self.detailViewMargin),
+            self.detailLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: self.detailViewMargin)
         ])
     }
     
     private func configureTableView() {
         self.view.addSubview(detailTableView)
-        self.detailTableView.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.detailTableView.backgroundColor = .backgroundPurple
         self.detailTableView.delegate = self
         self.detailTableView.dataSource = self
         self.detailTableView.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.identifier)
         self.detailTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.detailTableView.topAnchor.constraint(equalTo: self.detailLabel.bottomAnchor, constant: 20),
-            self.detailTableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 15),
-            self.detailTableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -15),
-            self.detailTableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -20)
+            self.detailTableView.topAnchor.constraint(equalTo: self.detailLabel.bottomAnchor, constant: .plusInset),
+            self.detailTableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: self.detailViewMargin),
+            self.detailTableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -self.detailViewMargin),
+            self.detailTableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: .minusInset)
         ])
     }
     
 }
 
 extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.calendarDetailViewModel.count
+        return self.calendarDetailViewModel.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -94,19 +105,17 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.dismiss(animated: true, completion: {
-            self.delegate?.gatheringListTouched(self.calendarDetailViewModel[indexPath.item])
+            self.delegate?.didGatheringListTouched(self.calendarDetailViewModel[indexPath.item])
         })
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { _, _, completion in
-            self.calendarDetailViewModel.deleteGathering(index: indexPath.row)
-            self.delegate?.deleteGathering()
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            self.calendarDetailViewModel.didDeleteButtonTouched(index: indexPath.row)
             completion(true)
         }
-        deleteAction.backgroundColor = UIColor(named: "GraphRed")
-        deleteAction.image = UIImage(named: "FaceRed1")
+        deleteAction.backgroundColor = .graphRed
+        deleteAction.image = .deleteImage
 
         let editAction = UIContextualAction(style: .normal, title: "편집") { _, _, completion in
             self.dismiss(animated: true) {
@@ -114,8 +123,8 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
             }
             completion(true)
         }
-        editAction.backgroundColor = UIColor(named: "GraphPurple2")
-        editAction.image = UIImage(named: "FacePurple1")
+        editAction.backgroundColor = .graphPurple2
+        editAction.image = .editImage
 
         return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
@@ -127,7 +136,9 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
 }
 
 protocol GatheringListDelegate: AnyObject {
-    func gatheringListTouched(_: Gathering)
+    
+    func didGatheringListTouched(_: Gathering)
     func editGathering(_: Gathering)
-    func deleteGathering()
+    func deleteGathering(id: UUID)
+    
 }

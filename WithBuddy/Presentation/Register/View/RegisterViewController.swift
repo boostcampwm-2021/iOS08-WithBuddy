@@ -10,13 +10,11 @@ import Combine
 import Photos
 import UserNotifications
 
-class RegisterViewController: UIViewController {
+final class RegisterViewController: UIViewController {
     
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
-    
     private lazy var dateTitleLabel = PurpleTitleLabel()
-    private lazy var dateBackgroundView = WhiteView()
     private lazy var datePicker = UIDatePicker()
     private lazy var placeTitleLabel = PurpleTitleLabel()
     private lazy var placeBackgroundView = WhiteView()
@@ -60,12 +58,14 @@ class RegisterViewController: UIViewController {
         self.bind()
         self.configure()
         self.registerViewModel.didDatePicked(Date())
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addGathering))
+        self.title = "모임 등록"
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .done, target: self, action: #selector(self.didCancelButtonTouched))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.didDoneTouched))
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(willKeyboardShow), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -73,28 +73,28 @@ class RegisterViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
+    @objc func willKeyboardShow(notification: NSNotification) {
         guard !placeTextField.isFirstResponder else { return }
         let memoButtomY = self.memoBackgroundView.frame.origin.y + self.memoBackgroundView.frame.height - self.scrollView.bounds.origin.y
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let offset = memoButtomY + keyboardSize.height - self.scrollView.bounds.height
-            if offset > 0 {
+            if offset > CGFloat.zero {
                 self.scrollView.bounds.origin.y += offset
             }
         }
     }
     
     private func bind() {
-        self.dataBind()
-        self.signalBind()
+        self.bindData()
+        self.bindSignal()
     }
     
-    private func dataBind() {
+    private func bindData() {
         self.registerViewModel.$purposeList
             .receive(on: DispatchQueue.main)
             .sink { [weak self] purposeList in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
-                snapshot.appendSections([0])
+                snapshot.appendSections([Int.zero])
                 snapshot.appendItems(purposeList)
                 self?.purposeDataSource.apply(snapshot, animatingDifferences: true)
             }
@@ -105,10 +105,10 @@ class RegisterViewController: UIViewController {
             .sink { [weak self] buddyList in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
                 if buddyList.isEmpty {
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "DefaultFace")])
                 } else {
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems(buddyList)
                 }
                 self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
@@ -124,10 +124,10 @@ class RegisterViewController: UIViewController {
                         return
                     }
                     let fileUrl = URL(fileURLWithPath: filePath)
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems([fileUrl])
                 } else {
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems(pictures)
                 }
                 self?.pictureDataSource.apply(snapshot, animatingDifferences: true)
@@ -135,25 +135,25 @@ class RegisterViewController: UIViewController {
             .store(in: &self.cancellables)
     }
     
-    private func signalBind() {
+    private func bindSignal() {
         self.registerViewModel.registerDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] gathering in
-                self?.alertSuccess()
+            .sink { [weak self] gathering in
+                self?.didRegisterSucceed()
                 self?.registerNotification(gathering: gathering)
             }
             .store(in: &self.cancellables)
         
         self.registerViewModel.registerFailSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] result in
-                self?.alertError(result)
+            .sink { [weak self] result in
+                self?.didRegisterFailed(result)
             }
             .store(in: &self.cancellables)
         
         self.registerViewModel.addBuddySignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] buddyList in
+            .sink { [weak self] buddyList in
                 let buddyChoiceViewController = BuddyChoiceViewController()
                 buddyChoiceViewController.delegate = self
                 buddyChoiceViewController.configureBuddyList(by: buddyList)
@@ -166,8 +166,8 @@ class RegisterViewController: UIViewController {
         guard let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: gathering.date) else { return }
         let content = UNMutableNotificationContent()
         content.title = "위드버디"
-        let firstBuddyName = gathering.buddyList.first?.name ?? ""
-        let buddyCountString = gathering.buddyList.count == 1 ? "" : "외 \(gathering.buddyList.count-1)명"
+        let firstBuddyName = gathering.buddyList.first?.name ?? String()
+        let buddyCountString = gathering.buddyList.count == 1 ? String() : "외 \(gathering.buddyList.count-1)명"
         content.body = "어제 \(firstBuddyName)님 \(buddyCountString)과의 만남은 어떠셨나요?"
         
         let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDay)
@@ -181,7 +181,7 @@ class RegisterViewController: UIViewController {
     }
     
     private func configure() {
-        self.view.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.view.backgroundColor = .backgroundPurple
         
         self.configureScrollView()
         self.configureContentView()
@@ -207,7 +207,7 @@ class RegisterViewController: UIViewController {
     
     private func configureContentView() {
         self.scrollView.addSubview(self.contentView)
-        self.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapEmptySpace)))
+        self.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didEmptySpacedTouched)))
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
@@ -222,7 +222,6 @@ class RegisterViewController: UIViewController {
     
     private func configureDatePart() {
         self.configureDateTitle()
-        self.configureDateBackground()
         self.configureDatePicker()
     }
     
@@ -238,30 +237,23 @@ class RegisterViewController: UIViewController {
         ])
     }
     
-    private func configureDateBackground() {
-        self.contentView.addSubview(self.dateBackgroundView)
-        self.dateBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.dateBackgroundView.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: .innerPartInset),
-            self.dateBackgroundView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
-            self.dateBackgroundView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
-            self.dateBackgroundView.heightAnchor.constraint(equalToConstant: .backgroudHeight)
-        ])
-    }
-    
     private func configureDatePicker() {
-        self.dateBackgroundView.addSubview(self.datePicker)
+        self.contentView.addSubview(self.datePicker)
         self.datePicker.datePickerMode = .dateAndTime
+        self.datePicker.contentHorizontalAlignment = .leading
         self.datePicker.locale = Locale(identifier: "ko-KR")
         self.datePicker.timeZone = .autoupdatingCurrent
-        self.datePicker.addTarget(self, action: #selector(self.didDateChanged(_:)), for: .valueChanged)
+        self.datePicker.addTarget(self, action: #selector(self.didDateChanged), for: .valueChanged)
+        self.datePicker.contentHorizontalAlignment = .leading
         
         self.datePicker.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.datePicker.leadingAnchor.constraint(equalTo: self.dateBackgroundView.leadingAnchor, constant: .plusInset),
-            self.datePicker.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
+            self.datePicker.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: .innerPartInset),
+            self.datePicker.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.datePicker.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])
     }
+    
     @objc private func didDateChanged(_ sender: UIDatePicker) {
         self.registerViewModel.didDatePicked(sender.date)
     }
@@ -280,7 +272,7 @@ class RegisterViewController: UIViewController {
         
         self.placeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.placeTitleLabel.topAnchor.constraint(equalTo: self.dateBackgroundView.bottomAnchor, constant: .plusInset),
+            self.placeTitleLabel.topAnchor.constraint(equalTo: self.datePicker.bottomAnchor, constant: .plusInset),
             self.placeTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
             self.placeTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])
@@ -299,7 +291,7 @@ class RegisterViewController: UIViewController {
     
     private func configurePlaceTextField() {
         self.placeBackgroundView.addSubview(self.placeTextField)
-        if let color = UIColor(named: "LabelPurple") {
+        if let color = UIColor.labelPurple {
             self.placeTextField.attributedPlaceholder = NSAttributedString(string: "모임 장소를 적어주세요", attributes: [NSAttributedString.Key.foregroundColor: color])
         }
         self.placeTextField.delegate = self
@@ -337,7 +329,7 @@ class RegisterViewController: UIViewController {
         self.purposeCollectionView.backgroundColor = .clear
         self.purposeCollectionView.showsHorizontalScrollIndicator = false
         self.purposeCollectionView.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.collectionViewDidTouched(_:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.didCollectionViewTouched))
         self.purposeCollectionView.addGestureRecognizer(tap)
         self.purposeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
         
@@ -355,12 +347,12 @@ class RegisterViewController: UIViewController {
         ])
     }
     
-    @objc func collectionViewDidTouched(_ sender: UITapGestureRecognizer) {
+    @objc func didCollectionViewTouched(_ sender: UITapGestureRecognizer) {
         if let indexPath = self.purposeCollectionView.indexPathForItem(at: sender.location(in: self.purposeCollectionView)) {
             self.registerViewModel.didPurposeTouched(indexPath.item)
             
             guard let cell = self.purposeCollectionView.cellForItem(at: indexPath) as? ImageTextCollectionViewCell  else { return }
-            cell.animateButtonTap(scale: 0.8)
+            cell.animateButtonTap()
         }
     }
     
@@ -390,8 +382,8 @@ class RegisterViewController: UIViewController {
             pointSize: .buddyAndPurposeWidth, weight: .medium, scale: .default)
         let image = UIImage(named: "Plus", in: .main, with: config)
         self.buddyAddButton.setImage(image, for: .normal)
-        self.buddyAddButton.tintColor = UIColor(named: "LabelPurple")
-        self.buddyAddButton.addTarget(self, action: #selector(self.onBuddyAddButtonTouched(_:)), for: .touchUpInside)
+        self.buddyAddButton.tintColor = .labelPurple
+        self.buddyAddButton.addTarget(self, action: #selector(self.didBuddyAddButtonTouched), for: .touchUpInside)
         
         self.buddyAddButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -425,8 +417,8 @@ class RegisterViewController: UIViewController {
         ])
     }
     
-    @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
-        self.buddyAddButton.animateButtonTap(scale: 0.8)
+    @objc private func didBuddyAddButtonTouched(_ sender: UIButton) {
+        self.buddyAddButton.animateButtonTap()
         self.registerViewModel.didAddBuddyTouched()
     }
     
@@ -470,7 +462,7 @@ class RegisterViewController: UIViewController {
         self.memoTextView.autocorrectionType = .no
         self.memoTextView.delegate = self
         self.memoTextView.text = "모임에 대한 메모를 적어주세요."
-        self.memoTextView.textColor = UIColor(named: "LabelPurple")
+        self.memoTextView.textColor = .labelPurple
         
         self.memoTextView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -507,8 +499,8 @@ class RegisterViewController: UIViewController {
             pointSize: 30, weight: .medium, scale: .default)
         let image = UIImage(systemName: "plus.square", withConfiguration: config)
         self.pictureAddButton.setImage(image, for: .normal)
-        self.pictureAddButton.tintColor = UIColor(named: "LablePurple")
-        self.pictureAddButton.addTarget(self, action: #selector(self.onPictureButtonTouched(_:)), for: .touchUpInside)
+        self.pictureAddButton.tintColor = .labelPurple
+        self.pictureAddButton.addTarget(self, action: #selector(self.didPictureButtonTouched), for: .touchUpInside)
         
         self.pictureAddButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -549,18 +541,6 @@ class RegisterViewController: UIViewController {
         self.pictureCollectionView.collectionViewLayout = layout
     }
     
-    private func requestAuthorization() {
-        PHPhotoLibrary.requestAuthorization { state in
-            DispatchQueue.main.async {
-                if state == .authorized {
-                    self.presentImagePicker()
-                } else {
-                    self.dismiss(animated: true, completion: nil)
-                }
-            }
-        }
-    }
-    
     private func presentImagePicker() {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -568,18 +548,47 @@ class RegisterViewController: UIViewController {
         self.present(picker, animated: true, completion: nil)
     }
     
-    @objc private func onPictureButtonTouched(_ sender: UIButton) {
-        self.pictureAddButton.animateButtonTap(scale: 0.8)
+    private func requestAuthorization() {
+        PHPhotoLibrary.requestAuthorization { state in
+            DispatchQueue.main.async {
+                if state == .authorized {
+                    self.presentImagePicker()
+                }
+            }
+        }
+    }
+    
+    private func presentDeniedAuthorization() {
+        let alert = UIAlertController(title: "갤러리 접근권한이 없습니다", message: "설정 > WithBuddy > 사진에서 접근권한을 허용해주세요", preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @objc private func didPictureButtonTouched(_ sender: UIButton) {
+        self.pictureAddButton.animateButtonTap()
         switch PHPhotoLibrary.authorizationStatus() {
         case .authorized: self.presentImagePicker()
         case .notDetermined: self.requestAuthorization()
+        case .denied: self.presentDeniedAuthorization()
         default: break
         }
     }
     
     // MARK: - CompletePart
     
-    private func alertSuccess() {
+    @objc private func didCancelButtonTouched() {
+        let alert = UIAlertController(title: "기록한 내용은 저장되지 않습니다. 그래도 나가시겠습니까?", message: String(), preferredStyle: UIAlertController.Style.alert)
+        let noAction = UIAlertAction(title: "취소", style: .cancel)
+        let okAction = UIAlertAction(title: "OK", style: .destructive, handler: { _ in
+            self.navigationController?.popViewController(animated: true)
+        })
+        alert.addAction(noAction)
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func didRegisterSucceed() {
         let alert = UIAlertController(title: "등록 완료", message: "모임 등록이 완료되었습니다!", preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in
             self.navigationController?.popViewController(animated: true)
@@ -588,37 +597,38 @@ class RegisterViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func alertError(_ error: RegisterError) {
+    private func didRegisterFailed(_ error: RegisterError) {
         let alert = UIAlertController(title: "등록 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
     }
     
-    @objc private func addGathering() {
+    @objc private func didDoneTouched() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in
             self.registerViewModel.didDoneTouched()
         }
     }
     
-    @objc private func tapEmptySpace(){
+    @objc private func didEmptySpacedTouched(){
         self.view.endEditing(true)
     }
     
 }
 
 extension RegisterViewController: UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         if collectionView == self.pictureCollectionView {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
                 let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash")) { _ in
-                    self.registerViewModel.didBuddyDeleteTouched(in: indexPath.item)
+                    self.registerViewModel.didPictureDeleteTouched(in: indexPath.item)
                 }
                 return UIMenu(title: "이 사진을", children: [delete])
             })
         } else {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
-                let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
+                let delete = UIAction(title: NSLocalizedString("삭제", comment: String()),
                                       image: UIImage(systemName: "trash")) { _ in
                     self.registerViewModel.didBuddyDeleteTouched(in: indexPath.item)
                 }
@@ -626,6 +636,7 @@ extension RegisterViewController: UICollectionViewDelegate {
             })
         }
     }
+    
 }
 
 extension RegisterViewController: UITextFieldDelegate {
@@ -656,7 +667,7 @@ extension RegisterViewController: UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor(named: "LabelPurple") {
+        if textView.textColor == .labelPurple {
             textView.text = nil
             textView.textColor = UIColor.black
         }
@@ -665,7 +676,7 @@ extension RegisterViewController: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = "모임에 대한 메모를 적어주세요."
-            textView.textColor = UIColor(named: "LabelPurple")
+            textView.textColor = .labelPurple
         }
     }
     
@@ -677,10 +688,9 @@ extension RegisterViewController: UITextViewDelegate {
 }
 
 extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        guard let url = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
-            return
-        }
+        guard let url = info[UIImagePickerController.InfoKey.imageURL] as? URL else { return }
         self.registerViewModel.didPicturePicked(url)
         dismiss(animated: true, completion: nil)
     }
@@ -688,6 +698,7 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
     }
+    
 }
 
 extension RegisterViewController: UIScrollViewDelegate {
@@ -699,7 +710,9 @@ extension RegisterViewController: UIScrollViewDelegate {
 }
 
 extension RegisterViewController: BuddyChoiceDelegate {
-    func buddySelectingDidCompleted(_ buddyList: [Buddy]) {
+    
+    func didBuddySelectingCompleted(_ buddyList: [Buddy]) {
         self.registerViewModel.didBuddyUpdated(buddyList)
     }
+    
 }

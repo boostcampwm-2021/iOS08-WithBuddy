@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WBCalendarCollectionView: UICollectionView {
+final class WBCalendarCollectionView: UICollectionView {
 
     init() {
         super.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -22,21 +22,23 @@ class WBCalendarCollectionView: UICollectionView {
     private func configure() {
         self.register(WBCalendarViewCell.self, forCellWithReuseIdentifier: WBCalendarViewCell.identifier)
         self.configureLayout()
+        self.backgroundColor = .clear
     }
     
     private func configureLayout() {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0/7.0),
+            widthDimension: .fractionalWidth(1.0/CGFloat(Int.numOfWeek)),
             heightDimension: .fractionalHeight(1.0)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0/6.0)
+            heightDimension: .fractionalHeight(1.0/(CGFloat(.numOfWeek - 1)))
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         
         self.collectionViewLayout = UICollectionViewCompositionalLayout(section: section)
     }
+    
 }

@@ -8,41 +8,86 @@
 import Foundation
 import Combine
 
-class BuddyManageViewModel {
+final class BuddyManageViewModel {
     
     @Published private(set) var storedBuddyList: [Buddy] = []
-    private(set) var failSignal = PassthroughSubject<BuddyChoiceError, Never>()
-    private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
+    private(set) var deleteSuccessSignal = PassthroughSubject<Void, Never>()
+    private(set) var failSignal = PassthroughSubject<CoreDataManager.CoreDataError, Never>()
+    private var buddyUseCase: BuddyUseCaseProtocol
+    private var cancellable: Set<AnyCancellable> = []
+    
+    init(buddyUseCase: BuddyUseCaseProtocol = BuddyUseCase(coreDataManager: CoreDataManager.shared)) {
+        self.buddyUseCase = buddyUseCase
+    }
     
     subscript(index: Int) -> Buddy {
         return self.storedBuddyList[index]
     }
     
-    func buddyDidDeleted(in idx: Int) {
-        do {
-            try self.buddyUseCase.deleteBuddy(storedBuddyList[idx])
-            self.storedBuddyList.remove(at: idx)
-        } catch let error {
-            guard let error = error as? BuddyChoiceError else { return }
-            self.failSignal.send(error)
-        }
+    func didBuddyDeleted(in idx: Int) {
+        self.buddyUseCase.deleteBuddy(self.storedBuddyList[idx])
+            .sink { [weak self] completion in
+                switch completion {
+                case .failure(let error):
+                    self?.failSignal.send(error)
+                case .finished:
+                    return
+                }
+            } receiveValue: { [weak self] in
+                self?.storedBuddyList.remove(at: idx)
+                self?.deleteSuccessSignal.send()
+            }
+            .store(in: &self.cancellable)
     }
     
-    func buddyDidAdded(_ buddy: Buddy) {
+    func didBuddyAdded(_ buddy: Buddy) {
         self.buddyUseCase.insertBuddy(buddy)
-        self.storedBuddyList.append(buddy)
+            .sink { [weak self] completion in
+                switch completion {
+                case .failure(let error):
+                    self?.failSignal.send(error)
+                case .finished:
+                    return
+                }
+            } receiveValue: { [weak self] buddy in
+                //TODO: 성공 alert 처리하기
+                self?.storedBuddyList.append(buddy)
+            }.store(in: &self.cancellable)
     }
     
-    func buddyListDidLoaded() {
-        self.storedBuddyList = self.buddyUseCase.fetchBuddy()
+    func didBuddyListLoaded() {
+        self.buddyUseCase.fetchBuddy()
+            .sink { [weak self] completion in
+                switch completion {
+                case .failure(let error):
+                    self?.failSignal.send(error)
+                case .finished:
+                    return
+                }
+            } receiveValue: { [weak self] buddyList in
+                //TODO: 성공 alert 처리하기
+                self?.storedBuddyList = buddyList
+            }.store(in: &self.cancellable)
     }
     
     func buddyDidEdited(_ buddy: Buddy) {
         guard let idx = self.storedBuddyList.firstIndex(where: {
             $0.id == buddy.id
         }) else { return }
-        self.storedBuddyList[idx] = buddy
+        
         self.buddyUseCase.updateBuddy(buddy)
+            .sink { [weak self] completion in
+                switch completion {
+                case .failure(let error):
+                    self?.failSignal.send(error)
+                case .finished:
+                    return
+                }
+            } receiveValue: { [weak self] buddy in
+                //TODO: 성공 처리 alert 처리하기
+                self?.storedBuddyList[idx] = buddy
+            }
+            .store(in: &self.cancellable)
     }
     
 }

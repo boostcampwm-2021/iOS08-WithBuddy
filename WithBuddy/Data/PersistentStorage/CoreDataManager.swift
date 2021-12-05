@@ -8,40 +8,70 @@
 import CoreData
 import Combine
 
-protocol CoreDataManagable {
+protocol BuddyManagable {
     
-    @discardableResult func insertGathering(_ gathering: Gathering) -> Bool
-    @discardableResult func insertBuddy(_ buddy: Buddy) -> Bool
-    @discardableResult func updateBuddy(_ buddy: Buddy) -> Bool
-    @discardableResult func deleteBuddy(_ buddy: Buddy) throws -> Bool
-    func fetchAllBuddy() -> [BuddyEntity]
-    func fetchAllGathering() -> [GatheringEntity]
-    func fetchBuddy(name: String) -> [BuddyEntity]
-    func fetchGathering(including name: String) -> [GatheringEntity]
-    func fetchGathering(including day: Date) -> [GatheringEntity]
-    func fetchGaterhing(month: Date) -> [GatheringEntity]
-    func fetchGaterhing(oneWeekFrom date: Date) -> [GatheringEntity]
-    func updateGathering(_ gathering: Gathering)
-    func deleteGathering(_ gatheringId: UUID)
-    func fetchPurpose() -> AnyPublisher<[PurposeEntity], Never>
+    func insertBuddy(_ buddy: Buddy) -> AnyPublisher<BuddyEntity, CoreDataManager.CoreDataError>
+    func fetchAllBuddy() -> AnyPublisher<[BuddyEntity], CoreDataManager.CoreDataError>
+    func updateBuddy(_ buddy: Buddy) -> AnyPublisher<BuddyEntity, CoreDataManager.CoreDataError>
+    func deleteBuddy(_ buddy: Buddy) -> AnyPublisher<Void, CoreDataManager.CoreDataError>
+    
+}
+
+protocol GatheringManagable {
+    
+    func insertGathering(_ gathering: Gathering) -> AnyPublisher<GatheringEntity, CoreDataManager.CoreDataError>
+    func fetchAllGathering() -> AnyPublisher<[GatheringEntity], CoreDataManager.CoreDataError>
+    func fetchGathering(day: Date) -> AnyPublisher<[GatheringEntity], CoreDataManager.CoreDataError>
+    func fetchThisMonthGathering(month: Date) -> AnyPublisher<[GatheringEntity], CoreDataManager.CoreDataError>
+    func fetchGathering(oneWeekFrom date: Date) -> AnyPublisher<[GatheringEntity], CoreDataManager.CoreDataError>
+    func fetchGathering(id: UUID) -> AnyPublisher<GatheringEntity, CoreDataManager.CoreDataError>
+    func updateGathering(_ gathering: Gathering) -> AnyPublisher<GatheringEntity, CoreDataManager.CoreDataError>
+    func deleteGathering(id: UUID) -> AnyPublisher<Void, CoreDataManager.CoreDataError>
     func deleteAllGathering() -> AnyPublisher<Void, CoreDataManager.CoreDataError>
     
+}
+
+protocol PurposeManagable {
+
+    func fetchPurpose() -> AnyPublisher<[PurposeEntity], CoreDataManager.CoreDataError>
+
 }
 
 final class CoreDataManager {
     
     enum CoreDataError: LocalizedError {
-        case deleteFail
+        case oneMoreGathering
+        case buddyInsert
+        case buddyFetch
+        case buddyUpdate
+        case buddyDelete
+        case gatheringInsert
+        case gatheringFetch
+        case gatheringUpdate
+        case gatheringDelete
+        case purposeFetch
         
         var errorDescription: String? {
-            return "삭제에 실패하셨습니다."
+            switch self {
+            case .oneMoreGathering: return "버디가 하나 이상의 모임에 속해있습니다."
+            case .buddyInsert: return "버디를 생성할 수 없습니다."
+            case .buddyFetch: return "버디를 불러올 수 없습니다."
+            case .buddyUpdate: return "버디를 수정할 수 없습니다."
+            case .buddyDelete: return "버디를 삭제할 수 없습니다."
+            case .gatheringInsert: return "모임을 생성할 수 없습니다."
+            case .gatheringFetch: return "모임을 불러올 수 없습니다."
+            case .gatheringUpdate: return "모임을 수정할 수 없습니다."
+            case .gatheringDelete: return "모임을 삭제할 수 없습니다."
+            case .purposeFetch: return "목적을 불러올 수 없습니다."
+            }
         }
     }
     
     static let shared = CoreDataManager()
-    let calendarUseCase = CalendarUseCase()
+    private let calendarUseCase: CalendarUseCase
     
-    private init() {
+    private init(calendarUseCase: CalendarUseCase = CalendarUseCase()) {
+        self.calendarUseCase = calendarUseCase
         self.context.perform { [weak self] in
             guard let self = self,
                   let purpose = try? self.context.fetch(PurposeEntity.fetchRequest()) else { return }
@@ -65,9 +95,17 @@ final class CoreDataManager {
         return container
     }()
     
-    private var context: NSManagedObjectContext {
-        self.persistentContainer.viewContext
-    }
+    private lazy var context: NSManagedObjectContext = {
+        let context = self.persistentContainer.viewContext
+        context.automaticallyMergesChangesFromParent = true
+        return context
+    }()
+    
+    private lazy var backgroundContext: NSManagedObjectContext = {
+        let context = self.persistentContainer.newBackgroundContext()
+        context.automaticallyMergesChangesFromParent = true
+        return context
+    }()
     
     private func fetch<T: NSManagedObject>(request: NSFetchRequest<T>) -> [T] {
         do {
@@ -82,189 +120,319 @@ final class CoreDataManager {
     private func fetchBuddyEntity(of buddyList: [Buddy]) -> [BuddyEntity] {
         let request = BuddyEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id IN %@", buddyList.map{ $0.id })
-        return self.fetch(request: request)
+        guard let fetchResult = try? self.backgroundContext.fetch(request) else { return [] }
+        return fetchResult
     }
     
     private func fetchPurposeEntity(of purposeList: [String]) -> [PurposeEntity] {
         let request = PurposeEntity.fetchRequest()
         request.predicate = NSPredicate(format: "name IN %@", purposeList)
-        return self.fetch(request: request)
+        guard let fetchResult = try? self.backgroundContext.fetch(request) else { return [] }
+        return fetchResult
     }
     
 }
 
-extension CoreDataManager: CoreDataManagable {
+extension CoreDataManager: BuddyManagable {
     
-    func fetchAllBuddy() -> [BuddyEntity] {
-        return self.fetch(request: BuddyEntity.fetchRequest()).sorted()
+    func fetchAllBuddy() -> AnyPublisher<[BuddyEntity], CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                do {
+                    let request = BuddyEntity.fetchRequest()
+                    let fetchResult = try self.backgroundContext.fetch(request)
+                    promise(.success(fetchResult))
+                } catch {
+                    promise(.failure(.buddyFetch))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
     
-    func fetchAllGathering() -> [GatheringEntity] {
-        return self.fetch(request: GatheringEntity.fetchRequest()).sorted(by: >)
+    func insertBuddy(_ buddy: Buddy) -> AnyPublisher<BuddyEntity, CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                let buddyEntity = BuddyEntity(context: self.backgroundContext, buddy: buddy)
+                do {
+                    try self.backgroundContext.save()
+                    promise(.success(buddyEntity))
+                } catch {
+                    promise(.failure(.buddyInsert))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
     
-    func fetchBuddy(name: String) -> [BuddyEntity] {
-        let request = BuddyEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "name == %@", name)
-        return self.fetch(request: request)
+    func updateBuddy(_ buddy: Buddy) -> AnyPublisher<BuddyEntity, CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                let request = BuddyEntity.fetchRequest()
+                request.predicate = NSPredicate(
+                    format: "%K == %@",
+                    #keyPath(BuddyEntity.id),
+                    buddy.id as CVarArg
+                )
+                do {
+                    let fetchResult = try self.backgroundContext.fetch(request)
+                    guard let buddyEntity = fetchResult.first else { return }
+                    buddyEntity.name = buddy.name
+                    buddyEntity.face = buddy.face
+                    
+                    if self.backgroundContext.hasChanges {
+                        try self.backgroundContext.save()
+                    }
+                    promise(.success(buddyEntity))
+                } catch {
+                    promise(.failure(.buddyUpdate))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
     
-    func fetchGathering(including name: String) -> [GatheringEntity] {
-        return self.fetchBuddy(name: name).compactMap{ $0.gatheringList }.map{ Array($0) }.compactMap{ $0 }.flatMap{ $0 }.sorted(by: >)
+    func deleteBuddy(_ buddy: Buddy) -> AnyPublisher<Void, CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                let request = BuddyEntity.fetchRequest()
+                request.predicate = NSPredicate(
+                    format: "%K == %@",
+                    #keyPath(BuddyEntity.id) ,
+                    buddy.id as CVarArg
+                )
+                do {
+                    let fetchResult = try self.backgroundContext.fetch(request)
+                    guard let buddyEntity = fetchResult.first else { return }
+                    if !buddyEntity.gatheringList.isEmpty {
+                        promise(.failure(.oneMoreGathering))
+                    } else {
+                        self.backgroundContext.delete(buddyEntity)
+                        try self.backgroundContext.save()
+                        promise(.success(()))
+                    }
+                } catch {
+                    promise(.failure(.buddyDelete))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
     
-    func fetchGathering(including day: Date) -> [GatheringEntity] {
-        let midnightOfDay = self.calendarUseCase.firstTimeOfDay(baseDate: day)
-        let midnightOfNextDay = self.calendarUseCase.nextDay(baseDate: midnightOfDay)
-        
-        let request = GatheringEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "date >= %@ AND date < %@", midnightOfDay as NSDate, midnightOfNextDay as NSDate)
-        return self.fetch(request: request)
+}
+
+extension CoreDataManager: GatheringManagable {
+    
+    func insertGathering(_ gathering: Gathering) -> AnyPublisher<GatheringEntity, CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                let gatheringEntity = GatheringEntity(context: self.backgroundContext, gathering: gathering)
+                gatheringEntity.addToBuddyList(NSSet(array: self.fetchBuddyEntity(of: gathering.buddyList)))
+                gatheringEntity.addToPurposeList(NSSet(array: self.fetchPurposeEntity(of: gathering.purpose)))
+                
+                do {
+                    try self.backgroundContext.save()
+                    promise(.success(gatheringEntity))
+                } catch let error {
+                    print(error)
+                    promise(.failure(.gatheringInsert))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
     
-    func fetchGaterhing(month: Date) -> [GatheringEntity] {
-        let startDateOfMonth = self.calendarUseCase.firstDateOfMonth(baseDate: month)
-        let startDateOfNextMonth = self.calendarUseCase.nextMonth(baseDate: startDateOfMonth)
-        
-        let request = GatheringEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startDateOfMonth as NSDate, startDateOfNextMonth as NSDate)
-        return self.fetch(request: request)
+    func fetchAllGathering() -> AnyPublisher<[GatheringEntity], CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                do {
+                    let request = GatheringEntity.fetchRequest()
+                    let fetchResult = try self.backgroundContext.fetch(request)
+                    promise(.success(fetchResult))
+                } catch {
+                    promise(.failure(.gatheringFetch))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
     
-    func fetchGaterhing(oneWeekFrom date: Date) -> [GatheringEntity] {
-        let startTimeOfDay = self.calendarUseCase.firstTimeOfDay(baseDate: date)
-        let startTimeOfNext8Day = self.calendarUseCase.next8Days(baseDate: startTimeOfDay)
-        
-        let request = GatheringEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "date >= %@ AND date < %@", startTimeOfDay as NSDate, startTimeOfNext8Day as NSDate)
-        return self.fetch(request: request)
+    func fetchGathering(day: Date) -> AnyPublisher<[GatheringEntity], CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                let nextDay = self.calendarUseCase.nextDay(baseDate: day)
+                do {
+                    let request = GatheringEntity.fetchRequest()
+                    request.predicate = NSPredicate(
+                        format: "%K >= %@ AND %K < %@",
+                        #keyPath(GatheringEntity.date),
+                        day as NSDate,
+                        #keyPath(GatheringEntity.date),
+                        nextDay as NSDate
+                    )
+                    let fetchResult = try self.backgroundContext.fetch(request)
+                    promise(.success(fetchResult))
+                } catch {
+                    promise(.failure(.gatheringFetch))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
     
-    @discardableResult
-    func insertBuddy(_ buddy: Buddy) -> Bool {
-        BuddyEntity(context: self.context, buddy: buddy)
-        
-        do {
-            try self.context.save()
-            return true
-        } catch {
-            print(error.localizedDescription)
-            return false
-        }
+    func fetchThisMonthGathering(month: Date) -> AnyPublisher<[GatheringEntity], CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                let startDateOfMonth = self.calendarUseCase.firstDateOfMonth(baseDate: month)
+                let startDateOfNextMonth = self.calendarUseCase.nextMonth(baseDate: startDateOfMonth)
+                do {
+                    let request = GatheringEntity.fetchRequest()
+                    request.predicate = NSPredicate(
+                        format: "%K >= %@ AND %K < %@",
+                        #keyPath(GatheringEntity.date),
+                        startDateOfMonth as NSDate,
+                        #keyPath(GatheringEntity.date),
+                        startDateOfNextMonth as NSDate
+                    )
+                    let fetchResult = try self.backgroundContext.fetch(request)
+                    promise(.success(fetchResult))
+                } catch {
+                    promise(.failure(.gatheringFetch))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
     
-    @discardableResult
-    func insertGathering(_ gathering: Gathering) -> Bool {
-        let gatheringEntity = GatheringEntity(context: self.context, gathering: gathering)
-        gatheringEntity.addToBuddyList(NSSet(array: self.fetchBuddyEntity(of: gathering.buddyList)))
-        gatheringEntity.addToPurposeList(NSSet(array: self.fetchPurposeEntity(of: gathering.purpose)))
-        
-        do {
-            try self.context.save()
-            return true
-        } catch {
-            print(error.localizedDescription)
-            return false
-        }
+    func fetchGathering(oneWeekFrom date: Date) -> AnyPublisher<[GatheringEntity], CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                let startTimeOfDay = self.calendarUseCase.firstTimeOfDay(baseDate: date)
+                let startTimeOfNext8Day = self.calendarUseCase.next8Days(baseDate: startTimeOfDay)
+                do {
+                    let request = GatheringEntity.fetchRequest()
+                    request.predicate = NSPredicate(
+                        format: "%K >= %@ AND %K < %@",
+                        #keyPath(GatheringEntity.date),
+                        startTimeOfDay as NSDate,
+                        #keyPath(GatheringEntity.date),
+                        startTimeOfNext8Day as NSDate
+                    )
+                    let fetchResult = try self.backgroundContext.fetch(request)
+                    promise(.success(fetchResult))
+                } catch {
+                    promise(.failure(.gatheringFetch))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
     
-    @discardableResult
-    func updateBuddy(_ buddy: Buddy) -> Bool {
-        let request = BuddyEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@", buddy.id as CVarArg )
-        
-        guard let buddyEntity = self.fetch(request: request).first else { return false }
-        buddyEntity.name = buddy.name
-        buddyEntity.face = buddy.face
-        
-        do {
-            try self.context.save()
-            return true
-        } catch {
-            print(error.localizedDescription)
-            return false
-        }
+    func fetchGathering(id: UUID) -> AnyPublisher<GatheringEntity, CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                do {
+                    let request = GatheringEntity.fetchRequest()
+                    request.predicate = NSPredicate(
+                        format: "%K == %@",
+                        #keyPath(GatheringEntity.id),
+                        id as CVarArg
+                    )
+                    let fetchResult = try self.backgroundContext.fetch(request)
+                    guard let result = fetchResult.first else {
+                        promise(.failure(.gatheringFetch))
+                        return
+                    }
+                    promise(.success(result))
+                } catch {
+                    promise(.failure(.gatheringFetch))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
     
-    @discardableResult
-    func deleteBuddy(_ buddy: Buddy) throws -> Bool {
-        let request = BuddyEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@", buddy.id as CVarArg )
-        
-        guard let buddyEntity = self.fetch(request: request).first else { return false }
-        if !buddyEntity.gatheringList.isEmpty {
-            throw BuddyChoiceError.oneMoreGathering
-        }
-        
-        self.context.delete(buddyEntity)
-        
-        do {
-            try self.context.save()
-            return true
-        } catch {
-            print(error.localizedDescription)
-            return false
-        }
+    func updateGathering(_ gathering: Gathering) -> AnyPublisher<GatheringEntity, CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                do {
+                    let request = GatheringEntity.fetchRequest()
+                    request.predicate = NSPredicate(
+                        format: "%K == %@",
+                        #keyPath(GatheringEntity.id),
+                        gathering.id as CVarArg
+                    )
+                    let fetchResult = try self.backgroundContext.fetch(request)
+                    guard let gatheringEntity = fetchResult.first else {
+                        promise(.failure(.gatheringUpdate))
+                        return
+                    }
+                    gatheringEntity.date = gathering.date
+                    gatheringEntity.place = gathering.place
+                    gatheringEntity.memo = gathering.memo
+                    gatheringEntity.picture = gathering.picture
+                    gatheringEntity.purposeList.forEach{ purposeEntity in
+                        gatheringEntity.removeFromPurposeList(purposeEntity)
+                    }
+                    gatheringEntity.addToPurposeList(NSSet(array: self.fetchPurposeEntity(of: gathering.purpose)))
+                    gatheringEntity.buddyList.forEach{ buddyEntity in
+                        gatheringEntity.removeFromBuddyList(buddyEntity)
+                    }
+                    gatheringEntity.addToBuddyList(NSSet(array: self.fetchBuddyEntity(of: gathering.buddyList)))
+                    try self.backgroundContext.save()
+                } catch {
+                    promise(.failure(.gatheringUpdate))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
     
-    func updateGathering(_ gathering: Gathering) {
-        let request = GatheringEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@", gathering.id as CVarArg)
-        
-        guard let gatheringEntity = self.fetch(request: request).first else { return }
-        gatheringEntity.date = gathering.date
-        gatheringEntity.place = gathering.place
-        gatheringEntity.memo = gathering.memo
-        gatheringEntity.picture = gathering.picture
-        gatheringEntity.purposeList.forEach{ purposeEntity in
-            gatheringEntity.removeFromPurposeList(purposeEntity)
-        }
-        gatheringEntity.addToPurposeList(NSSet(array: self.fetchPurposeEntity(of: gathering.purpose)))
-        gatheringEntity.buddyList.forEach{ buddyEntity in
-            gatheringEntity.removeFromBuddyList(buddyEntity)
-        }
-        gatheringEntity.addToBuddyList(NSSet(array: self.fetchBuddyEntity(of: gathering.buddyList)))
-        
-        do {
-            try self.context.save()
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    func deleteGathering(_ gatheringId: UUID) {
-        let request = GatheringEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@", gatheringId as CVarArg)
-        
-        guard let gatheringEntity = self.fetch(request: request).first else { return }
-        self.context.delete(gatheringEntity)
-        
-        do {
-            try self.context.save()
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    func fetchPurpose() -> AnyPublisher<[PurposeEntity], Never> {
-        let request = PurposeEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "gatheringList.@count > 0")
-        return Just(self.fetch(request: request))
-            .map{ $0.sorted(by: { lhs, rhs in
-                lhs.gatheringList.count > rhs.gatheringList.count
-            })}
-            .eraseToAnyPublisher()
+    func deleteGathering(id: UUID) -> AnyPublisher<Void, CoreDataError> {
+        return Future { promise in
+            self.backgroundContext.perform {
+                do {
+                    let request = GatheringEntity.fetchRequest()
+                    request.predicate = NSPredicate(
+                        format: "%K == %@",
+                        #keyPath(GatheringEntity.id),
+                        id as CVarArg
+                    )
+                    let fetchResult = try self.backgroundContext.fetch(request)
+                    guard let gatheringEntity = fetchResult.first else {
+                        promise(.failure(.gatheringDelete))
+                        return
+                    }
+                    self.backgroundContext.delete(gatheringEntity)
+                    try self.backgroundContext.save()
+                    promise(.success(()))
+                } catch {
+                    promise(.failure(.gatheringDelete))
+                }
+            }
+        }.eraseToAnyPublisher()
     }
     
     func deleteAllGathering() -> AnyPublisher<Void, CoreDataError> {
         return Future { promise in
             do {
-                let list = self.fetch(request: GatheringEntity.fetchRequest())
-                list.forEach{ self.context.delete($0) }
-                try self.context.save()
+                let request = GatheringEntity.fetchRequest()
+                let fetchReuslt = try self.backgroundContext.fetch(request)
+                
+                fetchReuslt.forEach { self.backgroundContext.delete($0) }
+                try self.backgroundContext.save()
                 promise(.success(()))
             } catch {
-                promise(.failure(.deleteFail))
+                promise(.failure(.gatheringDelete))
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+}
+
+extension CoreDataManager: PurposeManagable {
+    
+    func fetchPurpose() -> AnyPublisher<[PurposeEntity], CoreDataError> {
+        return Future { promise in
+            do {
+                let request = PurposeEntity.fetchRequest()
+                request.predicate = NSPredicate(
+                    format: "%K.@count > 0",
+                    #keyPath(PurposeEntity.gatheringList)
+                )
+                let fetchResult = try self.backgroundContext.fetch(request)
+                promise(.success(fetchResult))
+            } catch {
+                promise(.failure(.purposeFetch))
             }
         }.eraseToAnyPublisher()
     }

@@ -7,9 +7,9 @@
 
 import UIKit
 
-class PictureCollectionViewCell: UICollectionViewCell {
-    static let identifier = "PictureCollectionViewCell"
+final class PictureCollectionViewCell: UICollectionViewCell {
     
+    static let identifier = "PictureCollectionViewCell"
     private var photoImage = UIImageView()
     
     required init?(coder: NSCoder) {
@@ -22,15 +22,13 @@ class PictureCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(url: URL) {
-        guard let data = try? Data(contentsOf: url) else {
-            return
-        }
+        guard let data = try? Data(contentsOf: url) else { return }
         photoImage.image = UIImage(data: data)
     }
     
     private func configure() {
         self.addSubview(self.photoImage)
-        self.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.backgroundColor = .backgroundPurple
         self.photoImage.contentMode = .scaleAspectFit
         self.photoImage.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

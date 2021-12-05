@@ -23,7 +23,7 @@ final class SearchView: UIView {
     }
     
     func reset() {
-        self.searchTextField.text = ""
+        self.searchTextField.text = String()
     }
     
     private func configure() {
@@ -46,7 +46,7 @@ final class SearchView: UIView {
     
     private func configureTextField() {
         self.addSubview(self.searchTextField)
-        self.searchTextField.attributedPlaceholder = NSAttributedString(string: "버디를 검색해 보아요.", attributes: [.foregroundColor: UIColor(named: "LabelPurple") ?? UIColor.systemPurple])
+        self.searchTextField.attributedPlaceholder = NSAttributedString(string: "버디를 검색해 보아요.", attributes: [.foregroundColor: .labelPurple ?? UIColor.systemPurple])
         self.searchTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.searchTextField.leadingAnchor.constraint(equalTo: self.searchButton.trailingAnchor, constant: 4),

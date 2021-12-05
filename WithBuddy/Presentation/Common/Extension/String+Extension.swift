@@ -9,14 +9,19 @@ import Foundation
 
 extension String {
     
-    // MARK: App
+    // MARK: - App
     
     static let backgroundPurple = "BackgroundPurple"
     static let defaultFace = "DefaultFace"
     
-    // MARK: Chart
+    // MARK: - Chart
     
-    static let purposeChartTitle = "님의 만남 목적"
+    static let bubbleChartTitle = "많이 만난 버디"
+    static let purposeChartTitle = "만남 목적"
+    static let latestOldChartTitle = "가장 최근/오래전에 만난 버디"
+    static let latestDescription = "가장 최근에 만난 버디는"
+    static let oldDescription = "만난지 가장 오래된 버디는"
+    static let latestOldDescription = "님이에요!"
     static let defaultHobby = "DefaultHobby"
     static let defaultStudy = "DefaultStudy"
     static let defaultMeal = "DefaultMeal"
@@ -26,7 +31,7 @@ extension String {
     static let meal = "식사"
     static let sport = "운동"
     
-    // MARK: Widget
+    // MARK: - Widget
     
     static let widgetDisplayName = "위드버디 위젯"
     static let widgetDescription = "위드버디 캐릭터로 아이폰을 꾸며보아요~"

@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 @objc(GatheringEntity)
-public class GatheringEntity: NSManagedObject {
+public final class GatheringEntity: NSManagedObject {
     
     @NSManaged public var id: UUID
     @NSManaged public var date: Date
@@ -74,6 +74,7 @@ extension GatheringEntity {
                          memo: self.memo,
                          picture: self.picture)
     }
+    
 }
 
 extension GatheringEntity: Comparable {

@@ -19,14 +19,7 @@ final class ListViewController: UIViewController {
         return cell
     }
     
-    private let listViewModel = ListViewModel(
-        buddyUseCase: BuddyUseCase(
-            coreDataManager: CoreDataManager.shared
-        ),
-        gatheringUseCase: GatheringUseCase(
-            coreDataManager: CoreDataManager.shared
-        )
-    )
+    private let listViewModel = ListViewModel()
     private var cancellables: Set<AnyCancellable> = []
     
     override func viewDidLoad() {
@@ -35,9 +28,9 @@ final class ListViewController: UIViewController {
         self.bind()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.listViewModel.fetch()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.listViewModel.viewWillAppear()
         self.searchView.reset()
     }
     
@@ -53,17 +46,30 @@ final class ListViewController: UIViewController {
                 self?.reloadGathering(list: getheringList)
             }
             .store(in: &self.cancellables)
+        
+        self.listViewModel.deleteSuccessSignal
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] gathering in
+                self?.deleteNotification(id: gathering.id)
+            }
+            .store(in: &self.cancellables)
     }
+    
+    private func deleteNotification(id: UUID) {
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [id.uuidString])
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id.uuidString])
+    }
+    
     
     private func configureSearchView() {
         self.view.addSubview(self.searchView)
         self.searchView.searchTextField.delegate = self
-        self.searchView.layer.cornerRadius = 10
+        self.searchView.layer.cornerRadius = .whiteViewCornerRadius
         self.searchView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.searchView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            self.searchView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            self.searchView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            self.searchView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: .plusInset),
+            self.searchView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: .minusInset),
             self.searchView.heightAnchor.constraint(equalToConstant: 45)
         ])
     }
@@ -77,40 +83,44 @@ final class ListViewController: UIViewController {
         let panGesture = UIPanGestureRecognizer()
         panGesture.delegate = self
         self.listTableView.addGestureRecognizer(panGesture)
-        self.listTableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:))))
+        self.listTableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didCollectionViewTouched)))
         
         self.listTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.listTableView.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: 20),
+            self.listTableView.topAnchor.constraint(equalTo: self.searchView.bottomAnchor, constant: .plusInset),
             self.listTableView.leadingAnchor.constraint(equalTo: self.searchView.leadingAnchor),
             self.listTableView.trailingAnchor.constraint(equalTo: self.searchView.trailingAnchor),
-            self.listTableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            self.listTableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: .minusInset)
         ])
     }
     
     private func reloadGathering(list: [Gathering]) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Gathering>()
-        snapshot.appendSections([0])
+        snapshot.appendSections([Int.zero])
         snapshot.appendItems(list)
-        self.listDataSource.apply(snapshot, animatingDifferences: true)
+        if #available(iOS 15.0, *) {
+            self.listDataSource.apply(snapshot, animatingDifferences: true)
+        } else {
+            self.listDataSource.apply(snapshot, animatingDifferences: false)
+        }
     }
     
     private func reloadGathering(filter: String) {
         let gatheringList = self.listViewModel.gatheringList
         let filtered = gatheringList.filter{ $0.buddyList.contains{ $0.name.contains(filter) } }
         var snapshot = NSDiffableDataSourceSnapshot<Int, Gathering>()
-        snapshot.appendSections([0])
+        snapshot.appendSections([Int.zero])
         if filter.isEmpty {
             snapshot.appendItems(gatheringList)
         } else {
             snapshot.appendItems(filtered)
-            self.listViewModel.searched(list: filtered)
+            self.listViewModel.didBuddySearched(list: filtered)
         }
         self.listDataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func deleteGathering(index: Int) {
-        self.listViewModel.deleteGathering(index: index)
+        self.listViewModel.didGatheringDeleted(index: index)
     }
     
     private func editGathering(gathering: Gathering) {
@@ -119,7 +129,7 @@ final class ListViewController: UIViewController {
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
-    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+    @objc func didCollectionViewTouched(_ sender: UITapGestureRecognizer) {
         if sender.state == .ended {
             self.view.endEditing(true)
         }
@@ -150,9 +160,9 @@ extension ListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let viewController = GatheringDetailViewController()
-        viewController.configure(by: self.listViewModel[indexPath.item])
-        self.navigationController?.pushViewController(viewController, animated: true)
+        let gatheringDetailViewController = GatheringDetailViewController()
+        gatheringDetailViewController.id = self.listViewModel[indexPath.item].id
+        self.navigationController?.pushViewController(gatheringDetailViewController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -160,15 +170,15 @@ extension ListViewController: UITableViewDelegate {
             self.deleteGathering(index: indexPath.row)
             completion(true)
         }
-        deleteAction.backgroundColor = UIColor(named: "GraphRed")
-        deleteAction.image = UIImage(named: "FaceRed1")
+        deleteAction.backgroundColor = .graphRed
+        deleteAction.image = .deleteImage
 
         let editAction = UIContextualAction(style: .normal, title: "편집") { _, _, completion in
             self.editGathering(gathering: self.listViewModel[indexPath.row])
             completion(true)
         }
-        editAction.backgroundColor = UIColor(named: "GraphPurple2")
-        editAction.image = UIImage(named: "FacePurple1")
+        editAction.backgroundColor = .graphPurple2
+        editAction.image = .editImage
 
         return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
@@ -184,8 +194,10 @@ extension ListViewController: UITableViewDelegate {
 }
 
 extension ListViewController: UIGestureRecognizerDelegate {
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool{
         self.view.endEditing(true)
         return true
    }
+    
 }

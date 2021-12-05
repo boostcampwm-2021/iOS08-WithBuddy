@@ -7,9 +7,9 @@
 
 import UIKit
 
-class ImageTextCollectionViewCell: UICollectionViewCell {
-    static let identifier = "ImageTextCollectionViewCell"
+final class ImageTextCollectionViewCell: UICollectionViewCell {
     
+    static let identifier = "ImageTextCollectionViewCell"
     private var image = UIImageView()
     private var textLabel = UILabel()
     
@@ -23,10 +23,8 @@ class ImageTextCollectionViewCell: UICollectionViewCell {
     }
     
     func update(image: UIImage?, text: String, check: Bool?) {
-        guard let image = image else {
-            return
-        }
-        self.backgroundColor = UIColor(named: "BackgroundPurple")
+        guard let image = image else { return }
+        self.backgroundColor = .backgroundPurple
         self.image.image = image
         self.textLabel.text = text
         if let check = check,
@@ -38,10 +36,8 @@ class ImageTextCollectionViewCell: UICollectionViewCell {
     }
     
     func update(image: UIImage?, text: String) {
-        guard let image = image else {
-            return
-        }
-        self.backgroundColor = UIColor(named: "BackgroundPurple")
+        guard let image = image else { return }
+        self.backgroundColor = .backgroundPurple
         self.image.image = image
         self.textLabel.text = text
     }
@@ -68,7 +64,7 @@ class ImageTextCollectionViewCell: UICollectionViewCell {
         self.textLabel.textAlignment = .center
         self.textLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.textLabel.topAnchor.constraint(equalTo: self.image.bottomAnchor, constant: 10),
+            self.textLabel.topAnchor.constraint(equalTo: self.image.bottomAnchor, constant: .innerPartInset),
             self.textLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             self.textLabel.widthAnchor.constraint(equalToConstant: self.frame.width)
         ])

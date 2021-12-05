@@ -7,11 +7,12 @@
 
 import UIKit
 
-class BuddyView: UIImageView {
+final class BuddyView: UIImageView {
 
     override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
         return .ellipse
     }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         self.layer.cornerRadius = bounds.height * 0.5

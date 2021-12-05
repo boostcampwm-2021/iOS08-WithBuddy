@@ -8,21 +8,18 @@
 import Foundation
 import Combine
 
-protocol SettingViewModelProtocol {
-    
-}
-
 final class SettingViewModel {
     
     @Published private(set) var myBuddy: Buddy?
     
     private let userUseCase: UserUseCase
-    private let gatheringUseCase: GatheringUseCase
+    private let gatheringUseCase: GatheringUseCaseProtocol
     private(set) var deleteSignal = PassthroughSubject<(String, String?), Never>()
+    private var cancellable: Set<AnyCancellable> = []
     
     init(
         userUseCase: UserUseCase = UserUseCase(),
-        gatheringUseCase: GatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
+        gatheringUseCase: GatheringUseCaseProtocol = GatheringUseCase(coreDataManager: CoreDataManager.shared)
     ) {
         self.userUseCase = userUseCase
         self.gatheringUseCase = gatheringUseCase
@@ -30,23 +27,23 @@ final class SettingViewModel {
     
     func didGatheringResetTouched() {
         self.gatheringUseCase.deleteAllGathering()
-            .sink { error in
+            .sink { [weak self] error in
                 switch error {
                 case .failure(let error):
-                    self.deleteSignal.send(("삭제 실패", error.errorDescription))
+                    self?.deleteSignal.send(("삭제 실패", error.errorDescription))
                 case .finished:
                     return
                 }
-            } receiveValue: { _ in
-                self.deleteSignal.send(("삭제 성공", "모임 삭제가 완료되었습니다."))
-            }.cancel()
+            } receiveValue: { [weak self] in
+                self?.deleteSignal.send(("삭제 성공", "모임 삭제가 완료되었습니다."))
+            }.store(in: &self.cancellable)
     }
     
     func didMyBuddyChanged(buddy: Buddy) {
         self.userUseCase.createUser(buddy: buddy)
     }
     
-    func fetchMyBuddy() {
+    func reloadMyBuddy() {
         self.myBuddy = self.userUseCase.fetchUser()
     }
     

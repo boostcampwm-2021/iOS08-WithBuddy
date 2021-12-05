@@ -8,15 +8,12 @@
 import UIKit
 import Combine
 
-class GatheringEditViewController: UIViewController {
+final class GatheringEditViewController: UIViewController {
     
     private lazy var scrollView = UIScrollView()
     private lazy var contentView = UIView()
-    
     private lazy var dateTitleLabel = PurpleTitleLabel()
-    private lazy var dateBackgroundView = WhiteView()
     private lazy var datePicker = UIDatePicker()
-  
     private lazy var placeTitleLabel = PurpleTitleLabel()
     private lazy var placeBackgroundView = WhiteView()
     private lazy var placeTextField = UITextField()
@@ -53,7 +50,6 @@ class GatheringEditViewController: UIViewController {
     
     private lazy var deleteButton = UIButton()
     
-    weak var delegate: GatheringEditDelegate?
     private var gatheringEditViewModel = GatheringEditViewModel()
     private var cancellables: Set<AnyCancellable> = []
     
@@ -62,12 +58,14 @@ class GatheringEditViewController: UIViewController {
         self.bind()
         self.configure()
         self.gatheringEditViewModel.didDatePicked(Date())
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.addGathering))
+        self.title = "모임 편집"
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .done, target: self, action: #selector(self.didCancelButtonTouched))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(self.didDoneTouched))
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(willKeyboardShow), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -75,12 +73,12 @@ class GatheringEditViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
+    @objc func willKeyboardShow(notification: NSNotification) {
         guard !placeTextField.isFirstResponder else { return }
         let memoButtomY = self.memoBackgroundView.frame.origin.y + self.memoBackgroundView.frame.height - self.scrollView.bounds.origin.y
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             let offset = memoButtomY + keyboardSize.height - self.scrollView.bounds.height
-            if offset > 0 {
+            if offset > CGFloat.zero {
                 self.scrollView.bounds.origin.y += offset
             }
         }
@@ -99,14 +97,17 @@ class GatheringEditViewController: UIViewController {
         self.gatheringEditViewModel.gatheringId = gathering.id
         self.datePicker.date = gathering.date
         self.gatheringEditViewModel.didDatePicked(gathering.date)
-        self.gatheringEditViewModel.didPlaceChanged(gathering.place ?? "")
+        self.gatheringEditViewModel.didPlaceChanged(gathering.place ?? String())
         for (idx, place) in PurposeCategory.allCases.enumerated() {
             if gathering.purpose.contains(place.description) {
                 self.gatheringEditViewModel.didPurposeTouched(idx)
             }
         }
         self.gatheringEditViewModel.didBuddyUpdated(gathering.buddyList)
-        self.gatheringEditViewModel.didMemoChanged(gathering.memo ?? "")
+        if let memo = gathering.memo,
+           !memo.isEmpty {
+            self.gatheringEditViewModel.didMemoChanged(memo)
+        }
         guard let pictures = gathering.picture else { return }
         for url in pictures {
             self.gatheringEditViewModel.didPicturePicked(url)
@@ -127,7 +128,7 @@ class GatheringEditViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] purposeList in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, CheckableInfo>()
-                snapshot.appendSections([0])
+                snapshot.appendSections([Int.zero])
                 snapshot.appendItems(purposeList)
                 self?.purposeDataSource.apply(snapshot, animatingDifferences: true)
             }
@@ -140,10 +141,10 @@ class GatheringEditViewController: UIViewController {
             .sink { [weak self] buddyList in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, Buddy>()
                 if buddyList.isEmpty {
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems([Buddy(id: UUID(), name: "친구없음", face: "DefaultFace")])
                 } else {
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems(buddyList)
                 }
                 self?.buddyDataSource.apply(snapshot, animatingDifferences: true)
@@ -155,6 +156,7 @@ class GatheringEditViewController: UIViewController {
         self.gatheringEditViewModel.$memo
             .receive(on: DispatchQueue.main)
             .sink { [weak self] memo in
+                guard let memo = memo else { return }
                 self?.memoTextView.text = memo
             }
             .store(in: &self.cancellables)
@@ -168,10 +170,10 @@ class GatheringEditViewController: UIViewController {
                 if pictures.isEmpty {
                     guard let filePath = Bundle.main.path(forResource: "defaultImage", ofType: "png") else { return }
                     let fileUrl = URL(fileURLWithPath: filePath)
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems([fileUrl])
                 } else {
-                    snapshot.appendSections([0])
+                    snapshot.appendSections([Int.zero])
                     snapshot.appendItems(pictures)
                 }
                 self?.pictureDataSource.apply(snapshot, animatingDifferences: true)
@@ -182,31 +184,62 @@ class GatheringEditViewController: UIViewController {
     private func bindSignal() {
         self.gatheringEditViewModel.editDoneSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] gathering in
+            .sink { [weak self] gathering in
                 self?.alertSuccess(gathering: gathering)
+                self?.registerNotification(gathering: gathering)
             }
             .store(in: &self.cancellables)
         
         self.gatheringEditViewModel.editFailSignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] result in
+            .sink { [weak self] result in
                 self?.alertError(result)
             }
             .store(in: &self.cancellables)
         
         self.gatheringEditViewModel.addBuddySignal
             .receive(on: DispatchQueue.main)
-            .sink{ [weak self] buddyList in
+            .sink { [weak self] buddyList in
                 let buddyChoiceViewController = BuddyChoiceViewController()
                 buddyChoiceViewController.delegate = self
                 buddyChoiceViewController.configureBuddyList(by: buddyList)
                 self?.navigationController?.pushViewController(buddyChoiceViewController, animated: true)
             }
             .store(in: &self.cancellables)
+        
+        self.gatheringEditViewModel.deleteDoneSignal
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.alertSuccess()
+            }
+            .store(in: &self.cancellables)
+    }
+    
+    private func registerNotification(gathering: Gathering) {
+        guard let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: gathering.date) else { return }
+        let content = UNMutableNotificationContent()
+        content.title = "위드버디"
+        let firstBuddyName = gathering.buddyList.first?.name ?? String()
+        let buddyCountString = gathering.buddyList.count == 1 ? String() : "외 \(gathering.buddyList.count-1)명"
+        content.body = "어제 \(firstBuddyName)님 \(buddyCountString)과의 만남은 어떠셨나요?"
+        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: nextDay)
+        let trigger = UNCalendarNotificationTrigger(
+            dateMatching: dateComponents,
+            repeats: false
+        )
+        self.deleteNotification(id: gathering.id)
+        
+        let request = UNNotificationRequest(identifier: gathering.id.uuidString, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+    }
+    
+    private func deleteNotification(id: UUID) {
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [id.uuidString])
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id.uuidString])
     }
     
     private func configure() {
-        self.view.backgroundColor = UIColor(named: "BackgroundPurple")
+        self.view.backgroundColor = .backgroundPurple
         
         self.configureScrollView()
         self.configureContentView()
@@ -232,7 +265,7 @@ class GatheringEditViewController: UIViewController {
     
     private func configureContentView() {
         self.scrollView.addSubview(self.contentView)
-        self.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapEmptySpace)))
+        self.contentView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.didEmptySpacedTouched)))
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
@@ -247,7 +280,6 @@ class GatheringEditViewController: UIViewController {
     
     private func configureDatePart() {
         self.configureDateTitle()
-        self.configureDateBackground()
         self.configureDatePicker()
     }
     
@@ -263,19 +295,8 @@ class GatheringEditViewController: UIViewController {
         ])
     }
     
-    private func configureDateBackground() {
-        self.contentView.addSubview(self.dateBackgroundView)
-        self.dateBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.dateBackgroundView.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: .innerPartInset),
-            self.dateBackgroundView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
-            self.dateBackgroundView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset),
-            self.dateBackgroundView.heightAnchor.constraint(equalToConstant: .backgroudHeight)
-        ])
-    }
-    
     private func configureDatePicker() {
-        self.dateBackgroundView.addSubview(self.datePicker)
+        self.contentView.addSubview(self.datePicker)
         self.datePicker.datePickerMode = .dateAndTime
         self.datePicker.locale = Locale(identifier: "ko-KR")
         self.datePicker.timeZone = .autoupdatingCurrent
@@ -283,10 +304,12 @@ class GatheringEditViewController: UIViewController {
         
         self.datePicker.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.datePicker.leadingAnchor.constraint(equalTo: self.dateBackgroundView.leadingAnchor, constant: .plusInset),
-            self.datePicker.centerYAnchor.constraint(equalTo: self.dateBackgroundView.centerYAnchor)
+            self.datePicker.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: .innerPartInset),
+            self.datePicker.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
+            self.datePicker.heightAnchor.constraint(equalToConstant: .backgroudHeight)
         ])
     }
+    
     @objc private func didDateChanged(_ sender: UIDatePicker) {
         self.gatheringEditViewModel.didDatePicked(sender.date)
     }
@@ -305,7 +328,7 @@ class GatheringEditViewController: UIViewController {
         
         self.placeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.placeTitleLabel.topAnchor.constraint(equalTo: self.dateBackgroundView.bottomAnchor, constant: .plusInset),
+            self.placeTitleLabel.topAnchor.constraint(equalTo: self.datePicker.bottomAnchor, constant: .plusInset),
             self.placeTitleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
             self.placeTitleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])
@@ -324,6 +347,9 @@ class GatheringEditViewController: UIViewController {
     
     private func configurePlaceTextField() {
         self.placeBackgroundView.addSubview(self.placeTextField)
+        if let color = UIColor.labelPurple {
+            self.placeTextField.attributedPlaceholder = NSAttributedString(string: "모임 장소를 적어보아요", attributes: [NSAttributedString.Key.foregroundColor: color])
+        }
         self.placeTextField.delegate = self
         
         self.placeTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -359,7 +385,7 @@ class GatheringEditViewController: UIViewController {
         self.purposeCollectionView.backgroundColor = .clear
         self.purposeCollectionView.showsHorizontalScrollIndicator = false
         self.purposeCollectionView.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.collectionViewDidTouched(_:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.didCollectionViewTouched))
         self.purposeCollectionView.addGestureRecognizer(tap)
         self.purposeCollectionView.register(ImageTextCollectionViewCell.self, forCellWithReuseIdentifier: ImageTextCollectionViewCell.identifier)
 
@@ -377,12 +403,12 @@ class GatheringEditViewController: UIViewController {
         ])
     }
 
-    @objc func collectionViewDidTouched(_ sender: UITapGestureRecognizer) {
+    @objc func didCollectionViewTouched(_ sender: UITapGestureRecognizer) {
        if let indexPath = self.purposeCollectionView.indexPathForItem(at: sender.location(in: self.purposeCollectionView)) {
            self.gatheringEditViewModel.didPurposeTouched(indexPath.item)
            
            guard let cell = self.purposeCollectionView.cellForItem(at: indexPath) as? ImageTextCollectionViewCell  else { return }
-           cell.animateButtonTap(scale: 0.8)
+           cell.animateButtonTap()
        }
     }
     
@@ -412,7 +438,7 @@ class GatheringEditViewController: UIViewController {
             pointSize: .buddyAndPurposeWidth, weight: .medium, scale: .default)
         let image = UIImage(systemName: "plus.circle", withConfiguration: config)
         self.buddyAddButton.setImage(image, for: .normal)
-        self.buddyAddButton.addTarget(self, action: #selector(self.onBuddyAddButtonTouched(_:)), for: .touchUpInside)
+        self.buddyAddButton.addTarget(self, action: #selector(self.didBuddyAddButtonTouched), for: .touchUpInside)
         
         self.buddyAddButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -446,8 +472,8 @@ class GatheringEditViewController: UIViewController {
         ])
     }
     
-    @objc private func onBuddyAddButtonTouched(_ sender: UIButton) {
-        self.buddyAddButton.animateButtonTap(scale: 0.8)
+    @objc private func didBuddyAddButtonTouched(_ sender: UIButton) {
+        self.buddyAddButton.animateButtonTap()
         self.gatheringEditViewModel.didAddBuddyTouched()
     }
     
@@ -485,11 +511,13 @@ class GatheringEditViewController: UIViewController {
     private func configureMemoTextView() {
         self.memoBackgroundView.addSubview(self.memoTextView)
         self.memoTextView.backgroundColor = .systemBackground
-        self.memoTextView.font =  UIFont.systemFont(ofSize: .labelSize, weight: .medium)
+        self.memoTextView.font = UIFont.systemFont(ofSize: .labelSize, weight: .medium)
         self.memoTextView.textContentType = .none
         self.memoTextView.autocapitalizationType = .none
         self.memoTextView.autocorrectionType = .no
         self.memoTextView.delegate = self
+        self.memoTextView.text = "모임에 대한 메모를 적어보아요."
+        self.memoTextView.textColor = .labelPurple
         
         self.memoTextView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -526,7 +554,7 @@ class GatheringEditViewController: UIViewController {
             pointSize: 30, weight: .medium, scale: .default)
         let image = UIImage(systemName: "plus.square", withConfiguration: config)
         self.pictureAddButton.setImage(image, for: .normal)
-        self.pictureAddButton.addTarget(self, action: #selector(self.onPictureButtonTouched(_:)), for: .touchUpInside)
+        self.pictureAddButton.addTarget(self, action: #selector(self.didPictureButtonTouched), for: .touchUpInside)
         
         self.pictureAddButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -566,8 +594,8 @@ class GatheringEditViewController: UIViewController {
         self.pictureCollectionView.collectionViewLayout = layout
     }
     
-    @objc private func onPictureButtonTouched(_ sender: UIButton) {
-        self.pictureAddButton.animateButtonTap(scale: 0.8)
+    @objc private func didPictureButtonTouched(_ sender: UIButton) {
+        self.pictureAddButton.animateButtonTap()
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .photoLibrary
@@ -578,10 +606,10 @@ class GatheringEditViewController: UIViewController {
     
     private func configureDeleteButton() {
         self.contentView.addSubview(self.deleteButton)
-        self.deleteButton.backgroundColor = UIColor(named: "GraphRed")
+        self.deleteButton.backgroundColor = .graphRed
         self.deleteButton.layer.cornerRadius = .buttonCornerRadius
         self.deleteButton.setTitle("모임 삭제", for: .normal)
-        self.deleteButton.addTarget(self, action: #selector(self.deleteGathering), for: .touchUpInside)
+        self.deleteButton.addTarget(self, action: #selector(self.didDeleteButtonTouched), for: .touchUpInside)
         self.deleteButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.deleteButton.topAnchor.constraint(equalTo: self.pictureCollectionView.bottomAnchor, constant: .plusInset),
@@ -594,10 +622,29 @@ class GatheringEditViewController: UIViewController {
     
     // MARK: - CompletePart
     
+    @objc private func didCancelButtonTouched() {
+        let alert = UIAlertController(title: "기록한 내용은 저장되지 않습니다. 그래도 나가시겠습니까?", message: String(), preferredStyle: UIAlertController.Style.alert)
+        let noAction = UIAlertAction(title: "취소", style: .cancel)
+        let okAction = UIAlertAction(title: "OK", style: .destructive, handler: { _ in
+            self.navigationController?.popViewController(animated: true)
+        })
+        alert.addAction(noAction)
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func alertSuccess() {
+        let alert = UIAlertController(title: "삭제 완료", message: "모임 삭제가 완료되었습니다!", preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: { _ in
+            self.navigationController?.popToRootViewController(animated: true)
+        })
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     private func alertSuccess(gathering: Gathering) {
         let alert = UIAlertController(title: "편집 완료", message: "모임 편집이 완료되었습니다!", preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in
-            self.delegate?.didGatheringEdited(to: gathering)
             self.navigationController?.popViewController(animated: true)
         })
         alert.addAction(action)
@@ -605,47 +652,49 @@ class GatheringEditViewController: UIViewController {
     }
     
     private func alertError(_ error: RegisterError) {
-        let alert = UIAlertController(title: "등록 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: "편집 실패", message: error.errorDescription, preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in })
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
     }
     
-    @objc private func addGathering() {
+    @objc private func didDoneTouched() {
         self.gatheringEditViewModel.didDoneTouched()
     }
     
-    @objc private func deleteGathering() {
+    @objc private func didDeleteButtonTouched() {
+        guard let id = self.gatheringEditViewModel.gatheringId else { return }
         self.deleteButton.animateButtonTap(scale: 0.9)
         let alert = UIAlertController(title: "모임 삭제", message: "정말로 삭제하시겠습니까?", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "취소", style: .cancel)
         let deleteAction = UIAlertAction(title: "OK", style: .destructive) { _ in
             self.gatheringEditViewModel.didDeleteButtonTouched()
-            self.navigationController?.popToRootViewController(animated: true)
+            self.deleteNotification(id: id)
         }
         alert.addAction(cancelAction)
         alert.addAction(deleteAction)
         self.present(alert, animated: true)
     }
     
-    @objc private func tapEmptySpace(){
+    @objc private func didEmptySpacedTouched(){
         self.view.endEditing(true)
     }
     
 }
 
 extension GatheringEditViewController: UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         if collectionView == self.pictureCollectionView {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
                 let delete = UIAction(title: "삭제", image: UIImage(systemName: "trash")) { _ in
-                    self.gatheringEditViewModel.didBuddyDeleteTouched(in: indexPath.item)
+                    self.gatheringEditViewModel.didPictureDeleteTouched(in: indexPath.item)
                 }
                 return UIMenu(title: "이 사진을", children: [delete])
             })
         } else {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
-                let delete = UIAction(title: NSLocalizedString("삭제", comment: ""),
+                let delete = UIAction(title: NSLocalizedString("삭제", comment: String()),
                                       image: UIImage(systemName: "trash")) { _ in
                     self.gatheringEditViewModel.didBuddyDeleteTouched(in: indexPath.item)
                 }
@@ -653,6 +702,7 @@ extension GatheringEditViewController: UICollectionViewDelegate {
             })
         }
     }
+    
 }
 
 extension GatheringEditViewController: UITextFieldDelegate {
@@ -683,7 +733,7 @@ extension GatheringEditViewController: UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor(named: "LabelPurple") {
+        if textView.textColor == .labelPurple {
             textView.text = nil
             textView.textColor = UIColor.black
         }
@@ -691,8 +741,8 @@ extension GatheringEditViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "모임에 대한 메모를 적어주세요."
-            textView.textColor = UIColor(named: "LabelPurple")
+            textView.text = "모임에 대한 메모를 적어보아요."
+            textView.textColor = .labelPurple
         }
     }
     
@@ -704,6 +754,7 @@ extension GatheringEditViewController: UITextViewDelegate {
 }
 
 extension GatheringEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         guard let url = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
             return
@@ -715,14 +766,13 @@ extension GatheringEditViewController: UIImagePickerControllerDelegate, UINaviga
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
     }
+    
 }
 
 extension GatheringEditViewController: BuddyChoiceDelegate {
-    func buddySelectingDidCompleted(_ buddyList: [Buddy]) {
+    
+    func didBuddySelectingCompleted(_ buddyList: [Buddy]) {
         self.gatheringEditViewModel.didBuddyUpdated(buddyList)
     }
-}
-
-protocol GatheringEditDelegate: AnyObject {
-    func didGatheringEdited(to gathering: Gathering)
+    
 }

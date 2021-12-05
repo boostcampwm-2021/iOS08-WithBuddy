@@ -9,6 +9,9 @@ import WidgetKit
 import SwiftUI
 
 struct Provider: TimelineProvider {
+    
+    let updateCycle = 5
+    
     func placeholder(in context: Context) -> SimpleEntry {
         SimpleEntry(date: Date())
     }
@@ -22,7 +25,7 @@ struct Provider: TimelineProvider {
         var entries: [SimpleEntry] = []
 
         let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
+        for hourOffset in Int.zero..<self.updateCycle {
             let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
             let entry = SimpleEntry(date: entryDate)
             entries.append(entry)
@@ -31,13 +34,17 @@ struct Provider: TimelineProvider {
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
     }
+    
 }
 
 struct SimpleEntry: TimelineEntry {
+    
     let date: Date
+    
 }
 
 struct WithBuddyWidgetEntryView : View {
+    
     var entry: Provider.Entry
     @Environment(\.widgetFamily) var family
 
@@ -49,9 +56,11 @@ struct WithBuddyWidgetEntryView : View {
         default: LargeWidget(entry: entry)
         }
     }
+    
 }
 
 struct SmallWidget: View {
+    
     var entry: Provider.Entry
     
     var body: some View {
@@ -62,11 +71,12 @@ struct SmallWidget: View {
                 .frame(width: .widgetBigBuddySize, height: .widgetBigBuddySize, alignment: .center)
         }
     }
+    
 }
 
 struct MediumWidget: View {
-    var entry: Provider.Entry
     
+    var entry: Provider.Entry
     var body: some View {
         ZStack {
             Color(.backgroundPurple)
@@ -83,11 +93,12 @@ struct MediumWidget: View {
             }
         }
     }
+    
 }
 
 struct LargeWidget: View {
-    var entry: Provider.Entry
     
+    var entry: Provider.Entry
     var body: some View {
         ZStack {
             Color(.backgroundPurple)
@@ -111,10 +122,12 @@ struct LargeWidget: View {
             }
         }
     }
+    
 }
 
 @main
 struct WithBuddyWidget: Widget {
+    
     let kind: String = .widgetDisplayName
 
     var body: some WidgetConfiguration {
@@ -124,11 +137,14 @@ struct WithBuddyWidget: Widget {
         .configurationDisplayName(String.widgetDisplayName)
         .description(String.widgetDescription)
     }
+    
 }
 
 struct WithBuddyWidget_Previews: PreviewProvider {
+    
     static var previews: some View {
         WithBuddyWidgetEntryView(entry: SimpleEntry(date: Date()))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
+    
 }

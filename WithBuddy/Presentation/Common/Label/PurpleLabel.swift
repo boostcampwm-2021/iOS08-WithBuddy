@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PurpleLabel: UILabel {
+final class PurpleLabel: UILabel {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,7 +21,7 @@ class PurpleLabel: UILabel {
     
     private func configure() {
         self.font = .systemFont(ofSize: .labelSize)
-        self.textColor = UIColor(named: "LabelPurple")
+        self.textColor = .labelPurple
     }
 
 }

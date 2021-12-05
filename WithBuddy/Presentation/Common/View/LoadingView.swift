@@ -7,11 +7,9 @@
 
 import UIKit
 
-class LoadingView: UIView {
-
+final class LoadingView: UIView {
+    
     private var titleLabel = UILabel()
-    private var lazyBehavior = UIDynamicItemBehavior()
-
     lazy var animator = UIDynamicAnimator(referenceView: self)
     lazy var gravity = UIGravityBehavior()
     lazy var collider = UICollisionBehavior()
@@ -28,6 +26,7 @@ class LoadingView: UIView {
     }
 
     private func configure() {
+        _ = CoreDataManager.shared
         self.configureDynamicItemBehavior()
         self.configureTitle()
     }
@@ -43,7 +42,7 @@ class LoadingView: UIView {
     private func configureTitle() {
         self.addSubview(self.titleLabel)
         self.titleLabel.text = "위드버디"
-        self.appNameAnimation()
+        self.animateAppName()
         self.titleLabel.font = UIFont(name: "Cafe24Ssurround", size: UIScreen.main.bounds.width / 6)
         self.titleLabel.textColor = .white
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -64,7 +63,7 @@ class LoadingView: UIView {
                                CGPoint(x: width * 0.6, y: height * 0.01),
                                CGPoint(x: width * 0.7, y: height * 0.1)]
 
-        for idx in 0..<fallingBuddys.count {
+        for idx in Int.zero..<fallingBuddys.count {
             let squareSize = CGSize(width: .fallingBuddySize, height: .fallingBuddySize)
             let centerPoint = fallingPosition[idx]
             let frame = CGRect(origin: centerPoint, size: squareSize)
@@ -85,36 +84,37 @@ class LoadingView: UIView {
         self.dynamicItemBehavior.addItem(face)
     }
 
-    private func appNameAnimation() {
-        self.viewExpand(duration: 0.7)
+    private func animateAppName() {
+        self.expandView(duration: 0.7)
     }
     
-    private func viewExpand(duration: CGFloat) {
-        if duration < 0.5 {
-            self.titleTransitionAnimation(duration: duration)
+    private func expandView(duration: CGFloat) {
+        let minAnimationDuration = 0.5
+        if duration < minAnimationDuration {
+            self.animateTitleTransition(duration: duration)
         } else {
             UIView.animate(withDuration: duration) { [weak self] in
                 self?.titleLabel.transform = CGAffineTransform(scaleX: CGFloat(duration * 2.5), y: CGFloat(duration * 2.5))
             } completion: { [weak self] _ in
-                self?.viewIdentity(duration: duration - 0.1)
+                self?.transformViewIdentity(duration: duration - 0.1)
             }
         }
     }
     
-    private func viewIdentity(duration: CGFloat) {
+    private func transformViewIdentity(duration: CGFloat) {
         UIView.animate(withDuration: duration) { [weak self] in
             self?.titleLabel.transform = CGAffineTransform.identity
         } completion: { [weak self] _ in
-            self?.viewExpand(duration: duration)
+            self?.expandView(duration: duration)
         }
     }
     
-    private func titleTransitionAnimation(duration: CGFloat) {
+    private func animateTitleTransition(duration: CGFloat) {
         UIView.animate(withDuration: duration * 2) { [weak self] in
             self?.titleLabel.transform = CGAffineTransform(translationX: 0, y: -(UIScreen.main.bounds.height * 0.17))
         } completion: { [weak self] _ in
             UIView.animate(withDuration: duration) {
-                self?.alpha = 0
+                self?.alpha = CGFloat.zero
             } completion: { [weak self] _ in
                 self?.removeFromSuperview()
             }

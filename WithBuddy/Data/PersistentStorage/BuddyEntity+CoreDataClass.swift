@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 @objc(BuddyEntity)
-public class BuddyEntity: NSManagedObject {
+public final class BuddyEntity: NSManagedObject {
     
     @NSManaged public var id: UUID
     @NSManaged public var name: String
@@ -55,12 +55,11 @@ extension BuddyEntity {
                      face: self.face)
     }
     
-}
-
-extension BuddyEntity: Comparable {
-    
-    public static func < (lhs: BuddyEntity, rhs: BuddyEntity) -> Bool {
-        return lhs.name < rhs.name
+    func findRecentlyDate(before date: Date) -> Date? {
+        for gatheringEntity in self.gatheringList.sorted(by: >) where gatheringEntity.date <= date {
+            return gatheringEntity.date
+        }
+        return nil
     }
     
 }

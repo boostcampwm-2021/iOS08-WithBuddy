@@ -5,13 +5,16 @@
     
 <img src="https://i.imgur.com/8qlm9Fh.png" width=120>
 <img src="https://i.imgur.com/ciK5eGR.png" width=120>
+    
+<br/>
+    
 <img src="https://i.imgur.com/djHxXK8.png" width=120>
 <img src="https://i.imgur.com/9nQ3Zji.png" width=120>
 <img src="https://i.imgur.com/oJmVeFT.png" width=120>
 <img src="https://i.imgur.com/WnOcUq1.png" width=120>
 <img src="https://i.imgur.com/t5q2x5x.png" width=120>
     
-</br>
+<br/>
 
 [🔗 위드버디 앱 설치하러가기!](https://apps.apple.com/kr/app/id1597395615) 
     
@@ -23,7 +26,7 @@
 
 |```S005``` 김두연|```S020``` 박인우|```S021``` 박정아|```S036``` 이나정|
 |:-:|:-:|:-:|:-:|
-|<img src="https://avatars.githubusercontent.com/u/63900674?s=400&v=4" width=100>|<img src="https://avatars.githubusercontent.com/u/70463738?v=4" width=100>|<img src="https://avatars.githubusercontent.com/u/28800101?v=4" width=100>|<img src="https://avatars.githubusercontent.com/u/55748244?v=4" width=100>|
+|<img src="https://user-images.githubusercontent.com/55748244/144740234-20f5dce5-4089-45a6-81b7-66f352ab3997.png" width=130>|<img src="https://user-images.githubusercontent.com/55748244/144740232-06eaff26-d4a7-4ccd-b699-cb1df7f343ea.png" width=130>|<img src="https://user-images.githubusercontent.com/55748244/144740233-64ed787a-912e-4377-8e22-9cfd12fce604.png" width=130>|<img src="https://user-images.githubusercontent.com/55748244/144740222-8e0e00f2-8c4d-42d7-bbe9-65e028d582ba.png" width=130>|
 |[@duyeonnn](https://github.com/duyeonnn)|[@inuinseoul](https://github.com/inuinseoul)| [@co3oing](https://github.com/co3oing) |[@dailynj](https://github.com/dailynj)|
 
 <br/>

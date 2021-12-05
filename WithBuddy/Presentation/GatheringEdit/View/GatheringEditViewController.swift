@@ -206,6 +206,13 @@ final class GatheringEditViewController: UIViewController {
                 self?.navigationController?.pushViewController(buddyChoiceViewController, animated: true)
             }
             .store(in: &self.cancellables)
+        
+        self.gatheringEditViewModel.deleteDoneSignal
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.alertSuccess()
+            }
+            .store(in: &self.cancellables)
     }
     
     private func registerNotification(gathering: Gathering) {
@@ -626,6 +633,15 @@ final class GatheringEditViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    private func alertSuccess() {
+        let alert = UIAlertController(title: "삭제 완료", message: "모임 삭제가 완료되었습니다!", preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: { _ in
+            self.navigationController?.popToRootViewController(animated: true)
+        })
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     private func alertSuccess(gathering: Gathering) {
         let alert = UIAlertController(title: "편집 완료", message: "모임 편집이 완료되었습니다!", preferredStyle: UIAlertController.Style.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: { _ in
@@ -654,7 +670,6 @@ final class GatheringEditViewController: UIViewController {
         let deleteAction = UIAlertAction(title: "OK", style: .destructive) { _ in
             self.gatheringEditViewModel.didDeleteButtonTouched()
             self.deleteNotification(id: id)
-            self.navigationController?.popToRootViewController(animated: true)
         }
         alert.addAction(cancelAction)
         alert.addAction(deleteAction)

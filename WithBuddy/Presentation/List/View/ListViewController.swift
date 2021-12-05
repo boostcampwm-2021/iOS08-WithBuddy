@@ -19,14 +19,7 @@ final class ListViewController: UIViewController {
         return cell
     }
     
-    private let listViewModel = ListViewModel(
-        buddyUseCase: BuddyUseCase(
-            coreDataManager: CoreDataManager.shared
-        ),
-        gatheringUseCase: GatheringUseCase(
-            coreDataManager: CoreDataManager.shared
-        )
-    )
+    private let listViewModel = ListViewModel()
     private var cancellables: Set<AnyCancellable> = []
     
     override func viewDidLoad() {

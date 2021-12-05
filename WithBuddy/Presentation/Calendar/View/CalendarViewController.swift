@@ -157,11 +157,7 @@ extension CalendarViewController: UICollectionViewDataSource, UICollectionViewDe
               !self.calendarViewModel.totalFaces[indexPath.item].isEmpty else { return }
         cell.animateButtonTap()
         
-        let calendarDetailViewController = CalendarDetailViewController(
-            calendarDetailViewModel: CalendarDetailViewModel(
-                selectedDate: self.calendarViewModel.findDate(index: indexPath.item)
-            )
-        )
+        let calendarDetailViewController = CalendarDetailViewController(date: self.calendarViewModel.findDate(index: indexPath.item))
         calendarDetailViewController.delegate = self
         
         if #available(iOS 15.0, *) {
@@ -192,7 +188,7 @@ extension CalendarViewController: GatheringListDelegate {
     }
     
     func deleteGathering() {
-        self.calendarViewModel.reloadFaces()
+        self.calendarViewModel.viewDidAppear()
     }
     
 }

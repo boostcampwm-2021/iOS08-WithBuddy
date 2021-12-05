@@ -240,6 +240,7 @@ final class RegisterViewController: UIViewController {
     private func configureDatePicker() {
         self.contentView.addSubview(self.datePicker)
         self.datePicker.datePickerMode = .dateAndTime
+        self.datePicker.contentHorizontalAlignment = .leading
         self.datePicker.locale = Locale(identifier: "ko-KR")
         self.datePicker.timeZone = .autoupdatingCurrent
         self.datePicker.addTarget(self, action: #selector(self.didDateChanged), for: .valueChanged)
@@ -249,7 +250,7 @@ final class RegisterViewController: UIViewController {
         NSLayoutConstraint.activate([
             self.datePicker.topAnchor.constraint(equalTo: self.dateTitleLabel.bottomAnchor, constant: .innerPartInset),
             self.datePicker.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: .plusInset),
-            self.datePicker.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor)
+            self.datePicker.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: .minusInset)
         ])
     }
     

@@ -18,3 +18,12 @@ struct Gathering: Hashable {
     var picture: [URL]?
     
 }
+
+extension Gathering: Comparable {
+    
+    static func < (lhs: Gathering, rhs: Gathering) -> Bool {
+        if lhs.date == rhs.date { return lhs.id.uuidString < rhs.id.uuidString }
+        return lhs.date < rhs.date
+    }
+
+}

@@ -8,53 +8,84 @@
 import Foundation
 import Combine
 
-final class GatheringUseCase {
+protocol GatheringUseCaseProtocol {
     
-    private let coreDataManager: CoreDataManagable
+    func fetchAllGathering() -> AnyPublisher<[Gathering], CoreDataManager.CoreDataError>
+    func fetchGathering(id: UUID) -> AnyPublisher<Gathering, CoreDataManager.CoreDataError>
+    func fetchGathering(day: Date) -> AnyPublisher<[Gathering], CoreDataManager.CoreDataError>
+    func fetchGathering(month: Date) -> AnyPublisher<[Gathering], CoreDataManager.CoreDataError>
+    func fetchGathering(oneWeekFrom date: Date) -> AnyPublisher<[Gathering], CoreDataManager.CoreDataError>
+    func insertGathering(_ gathering: Gathering) -> AnyPublisher<Gathering, CoreDataManager.CoreDataError>
+    func updateGathering(_ gathering: Gathering) -> AnyPublisher<Gathering, CoreDataManager.CoreDataError>
+    func deleteGathering(_ id: UUID) -> AnyPublisher<Void, CoreDataManager.CoreDataError>
+    func deleteAllGathering() -> AnyPublisher<Void, CoreDataManager.CoreDataError>
     
-    init(coreDataManager: CoreDataManagable) {
+}
+
+final class GatheringUseCase: GatheringUseCaseProtocol {
+    
+    private let coreDataManager: GatheringManagable
+    
+    init(coreDataManager: GatheringManagable = CoreDataManager.shared) {
         self.coreDataManager = coreDataManager
     }
     
-    func fetchGathering() -> [Gathering] {
-        return self.coreDataManager.fetchAllGathering().map{ $0.toDomain() }
+    func fetchAllGathering() -> AnyPublisher<[Gathering], CoreDataManager.CoreDataError> {
+        self.coreDataManager.fetchAllGathering()
+            .map { gatheringEntityList in
+                gatheringEntityList.map { $0.toDomain() }.sorted(by: >)
+            }
+            .eraseToAnyPublisher()
     }
     
-    func fetchGathering(id: UUID) -> Gathering? {
-        guard let gatheringEntity = self.coreDataManager.fetchGathering(id: id) else { return nil }
-        return gatheringEntity.toDomain()
+    func fetchGathering(id: UUID) -> AnyPublisher<Gathering, CoreDataManager.CoreDataError> {
+        self.coreDataManager.fetchGathering(id: id)
+            .map { $0.toDomain() }
+            .eraseToAnyPublisher()
     }
     
-    func fetchGathering(including name: String) -> [Gathering] {
-        return self.coreDataManager.fetchGathering(including: name).map{ $0.toDomain() }
+    func fetchGathering(day: Date) -> AnyPublisher<[Gathering], CoreDataManager.CoreDataError> {
+        self.coreDataManager.fetchGathering(day: day)
+            .map { gatheringEntityList in
+                gatheringEntityList.map { $0.toDomain() }.sorted(by: >)
+            }
+            .eraseToAnyPublisher()
     }
     
-    func fetchGathering(including date: Date) -> [Gathering] {
-        return self.coreDataManager.fetchGathering(including: date).map{ $0.toDomain() }
+    func fetchGathering(month: Date) -> AnyPublisher<[Gathering], CoreDataManager.CoreDataError> {
+        self.coreDataManager.fetchThisMonthGathering(month: month)
+            .map { gatheringEntityList in
+                gatheringEntityList.map { $0.toDomain() }.sorted()
+            }
+            .eraseToAnyPublisher()
     }
     
-    func fetchGathering(month: Date) -> [Gathering] {
-        return self.coreDataManager.fetchGathering(month: month).map{ $0.toDomain() }
+    func fetchGathering(oneWeekFrom date: Date) -> AnyPublisher<[Gathering], CoreDataManager.CoreDataError> {
+        self.coreDataManager.fetchGathering(oneWeekFrom: date)
+            .map { gatheringEntityList in
+                gatheringEntityList.map { $0.toDomain() }.sorted()
+            }
+            .eraseToAnyPublisher()
     }
     
-    func insertGathering(_ gathering: Gathering) {
+    func insertGathering(_ gathering: Gathering) -> AnyPublisher<Gathering, CoreDataManager.CoreDataError> {
         self.coreDataManager.insertGathering(gathering)
+            .map { $0.toDomain() }
+            .eraseToAnyPublisher()
     }
     
-    func updateGathering(_ gathering: Gathering) {
+    func updateGathering(_ gathering: Gathering) -> AnyPublisher<Gathering, CoreDataManager.CoreDataError> {
         self.coreDataManager.updateGathering(gathering)
+            .map { $0.toDomain() }
+            .eraseToAnyPublisher()
     }
     
-    func deleteGathering(_ gatheringId: UUID) {
-        self.coreDataManager.deleteGathering(gatheringId)
+    func deleteGathering(_ id: UUID) -> AnyPublisher<Void, CoreDataManager.CoreDataError> {
+        return self.coreDataManager.deleteGathering(id: id)
     }
     
     func deleteAllGathering() -> AnyPublisher<Void, CoreDataManager.CoreDataError> {
         return self.coreDataManager.deleteAllGathering()
-    }
-    
-    func gatheringStatus(date: Date) -> [Gathering] {
-        return self.coreDataManager.fetchGathering(oneWeekFrom: date).map{ $0.toDomain() }
     }
     
 }

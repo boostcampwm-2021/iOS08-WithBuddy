@@ -21,7 +21,7 @@
     </entity>
     <elements>
         <element name="BuddyEntity" positionX="-243.0921020507812" positionY="-56.47283935546875" width="128" height="103"/>
-        <element name="GatheringEntity" positionX="-464.172119140625" positionY="-22.88272094726562" width="128" height="148"/>
-        <element name="PurposeEntity" positionX="-36" positionY="72" width="128" height="73"/>
+        <element name="GatheringEntity" positionX="-464.172119140625" positionY="-22.88272094726562" width="128" height="134"/>
+        <element name="PurposeEntity" positionX="-36" positionY="72" width="128" height="59"/>
     </elements>
 </model>

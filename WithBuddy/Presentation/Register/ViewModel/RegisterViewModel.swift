@@ -38,12 +38,19 @@ final class RegisterViewModel {
     @Published private(set) var buddyList: [Buddy] = []
     @Published private(set) var pictures: [URL] = []
     
-    private var buddyUseCase = BuddyUseCase(coreDataManager: CoreDataManager.shared)
-    private var gatheringUseCase = GatheringUseCase(coreDataManager: CoreDataManager.shared)
-    private var purposeUseCase = PurposeUseCase(coreDataManager: CoreDataManager.shared)
-    private var pictureUseCase = PictureUseCase()
+    private var gatheringUseCase: GatheringUseCaseProtocol
+    private var purposeUseCase: PurposeUseCaseProtocol
+    private var pictureUseCase: PictureUseCase
+    private var cancellable: Set<AnyCancellable> = []
     
-    init() {
+    init(
+        gatheringUseCase: GatheringUseCaseProtocol = GatheringUseCase(coreDataManager: CoreDataManager.shared),
+        purposeUseCase: PurposeUseCaseProtocol = PurposeUseCase(coreDataManager: CoreDataManager.shared),
+        pictureUseCase: PictureUseCase = PictureUseCase()
+    ) {
+        self.gatheringUseCase = gatheringUseCase
+        self.purposeUseCase = purposeUseCase
+        self.pictureUseCase = pictureUseCase
         self.purposeList = PurposeCategory.allCases.map({
             CheckableInfo(engDescription: "\($0)", korDescription: self.purposeUseCase.engToKor(eng: "\($0)"), check: false)
         })
@@ -109,7 +116,13 @@ final class RegisterViewModel {
                 picture: self.pictures
             )
             self.gatheringUseCase.insertGathering(gathering)
-            self.registerDoneSignal.send(gathering)
+                .sink { completion in
+                    //TODO: insert 실패 alert 띄우기
+                    print(completion)
+                } receiveValue: { [weak self] gathering in
+                    self?.registerDoneSignal.send(gathering)
+                }
+                .store(in: &self.cancellable)
         }
     }
     

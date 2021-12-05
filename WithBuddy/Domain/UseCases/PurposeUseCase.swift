@@ -10,20 +10,20 @@ import Combine
 
 protocol PurposeUseCaseProtocol {
     
-    func fetchTopFourPurpose(before date: Date) -> AnyPublisher<[String], Never>
+    func fetchTopFourPurpose(before date: Date) -> AnyPublisher<[String], CoreDataManager.CoreDataError>
     func engToKor(eng: String) -> String
     
 }
 
 final class PurposeUseCase: PurposeUseCaseProtocol {
     
-    private let coreDataManager: CoreDataManagable
+    private let coreDataManager: PurposeManagable
     
-    init(coreDataManager: CoreDataManagable = CoreDataManager.shared) {
+    init(coreDataManager: PurposeManagable = CoreDataManager.shared) {
         self.coreDataManager = coreDataManager
     }
     
-    func fetchTopFourPurpose(before date: Date) -> AnyPublisher<[String], Never> {
+    func fetchTopFourPurpose(before date: Date) -> AnyPublisher<[String], CoreDataManager.CoreDataError> {
         self.coreDataManager.fetchPurpose()
             .map{ purposeEntity in
                 Array(purposeEntity

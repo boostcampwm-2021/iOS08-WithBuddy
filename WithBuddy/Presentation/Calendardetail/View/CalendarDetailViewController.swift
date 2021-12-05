@@ -11,21 +11,21 @@ import Combine
 final class CalendarDetailViewController: UIViewController {
     
     private let detailViewMargin = 15.0
-    
+    private var date: Date
     private lazy var detailLabel = PurpleTitleLabel()
     private lazy var detailTableView = UITableView()
-    private var calendarDetailViewModel: CalendarDetailViewModel
+    private let calendarDetailViewModel = CalendarDetailViewModel()
     private var cancellables: Set<AnyCancellable> = []
     
     weak var delegate: GatheringListDelegate?
     
-    init(calendarDetailViewModel: CalendarDetailViewModel) {
-        self.calendarDetailViewModel = calendarDetailViewModel
+    init(date: Date) {
+        self.date = date
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
-        self.calendarDetailViewModel = CalendarDetailViewModel(selectedDate: Date())
+        self.date = Date()
         super.init(coder: coder)
     }
     
@@ -34,21 +34,27 @@ final class CalendarDetailViewController: UIViewController {
         self.view.backgroundColor = .backgroundPurple
         self.bind()
         self.configure()
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.labelPurple as Any]
+        self.calendarDetailViewModel.viewDidLoad(with: date)
     }
     
     private func bind() {
         self.calendarDetailViewModel.$dayLabel
-        .receive(on: DispatchQueue.main)
-        .sink { [weak self] label in
-            self?.detailLabel.text = label + " 모임"
-        }.store(in: &self.cancellables)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] label in
+                self?.detailLabel.text = label + " 모임"
+            }.store(in: &self.cancellables)
         
         self.calendarDetailViewModel.$gatheringList
-        .receive(on: DispatchQueue.main)
-        .sink { [weak self] _ in
-            self?.detailTableView.reloadData()
-        }.store(in: &self.cancellables)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.detailTableView.reloadData()
+            }.store(in: &self.cancellables)
+        
+        self.calendarDetailViewModel.deleteSuccessSingal
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.delegate?.deleteGathering()
+            }.store(in: &self.cancellables)
     }
     
     private func configure() {
@@ -107,7 +113,6 @@ extension CalendarDetailViewController: UITableViewDelegate, UITableViewDataSour
         let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { _, _, completion in
             self.calendarDetailViewModel.didDeleteButtonTouched(index: indexPath.row)
             self.delegate?.deleteGathering()
-            tableView.deleteRows(at: [indexPath], with: .automatic)
             completion(true)
         }
         deleteAction.backgroundColor = .graphRed

@@ -46,6 +46,20 @@ final class ChartViewController: UIViewController {
     }
     
     private func bind() {
+        self.viewModel.buddyEditSuccessSignal
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.alert(message: nil)
+            }
+            .store(in: &self.cancellables)
+        
+        self.viewModel.buddyEditFailSignal
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] error in
+                self?.alert(message: error.errorDescription)
+            }
+            .store(in: &self.cancellables)
+        
         self.viewModel.$buddyRank
             .receive(on: DispatchQueue.main)
             .sink { [weak self] list in
@@ -176,6 +190,20 @@ final class ChartViewController: UIViewController {
     private func update(oldBuddy: Buddy?) {
         guard let buddy = oldBuddy else { return }
         self.latestOldChartView.update(oldName: buddy.name, face: buddy.face)
+    }
+    
+    private func alert(message: String?) {
+        if let message = message {
+            let alert = UIAlertController(title: "수정 실패", message: message, preferredStyle: UIAlertController.Style.alert)
+            let action = UIAlertAction(title: "OK", style: .default)
+            alert.addAction(action)
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: "수정 성공", message: "버디 수정이 완료되었습니다.", preferredStyle: UIAlertController.Style.alert)
+            let action = UIAlertAction(title: "OK", style: .default)
+            alert.addAction(action)
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     @objc private func didBubbleTouched(_ sender: UITapGestureRecognizer) {

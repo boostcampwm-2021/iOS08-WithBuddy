@@ -94,12 +94,6 @@ final class BubbleChartView: UIView {
         imageView.isHidden = true
     }
     
-    private func animateBubble(imageView: UIImageView, count: Int?, length: CGFloat) {
-        UIView.animate(withDuration: 1) {
-            imageView.frame.size = CGSize(width: length, height: length)
-        }
-    }
-    
     private func configure() {
         self.configureTitleLabel()
         self.configureWhiteView()

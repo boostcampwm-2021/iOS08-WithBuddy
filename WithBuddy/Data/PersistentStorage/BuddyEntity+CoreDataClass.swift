@@ -63,11 +63,3 @@ extension BuddyEntity {
     }
     
 }
-
-extension BuddyEntity: Comparable {
-    
-    public static func < (lhs: BuddyEntity, rhs: BuddyEntity) -> Bool {
-        return lhs.name < rhs.name
-    }
-    
-}
